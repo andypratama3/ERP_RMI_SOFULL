@@ -1036,7 +1036,11 @@ $extraHead = '<style>
                 table-layout: fixed !important;
                 width: 100% !important;
             }
-            table.items thead th,
+            table.items thead th {
+                white-space: nowrap !important;
+                font-size: 9px !important;
+                letter-spacing: 0.02em !important;
+            }
             table.items tbody td,
             table.items tfoot td {
                 white-space: normal !important;
@@ -1191,13 +1195,13 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
             <th style="width:28px;">No</th>
             <th style="width:75px;">SKU</th>
 <?php if ($hasItemExpDate): ?><th style="width:65px;">Exp Date</th><?php endif; ?>
-            <th style="width:70px;">Nomor Lot / Seri</th>
-            <th>Nama Produk</th>
-            <th style="width:60px;">Kategori</th>
+            <th style="width:70px;">Lot / Seri</th>
+            <th>Produk</th>
+            <th style="width:62px;">Kategori</th>
             <th style="width:38px;" class="text-right">Qty</th>
-            <th style="width:45px;">Satuan</th>
+            <th style="width:42px;">Satuan</th>
             <th style="width:85px;" class="text-right">Harga</th>
-            <th style="width:38px;" class="text-right">Disc %</th>
+            <th style="width:38px;" class="text-right">Disc%</th>
             <th style="width:90px;" class="text-right">Subtotal</th>
         </tr>
         </thead>
