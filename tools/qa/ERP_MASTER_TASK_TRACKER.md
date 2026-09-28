@@ -76,3 +76,8 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 ## Print teks pudar DO-52
 - Bukti visual: seluruh isi pudar kecuali thead (warna terang tema gelap menimpa). Fix: paksa .page teks #111827, thead putih/hitam.
 - Re-render: teks pekat terbaca, 1 hal. php -l OK.
+
+## Print var(--rmi-text) akar masalah
+- Akar: html[data-theme=dark]{--rmi-text:#e5e7eb} + body{color:var(--rmi-text)} → hitam jadi putih di kertas.
+- Fix: @media print timpa --rmi-text/--text→#111827, --rmi-muted/--muted→#374151.
+- Bukti visual PNG DO-52: seluruh teks gelap terbaca, 1 hal. php -l OK.

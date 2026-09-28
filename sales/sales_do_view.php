@@ -935,7 +935,20 @@ $extraHead = '<style>
              * PRINT CLEAN MODE
              * Cetak hanya isi Delivery Order. Header/navigation/footer ERP dari
              * rmi_layout tidak boleh ikut ke hasil print/PDF.
+             *
+             * AKAR MASALAH WARNA: tema gelap mendefinisikan
+             * --rmi-text:#e5e7eb (putih) dan body memakai
+             * color:var(--rmi-text), sehingga hitam jadi putih di kertas.
+             * Timpa variabel khusus cetak agar seluruh var() ikut gelap.
              */
+            html[data-theme="dark"],
+            html[data-rmi-theme="dark"],
+            html {
+                --rmi-text: #111827 !important;
+                --rmi-muted: #374151 !important;
+                --text: #111827 !important;
+                --muted: #374151 !important;
+            }
             @page {
                 size: A4 portrait;
                 margin: 4mm;
