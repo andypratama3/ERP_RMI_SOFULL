@@ -1,0 +1,5 @@
+username,password,full_name,role,level,department,office_code,status
+StaffCRM_Bgr,1234,Staff CRM Bogor,staff,,CRM,BOGOR,active
+MgrCRM_Bgr,1234,Manager CRM Bogor,manager,,CRM,BOGOR,active
+StaffFIN_Bks,1234,Staff Finance Bekasi,staff,,FIN,BKS,active
+MgrFIN_Bks,1234,Manager Finance Bekasi,manager,,FIN,BKS,active

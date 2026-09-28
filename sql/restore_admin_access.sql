@@ -1,0 +1,2 @@
+-- DEPRECATED: File ini dipindah ke sql/utils/restore_admin_access.sql
+-- Jalankan: mysql -u root -p erp_rmi_sofull < sql/utils/restore_admin_access.sql

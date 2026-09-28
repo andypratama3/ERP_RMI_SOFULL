@@ -1,0 +1,50 @@
+state_version: 1
+policy_id: "OPS_THRESHOLDS_V1"
+updated_at: "AUTO_ON_APPLY"
+updated_by: "AUTO_ON_APPLY"
+notes: "Ops thresholds baseline"
+go_no_go:
+  require_readiness_score_100: true
+  require_backlog_p0_zero: true
+  require_contract_ok: true
+  require_smoke_http_fail_zero: true
+  require_core_flows_ok: true
+  production_requires_backup_age_hours_max: 24
+ops_score:
+  base_score_source: "readiness"
+  fixed_base_score: 100
+  critical_blockers:
+    contract_fail_score: 0
+    smoke_http_fail_score: 0
+    core_flows_fail_score: 0
+  penalties:
+    backlog_p0:
+      per_item: 10
+      cap: 30
+    backlog_p1:
+      per_item: 1
+      cap: 10
+    smoke_http_warn:
+      per_item: 1
+      cap: 10
+    backup_age:
+      staging:
+        warn_hours: 24
+        warn_penalty: 5
+        critical_hours: 48
+        critical_penalty: 10
+      production:
+        warn_hours: 24
+        warn_penalty: 10
+        critical_hours: 48
+        critical_penalty: 20
+    sla_breach_penalty: 10
+status_thresholds:
+  healthy_min: 90
+  attention_min: 70
+retention:
+  history_days: 90
+  rotate_max_bytes: 5242880
+rendering:
+  show_policy_id_in_exec_summary: true
+  show_policy_updated_at: true

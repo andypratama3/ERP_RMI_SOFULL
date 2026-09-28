@@ -1,0 +1,179 @@
+{
+    "default": {
+        "quality": {
+            "roles": "ADMIN,SUPERADMIN",
+            "hidden": false
+        },
+        "tools": {
+            "roles": "SYS",
+            "hidden": false
+        },
+        "system_config": {
+            "roles": "SYS",
+            "hidden": false
+        },
+        "master": {
+            "roles": "SYS",
+            "hidden": false
+        },
+        "dashboard": {
+            "roles": "ACT,CRM,FIN,HRL,ITC,MANAGER,MPR,PQP,SCM,STAFF,SYS,WQS",
+            "hidden": false
+        },
+        "scm_panduan": {
+            "roles": "BRANCH,HRL,SCM,SYS",
+            "hidden": false
+        },
+        "crm_control_tower_panduan": {
+            "roles": "BRANCH,CRM,FIN,HRL,SYS",
+            "hidden": false
+        },
+        "pqp_import_ct_panduan": {
+            "roles": "FIN,HRL,PQP,SCM,SYS",
+            "hidden": false
+        },
+        "hrl_rekap": {
+            "roles": "FIN,HRL,SYS",
+            "hidden": false
+        },
+        "hrl_tower_permintaan_karyawan": {
+            "roles": "ACT,BRANCH,CRM,FIN,HRL,MPR,PQP,SCM,SYS,WQS",
+            "hidden": false
+        },
+        "hrl_tower_kenaikan_gaji": {
+            "roles": "ACT,CRM,FIN,HRL,MPR,PQP,SCM,SYS,WQS",
+            "hidden": false
+        },
+        "hrl_tower_rekrutmen": {
+            "roles": "ACT,CRM,FIN,HRL,MPR,PQP,SCM,SYS,WQS",
+            "hidden": false
+        },
+        "audit_log": {
+            "roles": "SYS",
+            "hidden": false
+        },
+        "hrl_process": {
+            "roles": "ACT,BRANCH,CRM,FIN,HRL,MPR,PQP,SCM,SYS,WQS",
+            "hidden": false
+        },
+        "absensi": {
+            "roles": "ACT,BRANCH,CRM,FIN,HRL,ITC,MANAGER,MPR,PQP,SCM,STAFF,SYS,WQS",
+            "hidden": false
+        },
+        "absensi_approval": {
+            "roles": "ACT,CRM,FIN,HRL,MANAGER,MPR,PQP,SCM,STAFF,SYS,WQS",
+            "hidden": false
+        },
+        "mpr_plans": {
+            "roles": "BRANCH,FIN,MPR,SYS",
+            "hidden": false
+        },
+        "mpr_visits": {
+            "roles": "BRANCH,FIN,MPR,SYS",
+            "hidden": false
+        },
+        "mpr_ops_daily_fin": {
+            "roles": "BRANCH,FIN,MPR,SYS",
+            "hidden": false
+        },
+        "mpr_panduan": {
+            "roles": "BRANCH,FIN,MPR,SYS",
+            "hidden": false
+        },
+        "absensi_admin_panel": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_rekap": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_approval": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_offices": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_pins": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_user_map": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_shifts": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_settings": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_broadcast": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "absensi_admin_payroll_gate": {
+            "roles": "HRL,SYS",
+            "hidden": false
+        },
+        "docs_modules_hub": {
+            "roles": "ACT,BRANCH,CRM,FIN,HRL,MANAGER,MPR,PQP,SCM,STAFF,SYS,WQS",
+            "hidden": false
+        },
+        "mh_master_products": {
+            "roles": "CRM,PQP,SCM,SYS,WQS",
+            "hidden": false
+        },
+        "mh_master_office": {
+            "roles": "CRM,FIN,HRL,PQP,SCM,SYS",
+            "hidden": false
+        },
+        "mh_master_user": {
+            "roles": "CRM,MPR,SYS",
+            "hidden": false
+        },
+        "mh_master_emailcompany": {
+            "roles": "SYS",
+            "hidden": false
+        },
+        "mh_master_export_customers": {
+            "roles": "CRM,SYS",
+            "hidden": false
+        },
+        "mh_api_partner_keys": {
+            "roles": "SYS",
+            "hidden": false
+        },
+        "mh_mfa_policy": {
+            "roles": "SYS",
+            "hidden": false
+        },
+        "monitoring_center": {
+            "roles": "SYS",
+            "hidden": false
+        },
+        "pqp_import_ct": {
+            "roles": "ACT,FIN,PQP,SCM,SYS",
+            "hidden": false
+        },
+        "scm_import_ct": {
+            "roles": "BRANCH,FIN,MANAGER,PQP,SCM,STAFF,SYS",
+            "hidden": false
+        },
+        "crm_control_tower": {
+            "roles": "BRANCH,CRM,FIN,SYS",
+            "hidden": false
+        },
+        "master_employees": {
+            "roles": "FIN,HRL,SYS",
+            "hidden": false
+        }
+    },
+    "branch": [],
+    "landing_pages": [],
+    "_info": "Dikelola oleh master/nav_manager.php."
+}

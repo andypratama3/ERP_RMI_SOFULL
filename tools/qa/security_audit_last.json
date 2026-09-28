@@ -1,0 +1,47 @@
+{
+  "_meta": {
+    "generated_at": "2026-03-11T00:00:00+07:00",
+    "generator": "docs/governance/RBAC_FINAL_SPEC.md v2.0",
+    "note": "Static audit summary. Re-run php tools/qa/rbac_completeness_check.php --strict for live check."
+  },
+  "sys_only_routes": {
+    "status": "ENFORCED",
+    "guard_function": "require_admin_critical() | auth_is_admin() + auth_dept()===SYS",
+    "routes": [
+      {"route": "/tools/*",                           "guard": "rbac_policy SYS-only",        "status": "GUARDED"},
+      {"route": "/rbac/*",                            "guard": "rbac_policy SYS-only",        "status": "GUARDED"},
+      {"route": "/master/master_system_login.php",    "guard": "rbac_policy SYS-only",        "status": "GUARDED"},
+      {"route": "/master/mfa_policy.php",             "guard": "rbac_policy SYS-only",        "status": "GUARDED"},
+      {"route": "/master/mfa_bypass.php",             "guard": "rbac_policy SYS-only",        "status": "GUARDED"},
+      {"route": "/master/jobs_monitor.php",           "guard": "rbac_policy SYS-only",        "status": "GUARDED"},
+      {"route": "/master/rate_limit_policies.php",    "guard": "rbac_policy SYS-only",        "status": "GUARDED"}
+    ]
+  },
+  "fin_central_approver_rule": {
+    "status": "ENFORCED",
+    "function": "auth_require_fin_central_approver()",
+    "allowed_users": ["MgrFIN_BGR", "superadmin", "admin", "RizqullahMediskaSYS"],
+    "blocked_users_example": ["MgrFIN_BDG", "MgrFIN_TGR", "MgrFIN_BKS", "MgrFIN_SLO", "MgrFIN_SMG", "MgrFIN_KAL", "MgrFIN_JGY", "StaffFIN_BGR"],
+    "protected_actions": [
+      {"file": "purchases/purchases_payment_ap.php", "action": "create_pay POST",  "perm": "PURCHASES.AP_PAYMENT_APPROVE_POST"},
+      {"file": "purchases/gl_reversal_approvals.php","action": "approve POST",     "perm": "PURCHASES.GL_REVERSAL_APPROVE"}
+    ]
+  },
+  "maker_checker": {
+    "status": "ENFORCED",
+    "function": "auth_maker_checker_require($doc_created_by)",
+    "notes": "Hardcoded in gl_reversal_approvals.php (line ~61). Helper function added to auth.php for other modules.",
+    "sys_bypass": true,
+    "sys_bypass_requires": "reason + audit trail"
+  },
+  "csrf_gates": {
+    "status": "ENFORCED",
+    "mechanism": "verify_csrf() called in require_login() for all POST/PUT/PATCH/DELETE",
+    "coverage": "All pages using require_login()"
+  },
+  "scope_enforcement": {
+    "status": "PARTIAL — requires per-query implementation",
+    "helpers_available": ["auth_scope_check_office()", "auth_require_office_scope()"],
+    "note": "Full scope filtering must be applied per-query in individual module pages."
+  }
+}

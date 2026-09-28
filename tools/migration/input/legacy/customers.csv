@@ -1,0 +1,2 @@
+source_id,customer_code,customer_name,npwp,email,phone,address,city,status
+1,CUST001,PT Demo Customer,01.234.567.8-901.000,cust1@example.com,081234567890,Jl. Demo Customer 1,Jakarta,active

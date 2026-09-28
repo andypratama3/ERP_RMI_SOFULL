@@ -1,0 +1,19 @@
+# Terminology — Manufactures vs Vendor (ERP_RMI_SOFULL)
+
+## Konvensi
+
+| Istilah | Tabel | Fungsi |
+|---------|-------|--------|
+| **Manufactures** | `master_manufactures` | Tempat **pembelian barang/products** — PO, Incoming, AP |
+| **Vendor** | `master_vendors` | Rekanan jasa **logistik & forwarding** — pengiriman barang, bukan pembelian |
+
+## Vendor — Dipakai untuk apa?
+
+- **SCM DO Tasks** — assign vendor logistik (JNE, TIKI, dll.) untuk pengiriman DO ke customer
+- **Purchases Forwarding** — vendor forwarder untuk pengiriman import (manufacturer → gudang RMI)
+- **Bukan** tempat pembelian barang
+
+## Aturan (saat upgrade / development)
+
+- **Manufactures** = tempat pembelian barang. Jangan pakai vendor untuk flow PO/Incoming.
+- **Vendor** = logistik & forwarding saja. Jangan mengidentikkan vendor dengan tempat pembelian barang.

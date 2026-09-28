@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOP Internal Chat Collaboration</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 26px; color: #0f172a; line-height: 1.5; }
+    h1 { font-size: 24px; margin: 0 0 10px; }
+    h2 { font-size: 17px; margin-top: 18px; }
+    p, li { font-size: 13px; }
+    code { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; padding: 1px 4px; }
+    .meta { font-size: 12px; color: #334155; margin-bottom: 8px; }
+    @media print { body { margin: 12mm; } }
+  </style>
+</head>
+<body>
+  <h1>SOP Internal Chat Collaboration</h1>
+  <div class="meta">Dokumen SOP modul - versi 2026-02-11</div>
+  <p>Tujuan: memastikan proses operasional modul berjalan standar, aman, dan terukur.</p>
+
+  <h2>Ruang Lingkup</h2>
+  <ul><li><code>chat/index.php</code></li><li><code>chat/admin_settings.php</code></li></ul>
+
+  <h2>Prasyarat</h2>
+  <ul>
+    <li>User sudah login dan memiliki role sesuai kewenangan modul.</li>
+    <li>Data master terkait sudah valid (office, department, user, product, vendor, customer).</li>
+    <li>Semua mutasi dilakukan lewat mekanisme resmi sistem.</li>
+  </ul>
+
+  <h2>Langkah Operasional</h2>
+  <ol><li>Gunakan channel sesuai topik dan peran kerja.</li><li>Gunakan mention, reply/thread, dan pin untuk komunikasi operasional penting.</li><li>Jaga etika komunikasi dan hindari berbagi data sensitif tanpa izin.</li><li>Admin mengelola ACL channel, governance setting, dan kebijakan retention.</li><li>Pantau audit perubahan governance/chat permission untuk compliance.</li></ol>
+
+  <h2>Kontrol dan Kepatuhan</h2>
+  <ul><li>Role tanpa izin kirim tidak boleh bypass ACL.</li><li>Pin/reaction/mention dipakai untuk konteks kerja, bukan spam.</li><li>Perubahan admin setting harus dapat ditelusuri.</li></ul>
+
+  <h2>Bukti Operasional</h2>
+  <ul>
+    <li>Simpan bukti transaksi, approval, dan exception penting.</li>
+    <li>Gunakan dashboard/KPI untuk monitoring performa harian dan bulanan.</li>
+    <li>Gunakan audit log untuk investigasi jika terjadi mismatch.</li>
+  </ul>
+
+  <h2>Eskalasi</h2>
+  <ul>
+    <li>Jika ada anomali data, hold proses lanjutan dan eskalasi ke PIC modul + ITC.</li>
+    <li>Jika ada risiko keamanan/akses, eskalasi ke Security/ITC dan lakukan containment.</li>
+  </ul>
+</body>
+</html>

@@ -1,0 +1,3 @@
+migration_batch,row_no,sku,qty_on_hand
+CUTOVER_2026Q1,1,SKU001,150
+

@@ -1,0 +1,56 @@
+{
+  "info": {
+    "name": "H2H Order Hermina - RMI ERP",
+    "description": "Collection untuk testing API H2H Order dari Hermina ke ERP RMI.\n\n**Setup:**\n1. Buat API Key di ERP: Master Data → API Partner Keys\n2. Set variable `base_url` dan `api_key` di Environment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://erp.rizqullahmediska.com/ERP_RMI_SOFULL" },
+    { "key": "api_key", "value": "rpk_xxx" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "X-API-Key", "value": "{{api_key}}" }
+        ],
+        "url": "{{base_url}}/api/v1/partner/health.php",
+        "description": "Test koneksi dan validasi API Key"
+      }
+    },
+    {
+      "name": "Order Create (H2H)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-API-Key", "value": "{{api_key}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idempotency_key\": \"HERMINA-TEST-20260304-001\",\n  \"external_order_id\": \"PO-HERMINA-2026-001\",\n  \"customers_code\": \"Hoo1\",\n  \"office_code\": \"BGR\",\n  \"do_date\": \"2026-03-05\",\n  \"customer_pic\": \"Budi (Purchasing)\",\n  \"customer_phone\": \"0211234567\",\n  \"shipping_address\": \"Jl. Kesehatan No.1, Depok\",\n  \"note\": \"Order via H2H - UAT\",\n  \"items\": [\n    { \"sku\": \"OBT-001\", \"qty\": 10, \"unit\": \"pcs\" },\n    { \"sku\": \"OBT-002\", \"qty\": 5, \"unit\": \"pcs\" }\n  ]\n}"
+        },
+        "url": "{{base_url}}/api/v1/partner/order_create.php",
+        "description": "Create DO dari PO Hermina. Ganti customers_code, office_code, items sesuai data master."
+      }
+    },
+    {
+      "name": "Order Create - Idempotency Test",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-API-Key", "value": "{{api_key}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idempotency_key\": \"HERMINA-IDEM-001\",\n  \"customers_code\": \"Hoo1\",\n  \"office_code\": \"BGR\",\n  \"items\": [\n    { \"sku\": \"OBT-001\", \"qty\": 1 }\n  ]\n}"
+        },
+        "url": "{{base_url}}/api/v1/partner/order_create.php",
+        "description": "Kirim 2x dengan idempotency_key sama → harus return DO yang sama (no duplicate)"
+      }
+    }
+  ]
+}

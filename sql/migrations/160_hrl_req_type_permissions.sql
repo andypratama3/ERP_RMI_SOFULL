@@ -1,0 +1,3 @@
+-- 160: Registry permission per tipe pengajuan HRL Process (HRL.REQ_<TIPE>_{VIEW|CREATE|EDIT|DELETE})
+-- Disarankan: Sync Permissions di RBAC Center (upsert dari config) agar baris tercermin di DB.
+-- File ini dokumentasi; tidak wajib dijalankan jika sync sudah dijalankan.

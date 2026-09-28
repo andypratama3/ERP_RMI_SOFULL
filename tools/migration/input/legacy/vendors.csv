@@ -1,0 +1,2 @@
+source_id,vendor_code,vendor_name,npwp,email,phone,address,city,status
+1,VEND001,PT Demo Vendor,02.345.678.9-012.000,vendor1@example.com,082345678901,Jl. Demo Vendor 1,Bogor,active

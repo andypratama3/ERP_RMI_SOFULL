@@ -1,0 +1,17 @@
+from_path,to_path,type(entrypoint/helper/doc/cli/asset),wrapper_created(yes/no),justification
+TOOLS_DASHBOARD_SPEC.md,docs/governance/TOOLS_DASHBOARD_SPEC.md,doc,yes,rapikan dokumen aktif ke governance sambil menjaga path lama
+TOOLS_TESTPLAN_CUTOVER_CHECKS.md,docs/governance/TOOLS_TESTPLAN_CUTOVER_CHECKS.md,doc,yes,rapikan dokumen aktif ke governance sambil menjaga path lama
+FIX_REPORT_TOOLS_HARDENING.md,docs/governance/FIX_REPORT_TOOLS_HARDENING.md,doc,yes,rapikan dokumen aktif ke governance sambil menjaga path lama
+PATCH_DIFF_TOOLS_HARDENING.md,docs/governance/PATCH_DIFF_TOOLS_HARDENING.md,doc,yes,rapikan dokumen aktif ke governance sambil menjaga path lama
+CUTOVER_ONE_PAGER.md,docs/governance/CUTOVER_ONE_PAGER.md,doc,yes,rapikan dokumen cutover aktif ke governance sambil menjaga path lama
+DEPLOY_RUNBOOK.md,docs/governance/DEPLOY_RUNBOOK.md,doc,yes,rapikan dokumen runbook aktif ke governance sambil menjaga path lama
+TESTPLAN_DEPLOY.md,docs/governance/TESTPLAN_DEPLOY.md,doc,yes,rapikan dokumen testplan deploy aktif ke governance sambil menjaga path lama
+PATCH_DIFF_2_ERRORS.md,docs/archive/PATCH_DIFF_2_ERRORS.md,doc,no,arsip historis untuk mengurangi clutter root
+FIX_REPORT_2_ERRORS.md,docs/archive/FIX_REPORT_2_ERRORS.md,doc,no,arsip historis untuk mengurangi clutter root
+TESTPLAN_2_ERRORS.md,docs/archive/TESTPLAN_2_ERRORS.md,doc,no,arsip historis untuk mengurangi clutter root
+PATCH_DIFF_BATCH_A_E.md,docs/archive/PATCH_DIFF_BATCH_A_E.md,doc,no,arsip historis untuk mengurangi clutter root
+PATCH_DIFF_SMOKE.md,docs/archive/PATCH_DIFF_SMOKE.md,doc,no,arsip historis untuk mengurangi clutter root
+N/A,app/Bootstrap/app_root.php,helper,no,bootstrap standar untuk APP_ROOT tunggal
+N/A,app/Bootstrap/legacy_entry.php,helper,no,entry bootstrap kompatibel untuk loader legacy
+N/A,tools/_lib/bootstrap.php,helper,no,bootstrap tools terpusat tanpa ubah route
+N/A,tools/_lib/tools_ui_helpers.php,helper,no,alias helper tools agar include path konsisten minimal-risk

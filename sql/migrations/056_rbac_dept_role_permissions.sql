@@ -1,0 +1,61 @@
+-- 056_rbac_dept_role_permissions.sql
+-- Extracted from ERP_RMI_SOFULL.sql
+
+SET FOREIGN_KEY_CHECKS=0;
+
+--
+-- Struktur dari tabel `rbac_dept_role_permissions`
+--
+
+CREATE TABLE `rbac_dept_role_permissions` (
+  `dept_code` varchar(40) NOT NULL,
+  `role_code` varchar(40) NOT NULL,
+  `perm_code` varchar(80) NOT NULL,
+  `allow_flag` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data untuk tabel `rbac_dept_role_permissions`
+--
+
+INSERT INTO `rbac_dept_role_permissions` (`dept_code`, `role_code`, `perm_code`, `allow_flag`, `created_at`) VALUES
+('SYS', 'MANAGER', 'ABSENSI.CHECKIN', 1, '2026-01-01 14:59:54'),
+('SYS', 'MANAGER', 'ABSENSI.REQUEST', 1, '2026-01-01 14:59:54'),
+('SYS', 'MANAGER', 'ABSENSI.VIEW', 1, '2026-01-01 14:59:54'),
+('SYS', 'STAFF', 'ABSENSI.APPROVE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'ABSENSI.CHECKIN', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'ABSENSI.OFFICE_SETTINGS', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'ABSENSI.RECAP', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'ABSENSI.REQUEST', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'ABSENSI.VIEW', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'MASTER.COMPANY_BANK_CRUD', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'MASTER.DEPARTMENT_CRUD', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'MASTER.EMPLOYEE_CRUD', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.AUDIT', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.EXPORT_BANK', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.LOANS', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.MATRIX_MANAGE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.RUN_CREATE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.RUN_EDIT', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.RUN_PAID', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.RUN_POST', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.SETTINGS', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PAYROLL.VIEW', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PURCHASES.APPROVE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PURCHASES.CREATE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PURCHASES.DELETE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PURCHASES.EDIT', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PURCHASES.EXPORT', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'PURCHASES.VIEW', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'SALES.CREATE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'SALES.DELETE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'SALES.EDIT', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'SALES.EXPORT', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'SALES.VIEW', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'SYSTEM.RBAC_MANAGE', 1, '2026-01-01 16:36:03'),
+('SYS', 'STAFF', 'SYSTEM.USER_MANAGE', 1, '2026-01-01 16:36:03');
+
+-- --------------------------------------------------------
+
+SET FOREIGN_KEY_CHECKS=1;

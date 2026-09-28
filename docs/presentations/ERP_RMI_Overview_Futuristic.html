@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP RMI — Rizqullah Mediska Indonesia</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/theme/black.css" id="theme">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyber-cyan: #00f5ff;
+      --cyber-purple: #a855f7;
+      --cyber-pink: #ec4899;
+      --dark-bg: #0a0a12;
+      --card-bg: rgba(20, 20, 40, 0.85);
+      --border-glow: rgba(0, 245, 255, 0.4);
+    }
+    .reveal {
+      font-family: 'Exo 2', sans-serif;
+      background: linear-gradient(135deg, #0a0a12 0%, #0d0d1a 50%, #0a0a12 100%);
+    }
+    .reveal h1, .reveal h2, .reveal h3 {
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+    }
+    .reveal h1 { color: var(--cyber-cyan); font-size: 2.2em; }
+    .reveal h2 { color: var(--cyber-cyan); font-size: 1.6em; border-bottom: 2px solid var(--cyber-cyan); padding-bottom: 0.2em; }
+    .reveal h3 { color: var(--cyber-purple); font-size: 1.2em; }
+    .reveal p, .reveal li { font-size: 0.85em; line-height: 1.5; }
+    .reveal table { font-size: 0.7em; border-collapse: collapse; }
+    .reveal th, .reveal td { border: 1px solid rgba(0, 245, 255, 0.3); padding: 0.35em 0.5em; }
+    .reveal th { background: rgba(0, 245, 255, 0.15); color: var(--cyber-cyan); }
+    .reveal td { color: #e0e0e0; }
+    .reveal .subtitle { color: var(--cyber-purple); font-size: 0.6em; margin-top: 0.5em; }
+    .reveal .slide-background { background: transparent !important; }
+    .reveal section::after { content: ''; position: absolute; bottom: 1em; right: 1em; font-size: 0.5em; color: rgba(255,255,255,0.4); }
+    .cyber-badge { display: inline-block; background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-purple)); color: #0a0a12; padding: 0.2em 0.6em; border-radius: 4px; font-weight: 600; font-size: 0.8em; margin: 0.1em; }
+    .grid-bg { background-image: linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px); background-size: 40px 40px; }
+    .glow-box { border: 1px solid var(--border-glow); border-radius: 8px; padding: 1em; background: var(--card-bg); box-shadow: 0 0 20px rgba(0, 245, 255, 0.1); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5em; text-align: left; }
+    .reveal .small-table th, .reveal .small-table td { font-size: 0.6em; padding: 0.25em; }
+    ul.compact { font-size: 0.75em; }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides grid-bg">
+
+      <!-- Slide 1: Title -->
+      <section>
+        <h1>ERP RMI</h1>
+        <p class="subtitle">Rizqullah Mediska Indonesia</p>
+        <p style="margin-top: 2em; font-size: 0.7em; color: rgba(255,255,255,0.7);">Menu • Modul • Workflow — Unified Layout</p>
+        <p style="font-size: 0.55em; color: rgba(255,255,255,0.5);">Multi Branch + Depo • O2C • RBAC</p>
+      </section>
+
+      <!-- Slide 2: Struktur Kantor -->
+      <section>
+        <h2>Struktur Kantor RMI</h2>
+        <h3>6 Branch + 2 Depo</h3>
+        <div class="two-col">
+          <div class="glow-box">
+            <h4 style="color: var(--cyber-cyan); margin-bottom: 0.5em;">Branch</h4>
+            <table class="small-table">
+              <tr><th>Kode</th><th>Lokasi</th></tr>
+              <tr><td>BGR</td><td>Bogor</td></tr>
+              <tr><td>BKS</td><td>Bekasi</td></tr>
+              <tr><td>TGR</td><td>Tangerang</td></tr>
+              <tr><td>BDG</td><td>Bandung</td></tr>
+              <tr><td>SLO</td><td>Solo</td></tr>
+              <tr><td>SMG</td><td>Semarang</td></tr>
+            </table>
+          </div>
+          <div class="glow-box">
+            <h4 style="color: var(--cyber-purple); margin-bottom: 0.5em;">Depo</h4>
+            <table class="small-table">
+              <tr><th>Kode</th><th>Lokasi</th></tr>
+              <tr><td>KAL</td><td>Kalimantan</td></tr>
+              <tr><td>JGY</td><td>Jogyakarta</td></tr>
+            </table>
+          </div>
+        </div>
+        <p style="font-size: 0.6em; margin-top: 1em;">Kode office dipakai di sales_do, wqs, master_office</p>
+      </section>
+
+      <!-- Slide 3: Menu Overview -->
+      <section>
+        <h2>Menu ERP — Overview</h2>
+        <div class="two-col">
+          <ul class="compact">
+            <li><strong>MAIN</strong> — Dashboards, Chat, Help, Exec Summary, Quality</li>
+            <li><strong>MASTER DATA</strong> — Products, Customers, Vendors, Employees, dll</li>
+            <li><strong>CRM</strong> — Sales DO, Leads, Control Tower</li>
+            <li><strong>PQP</strong> — Purchases, PO, GR, AP, Forwarder</li>
+          </ul>
+          <ul class="compact">
+            <li><strong>WQS</strong> — Stock, Incoming, Picking, PR, Transfer</li>
+            <li><strong>HRL</strong> — Docs, Process, Reg Alkes, Absensi, KPI</li>
+            <li><strong>FIN</strong> — Payroll, Rekening Perusahaan</li>
+            <li><strong>MPR</strong> — Marketing Project, Budget Approval</li>
+            <li><strong>ACT</strong> — Fixed Asset</li>
+            <li><strong>SETTINGS</strong> — RBAC, Tools</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Slide 4: MAIN -->
+      <section>
+        <h2>MAIN</h2>
+        <table class="small-table">
+          <tr><th>Menu</th><th>Fungsi</th></tr>
+          <tr><td>Dashboards</td><td>Dashboard Center per dept</td></tr>
+          <tr><td>Internal Chat</td><td>Chat internal, channels</td></tr>
+          <tr><td>Help Center</td><td>Manual, SOP, Office Pack</td></tr>
+          <tr><td>Executive Summary</td><td>Ringkasan bisnis Owner (SYS)</td></tr>
+          <tr><td>Quality & Complaint</td><td>Incoming QC, lot/serial/exp</td></tr>
+        </table>
+      </section>
+
+      <!-- Slide 5: Master Data -->
+      <section>
+        <h2>Master Data</h2>
+        <p>Products • Customers • Vendors • Manufactures • Employees • Pricelist • Offices • Tax • Payment Terms</p>
+        <p style="font-size: 0.65em; margin-top: 0.5em;">Import, ITC Reset Password, Account Readiness, System Login, Config, Company Bank</p>
+      </section>
+
+      <!-- Slide 6: CRM -->
+      <section>
+        <h2>CRM (Sales)</h2>
+        <p>Sales DO → WQS → SCM → ACT → FIN</p>
+        <table class="small-table">
+          <tr><th>Stage</th><th>Fungsi</th></tr>
+          <tr><td>CRM</td><td>Buat DO, input/approval</td></tr>
+          <tr><td>WQS</td><td>Picking/packing</td></tr>
+          <tr><td>SCM</td><td>Logistik & forwarding</td></tr>
+          <tr><td>ACT</td><td>Cek accounting</td></tr>
+          <tr><td>FIN</td><td>Invoice & pembayaran</td></tr>
+        </table>
+        <p style="font-size: 0.6em;">Control Tower, Tax Invoice, CRM Leads</p>
+      </section>
+
+      <!-- Slide 7: PQP & WQS -->
+      <section>
+        <h2>PQP & WQS</h2>
+        <div class="two-col">
+          <div>
+            <h3>PQP (Purchases)</h3>
+            <p class="compact">PO, GR, Invoice AP, Payment AP, Forwarder, CEISA PIB, Bank Recon</p>
+          </div>
+          <div>
+            <h3>WQS (Stock)</h3>
+            <p class="compact">Stock, Incoming, Allocation, Picking, PR, Transfer, Adjustment, Opname, Audit</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: HRL -->
+      <section>
+        <h2>HRL</h2>
+        <table class="small-table">
+          <tr><th>Modul</th><th>Fungsi</th></tr>
+          <tr><td>HRL Docs</td><td>Dokumen, Ack Report, Tower</td></tr>
+          <tr><td>HRL Process</td><td>Request, PIN approval, Tower</td></tr>
+          <tr><td>Reg Alkes</td><td>15 tahap, NIE, SKU, Expiry</td></tr>
+          <tr><td>Absensi</td><td>Check-in/out, Izin, Approval</td></tr>
+          <tr><td>KPI Center</td><td>Daily, Monthly, Employee, Office, Stock, DO Audit/SLA</td></tr>
+        </table>
+      </section>
+
+      <!-- Slide 9: FIN, MPR, ACT -->
+      <section>
+        <h2>FIN • MPR • ACT</h2>
+        <div class="two-col">
+          <div>
+            <h3>FIN</h3>
+            <p>Payroll, Rekening Perusahaan</p>
+            <h3>MPR</h3>
+            <p>Plans, Budget FIN, Ops Daily</p>
+          </div>
+          <div>
+            <h3>ACT (Fixed Asset)</h3>
+            <p>Assets, Ops, Depreciation, Audit, Tax Annual, Disposals, Transfers</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: O2C Flow -->
+      <section>
+        <h2>O2C — Order to Cash</h2>
+        <p style="font-size: 0.75em;">DRAFT → crm_to_wqs → wqs_processing → ready_scm → on_delivery → delivered → wait_payment → paid → closed</p>
+        <table class="small-table">
+          <tr><th>Status</th><th>Dept</th><th>Aksi</th></tr>
+          <tr><td>DRAFT</td><td>CRM</td><td>Submit DO</td></tr>
+          <tr><td>wqs_processing</td><td>WQS</td><td>Foto stok, READY SCM</td></tr>
+          <tr><td>on_delivery</td><td>SCM</td><td>DELIVERED + POD</td></tr>
+          <tr><td>wait_payment</td><td>ACT/FIN</td><td>Tukar faktur, bayar</td></tr>
+          <tr><td>paid</td><td>FIN</td><td>Selesai</td></tr>
+        </table>
+      </section>
+
+      <!-- Slide 11: RBAC -->
+      <section>
+        <h2>RBAC — Role & Permission</h2>
+        <p><span class="cyber-badge">manager</span> <span class="cyber-badge">staff</span> <span class="cyber-badge">sys</span></p>
+        <table class="small-table">
+          <tr><th>Modul</th><th>Permission</th></tr>
+          <tr><td>Master</td><td>MASTER.VIEW</td></tr>
+          <tr><td>Sales</td><td>SALES.VIEW, DASHBOARD.SALES_VIEW</td></tr>
+          <tr><td>HRL</td><td>HRL.PROCESS_VIEW, HRL.REG_ALKES_VIEW</td></tr>
+          <tr><td>Absensi</td><td>ABSENSI.VIEW, ABSENSI.CHECKIN, ABSENSI.APPROVE</td></tr>
+          <tr><td>KPI</td><td>KPI.VIEW</td></tr>
+          <tr><td>Quality</td><td>DASHBOARD.QUALITY_VIEW</td></tr>
+        </table>
+      </section>
+
+      <!-- Slide 12: Settings -->
+      <section>
+        <h2>Settings</h2>
+        <p><strong>RBAC</strong> — Role, permission, user–permission</p>
+        <p><strong>Tools</strong> — Backup, Health, Migration, QA, Ops, Release, Audit</p>
+      </section>
+
+      <!-- Slide 13: Thank You -->
+      <section>
+        <h1>Terima Kasih</h1>
+        <p class="subtitle">ERP RMI — Rizqullah Mediska Indonesia</p>
+        <p style="font-size: 0.6em; margin-top: 2em;">Referensi: docs/ERP_MENU_WORKFLOW_REFERENCE.md</p>
+      </section>
+
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      transition: 'slide',
+      backgroundTransition: 'fade',
+      center: true,
+      progress: true,
+      controls: true,
+      slideNumber: 'c/t',
+      plugins: [ RevealNotes ]
+    });
+  </script>
+</body>
+</html>

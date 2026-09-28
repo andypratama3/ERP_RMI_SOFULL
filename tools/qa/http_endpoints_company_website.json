@@ -1,0 +1,9 @@
+{
+  "description": "Company website endpoints - rizqullahmediska.com",
+  "base_url": "https://rizqullahmediska.com",
+  "endpoints": [
+    {"method": "GET", "path": "/", "expect": 200},
+    {"method": "GET", "path": "/robots.txt", "expect": 200},
+    {"method": "GET", "path": "/sitemap.xml", "expect": 200}
+  ]
+}

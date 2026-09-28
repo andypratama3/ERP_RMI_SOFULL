@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memo Keputusan Go-Live - ERP_RMI_SOFULL</title>
+  <style>
+    :root {
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #d1d5db;
+      --brand: #0f766e;
+      --paper-max: 920px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font: 14px/1.5 Arial, Helvetica, sans-serif;
+      background: #f3f4f6;
+    }
+    .paper {
+      max-width: var(--paper-max);
+      margin: 24px auto;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      padding: 28px 34px 26px;
+    }
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--brand);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .org {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+      color: #0b3f3a;
+    }
+    h2 {
+      margin: 20px 0 8px;
+      font-size: 16px;
+      color: #1f2937;
+    }
+    p { margin: 6px 0; }
+    ul { margin: 8px 0 8px 18px; padding: 0; }
+    li { margin: 4px 0; }
+    .meta {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+    .meta td {
+      border: 1px solid var(--line);
+      padding: 7px 8px;
+      vertical-align: top;
+    }
+    .meta td:first-child {
+      width: 220px;
+      background: #f9fafb;
+      font-weight: 600;
+    }
+    .checklist {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+    .checklist th, .checklist td {
+      border: 1px solid var(--line);
+      padding: 7px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .checklist th {
+      background: #f9fafb;
+    }
+    .sign-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    .sign-table th, .sign-table td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .sign-table th { background: #f9fafb; }
+    .sig-space { height: 56px; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border: 1px solid #86efac;
+      background: #f0fdf4;
+      color: #166534;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .small { color: var(--muted); font-size: 12px; }
+    .paraf-box {
+      margin-top: 10px;
+      border: 1px dashed #9ca3af;
+      padding: 8px;
+      display: inline-block;
+      font-size: 12px;
+      color: #4b5563;
+      min-width: 220px;
+      text-align: center;
+    }
+
+    @media print {
+      @page { size: A4; margin: 14mm 12mm 14mm; }
+      body { background: #fff; }
+      .paper {
+        max-width: none;
+        margin: 0;
+        border: none;
+        padding: 0;
+      }
+      .print-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        font-size: 10px;
+        color: #6b7280;
+        border-top: 1px solid #d1d5db;
+        padding-top: 4px;
+      }
+      .page-break { page-break-before: always; }
+      .no-break { page-break-inside: avoid; }
+      .paraf-box {
+        float: right;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="paper">
+    <header class="doc-header">
+      <div>
+        <div class="org">PT Rizqullah Mediska Indonesia</div>
+        <h1>Memo Keputusan Go-Live</h1>
+      </div>
+      <div class="small">
+        <div><strong>Dokumen:</strong> GO_LIVE_DECISION_MEMO_ID</div>
+        <div><strong>Proyek:</strong> ERP_RMI_SOFULL</div>
+        <div><strong>Tanggal:</strong> 2026-02-11</div>
+        <div><strong>Status:</strong> <span class="badge">GO (Bersyarat)</span></div>
+      </div>
+    </header>
+
+    <section class="no-break">
+      <h2>1) Ringkasan Eksekutif</h2>
+      <p>
+        Migrasi data dari sumber <strong>legacy</strong> dan <strong>accurate</strong> telah diuji pada lingkungan
+        staging dan dinyatakan <strong>PASS</strong> untuk kontrol utama: Trial Balance (net), AR/AP, stok, serta
+        jumlah dan nilai dokumen transaksi.
+      </p>
+      <p>
+        Secara teknis sistem siap melanjutkan ke go-live dengan pengendalian operasional sesuai checklist di bawah.
+      </p>
+      <div class="paraf-box">Paraf Reviewer Halaman 1</div>
+    </section>
+
+    <section class="no-break">
+      <h2>2) Informasi & Bukti Utama</h2>
+      <table class="meta">
+        <tr><td>Lingkungan Verifikasi</td><td>STAGING</td></tr>
+        <tr><td>Run ID Legacy</td><td>7 (DONE, PASS)</td></tr>
+        <tr><td>Run ID Accurate</td><td>8 (DONE, PASS)</td></tr>
+        <tr><td>Laporan Validasi</td><td>VALIDATION_REPORT.md, VALIDATION_REPORT_ACCURATE.md</td></tr>
+        <tr><td>Backup Pra-eksekusi</td><td>Disimpan di <code>storage/backups/</code> + checksum SHA256 terdokumentasi</td></tr>
+      </table>
+    </section>
+
+    <section class="no-break">
+      <h2>3) Gate Checklist Sebelum Go-Live</h2>
+      <table class="checklist">
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th>Checklist</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Data & Accounting</td><td>Rekonsiliasi TB/AR/AP/Stock lulus</td><td>Siap</td></tr>
+          <tr><td>Data & Accounting</td><td>Bukti backup + hash tersedia</td><td>Siap</td></tr>
+          <tr><td>Security & Governance</td><td>Audit trail, SOP, runbook tersedia</td><td>Siap</td></tr>
+          <tr><td>Operasional</td><td>Freeze window disetujui</td><td>Menunggu</td></tr>
+          <tr><td>Operasional</td><td>War-room dan PIC on-call ditetapkan</td><td>Menunggu</td></tr>
+          <tr><td>Deploy</td><td>Rehearsal produksi timeboxed selesai</td><td>Menunggu</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="page-break"></div>
+
+    <section class="no-break">
+      <h2>4) Risiko Utama & Mitigasi</h2>
+      <ul>
+        <li><strong>Gap data saat cutover:</strong> mitigasi dengan freeze transaksi + final delta import.</li>
+        <li><strong>Mismatch numbering dokumen:</strong> mitigasi dengan idempotency `source_system + source_key`.</li>
+        <li><strong>Gangguan performa H+0:</strong> mitigasi dengan monitoring intensif dan rollback plan backup.</li>
+      </ul>
+      <div class="paraf-box">Paraf Reviewer Halaman 2</div>
+    </section>
+
+    <section class="no-break">
+      <h2>5) Rencana Eksekusi Hari H (Ringkas)</h2>
+      <ol>
+        <li>Konfirmasi backup produksi sebelum cutover.</li>
+        <li>Aktifkan freeze transaksi pada sistem lama.</li>
+        <li>Jalankan migrasi final produksi.</li>
+        <li>Jalankan validasi cepat (TB/AR/AP/stock/doc summary).</li>
+        <li>UAT smoke test lintas fungsi.</li>
+        <li>Putuskan GO final atau rollback.</li>
+      </ol>
+    </section>
+
+    <section class="no-break">
+      <h2>6) Persetujuan Manajemen (GO/NO-GO)</h2>
+      <table class="sign-table">
+        <thead>
+          <tr>
+            <th>Peran</th>
+            <th>Nama</th>
+            <th>Keputusan</th>
+            <th>Tanggal</th>
+            <th>Tanda Tangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Project Sponsor / Owner</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+          <tr><td>Finance Director / Lead</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+          <tr><td>Head of IT / DevOps</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+          <tr><td>Security Lead</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+          <tr><td>Project Manager</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+        </tbody>
+      </table>
+      <p class="small">
+        Catatan: dokumen ini adalah ringkasan keputusan. Detail teknis mengacu ke dokumen sign-off dan validation report.
+      </p>
+    </section>
+
+    <footer class="print-footer">
+      ERP_RMI_SOFULL - GO_LIVE_DECISION_MEMO_ID_PRINT | Internal Use Only
+    </footer>
+  </div>
+</body>
+</html>

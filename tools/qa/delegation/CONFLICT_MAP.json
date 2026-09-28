@@ -1,0 +1,322 @@
+{
+ "overlap": {
+  "sales/act_do_tasks.php": [
+   "AGENT-02",
+   "AGENT-05"
+  ],
+  "sales/fin_ar_import.php": [
+   "AGENT-02",
+   "AGENT-07"
+  ],
+  "sales/fin_ar_recap.php": [
+   "AGENT-02",
+   "AGENT-07"
+  ],
+  "sales/fin_do_tasks.php": [
+   "AGENT-02",
+   "AGENT-05"
+  ],
+  "sales/scm_delivery_recap.php": [
+   "AGENT-02",
+   "AGENT-05"
+  ],
+  "sales/scm_do_tasks.php": [
+   "AGENT-02",
+   "AGENT-05"
+  ],
+  "sales/scm_do_tasks__.php": [
+   "AGENT-02",
+   "AGENT-05"
+  ],
+  "sales/scm_tracker_mobile.php": [
+   "AGENT-02",
+   "AGENT-05"
+  ],
+  "sales/scm_tracker_sop.php": [
+   "AGENT-02",
+   "AGENT-05"
+  ],
+  "sales/scm_tracking_history.php": [
+   "AGENT-02",
+   "AGENT-05"
+  ],
+  "purchases/fin_gl_auto.php": [
+   "AGENT-03",
+   "AGENT-07"
+  ],
+  "purchases/purchases_fin_po_process.php": [
+   "AGENT-03",
+   "AGENT-07"
+  ],
+  "purchases/purchases_forwarder_invoice.php": [
+   "AGENT-03",
+   "AGENT-05"
+  ],
+  "purchases/purchases_forwarder_payment.php": [
+   "AGENT-03",
+   "AGENT-05"
+  ],
+  "purchases/purchases_forwarder_quotes.php": [
+   "AGENT-03",
+   "AGENT-05"
+  ],
+  "purchases/purchases_forwarding_tasks.php": [
+   "AGENT-03",
+   "AGENT-05"
+  ],
+  "purchases/purchases_po_fin_view.php": [
+   "AGENT-03",
+   "AGENT-07"
+  ],
+  "mpr/mpr_budget_fin.php": [
+   "AGENT-07",
+   "AGENT-09"
+  ],
+  "mpr/mpr_ops_daily_fin.php": [
+   "AGENT-07",
+   "AGENT-09"
+  ],
+  "mpr/mpr_ops_daily_fin_detail.php": [
+   "AGENT-07",
+   "AGENT-09"
+  ],
+  "mpr/mpr_ops_daily_fin_export.php": [
+   "AGENT-07",
+   "AGENT-09"
+  ],
+  "mpr/mpr_ops_daily_fin_pay.php": [
+   "AGENT-07",
+   "AGENT-09"
+  ]
+ },
+ "global_shared": [
+  "master/auth.php"
+ ],
+ "resolution": {
+  "mpr/mpr_budget_fin.php": {
+   "edit_wave1": "AGENT-09",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-07",
+    "AGENT-09"
+   ]
+  },
+  "mpr/mpr_ops_daily_fin.php": {
+   "edit_wave1": "AGENT-09",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-07",
+    "AGENT-09"
+   ]
+  },
+  "mpr/mpr_ops_daily_fin_detail.php": {
+   "edit_wave1": "AGENT-09",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-07",
+    "AGENT-09"
+   ]
+  },
+  "mpr/mpr_ops_daily_fin_export.php": {
+   "edit_wave1": "AGENT-09",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-07",
+    "AGENT-09"
+   ]
+  },
+  "mpr/mpr_ops_daily_fin_pay.php": {
+   "edit_wave1": "AGENT-09",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-07",
+    "AGENT-09"
+   ]
+  },
+  "purchases/fin_gl_auto.php": {
+   "edit_wave1": "AGENT-03",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-03",
+    "AGENT-07"
+   ]
+  },
+  "purchases/purchases_fin_po_process.php": {
+   "edit_wave1": "AGENT-03",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-03",
+    "AGENT-07"
+   ]
+  },
+  "purchases/purchases_forwarder_invoice.php": {
+   "edit_wave1": "AGENT-03",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-03",
+    "AGENT-05"
+   ]
+  },
+  "purchases/purchases_forwarder_payment.php": {
+   "edit_wave1": "AGENT-03",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-03",
+    "AGENT-05"
+   ]
+  },
+  "purchases/purchases_forwarder_quotes.php": {
+   "edit_wave1": "AGENT-03",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-03",
+    "AGENT-05"
+   ]
+  },
+  "purchases/purchases_forwarding_tasks.php": {
+   "edit_wave1": "AGENT-03",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-03",
+    "AGENT-05"
+   ]
+  },
+  "purchases/purchases_po_fin_view.php": {
+   "edit_wave1": "AGENT-03",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-03",
+    "AGENT-07"
+   ]
+  },
+  "sales/act_do_tasks.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-05"
+   ]
+  },
+  "sales/fin_ar_import.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-07"
+   ]
+  },
+  "sales/fin_ar_recap.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-07"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-07"
+   ]
+  },
+  "sales/fin_do_tasks.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-05"
+   ]
+  },
+  "sales/scm_delivery_recap.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-05"
+   ]
+  },
+  "sales/scm_do_tasks.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-05"
+   ]
+  },
+  "sales/scm_do_tasks__.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-05"
+   ]
+  },
+  "sales/scm_tracker_mobile.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-05"
+   ]
+  },
+  "sales/scm_tracker_sop.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-05"
+   ]
+  },
+  "sales/scm_tracking_history.php": {
+   "edit_wave1": "AGENT-02",
+   "test_only_wave1": [
+    "AGENT-05"
+   ],
+   "edit_wave2_queue": [
+    "AGENT-02",
+    "AGENT-05"
+   ]
+  }
+ },
+ "waves": {
+  "wave1": "File eksklusif per agen + file overlap HANYA boleh diedit pemilik (kolom edit_wave1). Agen lain TEST-ONLY (baca + uji, tanpa ubah). _shared/*, master/auth.php, config*: JANGAN disentuh di Wave 1.",
+  "wave2": "File overlap + shared global dikerjakan BERURUTAN (satu agen satu waktu, sesuai antrean edit_wave2_queue). Koordinator (LEAD) yang membuka kunci per file.",
+  "wave3": "Regresi per core \u2192 E2E P2P/O2C \u2192 final gate di NAS (/volume4/web/ERP_RMI_SOFULL) \u2192 ERP_FINAL_TEST_REPORT.md"
+ }
+}

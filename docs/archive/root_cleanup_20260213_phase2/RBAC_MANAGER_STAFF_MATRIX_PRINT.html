@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RBAC Manager vs Staff Matrix</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 24px; color: #0f172a; line-height: 1.45; }
+    h1 { font-size: 24px; margin: 0 0 8px; }
+    h2 { font-size: 17px; margin-top: 18px; margin-bottom: 8px; }
+    p, li, td, th { font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border: 1px solid #cbd5e1; padding: 7px; vertical-align: top; }
+    th { background: #f1f5f9; text-align: left; }
+    code { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 3px; padding: 1px 4px; font-size: 11px; }
+    .meta { font-size: 11px; color: #475569; margin-bottom: 10px; }
+    @media print { body { margin: 10mm; } }
+  </style>
+</head>
+<body>
+  <h1>RBAC Manager vs Staff Matrix</h1>
+  <div class="meta">Sumber: baseline policy aktif di <code>_shared/rbac.php</code> (`$extraByDeptRole`) + base permission umum.</div>
+
+  <h2>Aturan Umum</h2>
+  <ul>
+    <li><code>ADMIN</code> / <code>SUPERADMIN</code> / <code>OWNER</code>: <b>allow all</b> (kecuali guard khusus modul tertentu).</li>
+    <li>Semua dept + role (<code>MANAGER</code> dan <code>STAFF</code>) dapat base permission:
+      <code>ABSENSI.VIEW</code>, <code>ABSENSI.CHECKIN</code>, <code>ABSENSI.REQUEST</code>.</li>
+    <li>Matrix di bawah menunjukkan tambahan permission per departemen.</li>
+  </ul>
+
+  <h2>Ringkasan Per Departemen</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Dept</th>
+        <th>Shared (Manager + Staff)</th>
+        <th>Manager Only (dibanding Staff)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>ACT</code></td><td><code>MASTER.VIEW</code>, <code>SALES.VIEW</code>, <code>SALES.TASK_ACT</code></td><td><code>SALES.AUDIT_VIEW</code>, <code>SALES.EXPORT</code></td></tr>
+      <tr><td><code>CRM</code></td><td><code>MASTER.VIEW</code>, <code>MASTER.CUSTOMER_CRUD</code>, <code>MASTER.PIC_CUSTOMER_CRUD</code>, <code>MASTER.PRICELIST_SELL_CRUD</code>, <code>MASTER.CUSTOMER_EXPORT</code>, <code>SALES.VIEW</code>, <code>SALES.CREATE</code>, <code>SALES.EDIT</code>, <code>SALES.PRINT</code>, <code>STOCK.VIEW</code></td><td><code>SALES.DELETE</code>, <code>SALES.EXPORT</code>, <code>SALES.AUDIT_VIEW</code></td></tr>
+      <tr><td><code>FIN</code></td><td><code>MASTER.VIEW</code>, <code>MASTER.PRICELIST_BUY_CRUD</code>, <code>PURCHASES.AP_INVOICE_CRUD</code>, <code>PURCHASES.AP_PAYMENT_CRUD</code>, <code>PURCHASES.REPORTS_VIEW</code>, <code>FIXED_ASSET.VIEW</code>, <code>FIXED_ASSET.ASSET_CRUD</code>, <code>SALES.VIEW</code>, <code>SALES.TASK_FIN</code>, <code>STOCK.VIEW</code></td><td><code>MASTER.COMPANY_BANK_CRUD</code>, <code>MASTER.TAX_CRUD</code>, <code>MASTER.PAYMENT_TERMS_CRUD</code>, <code>PURCHASES.EXPORT</code>, <code>PURCHASES.ADMIN_GL_AUTO</code>, <code>PAYROLL.RUN_PAID</code>, <code>PAYROLL.EXPORT_BANK</code>, <code>PAYROLL.AUDIT</code>, <code>FIXED_ASSET.OPERATIONS</code>, <code>FIXED_ASSET.DEPRECIATION_RUN</code>, <code>FIXED_ASSET.TAX_ANNUAL</code>, <code>FIXED_ASSET.AUDIT_VIEW</code></td></tr>
+      <tr><td><code>HRL</code></td><td><code>MASTER.VIEW</code>, <code>MASTER.EMPLOYEE_CRUD</code>, <code>PAYROLL.VIEW</code>, <code>PAYROLL.LOANS</code>, <code>PAYROLL.PAYSLIP_VIEW</code>, <code>ABSENSI.RECAP</code></td><td><code>MASTER.DEPARTMENT_CRUD</code>, <code>PAYROLL.SETTINGS</code>, <code>PAYROLL.MATRIX_MANAGE</code>, <code>PAYROLL.RUN_CREATE</code>, <code>PAYROLL.RUN_EDIT</code>, <code>PAYROLL.RUN_POST</code>, <code>PAYROLL.AUDIT</code>, <code>ABSENSI.APPROVE</code>, <code>ABSENSI.ADMIN_USERS</code>, <code>ABSENSI.ADMIN_PINS</code></td></tr>
+      <tr><td><code>ITC</code></td><td><code>MASTER.VIEW</code>, <code>SYSTEM.SECURITY_VIEW</code>, <code>TOOLS.VIEW</code>, <code>TOOLS.ENTERPRISE_AUDIT_VIEW</code>, <code>TOOLS.ITC_RESET_PASSWORD</code>, <code>MASTER.OFFICE_CRUD</code>, <code>MASTER.EMAIL_COMPANY_CRUD</code>, <code>ABSENSI.OFFICE_SETTINGS</code></td><td><code>SYSTEM.USER_MANAGE</code>, <code>SYSTEM.CONFIG_MANAGE</code>, <code>TOOLS.ENTERPRISE_AUDIT_EXPORT</code>, <code>TOOLS.PURCHASES_M2_APPLY</code></td></tr>
+      <tr><td><code>MPR</code></td><td><code>MASTER.VIEW</code>, <code>SALES.VIEW</code>, <code>SALES.PRINT</code>, <code>MASTER.CUSTOMER_EXPORT</code></td><td><code>SALES.EXPORT</code>, <code>SALES.AUDIT_VIEW</code></td></tr>
+      <tr><td><code>PQP</code></td><td><code>MASTER.VIEW</code>, <code>MASTER.PRODUCT_CRUD</code>, <code>MASTER.PRODUCT_MEDIA_UPLOAD</code>, <code>MASTER.MANUFACTURE_CRUD</code>, <code>MASTER.PRICELIST_BUY_CRUD</code>, <code>STOCK.VIEW</code></td><td><code>MASTER.PRODUCT_PACKAGE_CRUD</code></td></tr>
+      <tr><td><code>SCM</code></td><td><code>MASTER.VIEW</code>, <code>MASTER.VENDOR_CRUD</code>, <code>PURCHASES.VIEW</code>, <code>PURCHASES.PO_CRUD</code>, <code>PURCHASES.PO_PRINT</code>, <code>PURCHASES.GR_PROCESS</code>, <code>PURCHASES.FORWARDING_CRUD</code>, <code>PURCHASES.IMPORT_CONTROL</code>, <code>PURCHASES.CEISA_PIB</code>, <code>PURCHASES.REPORTS_VIEW</code>, <code>SALES.VIEW</code>, <code>SALES.TASK_SCM</code>, <code>STOCK.VIEW</code></td><td><code>PURCHASES.PO_APPROVE</code>, <code>PURCHASES.EXPORT</code></td></tr>
+      <tr><td><code>WQS</code></td><td><code>MASTER.VIEW</code>, <code>STOCK.VIEW</code>, <code>WQS.INCOMING_CRUD</code>, <code>WQS.PICKING_CRUD</code>, <code>WQS.PR_CRUD</code>, <code>WQS.PR_PRINT</code>, <code>WQS.DO_TASKS</code>, <code>PURCHASES.GR_PROCESS</code>, <code>SALES.VIEW</code>, <code>SALES.TASK_WQS</code></td><td><code>STOCK.ADJUST</code>, <code>STOCK.AUDIT_VIEW</code>, <code>WQS.ALLOCATION</code></td></tr>
+      <tr><td><code>SYS</code></td><td><code>MASTER.VIEW</code></td><td>-</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Catatan Operasional Trial E2E</h2>
+  <ul>
+    <li>Perbedaan paling terlihat saat trial pada aksi approve/export/audit dan aksi high-impact.</li>
+    <li>Untuk uji cepat, gunakan 1 akun <code>MANAGER</code> + 1 akun <code>STAFF</code> pada dept yang sama.</li>
+  </ul>
+</body>
+</html>
+

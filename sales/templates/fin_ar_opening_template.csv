@@ -1,0 +1,2 @@
+customer_code,customer_name,office_code,legacy_document_no,document_date,due_date,original_amount,paid_amount,payment_date,status,notes
+H043,RS HERMINA SOLO,SLO,INV-LAMA-001,2026-05-10,2026-06-09,15000000,5000000,,UNPAID,Sisa piutang sebelum ERP

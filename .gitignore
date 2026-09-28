@@ -1,0 +1,62 @@
+# --- Credential & config (PENTING: jangan commit) ---
+.production
+.env
+.env.*
+!.env.example
+config-db.php
+*.bak
+.env.bak*
+
+# --- Composer ---
+/vendor/
+composer.phar
+
+# --- Storage & logs ---
+# restore_now.sh extract scratch (bisa berisi full tree sementara)
+storage/tmp/
+storage/logs/*.log
+storage/backups/*.sql
+storage/backups/*.zip
+storage/backups/*.env
+!storage/backups/.gitkeep
+
+# --- Uploads (data user, bisa besar) ---
+uploads/*
+!uploads/.gitkeep
+storage/uploads/*
+!storage/uploads/.gitkeep
+master/uploads/*
+manufacturer_portal/uploads/*
+customer_portal/uploads/*
+purchases/uploads/*
+
+# --- Android build cache ---
+android_app/.gradle-wrapper-cache/
+android_app/build/
+android_app/.gradle/
+*.apk
+*.aab
+
+# Struktur organisasi: runtime JSON + backup (default: _shared/org_structure.default.json)
+storage/config/org_structure.json
+storage/backups/org_structure/*.json
+!storage/backups/org_structure/.gitkeep
+
+# --- Deploy & exports ---
+exports/
+*.zip
+
+# --- OS & editor ---
+.DS_Store
+.env.swp
+*.swp
+*.swo
+Thumbs.db
+
+# --- IDE (opsional) ---
+.idea/
+.vscode/
+
+# --- Lock / state (opsional) ---
+.app_root.lock
+.APP_ROOT_LOCK.json

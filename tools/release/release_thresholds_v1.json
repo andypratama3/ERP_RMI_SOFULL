@@ -1,0 +1,9 @@
+{
+  "state_version": 1,
+  "freshness_minutes": 180,
+  "smoke_fail_max": 0,
+  "triage_p0_max": 0,
+  "critical_fail_max": 0,
+  "sla_breach_allowed": false,
+  "note": "Default thresholds for Release Final Checklist gate"
+}

@@ -1,0 +1,110 @@
+{
+  "_meta": {
+    "generated_at": "2026-03-15T00:00:00+07:00",
+    "spec_version": "RBAC_FINAL_SPEC v2.0",
+    "note": "Policy smoke matrix. Run live from NAS: php tools/qa/smoke_http.php --strict",
+    "enforcement": {
+      "primary": "_shared/rbac_policy.php (via require_rbac() inside require_login())",
+      "secondary": "Inline auth_allow_depts() guards in dashboard files",
+      "fin_central": "auth_require_fin_central_approver() in purchases_payment_ap.php + gl_reversal_approvals.php"
+    }
+  },
+  "matrix": [
+    {"id":"U01","label":"Guest → any internal page","actor":"unauthenticated","endpoint":"/dashboards/index.php","method":"GET","expected":302},
+    {"id":"U02","label":"Any dept → dashboards/index.php","actor":"StaffWQS_BGR","endpoint":"/dashboards/index.php","method":"GET","expected":200},
+    {"id":"U03","label":"Any dept → chat","actor":"StaffCRM_BGR","endpoint":"/chat/index.php","method":"GET","expected":200},
+    {"id":"U04","label":"Any dept → absensi","actor":"StaffHRL_BGR","endpoint":"/absensi/index.php","method":"GET","expected":200},
+    {"id":"U05","label":"Any dept → kpi","actor":"StaffFIN_BGR","endpoint":"/kpi/index.php","method":"GET","expected":200},
+
+    {"id":"D01","label":"BRANCH → branch_dashboard","actor":"StaffBRANCH_BGR","endpoint":"/dashboards/branch/branch_dashboard.php","method":"GET","expected":200},
+    {"id":"D02","label":"CRM → branch_dashboard (denied)","actor":"StaffCRM_BGR","endpoint":"/dashboards/branch/branch_dashboard.php","method":"GET","expected":403},
+    {"id":"D03","label":"SYS → branch_dashboard","actor":"superadmin","endpoint":"/dashboards/branch/branch_dashboard.php","method":"GET","expected":200},
+
+    {"id":"D04","label":"CRM → sales_dashboard","actor":"StaffCRM_BGR","endpoint":"/sales/sales_dashboard.php","method":"GET","expected":200},
+    {"id":"D05","label":"BRANCH → sales_dashboard","actor":"StaffBRANCH_BGR","endpoint":"/sales/sales_dashboard.php","method":"GET","expected":200},
+    {"id":"D06","label":"WQS → sales_dashboard (denied)","actor":"StaffWQS_BGR","endpoint":"/sales/sales_dashboard.php","method":"GET","expected":403},
+
+    {"id":"D07","label":"WQS → wqs_dashboard","actor":"StaffWQS_BGR","endpoint":"/dashboards/warehouse/wqs_dashboard.php","method":"GET","expected":200},
+    {"id":"D08","label":"SCM → wqs_dashboard","actor":"StaffSCM_BGR","endpoint":"/dashboards/warehouse/wqs_dashboard.php","method":"GET","expected":200},
+    {"id":"D09","label":"BRANCH → wqs_dashboard","actor":"StaffBRANCH_BGR","endpoint":"/dashboards/warehouse/wqs_dashboard.php","method":"GET","expected":200},
+    {"id":"D10","label":"CRM → wqs_dashboard (denied)","actor":"StaffCRM_BGR","endpoint":"/dashboards/warehouse/wqs_dashboard.php","method":"GET","expected":403},
+
+    {"id":"D11","label":"FIN → ar_ap_cash_dashboard (manager only)","actor":"MgrFIN_BGR","endpoint":"/dashboards/finance/ar_ap_cash_dashboard.php","method":"GET","expected":200},
+    {"id":"D12","label":"FIN staff → ar_ap_cash_dashboard (denied - manager only)","actor":"StaffFIN_BGR","endpoint":"/dashboards/finance/ar_ap_cash_dashboard.php","method":"GET","expected":403},
+    {"id":"D13","label":"ACT → ar_ap_cash_dashboard (denied)","actor":"StaffACT_BGR","endpoint":"/dashboards/finance/ar_ap_cash_dashboard.php","method":"GET","expected":403},
+
+    {"id":"D14","label":"ACT → act_dashboard","actor":"StaffACT_BGR","endpoint":"/dashboards/act/act_dashboard.php","method":"GET","expected":200},
+    {"id":"D15","label":"FIN → act_dashboard (denied)","actor":"StaffFIN_BGR","endpoint":"/dashboards/act/act_dashboard.php","method":"GET","expected":403},
+
+    {"id":"D16","label":"HRL → hrl_dashboard","actor":"StaffHRL_BGR","endpoint":"/dashboards/hrl/hrl_dashboard.php","method":"GET","expected":200},
+    {"id":"D17","label":"FIN → hrl_dashboard (denied)","actor":"StaffFIN_BGR","endpoint":"/dashboards/hrl/hrl_dashboard.php","method":"GET","expected":403},
+
+    {"id":"D18","label":"SCM → scm_dashboard","actor":"StaffSCM_BGR","endpoint":"/dashboards/scm/scm_dashboard.php","method":"GET","expected":200},
+    {"id":"D19","label":"CRM → scm_dashboard (denied)","actor":"StaffCRM_BGR","endpoint":"/dashboards/scm/scm_dashboard.php","method":"GET","expected":403},
+
+    {"id":"D20","label":"PQP → qc_complaint_dashboard","actor":"StaffPQP_BGR","endpoint":"/dashboards/quality/qc_complaint_dashboard.php","method":"GET","expected":200},
+    {"id":"D21","label":"BRANCH → qc_complaint_dashboard","actor":"StaffBRANCH_BGR","endpoint":"/dashboards/quality/qc_complaint_dashboard.php","method":"GET","expected":200},
+    {"id":"D22","label":"FIN → qc_complaint_dashboard (denied)","actor":"StaffFIN_BGR","endpoint":"/dashboards/quality/qc_complaint_dashboard.php","method":"GET","expected":403},
+
+    {"id":"D23","label":"PQP → license_docs_dashboard","actor":"StaffPQP_BGR","endpoint":"/dashboards/regulatory/license_docs_dashboard.php","method":"GET","expected":200},
+    {"id":"D24","label":"HRL → license_docs_dashboard","actor":"StaffHRL_BGR","endpoint":"/dashboards/regulatory/license_docs_dashboard.php","method":"GET","expected":200},
+    {"id":"D25","label":"CRM → license_docs_dashboard (denied)","actor":"StaffCRM_BGR","endpoint":"/dashboards/regulatory/license_docs_dashboard.php","method":"GET","expected":403},
+
+    {"id":"M01","label":"ITC → master/index.php","actor":"StaffITC_BGR","endpoint":"/master/index.php","method":"GET","expected":200},
+    {"id":"M02","label":"CRM → master/index.php (denied)","actor":"StaffCRM_BGR","endpoint":"/master/index.php","method":"GET","expected":403},
+    {"id":"M03","label":"SYS → master_system_login.php","actor":"superadmin","endpoint":"/master/master_system_login.php","method":"GET","expected":200},
+    {"id":"M04","label":"ITC → master_system_login.php (denied)","actor":"MgrITC_BGR","endpoint":"/master/master_system_login.php","method":"GET","expected":403},
+    {"id":"M05","label":"FIN → company_bank_accounts.php","actor":"MgrFIN_BGR","endpoint":"/master/company_bank_accounts.php","method":"GET","expected":200},
+    {"id":"M06","label":"CRM → company_bank_accounts.php (denied)","actor":"StaffCRM_BGR","endpoint":"/master/company_bank_accounts.php","method":"GET","expected":403},
+
+    {"id":"R01","label":"SYS → rbac/index.php","actor":"superadmin","endpoint":"/rbac/index.php","method":"GET","expected":200},
+    {"id":"R02","label":"ITC → rbac/index.php (denied — SYS only per spec)","actor":"MgrITC_BGR","endpoint":"/rbac/index.php","method":"GET","expected":403},
+    {"id":"R03","label":"Any non-SYS → rbac/*","actor":"StaffACT_BGR","endpoint":"/rbac/rbac_center.php","method":"GET","expected":403},
+
+    {"id":"T01","label":"SYS → tools/index.php","actor":"superadmin","endpoint":"/tools/index.php","method":"GET","expected":200},
+    {"id":"T02","label":"ITC → tools/index.php","actor":"MgrITC_BGR","endpoint":"/tools/index.php","method":"GET","expected":200},
+    {"id":"T03","label":"CRM → tools/index.php (denied)","actor":"StaffCRM_BGR","endpoint":"/tools/index.php","method":"GET","expected":403},
+    {"id":"T04","label":"ITC → tools/qa/run_cutover_checks.php (denied — SYS only sub-tools)","actor":"MgrITC_BGR","endpoint":"/tools/qa/run_cutover_checks.php","method":"GET","expected":403},
+
+    {"id":"F01","label":"FIN staff → purchases_payment_ap.php GET (view allowed)","actor":"StaffFIN_BGR","endpoint":"/purchases/purchases_payment_ap.php","method":"GET","expected":200},
+    {"id":"F02","label":"FIN staff → POST create_pay (denied — FIN Central only)","actor":"StaffFIN_BGR","endpoint":"/purchases/purchases_payment_ap.php","method":"POST","action":"create_pay","expected":403},
+    {"id":"F03","label":"MgrFIN non-BGR → POST create_pay (denied)","actor":"MgrFIN_BDG","endpoint":"/purchases/purchases_payment_ap.php","method":"POST","action":"create_pay","expected":403},
+    {"id":"F04","label":"MgrFIN_BGR → POST create_pay (allowed)","actor":"MgrFIN_BGR","endpoint":"/purchases/purchases_payment_ap.php","method":"POST","action":"create_pay","expected":200},
+    {"id":"F05","label":"SYS → POST create_pay (allowed)","actor":"superadmin","endpoint":"/purchases/purchases_payment_ap.php","method":"POST","action":"create_pay","expected":200},
+    {"id":"F06","label":"ACT → purchases_payment_ap.php (denied — FIN+SYS only)","actor":"StaffACT_BGR","endpoint":"/purchases/purchases_payment_ap.php","method":"GET","expected":403},
+
+    {"id":"G01","label":"POST without CSRF → 403","actor":"StaffFIN_BGR","endpoint":"/purchases/purchases_payment_ap.php","method":"POST","csrf":"MISSING","expected":403},
+
+    {"id":"P01","label":"PQP → purchases/index.php","actor":"StaffPQP_BGR","endpoint":"/purchases/index.php","method":"GET","expected":200},
+    {"id":"P02","label":"CRM → purchases/index.php (denied)","actor":"StaffCRM_BGR","endpoint":"/purchases/index.php","method":"GET","expected":403},
+    {"id":"P03","label":"PQP → ICT","actor":"StaffPQP_BGR","endpoint":"/purchases/purchases_import_control_tower.php","method":"GET","expected":200},
+    {"id":"P04","label":"BRANCH → ICT","actor":"StaffBRANCH_BGR","endpoint":"/purchases/purchases_import_control_tower.php","method":"GET","expected":200},
+    {"id":"P05","label":"MPR → ICT (denied)","actor":"StaffMPR_BGR","endpoint":"/purchases/purchases_import_control_tower.php","method":"GET","expected":403},
+
+    {"id":"W01","label":"WQS → stock/index.php","actor":"StaffWQS_BGR","endpoint":"/stock/index.php","method":"GET","expected":200},
+    {"id":"W02","label":"CRM → stock/index.php (denied)","actor":"StaffCRM_BGR","endpoint":"/stock/index.php","method":"GET","expected":403},
+
+    {"id":"S01","label":"CRM → sales/index.php","actor":"StaffCRM_BGR","endpoint":"/sales/index.php","method":"GET","expected":200},
+    {"id":"S02","label":"WQS → sales/index.php (denied)","actor":"StaffWQS_BGR","endpoint":"/sales/index.php","method":"GET","expected":403},
+
+    {"id":"X01","label":"Maker cannot approve own GL Reversal","actor":"MgrFIN_BGR","endpoint":"/purchases/gl_reversal_approvals.php","method":"POST","action":"approve","note":"req.requested_by == approver.user_id","expected":403},
+    {"id":"X02","label":"DO transition: CRM→on_delivery blocked","actor":"StaffCRM_BGR","endpoint":"/sales/scm_do_tasks.php","method":"POST","action":"on_delivery","expected":403}
+  ],
+  "summary": {
+    "total_scenarios": 44,
+    "categories": {
+      "universal": 5,
+      "dashboards": 22,
+      "master": 6,
+      "rbac_tools": 7,
+      "fin_central": 6,
+      "misc": 4
+    },
+    "special_rules": {
+      "rbac_index_sys_only": "R02 confirms ITC cannot access /rbac/index.php",
+      "tools_itc_can_view_index": "T02 confirms ITC CAN access /tools/index.php (dashboard view only)",
+      "fin_central_username": "F04: only MgrFIN_BGR (by exact username) + SYS can post payment",
+      "csrf_mandatory": "G01: POST without CSRF always 403"
+    }
+  }
+}

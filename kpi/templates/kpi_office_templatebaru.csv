@@ -1,0 +1,2 @@
+month_ym,office_code,status,sales_total,do_count,do_paid_count,ar_outstanding,ar_overdue,ar_aging,stock_value,po_total,ap_outstanding,ap_overdue,asset_cost,asset_nbv,headcount,rev_per_employee,note
+2025-12,OFFICE-JKT,DRAFT,0,0,0,0,0,"0-30:0; 31-60:0; 61-90:0; 91+:0",0,0,0,0,0,0,0,0,""

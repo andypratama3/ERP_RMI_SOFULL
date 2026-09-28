@@ -1,0 +1,2 @@
+supplier_code,supplier_name,office_code,legacy_document_no,document_date,due_date,original_amount,paid_amount,payment_date,status,currency,notes
+SUP001,PT CONTOH SUPPLIER,BGR,INV-LAMA-001,2026-08-01,2026-08-31,15000000,5000000,,PARTIAL,IDR,Sisa hutang sebelum ERP

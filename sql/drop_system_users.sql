@@ -1,0 +1,2 @@
+-- DEPRECATED: File ini dipindah ke sql/utils/drop_system_users.sql
+-- Jalankan: mysql -u root -p erp_rmi_sofull < sql/utils/drop_system_users.sql

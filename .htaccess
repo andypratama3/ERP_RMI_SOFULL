@@ -1,0 +1,10 @@
+RewriteEngine On
+
+<IfModule mod_headers.c>
+  Header always unset Permissions-Policy
+  Header always unset Feature-Policy
+  Header always set Permissions-Policy "geolocation=(self \"https://erp.rizqullahcorp.com\" \"https://rizqullahcorp.com\"), camera=(self \"https://erp.rizqullahcorp.com\" \"https://rizqullahcorp.com\"), fullscreen=(self)"
+</IfModule>
+
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

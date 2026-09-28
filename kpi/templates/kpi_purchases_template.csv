@@ -1,0 +1,2 @@
+month_ym,office_code,status,pr_submitted_count,pr_submitted_age_median_days,po_open_count,po_open_value,po_to_received_avg_days,eta_ontime_pct,forwarder_pending_count,docs_missing_count,ceisa_pending_count,ap_outstanding,ap_overdue,purchases_note,source_purchases
+2026-01,OFFICE1,DRAFT,0,0,0,0,0,0,0,0,0,0,0,,manual

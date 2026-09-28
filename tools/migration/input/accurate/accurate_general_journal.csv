@@ -1,0 +1,3 @@
+No,JournalNo,JournalDate,LineNo,AccountNo,Debit,Credit,Description
+1,GJ-ACC-0001,2026-01-12,1,110101,300000,0,Accurate journal debit
+2,GJ-ACC-0001,2026-01-12,2,410101,0,300000,Accurate journal credit

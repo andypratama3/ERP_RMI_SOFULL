@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOP ACT / Accounting Tax</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 26px; color: #0f172a; line-height: 1.5; }
+    h1 { font-size: 24px; margin: 0 0 10px; }
+    h2 { font-size: 17px; margin-top: 18px; }
+    p, li { font-size: 13px; }
+    code { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; padding: 1px 4px; }
+    .meta { font-size: 12px; color: #334155; margin-bottom: 8px; }
+    @media print { body { margin: 12mm; } }
+  </style>
+</head>
+<body>
+  <h1>SOP ACT / Accounting Tax</h1>
+  <div class="meta">Dokumen SOP modul - versi 2026-02-11</div>
+  <p>Tujuan: memastikan proses operasional modul berjalan standar, aman, dan terukur.</p>
+
+  <h2>Ruang Lingkup</h2>
+  <ul><li><code>master/master_tax.php</code></li><li><code>finance/accounting flow</code></li><li><code>fixed asset</code></li></ul>
+
+  <h2>Prasyarat</h2>
+  <ul>
+    <li>User sudah login dan memiliki role sesuai kewenangan modul.</li>
+    <li>Data master terkait sudah valid (office, department, user, product, vendor, customer).</li>
+    <li>Semua mutasi dilakukan lewat mekanisme resmi sistem.</li>
+  </ul>
+
+  <h2>Langkah Operasional</h2>
+  <ol><li>Validasi kelengkapan dokumen transaksi sebelum posting akuntansi.</li><li>Pastikan mapping akun dan tax profile sesuai kebijakan perusahaan.</li><li>Lakukan rekonsiliasi periodik AR/AP/GL sesuai jadwal closing.</li><li>Kelola adjustment dan reversal hanya melalui approval resmi.</li><li>Dokumentasikan hasil closing dan exception untuk audit.</li></ol>
+
+  <h2>Kontrol dan Kepatuhan</h2>
+  <ul><li>Jaga segregasi tugas maker-checker-approver.</li><li>Hindari jurnal manual tanpa referensi dokumen.</li><li>Seluruh perubahan sensitif harus auditable.</li></ul>
+
+  <h2>Bukti Operasional</h2>
+  <ul>
+    <li>Simpan bukti transaksi, approval, dan exception penting.</li>
+    <li>Gunakan dashboard/KPI untuk monitoring performa harian dan bulanan.</li>
+    <li>Gunakan audit log untuk investigasi jika terjadi mismatch.</li>
+  </ul>
+
+  <h2>Eskalasi</h2>
+  <ul>
+    <li>Jika ada anomali data, hold proses lanjutan dan eskalasi ke PIC modul + ITC.</li>
+    <li>Jika ada risiko keamanan/akses, eskalasi ke Security/ITC dan lakukan containment.</li>
+  </ul>
+</body>
+</html>

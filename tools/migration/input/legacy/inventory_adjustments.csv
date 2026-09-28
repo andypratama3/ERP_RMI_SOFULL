@@ -1,0 +1,2 @@
+source_id,adjustment_no,adjustment_date,item_code,warehouse_code,qty_delta,note
+1,IA-0001,2026-01-15,ITEM001,BGR,-1,Damage item

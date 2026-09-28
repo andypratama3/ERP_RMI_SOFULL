@@ -1,0 +1,30 @@
+---
+description: RBAC role convention — hanya 3 role, jangan tambah tanpa persetujuan user
+alwaysApply: true
+---
+
+# RBAC Roles — ERP_RMI_SOFULL
+
+## Konvensi Role (Tetap)
+
+Hanya **3 role** yang disepakati:
+
+| Role | Deskripsi |
+|------|-----------|
+| **manager** | Manager divisi |
+| **staff** | Staff operasional |
+| **sys** | System (khusus SYS) & Administrator sistem — setara admin/ADMIN/superadmin/SUPERADMIN |
+
+## Mapping Konsisten
+
+| Level | Scope |
+|-------|-------|
+| **SYS** | ADMIN & SUPERADMIN (privileged, akses penuh) |
+| **MANAGER & STAFF** | ACT, CRM, SCM, WQS, FIN, HRL, BRANCH, PQP, ITC, MPR (dept operasional) |
+
+## Aturan Wajib
+
+- **Jangan menambahkan role baru** tanpa persetujuan eksplisit dari user.
+- **Jangan menambah permission/guard baru** yang mengubah scope akses tanpa konfirmasi user.
+- Privileged: SYS = ADMIN = SUPERADMIN (akses penuh). OWNER deprecated, diganti SYS.
+- Role baru yang valid: hanya `manager`, `staff`, `sys`.

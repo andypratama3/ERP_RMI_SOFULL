@@ -1,0 +1,4 @@
+# Blokir akses langsung ke file sensitif di root docs/
+<Files "NOTES_RMI_TERMINOLOGY.md">
+  Require all denied
+</Files>

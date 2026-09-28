@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOP Index ERP_RMI_SOFULL</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 26px; color: #111827; }
+    h1, h2 { color: #0f172a; margin: 0 0 10px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 17px; margin-top: 20px; }
+    p, li, td, th { font-size: 13px; line-height: 1.45; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border: 1px solid #cbd5e1; padding: 7px; vertical-align: top; }
+    th { background: #f1f5f9; text-align: left; }
+    code { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; padding: 1px 4px; font-size: 12px; }
+    .meta { font-size: 12px; color: #334155; margin-bottom: 8px; }
+    @media print { body { margin: 12mm; } }
+  </style>
+</head>
+<body>
+  <h1>SOP Index ERP_RMI_SOFULL</h1>
+  <div class="meta">Katalog SOP aktif - versi 2026-02-11</div>
+  <p>Tujuan: 1 tempat untuk melihat seluruh SOP aktif yang dipakai tim operasional, admin, dan ITC.</p>
+
+  <h2>A. SOP Governance Utama (Repository Root)</h2>
+  <table>
+    <thead><tr><th>SOP</th><th>Fokus</th><th>File</th></tr></thead>
+    <tbody>
+      <tr><td>SOP Operasional Harian</td><td>Monitoring harian, kontrol incident, governance run</td><td><code>SOP_OPERASIONAL_HARIAN.md</code></td></tr>
+      <tr><td>SOP Admin/ITC Account Bootstrap</td><td>Seed akun dari master_departements + holder mapping</td><td><code>SOP_ADMIN_ITC_ACCOUNT_BOOTSTRAP.md</code></td></tr>
+      <tr><td>SOP Master Data</td><td>Kelola master data lintas modul + kontrol audit</td><td><code>SOP_MASTER_DATA.md</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>B. SOP Modul Spesifik</h2>
+  <table>
+    <thead><tr><th>Modul</th><th>SOP</th><th>File</th></tr></thead>
+    <tbody>
+      <tr><td>Absensi</td><td>SOP Singkat Absensi by Photo</td><td><code>absensi/_docs/SOP_Absensi_Photo.md</code></td></tr>
+      <tr><td>Master Data</td><td>SOP Master Data (baru)</td><td><code>SOP_MASTER_DATA.md</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>C. Print-Ready SOP (HTML)</h2>
+  <ul>
+    <li><code>SOP_ADMIN_ITC_ACCOUNT_BOOTSTRAP_PRINT.html</code></li>
+    <li><code>SOP_MASTER_DATA_PRINT.html</code></li>
+    <li><code>SOP_INDEX_ERP_RMI_SOFULL_PRINT.html</code></li>
+  </ul>
+
+  <h2>D. Referensi untuk modul belum punya SOP khusus</h2>
+  <ul>
+    <li><code>docs/help_sop_map.json</code> (F1 map per halaman/modul, termasuk master)</li>
+    <li><code>docs/officepack/dept_training/*.html</code> (manual departemen)</li>
+    <li><code>docs/officepack/checklists/*.html</code> (checklist implementasi/go-live)</li>
+  </ul>
+
+  <h2>E. Aturan penambahan SOP baru</h2>
+  <ol>
+    <li>Wajib ada file source <code>.md</code>.</li>
+    <li>Wajib ada versi print-ready <code>.html</code>.</li>
+    <li>Wajib didaftarkan di <code>GOVERNANCE_DOCS_INDEX.md</code> dan <code>SOP_INDEX_ERP_RMI_SOFULL.md</code>.</li>
+    <li>Jika masuk Office Pack, daftarkan ke index, manifest, dan checksums Office Pack.</li>
+  </ol>
+</body>
+</html>
+

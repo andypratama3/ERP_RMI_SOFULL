@@ -1,0 +1,202 @@
+openapi: 3.0.3
+info:
+  title: ERP RMI Mobile API
+  version: 1.0.1
+  description: |
+    Kontrak untuk endpoint **logis** di bawah `/api/v1/mobile/` (pemanggilan nyata lewat file `*.php` yang memuat `_router.php`).
+
+    **Header:** `X-Request-Id` (validasi di server). **POST mutasi:** `X-Idempotency-Key` (wajib untuk operasi yang mendukung idempotency).
+
+    **Auth:** `Bearer` JWT untuk semua operasi kecuali `POST /auth/login` dan `POST /auth/refresh`.
+
+    **Master read:** `GET /master/products`, `/master/vendors`, `/master/customers` di implementasi saat ini mengembalikan **403** (policy).
+
+    **Stock opname:** file `stock/opname_*.php` ada, namun **handler belum terdaftar** di `api/v1/mobile/_router.php` — operasi berikut ditandai `x-erp-router-v1: false` (lihat `docs/API_INDEX.md`).
+servers:
+  - url: /api/v1/mobile
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    XRequestId:
+      in: header
+      name: X-Request-Id
+      required: true
+      schema:
+        type: string
+    XIdempotencyKey:
+      in: header
+      name: X-Idempotency-Key
+      required: true
+      schema:
+        type: string
+  schemas:
+    SuccessEnvelope:
+      type: object
+      required: [ok, message, data, request_id]
+      properties:
+        ok: { type: boolean, example: true }
+        message: { type: string, example: OK }
+        data: { type: object, additionalProperties: true }
+        request_id: { type: string }
+    ErrorEnvelope:
+      type: object
+      required: [ok, code, message, request_id]
+      properties:
+        ok: { type: boolean, example: false }
+        code:
+          type: string
+          enum:
+            - ERR_UNAUTHENTICATED
+            - ERR_TOKEN_EXPIRED
+            - ERR_FORBIDDEN
+            - ERR_VALIDATION
+            - ERR_RATE_LIMIT
+            - ERR_IDEMPOTENCY_REPLAY_MISMATCH
+            - ERR_CONFLICT_STATE_CHANGED
+            - ERR_DUPLICATE_INVOICE
+            - ERR_3WAY_MISMATCH
+            - ERR_NEGATIVE_STOCK
+            - ERR_SELF_APPROVE_FORBIDDEN
+            - ERR_UPLOAD_INVALID_MIME
+            - ERR_UPLOAD_TOO_LARGE
+            - ERR_QUOTA_EXCEEDED
+            - ERR_NOT_FOUND
+            - ERR_INTERNAL
+        message: { type: string }
+        request_id: { type: string }
+        details:
+          type: object
+          additionalProperties: true
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      security: []
+      parameters: [ { $ref: '#/components/parameters/XRequestId' } ]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        default: { description: Error, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+  /auth/refresh:
+    post:
+      security: []
+      parameters: [ { $ref: '#/components/parameters/XRequestId' } ]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } }
+        default: { description: Error, content: { application/json: { schema: { $ref: '#/components/schemas/ErrorEnvelope' } } } }
+  /auth/logout:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /auth/me:
+    get:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /dashboard/get:
+    get:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /tasks/my:
+    get:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /sales/do_list: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /sales/do_detail: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /sales/do_action:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /purchases/pr_list: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /purchases/pr_create:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /purchases/po_list: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /purchases/po_create:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /purchases/po_detail: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /purchases/ap_invoice_list: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /purchases/ap_invoice_create:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /purchases/ap_payment_list: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /purchases/ap_payment_create:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /stock/items: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /stock/incoming_list: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /stock/incoming_receive:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /stock/adjustment_create:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /stock/adjustment_approve:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /stock/audit: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/channels: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/messages: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/send:
+    post:
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } }
+  /chat/read: { post: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/mark_all_read: { post: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/mute: { post: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/unmute: { post: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/presence_ping: { post: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/presence_get: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/search: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/attachment_upload: { post: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/attachment_preview: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /chat/attachment_download: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /master/products: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /master/vendors: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /master/customers: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /notifications/register_token: { post: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /notifications/list: { get: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /notifications/mark_read: { post: { responses: { '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SuccessEnvelope' } } } } } } }
+  /stock/opname_list:
+    get:
+      x-erp-router-v1: false
+      summary: Daftar opname (handler belum di _router v1)
+      description: Panggilan via `stock/opname_list.php` dapat mengembalikan ERR_NOT_FOUND sampai router diselaraskan.
+      parameters: [ { $ref: '#/components/parameters/XRequestId' } ]
+      responses:
+        '404': { description: Endpoint tidak terdaftar di router v1 }
+  /stock/opname_detail:
+    get:
+      x-erp-router-v1: false
+      parameters: [ { $ref: '#/components/parameters/XRequestId' } ]
+      responses:
+        '404': { description: Endpoint tidak terdaftar di router v1 }
+  /stock/opname_create:
+    post:
+      x-erp-router-v1: false
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses:
+        '404': { description: Endpoint tidak terdaftar di router v1 }
+  /stock/opname_input_qty:
+    post:
+      x-erp-router-v1: false
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses:
+        '404': { description: Endpoint tidak terdaftar di router v1 }
+  /stock/opname_apply:
+    post:
+      x-erp-router-v1: false
+      parameters: [ { $ref: '#/components/parameters/XRequestId' }, { $ref: '#/components/parameters/XIdempotencyKey' } ]
+      responses:
+        '404': { description: Endpoint tidak terdaftar di router v1 }

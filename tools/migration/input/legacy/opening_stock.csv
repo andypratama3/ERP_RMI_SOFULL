@@ -1,0 +1,2 @@
+source_id,balance_date,item_code,warehouse_code,qty_on_hand,stock_value,currency
+1,2025-12-31,ITEM001,BGR,10,1000000,IDR

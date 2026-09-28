@@ -1,0 +1,31 @@
+---
+description: Path ERP_RMI_SOFULL — edit vs eksekusi
+alwaysApply: true
+---
+
+# Path Project ERP_RMI_SOFULL
+
+## Konteks
+
+| Path | Lokasi | Dipakai untuk |
+|------|--------|---------------|
+| `/volume4/web/ERP_RMI_SOFULL` | NAS (Synology) | Web server baca dari sini; CLI tools wajib jalan di sini |
+| `/Volumes/web/ERP_RMI_SOFULL` | Mac (mount SMB) | Edit file — jika share NAS terhubung, edit = langsung ke NAS |
+
+## Aturan Edit (Agar Perubahan Terlihat)
+
+- **Edit di share NAS:** Buka project dari Finder → RMI-2025 → web → ERP_RMI_SOFULL. Path = `/Volumes/web/ERP_RMI_SOFULL`. Save = langsung ke NAS.
+- **Edit di folder lokal:** Perubahan TIDAK otomatis ke NAS. Harus deploy manual (scp/rsync). Lihat `docs/SETUP_TIM_EDIT_TERLIHAT.md`.
+
+## Aturan CLI / Tools
+
+- Scripts (smoke, cutover, backup) **wajib** dijalankan di NAS: `cd /volume4/web/ERP_RMI_SOFULL`
+- Dari Mac mount → guard FAIL (RUN_ON_NAS_REQUIRED)
+
+## Contoh
+
+```
+✅ Edit: /Volumes/web/ERP_RMI_SOFULL/... (jika share terhubung)
+✅ Eksekusi: cd /volume4/web/ERP_RMI_SOFULL && php tools/...
+❌ Edit di ~/Projects/... tanpa deploy → perubahan tidak terlihat
+```

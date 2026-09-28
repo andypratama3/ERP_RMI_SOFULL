@@ -1,0 +1,2 @@
+No,ReceiptNo,ReceiptDate,InvoiceNo,CustomerNo,Amount,Currency,Method,Description
+1,RC-ACC-0001,2026-01-09,SI-ACC-0001,ACCCUST01,222000,IDR,BANK,Payment SI-ACC-0001

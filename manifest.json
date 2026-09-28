@@ -1,0 +1,18 @@
+{
+  "app": "ERP_RMI_SOFULL",
+  "created_at": "2026-04-16T17:02:36Z",
+  "package": "ERP_RMI_SOFULL_backup_20260417_000002_auto_2300",
+  "root_dir": "[APP_ROOT]",
+  "files_zip": "files.zip",
+  "files_sha256": "00c4139b397f4e172ddd54c06b43ba6be45bed676af47e2db96fe547a8943753",
+  "db_dump": "",
+  "db_sha256": "",
+  "db_status": "skipped",
+  "db_reason": "db config missing (host/name/user)",
+  "db_config": {
+    "host": "[REDACTED]",
+    "port": "",
+    "name": "",
+    "user": ""
+  }
+}

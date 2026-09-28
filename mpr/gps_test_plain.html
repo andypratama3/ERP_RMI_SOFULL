@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPS Test Plain</title>
+</head>
+<body>
+<h3>GPS Test Plain</h3>
+<button onclick="getGps()">Ambil GPS</button>
+<pre id="out">Belum mulai</pre>
+
+<script>
+function log(msg) {
+  document.getElementById('out').textContent += "\n" + msg;
+}
+
+function getGps() {
+  document.getElementById('out').textContent = "Klik GPS...";
+  
+  if (!window.isSecureContext) {
+    log("ERROR: halaman tidak secure context");
+    return;
+  }
+
+  if (!navigator.geolocation) {
+    log("ERROR: geolocation tidak tersedia");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      log("OK");
+      log("lat: " + pos.coords.latitude);
+      log("lng: " + pos.coords.longitude);
+      log("acc: " + pos.coords.accuracy);
+    },
+    function(err) {
+      log("ERROR code: " + err.code);
+      log("ERROR message: " + err.message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 60000,
+      maximumAge: 0
+    }
+  );
+}
+</script>
+</body>
+</html>

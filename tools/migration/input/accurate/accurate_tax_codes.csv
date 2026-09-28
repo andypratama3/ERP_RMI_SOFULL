@@ -1,0 +1,3 @@
+No,TaxCode,TaxName,TaxType,Rate,Status
+1,PPN11,PPN 11%,PPN,11,active
+2,NONPPN,Non PPN,PPN,0,active

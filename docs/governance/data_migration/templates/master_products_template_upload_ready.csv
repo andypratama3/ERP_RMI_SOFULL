@@ -1,0 +1,4 @@
+sku,products_name,category,unit,status
+SKU001,Produk Satu,BMHP,PCS,active
+SKU002,Produk Dua,ALKES,PCS,active
+SKU003,Produk Tiga,BMHP,BOX,inactive

@@ -1,0 +1,88 @@
+{
+  "state_version": 1,
+  "policy_id": "ALERT-POLICY-BASELINE",
+  "updated_at": "",
+  "updated_by": "",
+  "request_id": "",
+  "email": {
+    "enabled_default": false,
+    "max_emails_per_day": 20
+  },
+  "throttle": {
+    "enabled": true,
+    "cooldown_minutes_by_severity": {
+      "CRITICAL": 60,
+      "ATTENTION": 240
+    }
+  },
+  "sla_defaults": {
+    "CRITICAL": {
+      "ack_minutes": 30,
+      "resolve_minutes": 240
+    },
+    "ATTENTION": {
+      "ack_minutes": 240,
+      "resolve_minutes": 1440
+    }
+  },
+  "owners": {
+    "default_owner": "OPS",
+    "default_secondary": "ENG_LEAD",
+    "rules": {
+      "contract_fail": {
+        "primary": "QA",
+        "secondary": "SECURITY",
+        "escalation": ["ENG_LEAD", "RELEASE"]
+      },
+      "smoke_http_fail": {
+        "primary": "QA",
+        "secondary": "OPS",
+        "escalation": ["ENG_LEAD"]
+      },
+      "core_flows_fail": {
+        "primary": "ENG_LEAD",
+        "secondary": "QA",
+        "escalation": ["RELEASE"]
+      },
+      "backlog_p0_present": {
+        "primary": "ENG_LEAD",
+        "secondary": "OPS",
+        "escalation": ["RELEASE"]
+      },
+      "release_verify_fail": {
+        "primary": "RELEASE",
+        "secondary": "QA",
+        "escalation": ["SECURITY"]
+      },
+      "backup_age": {
+        "primary": "OPS",
+        "secondary": "RELEASE",
+        "escalation": ["ENG_LEAD"]
+      },
+      "sla_breach": {
+        "primary": "OPS",
+        "secondary": "ENG_LEAD",
+        "escalation": ["RELEASE", "SECURITY"]
+      }
+    }
+  },
+  "escalation": {
+    "enabled": true,
+    "banner_add_sla_breach_badge": true,
+    "email_on_sla_breach": false,
+    "create_manual_action_queue": false,
+    "max_escalation_levels": 3,
+    "include_owner_in_non_admin_banner": true
+  },
+  "workflow": {
+    "allow_ack": true,
+    "allow_status_update": true,
+    "allow_owner_override": false,
+    "statuses": ["OPEN", "ACKNOWLEDGED", "IN_PROGRESS", "RESOLVED", "SUPPRESSED"],
+    "suppress_rules": {
+      "enabled": false,
+      "note": "Do not suppress CRITICAL in production without RFC"
+    }
+  }
+}
+

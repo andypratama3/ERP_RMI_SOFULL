@@ -1,0 +1,11 @@
+# Mobile API: rewrite /auth/me -> me.php (no .php in REST URL)
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^me$ me.php [L,QSA]
+RewriteRule ^login$ login.php [L,QSA]
+RewriteRule ^logout$ logout.php [L,QSA]
+RewriteRule ^refresh$ refresh.php [L,QSA]
+</IfModule>

@@ -1,0 +1,6 @@
+No,AccountNo,AccountName,Type,ParentAccountNo,Postable,Status
+1,110101,Kas Accurate,ASSET,,1,ACTIVE
+2,120101,Piutang Accurate,ASSET,,1,ACTIVE
+3,210101,Hutang Accurate,LIABILITY,,1,ACTIVE
+4,410101,Penjualan Accurate,REVENUE,,1,ACTIVE
+5,399999,Offset Opening Accurate,EQUITY,,1,ACTIVE

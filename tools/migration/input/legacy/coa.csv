@@ -1,0 +1,7 @@
+source_id,account_code,account_name,account_type,parent_code,is_postable,status
+1,110101,Kas Besar,ASSET,,1,ACTIVE
+2,120101,Piutang Usaha,ASSET,,1,ACTIVE
+3,210101,Hutang Usaha,LIABILITY,,1,ACTIVE
+4,410101,Penjualan,REVENUE,,1,ACTIVE
+5,510101,HPP,EXPENSE,,1,ACTIVE
+6,399999,Saldo Awal Offset,EQUITY,,1,ACTIVE

@@ -1,0 +1,6 @@
+timestamp_wib=2026-02-13 05:39:23 WIB
+pwd=/volume4/web/ERP_RMI_SOFULL
+git_rev_parse_head:
+fatal: not a git repository (or any of the parent directories): .git
+git_log_1:
+fatal: not a git repository (or any of the parent directories): .git

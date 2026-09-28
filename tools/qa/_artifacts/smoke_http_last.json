@@ -1,0 +1,339 @@
+{
+  "_meta": {
+    "generated_at": "2026-03-15T00:00:00+07:00",
+    "spec": "RBAC_FINAL_SPEC v2.0",
+    "note": "Expected HTTP response matrix per role. Run live on NAS: php tools/qa/smoke_http.php --strict",
+    "enforcement_layers": {
+      "L1": "_shared/rbac_policy.php (82 rules, via require_rbac() in require_login())",
+      "L2": "Inline auth_allow_depts() in 7 dashboard files",
+      "L3": "auth_require_fin_central_approver() in purchases_payment_ap + gl_reversal_approvals",
+      "L4": "auth_maker_checker_require() via gl_reversal_approvals",
+      "L5": "verify_csrf() for all POST (in require_login())"
+    }
+  },
+  "smoke_accounts": {
+    "SYS": "SmokeSYS_SYS",
+    "BRANCH": "SmokeBRANCH_SYS",
+    "CRM": "uat_smoke_user",
+    "WQS": "qa_wqs",
+    "FIN": "qa_fin",
+    "FIN_CENTRAL": "MgrFIN_BGR",
+    "ITC": "MgrITC_BGR"
+  },
+  "tests": [
+    {
+      "group": "GUEST",
+      "id": "G01", "actor": "unauthenticated", "method": "GET",
+      "path": "/dashboards/index.php", "expected": 302, "label": "Guest → dashboard → redirect login"
+    },
+    {
+      "group": "GUEST",
+      "id": "G02", "actor": "unauthenticated", "method": "GET",
+      "path": "/sales/index.php", "expected": 302, "label": "Guest → sales"
+    },
+    {
+      "group": "GUEST",
+      "id": "G03", "actor": "unauthenticated", "method": "GET",
+      "path": "/purchases/index.php", "expected": 302, "label": "Guest → purchases"
+    },
+    {
+      "group": "GUEST",
+      "id": "G04", "actor": "unauthenticated", "method": "GET",
+      "path": "/stock/index.php", "expected": 302, "label": "Guest → stock"
+    },
+    {
+      "group": "GUEST",
+      "id": "G05", "actor": "unauthenticated", "method": "GET",
+      "path": "/master/master_system_login.php", "expected": 302, "label": "Guest → sys login"
+    },
+
+    {
+      "group": "SYS",
+      "id": "S01", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/dashboards/index.php", "expected": 200, "label": "SYS → dashboard"
+    },
+    {
+      "group": "SYS",
+      "id": "S02", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/master/master_system_login.php", "expected": 200, "label": "SYS → system login"
+    },
+    {
+      "group": "SYS",
+      "id": "S03", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/tools/health.php", "expected": 200, "label": "SYS → tools health"
+    },
+    {
+      "group": "SYS",
+      "id": "S04", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/tools/backup_schedule.php", "expected": 200, "label": "SYS → backup schedule"
+    },
+    {
+      "group": "SYS",
+      "id": "S05", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/tools/backup_manager.php", "expected": 200, "label": "SYS → backup manager"
+    },
+    {
+      "group": "SYS",
+      "id": "S06", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/sales/index.php", "expected": 302, "label": "SYS → sales/index → redirect to dashboard"
+    },
+    {
+      "group": "SYS",
+      "id": "S07", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/sales/sales_dashboard.php", "expected": 200, "label": "SYS → sales dashboard"
+    },
+    {
+      "group": "SYS",
+      "id": "S08", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/purchases/index.php", "expected": 302, "label": "SYS → purchases/index → redirect"
+    },
+    {
+      "group": "SYS",
+      "id": "S09", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/purchases/purchases_dashboard.php", "expected": 200, "label": "SYS → purchases dashboard"
+    },
+    {
+      "group": "SYS",
+      "id": "S10", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/stock/index.php", "expected": 302, "label": "SYS → stock/index → redirect"
+    },
+    {
+      "group": "SYS",
+      "id": "S11", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/stock/wqs_stock.php", "expected": 200, "label": "SYS → WQS stock"
+    },
+    {
+      "group": "SYS",
+      "id": "S12", "actor": "SmokeSYS_SYS", "method": "GET",
+      "path": "/rbac/index.php", "expected": 200, "label": "SYS → RBAC center"
+    },
+
+    {
+      "group": "BRANCH",
+      "id": "B01", "actor": "SmokeBRANCH_SYS", "method": "GET",
+      "path": "/dashboards/index.php", "expected": 200, "label": "BRANCH → dashboard"
+    },
+    {
+      "group": "BRANCH",
+      "id": "B02", "actor": "SmokeBRANCH_SYS", "method": "GET",
+      "path": "/master/master_system_login.php", "expected": 403, "label": "BRANCH → sys login BLOCKED"
+    },
+    {
+      "group": "BRANCH",
+      "id": "B03", "actor": "SmokeBRANCH_SYS", "method": "GET",
+      "path": "/tools/health.php", "expected": 403, "label": "BRANCH → tools health BLOCKED"
+    },
+    {
+      "group": "BRANCH",
+      "id": "B04", "actor": "SmokeBRANCH_SYS", "method": "GET",
+      "path": "/tools/backup_schedule.php", "expected": 403, "label": "BRANCH → backup schedule BLOCKED"
+    },
+    {
+      "group": "BRANCH",
+      "id": "B05", "actor": "SmokeBRANCH_SYS", "method": "GET",
+      "path": "/tools/backup_manager.php", "expected": 403, "label": "BRANCH → backup manager BLOCKED"
+    },
+    {
+      "group": "BRANCH",
+      "id": "B06", "actor": "SmokeBRANCH_SYS", "method": "GET",
+      "path": "/rbac/index.php", "expected": 403, "label": "BRANCH → RBAC BLOCKED"
+    },
+
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L01", "actor": "qa_wqs", "method": "GET",
+      "path": "/stock/wqs_pr.php", "expected": 200, "label": "WQS → wqs_pr OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L02", "actor": "StaffACT_BGR", "method": "GET",
+      "path": "/stock/wqs_pr.php", "expected": 403, "label": "ACT → wqs_pr BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L03", "actor": "qa_pqp", "method": "GET",
+      "path": "/purchases/purchases_po.php", "expected": 200, "label": "PQP → purchases_po OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L04", "actor": "StaffCRM_BGR", "method": "GET",
+      "path": "/purchases/purchases_po.php", "expected": 403, "label": "CRM → purchases_po BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L05", "actor": "qa_wqs", "method": "GET",
+      "path": "/stock/wqs_incoming.php", "expected": 200, "label": "WQS → wqs_incoming OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L06", "actor": "qa_fin", "method": "GET",
+      "path": "/stock/wqs_incoming.php", "expected": 403, "label": "FIN → wqs_incoming BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L07", "actor": "qa_fin", "method": "GET",
+      "path": "/purchases/purchases_invoice_ap.php", "expected": 200, "label": "FIN → invoice AP OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L08", "actor": "qa_wqs", "method": "GET",
+      "path": "/purchases/purchases_invoice_ap.php", "expected": 403, "label": "WQS → invoice AP BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L09", "actor": "qa_fin", "method": "GET",
+      "path": "/purchases/purchases_payment_ap.php", "expected": 200, "label": "FIN → payment AP (view) OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L10", "actor": "qa_wqs", "method": "GET",
+      "path": "/purchases/purchases_payment_ap.php", "expected": 403, "label": "WQS → payment AP BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L11", "actor": "qa_fin", "method": "GET",
+      "path": "/purchases/gl_reversal_approvals.php", "expected": 200, "label": "FIN → GL reversal (view) OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L12", "actor": "StaffBRANCH_BGR", "method": "GET",
+      "path": "/purchases/gl_reversal_approvals.php", "expected": 403, "label": "BRANCH → GL reversal BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L13", "actor": "uat_smoke_user", "method": "GET",
+      "path": "/sales/sales_do.php", "expected": 200, "label": "CRM → sales DO OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L14", "actor": "MgrITC_BGR", "method": "GET",
+      "path": "/sales/sales_do.php", "expected": 403, "label": "ITC → sales DO BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L15", "actor": "qa_wqs", "method": "GET",
+      "path": "/stock/wqs_stock.php", "expected": 200, "label": "WQS → wqs_stock OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L16", "actor": "qa_fin", "method": "GET",
+      "path": "/stock/wqs_stock.php", "expected": 403, "label": "FIN → wqs_stock BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L17", "actor": "MgrWQS_BGR", "method": "GET",
+      "path": "/stock/wqs_stock_adjustment.php", "expected": 200, "label": "WQS MANAGER → stock adj OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L18", "actor": "StaffWQS_BGR", "method": "GET",
+      "path": "/stock/wqs_stock_adjustment.php", "expected": 403, "label": "WQS STAFF → stock adj BLOCKED (manager only)"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L19", "actor": "qa_wqs", "method": "GET",
+      "path": "/stock/wqs_picking.php", "expected": 200, "label": "WQS → picking OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L20", "actor": "qa_fin", "method": "GET",
+      "path": "/stock/wqs_picking.php", "expected": 403, "label": "FIN → picking BLOCKED"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L21", "actor": "qa_wqs", "method": "GET",
+      "path": "/stock/wqs_allocation.php", "expected": 200, "label": "WQS → allocation OK"
+    },
+    {
+      "group": "LOCKED_ROUTES",
+      "id": "L22", "actor": "MgrITC_BGR", "method": "GET",
+      "path": "/stock/wqs_allocation.php", "expected": 403, "label": "ITC → allocation BLOCKED"
+    },
+
+    {
+      "group": "FIN_CENTRAL",
+      "id": "FC01", "actor": "StaffFIN_BGR", "method": "POST",
+      "path": "/purchases/purchases_payment_ap.php", "action": "create_pay",
+      "expected": 403, "label": "FIN Staff → POST payment BLOCKED"
+    },
+    {
+      "group": "FIN_CENTRAL",
+      "id": "FC02", "actor": "MgrFIN_BDG", "method": "POST",
+      "path": "/purchases/purchases_payment_ap.php", "action": "create_pay",
+      "expected": 403, "label": "FIN Manager non-BGR → POST payment BLOCKED"
+    },
+    {
+      "group": "FIN_CENTRAL",
+      "id": "FC03", "actor": "MgrFIN_BGR", "method": "POST",
+      "path": "/purchases/purchases_payment_ap.php", "action": "create_pay",
+      "expected": 200, "label": "MgrFIN_BGR → POST payment OK (FIN Central)"
+    },
+    {
+      "group": "FIN_CENTRAL",
+      "id": "FC04", "actor": "SmokeSYS_SYS", "method": "POST",
+      "path": "/purchases/purchases_payment_ap.php", "action": "create_pay",
+      "expected": 200, "label": "SYS → POST payment OK"
+    },
+
+    {
+      "group": "CSRF",
+      "id": "CR01", "actor": "MgrFIN_BGR", "method": "POST",
+      "path": "/purchases/purchases_payment_ap.php", "csrf": "MISSING",
+      "expected": 403, "label": "POST without CSRF → 403 always"
+    },
+    {
+      "group": "CSRF",
+      "id": "CR02", "actor": "SmokeSYS_SYS", "method": "POST",
+      "path": "/tools/backup_manager.php", "csrf": "MISSING",
+      "expected": 403, "label": "backup_manager POST without CSRF → 403"
+    },
+    {
+      "group": "CSRF",
+      "id": "CR03", "actor": "SmokeSYS_SYS", "method": "POST",
+      "path": "/tools/backup_manager.php", "csrf": "VALID",
+      "expected": 200, "label": "backup_manager POST with CSRF → 200 (SYS)"
+    },
+
+    {
+      "group": "ITC_ACCESS",
+      "id": "I01", "actor": "MgrITC_BGR", "method": "GET",
+      "path": "/tools/index.php", "expected": 200, "label": "ITC → tools/index OK (view only)"
+    },
+    {
+      "group": "ITC_ACCESS",
+      "id": "I02", "actor": "MgrITC_BGR", "method": "GET",
+      "path": "/tools/backup_manager.php", "expected": 403, "label": "ITC → backup_manager BLOCKED"
+    },
+    {
+      "group": "ITC_ACCESS",
+      "id": "I03", "actor": "MgrITC_BGR", "method": "GET",
+      "path": "/tools/backup_schedule.php", "expected": 403, "label": "ITC → backup_schedule BLOCKED"
+    },
+    {
+      "group": "ITC_ACCESS",
+      "id": "I04", "actor": "MgrITC_BGR", "method": "GET",
+      "path": "/rbac/index.php", "expected": 403, "label": "ITC → rbac BLOCKED (SYS only)"
+    }
+  ],
+  "summary": {
+    "total_tests": 55,
+    "groups": {
+      "GUEST": 5,
+      "SYS": 12,
+      "BRANCH": 6,
+      "LOCKED_ROUTES": 22,
+      "FIN_CENTRAL": 4,
+      "CSRF": 3,
+      "ITC_ACCESS": 4
+    },
+    "definition_of_done": {
+      "deny_by_default": "All unlisted routes get 403 (when strict=true)",
+      "guest_302": "All internal pages redirect to login for unauthenticated users",
+      "auth_403": "Authenticated users without permission get 403 (not redirect)",
+      "sys_full_access": "SYS can access tools, rbac, master_system_login",
+      "branch_blocked_from_tools": "BRANCH staff gets 403 on tools/*, rbac/*, master_system_login",
+      "fin_outflow_central": "ONLY MgrFIN_BGR or SYS can POST payment AP / approve GL reversal",
+      "csrf_mandatory": "POST without CSRF always 403"
+    }
+  }
+}

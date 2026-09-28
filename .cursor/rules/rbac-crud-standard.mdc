@@ -1,0 +1,25 @@
+---
+description: Standar permission quartet VIEW/CREATE/EDIT/DELETE dan katalog RBAC
+globs: config/rbac_permissions.php,_shared/rbac.php,hrl_process/**/*.php,rbac/**/*.php,docs/RBAC*.md
+alwaysApply: false
+---
+
+# RBAC — Quartet CRUD & katalog
+
+## Prinsip
+
+- Target konsistensi (Accurate-like / selaras **HRL Process**): per *resource* gunakan **`VIEW` · `CREATE` · `EDIT` · `DELETE`** bila memungkinkan.
+- Registry utama: **`config/rbac_permissions.php`** (sync ke DB via RBAC Center).
+- Katalog per modul (generated): **`docs/RBAC_CATALOG_BY_MODULE.md`** — regenerate: `php tools/rbac/build_rbac_catalog_md.php`
+- Aturan teks: **`docs/RBAC_CRUD_STANDARD.md`**
+
+## Modul baru / permission baru
+
+1. Tambahkan baris ke `config/rbac_permissions.php` + fallback `_shared/rbac.php` jika perlu.
+2. Gate halaman: GET → **VIEW**; POST mutasi → **CREATE** / **EDIT** / **DELETE** + CSRF.
+3. Hindari menambah `*.CRUD` kecuali alias sementara; prefer quartet.
+4. Setelah ubah registry, jalankan generator katalog agar dokumen selaras.
+
+## Helper
+
+- `_shared/rbac_crud.php` — `rmi_rbac_crud_codes('MOD.RESOURCE')` untuk empat kode sekaligus.

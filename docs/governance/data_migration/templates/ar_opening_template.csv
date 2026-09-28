@@ -1,0 +1,3 @@
+migration_batch,row_no,invoice_number,invoice_date,due_date,customers_code,office_code,currency,balance_amount,note
+CUTOVER_2026Q1,1,INV-AR-001,2026-01-31,2026-02-29,CUST001,BGR,IDR,9800000,Opening AR dari sistem lama
+

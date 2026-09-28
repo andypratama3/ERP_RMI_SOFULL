@@ -1,0 +1,175 @@
+{
+  "state_version": 1,
+  "stages": {
+    "00": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "01": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "02": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "03": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "04": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "05": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "06": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "07": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "08": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "09": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "10": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "11": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "12": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "13": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "14": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "15": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    },
+    "16": {
+      "requirements": {
+        "required_files": [],
+        "required_http_endpoints_file": "tools/qa/whitelists/http_manifest_v1.json",
+        "required_contract_whitelist_file": "tools/qa/whitelists/contract_manifest_v1.json",
+        "required_http_routes": [],
+        "required_contract_routes": [],
+        "required_env": []
+      }
+    }
+  }
+}

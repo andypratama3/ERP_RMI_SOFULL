@@ -1,0 +1,3029 @@
+{
+    "version": "2.0",
+    "updated": "2026-03-04",
+    "description": "F1 / Help map: halaman ERP → langkah/tips; dokumen file di docs/panduan/ + panduan_view.php",
+    "default": {
+        "title": "Bantuan",
+        "purpose": "Panduan singkat untuk halaman ini. Gunakan link di bawah untuk dokumen terkait atau buka Help Center.",
+        "diagram_title": "Alur O2C DO",
+        "steps": [
+            "Gunakan tombol ☰ Menu untuk navigasi",
+            "Tekan F1 di halaman modul untuk panduan spesifik",
+            "Buka Help Center untuk manual lengkap"
+        ],
+        "tips": [
+            "Sales, Purchases, Stock, HRL, Master punya panduan F1 lengkap",
+            "Help Center & docs/panduan/ untuk dokumen per halaman"
+        ],
+        "links": [
+            {
+                "label": "Help Center",
+                "url": "/docs/help_center.php"
+            }
+        ]
+    },
+    "map": [
+        {
+            "path": "/sales/sales_do.php",
+            "module": "CRM",
+            "title": "Sales DO",
+            "purpose": "Buat dan kelola Delivery Order. Alur O2C: CRM → WQS → SCM → FIN. Tekan F1 untuk panduan lengkap.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih customer, office, produk, qty",
+                "Buat DO → Submit",
+                "Kirim ke WQS (status sent_wqs)",
+                "Pantau di Control Tower jika stuck"
+            ],
+            "tips": [
+                "Pastikan customer & produk sudah di master",
+                "Cek pricelist jika harga otomatis",
+                "DO stuck? Buka Control Tower untuk tracking"
+            ]
+        },
+        {
+            "path": "/sales/sales_do_view.php",
+            "module": "CRM",
+            "title": "Sales DO View",
+            "purpose": "Detail DO: items, status, tracking. Lihat progress CRM→WQS→SCM→FIN. Print, tracking carrier.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat detail DO dari Control Tower atau link",
+                "Cek status per stage (sent_wqs, done, delivered)",
+                "Print DO jika perlu (sales_do_print_cf)",
+                "Tracking carrier jika ada",
+                "Tax Invoice jika sudah delivered"
+            ],
+            "tips": [
+                "Control Tower untuk daftar DO",
+                "sales_do untuk buat baru",
+                "Print CF untuk serah terima"
+            ]
+        },
+        {
+            "path": "/sales/crm_leads.php",
+            "module": "CRM",
+            "title": "CRM Leads",
+            "purpose": "Kelola leads/prospek. Pipeline: New → Contacted → Qualified → Won/Lost. Filter, create, edit, convert ke Customer.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat daftar leads",
+                "Filter by status/office",
+                "Create lead baru atau Edit existing",
+                "Convert ke Customer jika Won",
+                "crm_lead_view untuk detail"
+            ],
+            "tips": [
+                "Leads untuk pipeline penjualan",
+                "Customer dari master_customers",
+                "Won = siap convert"
+            ]
+        },
+        {
+            "path": "/sales/crm_lead_create.php",
+            "module": "CRM",
+            "title": "Create Lead",
+            "purpose": "Buat lead baru. Input nama, kontak, sumber. Lead masuk pipeline untuk follow-up hingga Won/Lost.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Input nama, phone, email",
+                "Pilih sumber lead (referral, web, dll)",
+                "Isi notes jika perlu",
+                "Submit → lead tercatat di pipeline"
+            ],
+            "tips": [
+                "Lead Won → convert ke Customer",
+                "crm_leads untuk daftar & filter",
+                "Edit di crm_lead_edit untuk update status"
+            ]
+        },
+        {
+            "path": "/sales/crm_lead_edit.php",
+            "module": "CRM",
+            "title": "Edit Lead",
+            "purpose": "Edit lead: update data, status pipeline (New/Contacted/Qualified/Won/Lost), notes. Simpan untuk tracking follow-up.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Buka lead dari crm_leads",
+                "Edit data: nama, kontak, notes",
+                "Update status pipeline",
+                "Won → Convert ke Customer",
+                "Simpan perubahan"
+            ],
+            "tips": [
+                "Won → convert ke master_customers",
+                "Lost → arsip, tidak perlu convert",
+                "crm_lead_view untuk detail lengkap"
+            ]
+        },
+        {
+            "path": "/sales/crm_lead_view.php",
+            "module": "CRM",
+            "title": "Lead View",
+            "purpose": "Detail lead: history, notes, status. Lihat aktivitas, update status, convert ke Customer jika Won.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat detail lead dari crm_leads",
+                "Cek history & notes",
+                "Update status pipeline jika perlu",
+                "Convert ke Customer jika status Won",
+                "Edit di crm_lead_edit untuk ubah data"
+            ],
+            "tips": [
+                "crm_leads untuk daftar",
+                "Convert hanya jika Won",
+                "SOP CRM untuk pipeline"
+            ]
+        },
+        {
+            "path": "/sales/sales_do_print_cf.php",
+            "module": "CRM",
+            "title": "Print DO (CF)",
+            "purpose": "Cetak Delivery Order format CF untuk serah terima. Pilih DO, preview, print. Dokumen untuk customer & SCM.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih DO Code dari parameter/daftar",
+                "Preview format CF (customer, items, qty)",
+                "Print untuk serah terima",
+                "Serah ke SCM untuk delivery",
+                "Arsip copy untuk customer"
+            ],
+            "tips": [
+                "sales_do_view untuk detail DO",
+                "Control Tower untuk daftar DO",
+                "Format CF = format standar serah terima"
+            ]
+        },
+        {
+            "path": "/sales/kpi_do_sla.php",
+            "module": "CRM",
+            "title": "KPI DO SLA",
+            "purpose": "KPI SLA & bottleneck DO. Pantau performa CRM-WQS-SCM-FIN. Identifikasi stage yang breach, eskalasi.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat SLA per stage (CRM→WQS→SCM→FIN)",
+                "Identifikasi bottleneck & breach",
+                "Drill ke Control Tower untuk DO bermasalah",
+                "Eskalasi ke divisi terkait jika breach"
+            ],
+            "tips": [
+                "Control Tower untuk DO stuck",
+                "SLA breach = perlu tindak lanjut",
+                "SOP KPI Center untuk definisi SLA"
+            ]
+        },
+        {
+            "path": "/sales/kpi_do_audit.php",
+            "module": "CRM",
+            "title": "KPI DO Audit",
+            "purpose": "Audit viewer untuk DO. Trace history perubahan status, user, waktu. Untuk investigasi & compliance.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih DO Code",
+                "Lihat audit trail: perubahan status",
+                "Trace user & waktu tiap perubahan",
+                "Export untuk laporan jika perlu"
+            ],
+            "tips": [
+                "Untuk investigasi selisih/keluhan",
+                "Control Tower untuk monitoring live",
+                "Audit trail immutable"
+            ]
+        },
+        {
+            "path": "/sales/sales_control_tower.php",
+            "module": "CRM",
+            "title": "Sales Control Tower",
+            "purpose": "Pantau status DO dari CRM sampai delivery. Deteksi DO yang stuck atau terlambat.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat daftar DO per status",
+                "Filter by office/tanggal",
+                "Eskalasi DO yang stuck > SLA",
+                "Drill ke detail DO jika perlu"
+            ],
+            "tips": [
+                "Refresh untuk data terbaru",
+                "DO sent_wqs menunggu WQS picking",
+                "DO done menunggu SCM delivery"
+            ]
+        },
+        {
+            "path": "/sales/sales_dashboard.php",
+            "module": "CRM",
+            "title": "Sales Dashboard",
+            "purpose": "KPI penjualan: volume DO, SLA, trend. Overview harian/mingguan. Drill ke Control Tower untuk detail.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat KPI harian/mingguan",
+                "Cek SLA compliance",
+                "Identifikasi trend & anomaly",
+                "Drill ke Control Tower untuk DO stuck",
+                "kpi_do_sla untuk detail SLA"
+            ],
+            "tips": [
+                "SLA breach? Eskalasi ke SCM/WQS",
+                "Control Tower untuk DO stuck",
+                "sales_do untuk buat DO baru"
+            ]
+        },
+        {
+            "path": "/sales/sales_order.php",
+            "module": "CRM",
+            "title": "Sales Order",
+            "purpose": "Kelola Sales Order sebelum jadi DO. Buat SO, konversi ke DO jika siap kirim. Bisa juga buat DO langsung di sales_do.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Buat SO atau lihat daftar existing",
+                "Input customer, produk, qty",
+                "Konversi SO → DO jika siap kirim",
+                "Lanjut ke sales_do untuk DO langsung",
+                "Control Tower untuk tracking"
+            ],
+            "tips": [
+                "SO siap? Konversi ke DO",
+                "sales_do untuk buat DO langsung",
+                "SO = order sebelum picking"
+            ]
+        },
+        {
+            "path": "/sales/sales_do_rekap.php",
+            "module": "CRM",
+            "title": "Sales DO Rekap",
+            "purpose": "Rekap DO per periode. Ringkasan qty, nilai, status. Untuk laporan & kontrol.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih periode (tanggal)",
+                "Filter by office/customer jika perlu",
+                "Lihat rekap per status",
+                "Export jika perlu"
+            ],
+            "tips": [
+                "Control Tower untuk DO stuck",
+                "Rekap untuk laporan manajemen",
+                "SOP CRM untuk prosedur"
+            ]
+        },
+        {
+            "path": "/sales/scm_tracker_sop.php",
+            "module": "SCM",
+            "title": "SCM Tracker SOP",
+            "purpose": "Tracking pengiriman sesuai SOP. Pantau DO dalam perjalanan, ETA, carrier.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat DO status sent_scm",
+                "Update tracking carrier",
+                "Input ETA & status delivery",
+                "Mark delivered jika sampai"
+            ],
+            "tips": [
+                "scm_do_tasks untuk task SCM",
+                "Control Tower untuk overview",
+                "SOP SCM untuk prosedur delivery"
+            ]
+        },
+        {
+            "path": "/sales/scm_tracker_mobile.php",
+            "module": "SCM",
+            "title": "SCM Tracker Mobile",
+            "purpose": "Tracking pengiriman versi mobile. Update status delivery dari lapangan.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Buka dari mobile",
+                "Lihat DO yang dikirim",
+                "Update status delivery",
+                "Foto bukti jika perlu"
+            ],
+            "tips": [
+                "Untuk driver/SCM di lapangan",
+                "scm_tracker_sop untuk desktop",
+                "SOP SCM untuk prosedur"
+            ]
+        },
+        {
+            "path": "/sales/tax_invoices.php",
+            "module": "FIN",
+            "title": "Tax Invoice",
+            "purpose": "Workflow faktur pajak untuk DO. Buat draft → Upload PDF → Set ISSUED. Jika config REQUIRE_ISSUED aktif, FIN tidak bisa Set PAID sebelum Tax Invoice status ISSUED. Alur: DRAFT → ISSUED (atau REVISED/CANCELLED).",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "1. Buat Draft — Pilih DO dari dropdown (DO delivered/wait_payment yang belum punya Tax Invoice ISSUED), isi \"Tax Date\", \"Tax Number\" (kosongkan untuk auto). Klik \"Create Draft\".",
+                "2. Upload PDF — Di tabel, pilih file PDF di kolom File, klik \"Upload\". Format wajib PDF.",
+                "3. Set ISSUED — Setelah PDF terupload, klik tombol \"ISSUED\" untuk status resmi. Tax Invoice ISSUED wajib sebelum FIN Set PAID (jika config aktif).",
+                "4. Filter & Export — Filter by status (DRAFT/ISSUED/REVISED/CANCELLED). Export CSV untuk laporan."
+            ],
+            "tips": [
+                "Sales Ref = kode DO (dari sales_do_view atau Control Tower)",
+                "ISSUED wajib sebelum FIN Set PAID jika config REQUIRE_ISSUED aktif",
+                "REVISED/CANCELLED untuk koreksi atau pembatalan"
+            ]
+        },
+        {
+            "path": "/sales/fin_do_tasks.php",
+            "module": "FIN",
+            "title": "FIN DO Tasks",
+            "purpose": "Task pembayaran untuk DO status WAIT PAYMENT (dari ACT). Upload bukti bayar, lalu Set PAID/CLOSED. Alur: WAIT PAYMENT → upload bukti bayar → PAID (siklus selesai).",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "1. Upload Bukti Pembayaran — Klik \"Pilih File\" di bagian Upload Bukti Pembayaran, pilih file (PDF/JPG/PNG/WEBP). Wajib sebelum Set PAID.",
+                "2. Isi Tanggal Pembayaran — Di kolom \"Tanggal pembayaran\", masukkan tanggal saat pembayaran masuk (opsional, default hari ini).",
+                "3. Set PAID / CLOSED — Setelah bukti bayar terupload, klik tombol \"Set PAID / CLOSED\". Status berubah ke paid dan siklus DO selesai.",
+                "4. Catatan — Isi Catatan FIN jika perlu (nomor transfer, rekening, dll)."
+            ],
+            "tips": [
+                "DO harus status WAIT PAYMENT (dari ACT) dulu",
+                "Upload bukti bayar wajib sebelum Set PAID",
+                "Status PAID menutup siklus DO"
+            ]
+        },
+        {
+            "path": "/sales/act_do_tasks.php",
+            "module": "ACT",
+            "title": "ACT DO Tasks",
+            "purpose": "Task accounting untuk DO yang sudah DELIVERED. Upload dokumen, isi tanggal & nominal, lalu Kirim ke FIN (WAIT PAYMENT). Alur: DELIVERED → isi dokumen & tanggal/nominal → WAIT PAYMENT (trigger FIN).",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "1. Upload Faktur Pajak — Klik \"Pilih File\" di bagian Upload Faktur Pajak, pilih file (PDF/JPG/PNG)",
+                "2. Upload Bukti Tukar Faktur — Klik \"Pilih File\" di bagian Upload Bukti Tukar Faktur (kertas), pilih file (PDF/JPG/PNG)",
+                "3. Isi Tanggal Jatuh Tempo — Di kolom \"Tanggal dibayar / jatuh tempo\", masukkan tanggal jatuh tempo pembayaran (mis. 06/03/2026 atau sesuai kesepakatan dengan customer)",
+                "4. Isi Nominal — Di kolom \"Nominal\", masukkan nilai tagihan (contoh: 100000 untuk Rp 100.000)",
+                "5. Kirim ke FIN — Setelah semua data dan dokumen terisi, klik tombol \"Kirim ke FIN (WAIT PAYMENT)\". Status DO berubah ke WAIT PAYMENT dan muncul di FIN DO Tasks untuk proses pembayaran"
+            ],
+            "tips": [
+                "DO harus status DELIVERED dulu sebelum ACT proses",
+                "Upload dokumen wajib sebelum Kirim ke FIN",
+                "Setelah WAIT PAYMENT, FIN akan proses pembayaran dan set PAID"
+            ]
+        },
+        {
+            "path": "/sales/index.php",
+            "module": "CRM",
+            "title": "Sales (CRM)",
+            "purpose": "Modul penjualan: DO, order, pengiriman. Alur O2C: CRM buat DO → WQS picking → SCM delivery → FIN invoice. Tekan F1 untuk diagram lengkap.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "sales_do.php: Buat DO",
+                "Kirim ke WQS (status sent_wqs) untuk picking",
+                "SCM handle delivery ke customer",
+                "FIN invoice & pembayaran"
+            ],
+            "tips": [
+                "Mulai dari sales_do untuk buat DO baru",
+                "Control Tower untuk pantau DO stuck",
+                "CRM Manual untuk panduan lengkap"
+            ]
+        },
+        {
+            "path": "/sales/scm_do_tasks.php",
+            "module": "SCM",
+            "title": "SCM DO Tasks",
+            "purpose": "Task delivery: DO yang sudah READY SCM dari WQS. Upload bukti terima, set ON DELIVERY, upload POD + tanda tangan, set DELIVERED. Alur: READY SCM → ON DELIVERY → DELIVERED (trigger ACT).",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "1. Input Tracking — Isi No Resi/AWB, pilih Vendor jika pakai jasa logistik. Pilih Metode Pengiriman (INTERNAL atau VENDOR).",
+                "2. Upload Bukti Terima dari WQS — Klik \"Pilih File\" untuk foto/video bukti terima barang dari WQS (opsional).",
+                "3. Set ON DELIVERY — Saat barang dikirim, klik tombol \"Set ON DELIVERY\". Status berubah ke on_delivery.",
+                "4. Upload Bukti Serah Terima ke Customer — Upload foto/video POD (Proof of Delivery) saat barang sampai di customer.",
+                "5. Tanda Tangan Digital — Di canvas TTD, minta customer tanda tangan. Klik \"Ambil TTD\" untuk simpan.",
+                "6. Set DELIVERED — Setelah POD dan TTD terisi, klik tombol \"Set DELIVERED\". Status berubah ke delivered dan DO muncul di ACT DO Tasks."
+            ],
+            "tips": [
+                "Tanda tangan digital wajib untuk Set DELIVERED",
+                "Share WA untuk kirim link tracking ke customer",
+                "scm_tracker_mobile untuk update dari lapangan"
+            ]
+        },
+        {
+            "path": "/sales/wqs_do_tasks.php",
+            "module": "WQS",
+            "title": "WQS DO Tasks",
+            "purpose": "Task picking: DO yang dikirim CRM (status sent_wqs), siap diproses di gudang. Mulai Proses → Upload foto kartu stok → Set READY SCM. Alur: sent_wqs → Mulai Proses → wqs_processing → Upload before/after → READY SCM (trigger SCM).",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "1. Mulai Proses — Untuk DO status sent_wqs, klik tombol \"Mulai Proses\". Status berubah ke wqs_processing.",
+                "2. Picking Barang — Lakukan picking fisik sesuai DO. Cek stok di wqs_stock atau wqs_picking jika perlu.",
+                "3. Upload Foto Kartu Stok SEBELUM — Klik \"Pilih File\" di bagian Foto kartu stok SEBELUM, pilih file (JPG/PNG/WEBP/PDF).",
+                "4. Upload Foto Kartu Stok SESUDAH — Klik \"Pilih File\" di bagian Foto kartu stok SESUDAH, pilih file (JPG/PNG/WEBP/PDF).",
+                "5. Set READY SCM — Setelah foto terisi, klik tombol \"Set READY SCM\". Status berubah ke ready_scm dan DO muncul di SCM DO Tasks untuk delivery."
+            ],
+            "tips": [
+                "Cek stok di wqs_stock sebelum picking",
+                "Foto before/after wajib sebelum Set READY SCM",
+                "wqs_picking untuk input picking dari allocation"
+            ]
+        },
+        {
+            "path": "/purchases/index.php",
+            "module": "PQP",
+            "title": "Purchases",
+            "purpose": "Modul pembelian: PO, GR, AP. Alur P2P: PO → GR → Invoice AP. Tekan F1 untuk alur lengkap.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Buat PO (purchases_po.php)",
+                "Terima barang → GR (purchases_gr.php)",
+                "Input invoice AP",
+                "Bayar (purchases_payment_ap)"
+            ],
+            "tips": [
+                "Vendor & produk harus di master dulu",
+                "GR harus match qty PO",
+                "Invoice AP bisa link ke PO/GR"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_po.php",
+            "module": "PQP",
+            "title": "Purchase Order",
+            "purpose": "Buat PO ke vendor. Pilih vendor, office, produk. Input qty, harga, term. Vendor & produk harus di master.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih vendor, office, manufacture",
+                "Tambah item (produk, qty, harga)",
+                "Input payment term",
+                "Submit PO",
+                "Tunggu approval DoA jika ada"
+            ],
+            "tips": [
+                "Vendor & produk harus di master",
+                "Approval DoA jika delegasi",
+                "Bisa dari PR (wqs_pr) jika ada"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_gr.php",
+            "module": "WQS",
+            "title": "Goods Receipt",
+            "purpose": "Terima barang dari PO. WQS input qty diterima per item, simpan GR → stok bertambah otomatis. Lanjut ke invoice AP.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Pilih PO yang sudah datang",
+                "Input qty diterima per item",
+                "Simpan GR → stok bertambah per office",
+                "Lanjut ke purchases_invoice_ap jika ada",
+                "stock_update_from_gr jika perlu post manual"
+            ],
+            "tips": [
+                "Qty GR ≤ qty PO",
+                "Stok otomatis naik setelah GR",
+                "SOP WQS untuk receiving"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_invoice_ap.php",
+            "module": "FIN",
+            "title": "Invoice AP",
+            "purpose": "Input hutang dari vendor. Setelah GR atau invoice terpisah. Link ke PO/GR untuk tracking.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih vendor",
+                "Input nomor invoice, tanggal, amount",
+                "Link ke PO/GR jika ada",
+                "Submit → AP tercatat",
+                "Bayar di purchases_payment_ap"
+            ],
+            "tips": [
+                "Link ke PO/GR untuk tracking",
+                "Bayar di purchases_payment_ap",
+                "AP rekap di dashboard Finance"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_invoice_ap_edit.php",
+            "module": "FIN",
+            "title": "Edit Invoice AP",
+            "purpose": "Edit invoice AP yang belum paid. Ubah nominal, tanggal, link PO/GR. Lock setelah paid.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Buka invoice dari purchases_invoice_ap",
+                "Edit nominal, tanggal, vendor jika perlu",
+                "Update link PO/GR",
+                "Simpan perubahan"
+            ],
+            "tips": [
+                "Hanya bisa edit jika belum paid",
+                "purchases_invoice_ap untuk buat baru",
+                "SOP FIN untuk prosedur AP"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_payment_ap.php",
+            "module": "FIN",
+            "title": "Pembayaran AP",
+            "purpose": "Bayar hutang ke vendor. Pilih invoice AP unpaid, input jumlah, pilih rekening. Partial payment didukung.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih invoice AP yang unpaid",
+                "Input jumlah bayar",
+                "Pilih rekening dari company_bank_accounts",
+                "Submit → AP terbayar",
+                "Cek ap_rekap untuk prioritas"
+            ],
+            "tips": [
+                "Rekening harus di company_bank_accounts",
+                "Partial payment bisa bayar bertahap",
+                "Overdue = prioritas bayar"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_import_control_view.php",
+            "module": "PQP",
+            "title": "Import Control View",
+            "purpose": "Detail per PO: Production, Shipping, Dokumen, AP, Forwarder, CEISA/PIB, Total Landed Cost. Hub utama tracking import.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Production Milestone (PQP): Start & Done",
+                "Shipping (SCM): Pickup, ETD, ETA, Arrived",
+                "Upload dokumen (CIPL, BL, PIB, dll)",
+                "Finance: AP DP/FINAL, Forwarder Invoice",
+                "CEISA/PIB: Billing & pembayaran bea cukai",
+                "Total Landed Cost → Sync ke Master Pricelist (ADMIN/FIN/PQP)"
+            ],
+            "tips": [
+                "Alur: PO → Forwarder Quotes → Forwarding Tasks → FWD Invoice → CEISA PIB → GR → AP",
+                "Total Landed Cost hanya ADMIN/SUPERADMIN/FIN/PQP",
+                "WQS Incoming untuk receiving barang"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_import_control_tower.php",
+            "module": "PQP",
+            "title": "Import Control Tower",
+            "purpose": "Daftar PO import: status production, shipping, dokumen, AP, forwarder, CEISA. Deteksi PO stuck. Hub utama monitoring import.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat daftar PO per status",
+                "Filter by office/tanggal/manufacture",
+                "Open → Import Control View untuk detail",
+                "Eskalasi PO yang stuck > SLA",
+                "Quick link ke Forwarder Quotes, CEISA PIB"
+            ],
+            "tips": [
+                "Import Control View untuk detail per PO",
+                "Forwarder Quotes, CEISA PIB dari link",
+                "PO stuck? Cek stage yang tertahan"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_po_view.php",
+            "module": "PQP",
+            "title": "PO View",
+            "purpose": "Detail PO: header, items, total. Edit jika DRAFT. Print untuk kirim ke manufacture.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat/Edit header PO",
+                "Lihat/Edit item (qty, harga)",
+                "Total otomatis terhitung",
+                "Print PO (purchases_po_print)",
+                "Import Control View untuk tracking"
+            ],
+            "tips": [
+                "Hanya DRAFT bisa diedit",
+                "Print untuk kirim ke manufacture",
+                "GR setelah barang datang"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_forwarder_quotes.php",
+            "module": "PQP",
+            "title": "Forwarder Quotes",
+            "purpose": "Input penawaran forwarder per PO. Bandingkan quote, pilih 1 → PO forwarder ter-update. Lanjut ke Forwarding Tasks.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih PO import",
+                "Input quote (vendor, total cost, leadtime)",
+                "Bandingkan beberapa quote",
+                "Select quote terpilih → PO forwarder terisi",
+                "Lanjut ke Forwarding Tasks untuk dokumen"
+            ],
+            "tips": [
+                "Select quote = PO.forwarder_vendor_id ter-update",
+                "Lanjut ke Forwarding Tasks",
+                "Import Control Tower untuk monitoring"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_forwarding_tasks.php",
+            "module": "SCM",
+            "title": "Forwarding Tasks",
+            "purpose": "Kelola dokumen & status pengiriman import. Upload CIPL, BL, Form E. Update Pickup, ETD, ETA, Arrived.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih PO",
+                "Upload dokumen (CIPL, BL, Form E, BC11, PIB)",
+                "Update factory info & forwarder status",
+                "Monitor sampai dokumen lengkap"
+            ],
+            "tips": [
+                "Dokumen lengkap → lanjut CEISA PIB",
+                "Import Control View untuk overview",
+                "SCM Manual untuk prosedur"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_forwarder_invoice.php",
+            "module": "FIN",
+            "title": "Forwarder Invoice",
+            "purpose": "Input tagihan forwarder (freight, handling). Link ke PO. FAP masuk ke Landed Cost. Bayar di Forwarder Payment.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih PO & Vendor forwarder",
+                "Input subtotal, tax",
+                "Upload invoice PDF",
+                "Submit → FAP tercatat",
+                "Bayar di purchases_forwarder_payment"
+            ],
+            "tips": [
+                "FAP = Forwarder AP",
+                "Total masuk ke Landed Cost",
+                "Forwarder Payment untuk bayar"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_forwarder_payment.php",
+            "module": "FIN",
+            "title": "Forwarder Payment",
+            "purpose": "Bayar tagihan forwarder. Pilih FAP unpaid, input jumlah, pilih rekening. Sama seperti AP Payment.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih FAP (Forwarder Invoice) unpaid",
+                "Input jumlah bayar",
+                "Pilih rekening",
+                "Submit → FAP terbayar"
+            ],
+            "tips": [
+                "Sama seperti AP Payment",
+                "Rekening di company_bank_accounts",
+                "FAP terbayar → Landed Cost update"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_ceisa_pib.php",
+            "module": "ACT",
+            "title": "CEISA PIB List",
+            "purpose": "Daftar PIB per PO. Status CEISA, Billing, SPPB.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat daftar PO dengan PIB",
+                "Filter status CEISA",
+                "Open untuk detail & billing"
+            ],
+            "tips": [
+                "CEISA PIB View untuk input billing",
+                "Billing → bayar bea cukai"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_ceisa_pib_view.php",
+            "module": "ACT",
+            "title": "CEISA PIB View",
+            "purpose": "Detail PIB: status CEISA, BC11, Billing Aju, SPPB. Input billing & bayar bea cukai.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Update status CEISA (DRAFT→SUBMITTED→APPROVED)",
+                "Input Billing Aju (no, date, amount)",
+                "Upload dokumen (BC11, NOA, PIB)",
+                "Bayar bea cukai → upload bukti"
+            ],
+            "tips": [
+                "Billing Amount = bea cukai",
+                "PIB payment untuk catat pembayaran"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_reports.php",
+            "module": "PQP",
+            "title": "Purchases Reports",
+            "purpose": "Laporan PR, PO, AP per periode. Summary per office & manufacture. Export untuk analisis.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih periode (from-to)",
+                "Lihat PR by office",
+                "Lihat PO by manufacture",
+                "Lihat AP outstanding",
+                "Export ke Excel jika perlu"
+            ],
+            "tips": [
+                "Buy price hanya ADMIN/FIN/PQP",
+                "Export untuk analisis",
+                "ap_rekap untuk prioritas bayar"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_dashboard.php",
+            "module": "PQP",
+            "title": "Purchases Dashboard",
+            "purpose": "Overview PO, GR, import. Quick links ke purchases_po, purchases_gr, Import Control Tower, AP. Landing modul pembelian.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat summary PO/GR",
+                "Quick links: PO, Control Tower, Reports",
+                "Monitor AP aging",
+                "Drill ke Import Control Tower jika perlu"
+            ],
+            "tips": [
+                "Import Control Tower untuk tracking",
+                "purchases_po untuk buat PO baru",
+                "ap_rekap untuk prioritas bayar"
+            ]
+        },
+        {
+            "path": "/purchases/purchases_po_print.php",
+            "module": "PQP",
+            "title": "Print PO",
+            "purpose": "Cetak Purchase Order untuk kirim ke manufacture. Pilih PO, preview, print. Setelah PO approved.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih PO Code",
+                "Preview format print",
+                "Print untuk kirim ke manufacture",
+                "Arsip copy untuk tracking"
+            ],
+            "tips": [
+                "PO View untuk edit",
+                "Print setelah PO approved",
+                "Import Control View untuk tracking"
+            ]
+        },
+        {
+            "path": "/purchases/stock_update_from_gr.php",
+            "module": "WQS",
+            "title": "Stock Update from GR",
+            "purpose": "Update stok dari Goods Receipt. Pilih GR yang sudah ada, validasi qty per item & office, post ke stok. Stok naik per office sesuai GR.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Pilih GR Code dari daftar (GR dari purchases_gr)",
+                "Cek item & qty yang akan di-post",
+                "Validasi office — harus match PO",
+                "Submit → stok bertambah per office",
+                "Cek wqs_stock untuk verifikasi"
+            ],
+            "tips": [
+                "GR dibuat di purchases_gr dulu",
+                "Stok naik per office sesuai GR",
+                "SOP WQS untuk receiving"
+            ]
+        },
+        {
+            "path": "/purchases/gl_reversal_approvals.php",
+            "module": "FIN",
+            "title": "GL Reversal Approvals",
+            "purpose": "Approval reversal jurnal GL. FIN/Admin validasi request reversal dari ACT sebelum jurnal dibalik. Audit trail tercatat.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat daftar request reversal dari ACT",
+                "Cek nomor jurnal, akun, amount yang akan dibalik",
+                "Validasi alasan reversal & dokumen pendukung",
+                "Approve atau Reject request",
+                "Reversal tercatat ke GL setelah approve"
+            ],
+            "tips": [
+                "Hanya Admin/FIN yang bisa approve reversal",
+                "ACT buat jurnal, FIN approve reversal",
+                "Reject jika alasan tidak valid"
+            ]
+        },
+        {
+            "path": "/purchases/bank_statement_import.php",
+            "module": "FIN",
+            "title": "Import Bank Statement",
+            "purpose": "Import mutasi bank dari file Excel/CSV. Mapping kolom ke akun GL, validasi saldo, post ke jurnal. Rekening harus sudah di master.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Download template dari halaman ini",
+                "Isi file sesuai format: tanggal, ref, debit, kredit, rekening",
+                "Upload file & pilih rekening bank tujuan",
+                "Validasi mapping kolom ke akun GL",
+                "Preview & Post ke GL jika saldo match"
+            ],
+            "tips": [
+                "Format file harus sesuai template",
+                "Rekening bank harus match master company_bank_accounts",
+                "Cek saldo awal sebelum post"
+            ]
+        },
+        {
+            "path": "/purchases/bank_recon.php",
+            "module": "FIN",
+            "title": "Bank Reconciliation",
+            "purpose": "Rekonsiliasi mutasi bank vs GL. Match statement dengan jurnal, selisih investigasi.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih rekening & periode",
+                "Import statement atau input manual",
+                "Match dengan jurnal GL",
+                "Selisih? Investigasi & adjust"
+            ],
+            "tips": [
+                "bank_statement_import untuk import",
+                "Rekonsiliasi rutin untuk akurasi",
+                "SOP FIN untuk prosedur"
+            ]
+        },
+        {
+            "path": "/purchases/fin_gl_auto.php",
+            "module": "FIN",
+            "title": "FIN GL Auto",
+            "purpose": "Posting otomatis ke GL. Jurnal dari AP, AR, bank. Validasi sebelum post.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat transaksi pending GL",
+                "Validasi mapping akun",
+                "Post ke GL",
+                "Cek jurnal hasil"
+            ],
+            "tips": [
+                "Validasi sebelum post",
+                "SOP FIN untuk prosedur",
+                "Period lock untuk closing"
+            ]
+        },
+        {
+            "path": "/stock/index.php",
+            "module": "WQS",
+            "title": "Stock (WQS)",
+            "purpose": "Modul gudang: stok per branch, picking, incoming, adjustment. Stock per office: setiap cabang punya saldo sendiri.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "wqs_stock: Saldo per produk & per office (filter Branch)",
+                "wqs_incoming: Terima barang — Office harus match PO",
+                "wqs_picking: Picking DO",
+                "wqs_stock_adjustment: Koreksi per office"
+            ],
+            "tips": [
+                "BRANCH hanya akses office sendiri di Incoming/Allocation/PR",
+                "Migration 125 untuk aktifkan stock per branch",
+                "Picking ambil dari wqs_do_tasks"
+            ]
+        },
+        {
+            "path": "/stock/wqs_stock.php",
+            "module": "WQS",
+            "title": "Stock Summary",
+            "purpose": "Lihat saldo stok per produk & per branch. Stock per office: filter Office untuk lihat stok per cabang. BRANCH hanya lihat office sendiri.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Pilih Office (filter) — BRANCH otomatis office sendiri",
+                "Cek saldo per produk",
+                "Kolom Office/Branch menampilkan branch aktif",
+                "Untuk koreksi: gunakan Stock Adjustment"
+            ],
+            "tips": [
+                "Stock per branch aktif setelah Migration 125",
+                "BRANCH hanya lihat stok kantor sendiri",
+                "Adjustment untuk koreksi fisik per office"
+            ]
+        },
+        {
+            "path": "/stock/wqs_picking.php",
+            "module": "WQS",
+            "title": "Picking",
+            "purpose": "Picking barang untuk DO. Ambil dari wqs_do_tasks. Picking fisik, update done, serah ke SCM.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Ambil task dari DO yang sent_wqs",
+                "Cek stok di wqs_stock",
+                "Picking sesuai qty",
+                "Update status done",
+                "Serah ke SCM"
+            ],
+            "tips": [
+                "Sama dengan wqs_do_tasks",
+                "Cek stok sebelum picking",
+                "wqs_picking_view untuk slip"
+            ]
+        },
+        {
+            "path": "/stock/wqs_incoming.php",
+            "module": "WQS",
+            "title": "WQS Incoming",
+            "purpose": "Terima barang datang dengan validasi PO. Pilih PO → Office otomatis. Office Incoming harus sama dengan Office PO. BRANCH hanya bisa pilih office sendiri.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Pilih PO Code (dropdown) — item outstanding auto-fill",
+                "Pilih Office — harus sama dengan Office PO",
+                "Isi Depo, Ref Note, item SKU & Qty",
+                "Simpan → stok bertambah per office",
+                "List Incoming: Filter Branch untuk filter per cabang"
+            ],
+            "tips": [
+                "Office Incoming ≠ Office PO → error. Pastikan match.",
+                "BRANCH: dropdown Office hanya office user",
+                "Import CSV: template punya kolom office_code"
+            ]
+        },
+        {
+            "path": "/stock/wqs_stock_adjustment.php",
+            "module": "WQS",
+            "title": "Stock Adjustment",
+            "purpose": "Koreksi stok per office dengan audit trail. BRANCH hanya bisa adjustment untuk office sendiri.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Pilih SKU, Office (BRANCH: otomatis office user)",
+                "Input delta qty (+/-)",
+                "Isi alasan wajib",
+                "Submit → stok terupdate per office"
+            ],
+            "tips": [
+                "BRANCH: Office readonly, hanya kantor sendiri",
+                "Delta negatif hanya ADMIN/SUPERADMIN",
+                "Audit trail tercatat per office"
+            ]
+        },
+        {
+            "path": "/stock/wqs_allocation.php",
+            "module": "WQS",
+            "title": "Allocation",
+            "purpose": "Alokasi stok ke office/depo. BRANCH hanya bisa alokasi ke office sendiri.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Pilih incoming/source",
+                "Pilih Office — BRANCH hanya office user",
+                "Validasi qty",
+                "Submit"
+            ],
+            "tips": [
+                "BRANCH: dropdown Office hanya kantor sendiri",
+                "Dari incoming yang sudah diterima",
+                "Monitor expiry di allocation"
+            ]
+        },
+        {
+            "path": "/stock/wqs_stock_transfer.php",
+            "module": "WQS",
+            "title": "Transfer Antar Kantor",
+            "purpose": "Transfer/mutasi stok antar kantor. Hanya Admin/SYS. Kantor & Depo gunakan Pembelian (PO + Sales DO).",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Buat transfer DRAFT (from/to office, items)",
+                "Kirim — upload foto kartu stok + foto fisik keluar",
+                "Terima — upload foto kartu stok + foto fisik masuk",
+                "Stok terupdate di office tujuan"
+            ],
+            "tips": [
+                "Hanya ADMIN/SUPERADMIN/SYS",
+                "Foto kartu stok wajib",
+                "Kantor gunakan Pembelian, bukan Transfer"
+            ]
+        },
+        {
+            "path": "/stock/wqs_pr.php",
+            "module": "WQS",
+            "title": "Purchase Request (PR)",
+            "purpose": "Buat PR pembelian (tanpa harga). Disimpan DRAFT lalu lanjut di View / PQP. BRANCH hanya office sendiri.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Isi tanggal PR, pilih Office (wajib)",
+                "Tambah baris item: produk + qty + unit",
+                "Simpan → PR DRAFT, redirect ke wqs_pr_view",
+                "Dari View: alur submit/approval; PO dari modul Purchases bila sudah disetujui"
+            ],
+            "tips": [
+                "BRANCH: dropdown Office hanya kantor sendiri",
+                "Produk dari master_products status active",
+                "Tombol Save PR (DRAFT) — bukan submit final di halaman ini"
+            ]
+        },
+        {
+            "path": "/stock/wqs_pr_view.php",
+            "module": "WQS",
+            "title": "PR View",
+            "purpose": "Detail PR: items, status. Lihat item & qty, print untuk approval. PR approved → buat PO di purchases_po.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Lihat detail PR",
+                "Cek item & qty",
+                "Print untuk approval",
+                "Lanjut ke PO dari purchases_po"
+            ],
+            "tips": [
+                "PR approved → buat PO",
+                "wqs_pr untuk daftar",
+                "wqs_pr_print untuk cetak"
+            ]
+        },
+        {
+            "path": "/stock/wqs_picking_view.php",
+            "module": "WQS",
+            "title": "Picking View",
+            "purpose": "Detail picking per DO. Print slip picking.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Lihat item picking",
+                "Print slip",
+                "Picking fisik di gudang",
+                "Update done di wqs_do_tasks"
+            ],
+            "tips": [
+                "wqs_do_tasks untuk task list",
+                "Done = serah ke SCM"
+            ]
+        },
+        {
+            "path": "/stock/wqs_stock_opname.php",
+            "module": "WQS",
+            "title": "Stock Opname",
+            "purpose": "Stock opname: bandingkan fisik vs sistem per SKU & office. Input qty fisik, sistem hitung selisih.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Pilih periode & office",
+                "Input qty fisik",
+                "Bandingkan dengan sistem",
+                "Adjust jika selisih"
+            ],
+            "tips": [
+                "Stock Adjustment untuk koreksi",
+                "Audit trail tercatat"
+            ]
+        },
+        {
+            "path": "/stock/wqs_stock_opname_report.php",
+            "module": "WQS",
+            "title": "Stock Opname Report",
+            "purpose": "Laporan hasil stock opname.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Filter periode/office",
+                "Lihat selisih",
+                "Export jika perlu"
+            ],
+            "tips": [
+                "wqs_stock_opname untuk input",
+                "Adjustment untuk koreksi"
+            ]
+        },
+        {
+            "path": "/stock/wqs_incoming_view.php",
+            "module": "WQS",
+            "title": "WQS Incoming View",
+            "purpose": "Detail incoming. Lihat item yang diterima, link ke PO. Office harus match PO.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Lihat detail incoming",
+                "Cek item & qty",
+                "Link ke PO"
+            ],
+            "tips": [
+                "wqs_incoming untuk input",
+                "Office harus match PO"
+            ]
+        },
+        {
+            "path": "/stock/wqs_pr_print.php",
+            "module": "WQS",
+            "title": "Print PR",
+            "purpose": "Cetak Purchase Request untuk approval atau arsip. Pilih PR, preview format, print. PR dari wqs_pr atau wqs_pr_view.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Pilih PR Code",
+                "Preview format print",
+                "Print untuk approval",
+                "Serah ke PQP untuk buat PO"
+            ],
+            "tips": [
+                "wqs_pr untuk daftar",
+                "PR View untuk detail",
+                "PR approved → purchases_po"
+            ]
+        },
+        {
+            "path": "/stock/wqs_stock_audit.php",
+            "module": "WQS",
+            "title": "Stock Audit",
+            "purpose": "Audit trail pergerakan stok per SKU & office. Trace history: Incoming, Picking, Adjustment. Untuk investigasi selisih atau verifikasi mutasi.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Filter SKU, Office, periode tanggal",
+                "Lihat history mutasi: tipe (incoming/picking/adjustment), qty, ref",
+                "Trace pergerakan jika ada selisih fisik vs sistem",
+                "Export untuk laporan audit jika perlu"
+            ],
+            "tips": [
+                "Stock Adjustment tercatat dengan alasan wajib",
+                "Incoming & Picking tercatat otomatis",
+                "Gunakan untuk investigasi selisih opname"
+            ]
+        },
+        {
+            "path": "/dashboards/branch/branch_dashboard.php",
+            "module": "BRANCH",
+            "title": "Branch Dashboard",
+            "purpose": "Landing page Staff BRANCH. Quick links: Buat DO, Control Tower, CRM Leads, WQS Incoming, PR, PO, GR, HRL, Chat, Absensi. Widget penjualan cabang.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Gunakan Quick Links untuk akses modul",
+                "Widget Penjualan Cabang: Jumlah DO + Nilai Rp MTD",
+                "Tanpa Master Customers/Vendor (diurus modul lain)",
+                "Chat untuk kolaborasi"
+            ],
+            "tips": [
+                "Staff BRANCH otomatis landing di sini",
+                "Stock/Incoming/PR hanya office user",
+                "Dashboard Detail (Finance) hanya Admin"
+            ]
+        },
+        {
+            "path": "/absensi/index.php",
+            "module": "HRL",
+            "title": "Absensi",
+            "purpose": "Modul absensi: check-in, check-out, request izin, approval.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Check-in (dengan geo & foto)",
+                "Check-out",
+                "Request izin/sakit/dinas",
+                "Approval oleh atasan",
+                "Rekap di admin"
+            ],
+            "tips": [
+                "GeoFence wajib valid",
+                "Request untuk izin/sakit/dinas"
+            ]
+        },
+        {
+            "path": "/payroll/index.php",
+            "module": "FIN",
+            "title": "Payroll",
+            "purpose": "Modul payroll: settings, matrix, run, export bank, mark paid. Alur: Matrix → Run → Post → Export → Paid.",
+            "diagram_title": "Alur Payroll",
+            "steps": [
+                "Settings: periode, komponen",
+                "Salary Matrix: gaji per level",
+                "Create Payroll Run",
+                "Edit tunjangan/potongan",
+                "Post → Export Bank → Mark Paid"
+            ],
+            "tips": [
+                "Data karyawan harus lengkap",
+                "BPJS, PPh di matrix",
+                "SOP Payroll untuk prosedur"
+            ]
+        },
+        {
+            "path": "/payroll/payroll_run.php",
+            "module": "FIN",
+            "title": "Payroll Run",
+            "purpose": "Buat & edit payroll run. Input tunjangan, potongan, OT per karyawan. Post → Export Bank → Mark Paid.",
+            "diagram_title": "Alur Payroll",
+            "steps": [
+                "Pilih periode",
+                "Create run",
+                "Edit item per karyawan (tunjangan, potongan, OT)",
+                "Post jika sudah valid",
+                "Export Bank → Mark Paid"
+            ],
+            "tips": [
+                "Matrix untuk base salary",
+                "Export Bank untuk transfer",
+                "SOP Payroll untuk prosedur"
+            ]
+        },
+        {
+            "path": "/payroll/salary_matrix.php",
+            "module": "FIN",
+            "title": "Salary Matrix",
+            "purpose": "Gaji dasar per level/dept. Dasar perhitungan payroll.",
+            "diagram_title": "Alur Payroll",
+            "steps": [
+                "Input gaji per level",
+                "Set komponen (basic, tunjangan)",
+                "Validasi sebelum run"
+            ],
+            "tips": [
+                "Update matrix jika ada kenaikan",
+                "Payroll run ambil dari matrix"
+            ]
+        },
+        {
+            "path": "/Fixed_Asset/index.php",
+            "module": "FIN",
+            "title": "Fixed Asset",
+            "purpose": "Modul aset tetap: register, depreciation run bulanan, ops maintenance, audit. Nilai & umur manfaat wajib.",
+            "diagram_title": "Alur Fixed Asset",
+            "steps": [
+                "Asset Register: input aset",
+                "Depreciation Run: bulanan",
+                "Ops: maintenance",
+                "Audit & Tax Annual"
+            ],
+            "tips": [
+                "Nilai perolehan & umur manfaat wajib",
+                "Depreciation run tiap bulan",
+                "SOP ACT untuk aset"
+            ]
+        },
+        {
+            "path": "/Fixed_Asset/assets.php",
+            "module": "FIN",
+            "title": "Fixed Asset Register",
+            "purpose": "Daftar aset tetap. Input nilai perolehan, umur manfaat, lokasi. Dasar untuk depreciation run.",
+            "diagram_title": "Alur Fixed Asset",
+            "steps": [
+                "Input data aset: nama, nilai, umur manfaat",
+                "Set lokasi & kategori",
+                "Simpan untuk depreciation run",
+                "Update jika ada perubahan"
+            ],
+            "tips": [
+                "Nilai perolehan & umur manfaat wajib",
+                "Depreciation run ambil dari register",
+                "SOP ACT untuk prosedur aset"
+            ]
+        },
+        {
+            "path": "/Fixed_Asset/ops.php",
+            "module": "FIN",
+            "title": "Fixed Asset Ops",
+            "purpose": "Maintenance & operasi aset. Catat perbaikan, pemindahan, disposal.",
+            "diagram_title": "Alur Fixed Asset",
+            "steps": [
+                "Lihat daftar aset",
+                "Catat maintenance/perbaikan",
+                "Update pemindahan lokasi",
+                "Proses disposal jika perlu"
+            ],
+            "tips": [
+                "Maintenance untuk perpanjang umur aset",
+                "Disposal perlu approval",
+                "SOP ACT untuk prosedur"
+            ]
+        },
+        {
+            "path": "/Fixed_Asset/depreciation.php",
+            "module": "FIN",
+            "title": "Depreciation Run",
+            "purpose": "Jalankan depresiasi bulanan. Hitung penyusutan per aset, posting ke GL.",
+            "diagram_title": "Alur Fixed Asset",
+            "steps": [
+                "Pilih periode (bulan)",
+                "Preview perhitungan depresiasi",
+                "Run depresiasi",
+                "Post ke GL jika valid"
+            ],
+            "tips": [
+                "Run tiap bulan",
+                "Cek register sebelum run",
+                "SOP ACT untuk prosedur"
+            ]
+        },
+        {
+            "path": "/Fixed_Asset/tax_annual.php",
+            "module": "FIN",
+            "title": "Tax Annual (Aset)",
+            "purpose": "Laporan pajak tahunan aset. Untuk SPT PPh, laporan fiskal.",
+            "diagram_title": "Alur Fixed Asset",
+            "steps": [
+                "Pilih tahun fiskal",
+                "Lihat ringkasan aset & depresiasi",
+                "Export untuk SPT",
+                "Arsip untuk audit"
+            ],
+            "tips": [
+                "Sinkron dengan periode pajak",
+                "SOP ACT untuk prosedur pajak",
+                "Audit untuk validasi"
+            ]
+        },
+        {
+            "path": "/Fixed_Asset/audit.php",
+            "module": "FIN",
+            "title": "Fixed Asset Audit",
+            "purpose": "Audit trail aset. Lihat history perubahan, validasi fisik.",
+            "diagram_title": "Alur Fixed Asset",
+            "steps": [
+                "Lihat log perubahan aset",
+                "Filter by periode/user",
+                "Validasi fisik vs sistem",
+                "Laporan untuk compliance"
+            ],
+            "tips": [
+                "Audit rutin untuk akurasi",
+                "SOP ACT untuk prosedur",
+                "Tax annual butuh data valid"
+            ]
+        },
+        {
+            "path": "/payroll/payslip.php",
+            "module": "FIN",
+            "title": "Payslip",
+            "purpose": "Lihat slip gaji per karyawan. Detail tunjangan, potongan, take-home pay.",
+            "diagram_title": "Alur Payroll",
+            "steps": [
+                "Pilih periode & karyawan",
+                "Lihat detail gaji",
+                "Print/export jika perlu",
+                "Arsip untuk karyawan"
+            ],
+            "tips": [
+                "Payroll run harus sudah posted",
+                "SOP Payroll untuk prosedur",
+                "Data sensitif, akses terbatas"
+            ]
+        },
+        {
+            "path": "/payroll/payroll_settings.php",
+            "module": "FIN",
+            "title": "Payroll Settings",
+            "purpose": "Pengaturan payroll: periode, komponen gaji, BPJS, PPh. Konfigurasi sebelum run.",
+            "diagram_title": "Alur Payroll",
+            "steps": [
+                "Set periode payroll",
+                "Konfigurasi komponen (basic, tunjangan, potongan)",
+                "Set BPJS & PPh",
+                "Simpan untuk run"
+            ],
+            "tips": [
+                "Settings sebelum payroll run",
+                "Matrix untuk gaji dasar",
+                "SOP Payroll untuk prosedur"
+            ]
+        },
+        {
+            "path": "/payroll/loans.php",
+            "module": "FIN",
+            "title": "Payroll Loans",
+            "purpose": "Kelola pinjaman karyawan. Input pinjaman, cicilan otomatis di payroll.",
+            "diagram_title": "Alur Payroll",
+            "steps": [
+                "Input pinjaman karyawan",
+                "Set tenor & cicilan",
+                "Potongan otomatis di payroll run",
+                "Monitor sisa pinjaman"
+            ],
+            "tips": [
+                "Pinjaman terpotong di payslip",
+                "SOP Payroll untuk prosedur",
+                "Approval untuk pinjaman besar"
+            ]
+        },
+        {
+            "path": "/payroll/audit.php",
+            "module": "FIN",
+            "title": "Payroll Audit",
+            "purpose": "Audit trail payroll. Lihat history run, perubahan, posting.",
+            "diagram_title": "Alur Payroll",
+            "steps": [
+                "Lihat log payroll run",
+                "Filter by periode",
+                "Validasi posting ke GL",
+                "Laporan untuk compliance"
+            ],
+            "tips": [
+                "Audit untuk akurasi",
+                "SOP Payroll untuk prosedur",
+                "Data sensitif"
+            ]
+        },
+        {
+            "path": "/absensi/checkin.php",
+            "module": "HRL",
+            "title": "Check-in",
+            "purpose": "Check-in absensi dengan geo & foto. Validasi lokasi GeoFence.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Buka halaman check-in",
+                "Izinkan akses lokasi (GPS)",
+                "Ambil foto selfie",
+                "Submit check-in"
+            ],
+            "tips": [
+                "GeoFence wajib valid",
+                "Foto untuk bukti kehadiran",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/checkout.php",
+            "module": "HRL",
+            "title": "Check-out",
+            "purpose": "Check-out absensi. Tutup shift, catat jam pulang.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Buka halaman check-out",
+                "Validasi lokasi jika perlu",
+                "Submit check-out",
+                "Shift tercatat lengkap"
+            ],
+            "tips": [
+                "Check-out wajib sebelum tutup hari",
+                "History untuk rekap",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/request.php",
+            "module": "HRL",
+            "title": "Request Izin",
+            "purpose": "Ajukan izin/sakit/dinas. Upload dokumen, tunggu approval atasan.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Pilih tipe (izin/sakit/dinas)",
+                "Input tanggal & alasan",
+                "Upload dokumen jika perlu",
+                "Submit → tunggu approval"
+            ],
+            "tips": [
+                "Dokumen wajib untuk sakit",
+                "Approval di halaman approval",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/history.php",
+            "module": "HRL",
+            "title": "History Absensi",
+            "purpose": "Riwayat check-in/out per user. Lihat jam masuk, keluar, izin.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Filter by periode",
+                "Lihat daftar check-in/out",
+                "Cek status izin",
+                "Export jika perlu"
+            ],
+            "tips": [
+                "History untuk validasi",
+                "Admin rekap untuk payroll",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/izin.php",
+            "module": "HRL",
+            "title": "Izin",
+            "purpose": "Kelola izin/sakit/dinas. Lihat status request, history approval.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Lihat daftar request",
+                "Filter by status",
+                "Detail per request",
+                "Request baru di request.php"
+            ],
+            "tips": [
+                "request.php untuk ajukan baru",
+                "Approval oleh atasan",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/approval.php",
+            "module": "HRL",
+            "title": "Approval Request",
+            "purpose": "Approve/reject request izin karyawan. Set PIN dulu jika belum. Validasi dokumen.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Lihat request pending",
+                "Cek dokumen jika sakit",
+                "Masukkan PIN",
+                "Approve atau Reject"
+            ],
+            "tips": [
+                "Set PIN di admin jika pertama kali",
+                "Dokumen wajib untuk sakit",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/admin.php",
+            "module": "HRL",
+            "title": "Admin Absensi",
+            "purpose": "Admin absensi: users, offices, rekap, approval, pins. Konfigurasi & rekap payroll.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Users: kelola user absensi",
+                "Offices: set GeoFence",
+                "Rekap: export untuk payroll",
+                "Pins: set PIN approval"
+            ],
+            "tips": [
+                "GeoFence wajib untuk check-in",
+                "Rekap untuk payroll gate",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/admin/rekap.php",
+            "module": "HRL",
+            "title": "Rekap Absensi",
+            "purpose": "Rekap absensi untuk payroll. Export data check-in/out, izin. Gate ke payroll.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Pilih periode",
+                "Lihat rekap per user",
+                "Export untuk payroll",
+                "Payroll gate untuk integrasi"
+            ],
+            "tips": [
+                "Rekap wajib sebelum payroll run",
+                "Payroll gate sync ke payroll",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/admin/users.php",
+            "module": "HRL",
+            "title": "Admin Users Absensi",
+            "purpose": "Kelola user absensi. Aktif/nonaktif, set office, akses.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Lihat daftar user",
+                "Edit office & status",
+                "Set akses jika perlu",
+                "Simpan perubahan"
+            ],
+            "tips": [
+                "User dari master karyawan",
+                "Office untuk GeoFence",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/admin/approval.php",
+            "module": "HRL",
+            "title": "Admin Approval Absensi",
+            "purpose": "Kelola approval request izin. Overview pending, history, eskalasi.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Lihat request pending",
+                "Filter by user/status",
+                "Drill ke approval.php untuk approve",
+                "Monitor history"
+            ],
+            "tips": [
+                "approval.php untuk approve/reject",
+                "PIN wajib untuk approve",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/admin/offices.php",
+            "module": "HRL",
+            "title": "Admin Offices",
+            "purpose": "Set GeoFence per kantor. Radius, koordinat. Wajib untuk check-in valid.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Input koordinat kantor",
+                "Set radius GeoFence (meter)",
+                "Simpan untuk validasi check-in",
+                "Test dari lokasi kantor"
+            ],
+            "tips": [
+                "GeoFence wajib untuk check-in",
+                "Radius sesuai kebutuhan",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/admin/pins.php",
+            "module": "HRL",
+            "title": "Admin PINs",
+            "purpose": "Kelola PIN approval. Set/reset PIN untuk approver.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Lihat daftar user dengan PIN",
+                "Reset PIN jika lupa",
+                "Set PIN baru untuk approver",
+                "Simpan perubahan"
+            ],
+            "tips": [
+                "PIN untuk otentikasi approval",
+                "Approver wajib set PIN",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/absensi/admin/payroll_gate.php",
+            "module": "HRL",
+            "title": "Payroll Gate",
+            "purpose": "Integrasi absensi ke payroll. Sync rekap ke payroll run.",
+            "diagram_title": "Alur Absensi",
+            "steps": [
+                "Pilih periode rekap",
+                "Sync ke payroll",
+                "Validasi data terkirim",
+                "Payroll run ambil data absensi"
+            ],
+            "tips": [
+                "Rekap harus sudah selesai",
+                "Sync sebelum payroll run",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/mpr/index.php",
+            "module": "MPR",
+            "title": "MPR (Marketing & Project)",
+            "purpose": "Modul Marketing & Project. Focus: berkunjung ke User/PIC Customers untuk buat Sales.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Rencana kunjungan ke Customer (User/PIC)",
+                "Leads & Plans",
+                "Budget approval FIN",
+                "Buat DO dari hasil kunjungan",
+                "Ops Daily: input aktivitas & bukti"
+            ],
+            "tips": [
+                "MPR tidak lihat Buy Price",
+                "master_pricelist_sell untuk harga",
+                "mpr_dashboard untuk overview"
+            ]
+        },
+        {
+            "path": "/mpr/",
+            "module": "MPR",
+            "title": "MPR (Marketing & Project)",
+            "purpose": "Berkunjung ke User/PIC Customers untuk buat Sales. Rencana kunjungan, budget approval FIN, ops daily, DO.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Rencana kunjungan (mpr_plans)",
+                "Budget approval FIN (mpr_budget_fin)",
+                "Ops daily: input aktivitas & bukti",
+                "Buat DO dari hasil kunjungan"
+            ],
+            "tips": [
+                "MPR tidak lihat Buy Price",
+                "mpr_dashboard untuk detail",
+                "MPR Manual untuk prosedur"
+            ]
+        },
+        {
+            "path": "/mpr/mpr_dashboard.php",
+            "module": "MPR",
+            "title": "MPR Dashboard",
+            "purpose": "Dashboard Marketing & Project. Overview plans kunjungan, budget, ops daily. Quick links ke modul.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Lihat summary MPR",
+                "Quick links ke plans, budget, ops daily",
+                "Monitor kunjungan & approval",
+                "Drill ke detail jika perlu"
+            ],
+            "tips": [
+                "MPR tidak lihat Buy Price",
+                "mpr_plans untuk rencana kunjungan",
+                "mpr_budget_fin untuk approval FIN"
+            ]
+        },
+        {
+            "path": "/mpr/mpr_plans.php",
+            "module": "MPR",
+            "title": "MPR Plans",
+            "purpose": "Rencana kunjungan ke User/PIC Customers. Buat plan, submit untuk approval budget FIN. Monitor status approval.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Lihat/buat rencana kunjungan",
+                "Input customer, PIC, tanggal, budget",
+                "Submit untuk approval",
+                "Monitor approval di mpr_budget_fin"
+            ],
+            "tips": [
+                "mpr_plan_view untuk detail",
+                "Budget approval di mpr_budget_fin",
+                "Ops daily setelah approved"
+            ]
+        },
+        {
+            "path": "/mpr/mpr_plan_view.php",
+            "module": "MPR",
+            "title": "MPR Plan View",
+            "purpose": "Detail rencana kunjungan MPR ke User/PIC Customers. Lihat target, budget, tanggal. Edit jika draft, submit untuk approval budget.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Buka dari mpr_plans atau link direct",
+                "Lihat detail: customer, PIC, tanggal, budget",
+                "Edit jika status draft (ubah tanggal, target)",
+                "Submit untuk approval budget di mpr_budget_fin",
+                "Lanjut ke mpr_ops_daily setelah plan approved"
+            ],
+            "tips": [
+                "Daftar plan di mpr_plans",
+                "Budget approval oleh FIN di mpr_budget_fin",
+                "Ops daily untuk input aktivitas kunjungan"
+            ]
+        },
+        {
+            "path": "/mpr/mpr_budget_fin.php",
+            "module": "FIN",
+            "title": "MPR Budget Approval",
+            "purpose": "Approval budget kunjungan MPR oleh FIN. Validasi plan, approve atau reject. Hanya FIN Manager/Admin.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Lihat daftar plan pending approval",
+                "Validasi budget & customer",
+                "Approve atau Reject",
+                "Budget tercatat jika approve",
+                "MPR lanjut ops daily"
+            ],
+            "tips": [
+                "Hanya FIN Manager/Admin",
+                "mpr_dashboard untuk MPR",
+                "Reject jika budget tidak valid"
+            ]
+        },
+        {
+            "path": "/mpr/mpr_ops_daily_fin.php",
+            "module": "MPR",
+            "title": "MPR Ops Daily",
+            "purpose": "Operasional harian: aktivitas kunjungan, bukti foto/lokasi, laporan. Plan harus approved dulu. Submit untuk approval FIN.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Pilih plan yang sudah approved",
+                "Input aktivitas kunjungan harian",
+                "Lampirkan bukti (foto/lokasi)",
+                "Submit untuk approval",
+                "mpr_ops_daily_fin_pay untuk reimbursement"
+            ],
+            "tips": [
+                "mpr_ops_daily_fin_detail untuk detail",
+                "Export untuk laporan",
+                "Plan approved dulu sebelum ops"
+            ]
+        },
+        {
+            "path": "/mpr/mpr_ops_daily_fin_detail.php",
+            "module": "MPR",
+            "title": "MPR Ops Daily Detail",
+            "purpose": "Detail aktivitas ops daily per plan/kunjungan. Cek bukti foto/lokasi. FIN approve untuk reimbursement.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Lihat detail aktivitas",
+                "Cek bukti foto/lokasi",
+                "Approve jika FIN",
+                "Lanjut mpr_ops_daily_fin_pay untuk bayar"
+            ],
+            "tips": [
+                "mpr_ops_daily_fin untuk daftar",
+                "Export untuk laporan",
+                "Bukti wajib untuk approval"
+            ]
+        },
+        {
+            "path": "/mpr/mpr_ops_daily_fin_export.php",
+            "module": "MPR",
+            "title": "MPR Ops Daily Export",
+            "purpose": "Export laporan ops daily ke Excel/CSV. Pilih periode, filter. Untuk laporan ke FIN atau arsip.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Pilih periode (tanggal)",
+                "Filter by plan/user jika perlu",
+                "Export ke Excel/CSV",
+                "Untuk laporan ke FIN"
+            ],
+            "tips": [
+                "mpr_ops_daily_fin untuk daftar",
+                "Export untuk reimbursement",
+                "MPR Manual untuk prosedur"
+            ]
+        },
+        {
+            "path": "/mpr/mpr_ops_daily_fin_pay.php",
+            "module": "MPR",
+            "title": "MPR Ops Daily Pay",
+            "purpose": "Pembayaran/reimbursement ops daily MPR. Proses pembayaran untuk ops daily yang sudah approved. Hanya FIN.",
+            "diagram_title": "Alur MPR",
+            "steps": [
+                "Lihat ops daily approved",
+                "Validasi bukti & amount",
+                "Proses pembayaran",
+                "Update status paid"
+            ],
+            "tips": [
+                "Hanya FIN",
+                "mpr_ops_daily_fin untuk daftar",
+                "Ops daily harus approved dulu"
+            ]
+        },
+        {
+            "path": "/hrl/index.php",
+            "module": "HRL",
+            "title": "HRL (Docs)",
+            "purpose": "Modul dokumen HR & Legal. Upload, approval, ack. Dokumen terkontrol dengan masa berlaku. HRL Tower untuk overview expiry.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "hrl_docs: Kelola dokumen",
+                "hrl_tower: Overview expiry",
+                "hrl_ack_report: Laporan ack",
+                "Renew sebelum near expiry"
+            ],
+            "tips": [
+                "HRL Docs untuk upload dokumen",
+                "Tower untuk pantau masa berlaku",
+                "SOP HRL untuk prosedur"
+            ]
+        },
+        {
+            "path": "/hrl/hrl_docs.php",
+            "module": "HRL",
+            "title": "HRL Docs",
+            "purpose": "Kelola dokumen HR & Legal: upload, approval, ack report. Dokumen terkontrol dengan masa berlaku.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Tambah dokumen → isi metadata",
+                "Upload file (PDF/DOCX)",
+                "Set status ACTIVE setelah approve",
+                "Monitor ack di hrl_ack_report"
+            ],
+            "tips": [
+                "ACTIVE = wajib di-ack karyawan",
+                "HRL Tower untuk overview expiry",
+                "Renew sebelum near expiry"
+            ]
+        },
+        {
+            "path": "/hrl/hrl_doc_view.php",
+            "module": "HRL",
+            "title": "HRL Doc View",
+            "purpose": "Detail dokumen: view, upload versi baru, approve, ack. Set Active setelah approve untuk wajib ack karyawan.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Lihat dokumen & versi",
+                "Upload versi baru jika perlu",
+                "Approve/Reject (HRL)",
+                "Ack jika ACTIVE"
+            ],
+            "tips": [
+                "hrl_docs untuk daftar",
+                "Set Active setelah approve",
+                "Ack wajib untuk karyawan"
+            ]
+        },
+        {
+            "path": "/hrl/hrl_tower.php",
+            "module": "HRL",
+            "title": "HRL Tower",
+            "purpose": "Dashboard dokumen terkontrol HRL. Overview status dokumen per kategori: pending approval, near expiry, ack. Eskalasi dokumen yang mendekati expiry.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Lihat overview: dokumen pending, approved, expired",
+                "Filter per kategori (SOP, Reg Alkes, dll)",
+                "Cek dokumen near expiry — renew segera",
+                "Drill ke hrl_docs untuk detail/approval",
+                "Ack report untuk follow-up acknowledge"
+            ],
+            "tips": [
+                "Near expiry? Renew di hrl_docs",
+                "hrl_ack_report untuk siapa sudah ack",
+                "SOP HRL untuk prosedur dokumen terkontrol"
+            ]
+        },
+        {
+            "path": "/hrl/hrl_ack_report.php",
+            "module": "HRL",
+            "title": "HRL Ack Report",
+            "purpose": "Laporan siapa sudah acknowledge dokumen. Filter per dokumen, follow-up yang belum ack.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Pilih dokumen aktif",
+                "Lihat daftar ack per user",
+                "Identifikasi yang belum ack",
+                "Follow-up reminder"
+            ],
+            "tips": [
+                "Filter by dokumen aktif",
+                "Reminder ke yang belum ack",
+                "hrl_docs untuk kelola dokumen"
+            ]
+        },
+        {
+            "path": "/hrl/hrl_proses.php",
+            "module": "HRL",
+            "title": "HRL Proses",
+            "purpose": "Pengajuan mutasi, kenaikan pangkat, perubahan departemen. Alur: DRAFT → SUBMITTED → APPROVED → EXECUTED.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Buat pengajuan → pilih karyawan, dept/kantor/level baru",
+                "Submit → menunggu approval",
+                "Approver: Approve/Reject",
+                "Execute → update Master Employees"
+            ],
+            "tips": [
+                "Karyawan SYS tidak bisa dimutasi",
+                "Import CSV untuk bulk mutasi di Master Employees",
+                "SOP Mutasi untuk prosedur"
+            ]
+        },
+        {
+            "path": "/hrl_process/index.php",
+            "module": "HRL",
+            "title": "HRL Process",
+            "purpose": "Buat request: cuti, lembur, dll. Multi-approval dengan PIN.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Buat request (cuti/lembur/etc)",
+                "Pilih approver",
+                "Submit → approver terima notif",
+                "Approver approve di my_pin.php"
+            ],
+            "tips": [
+                "Approver harus set PIN di my_pin",
+                "Multi-level approval jika ada"
+            ]
+        },
+        {
+            "path": "/hrl_process/tower.php",
+            "module": "HRL",
+            "title": "HRL Process Tower",
+            "purpose": "Pengajuan ke HRL: Cuti/Izin/Lembur/Kenaikan Gaji/Rekrutmen. Buat pengajuan (Fase 1) & daftar pengajuan (Fase 2-3).",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Fase 1: Buat pengajuan (tipe, judul, periode, nominal, attachment, foto bukti)",
+                "Submit → masuk daftar",
+                "Fase 2-3: Approver PIN approve di my_pin.php",
+                "Nominal > 0 butuh approval FIN",
+                "Export CSV/Excel/PDF dari DataTables"
+            ],
+            "tips": [
+                "Attachment & Foto Bukti wajib saat submit (kecuali Perjadin)",
+                "Perjadin: form only, bukti pakai Absensi Dinas Luar",
+                "Tower untuk pantau status pengajuan"
+            ]
+        },
+        {
+            "path": "/hrl_process/request_view.php",
+            "module": "HRL",
+            "title": "Request View",
+            "purpose": "Detail pengajuan HRL Process. Lihat status, approver, history. Print untuk arsip.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Lihat detail request",
+                "Cek status & next PIC",
+                "Print jika perlu",
+                "request_print untuk cetak"
+            ],
+            "tips": [
+                "Tower untuk daftar",
+                "my_pin untuk approve",
+                "SOP HRL untuk alur"
+            ]
+        },
+        {
+            "path": "/hrl_process/request_print.php",
+            "module": "HRL",
+            "title": "Print Request",
+            "purpose": "Cetak pengajuan HRL Process (mutasi, disipliner, dll). Pilih request, preview format, print untuk tandatangan approval atau arsip.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Pilih request ID dari dropdown/parameter",
+                "Preview format print: header, detail, alasan",
+                "Print untuk tandatangan approval",
+                "Serah ke atasan/HRL untuk approval",
+                "Arsip copy yang sudah ditandatangani"
+            ],
+            "tips": [
+                "Detail request di request_view",
+                "Daftar di HRL Tower",
+                "SOP HRL untuk alur approval"
+            ]
+        },
+        {
+            "path": "/hrl_process/my_pin.php",
+            "module": "HRL",
+            "title": "My PIN",
+            "purpose": "Approve request dengan PIN. Set PIN dulu jika belum. Lihat request pending, approve/reject.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Set PIN dulu jika pertama kali",
+                "Lihat request pending",
+                "Masukkan PIN",
+                "Approve atau Reject",
+                "Request selesai"
+            ],
+            "tips": [
+                "Set PIN dulu jika pertama kali",
+                "PIN untuk otentikasi approval",
+                "Tower untuk daftar request"
+            ]
+        },
+        {
+            "path": "/hrl_reg_alkes/index.php",
+            "module": "PQP",
+            "title": "HRL Reg Alkes",
+            "purpose": "Modul Registrasi Alat Kesehatan. Recall, keluhan, adverse event.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Reg Alkes: input data registrasi",
+                "Control Tower: overview near expiry",
+                "Case: keluhan & recall",
+                "SKU by NIE, Expiry Check"
+            ],
+            "tips": [
+                "Near expiry? Renew sebelum kadaluarsa",
+                "SOP Keluhan untuk adverse event"
+            ]
+        },
+        {
+            "path": "/hrl_reg_alkes/",
+            "module": "PQP",
+            "title": "HRL Reg Alkes",
+            "purpose": "Modul Registrasi Alat Kesehatan. Recall, keluhan, adverse event. Near expiry, SKU by NIE.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Reg Alkes: input data registrasi",
+                "Control Tower: overview near expiry",
+                "Case: keluhan & recall",
+                "reg_alkes.php untuk daftar"
+            ],
+            "tips": [
+                "Near expiry? Renew sebelum kadaluarsa",
+                "reg_alkes.php untuk daftar",
+                "SOP Reg Alkes untuk prosedur"
+            ]
+        },
+        {
+            "path": "/hrl_reg_alkes/reg_alkes.php",
+            "module": "PQP",
+            "title": "Reg Alkes",
+            "purpose": "Registrasi alat kesehatan. Input data registrasi, upload izin. Monitor masa berlaku. Recall & keluhan.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Input data registrasi",
+                "Upload dokumen izin",
+                "Monitor masa berlaku",
+                "Eskalasi jika near expiry"
+            ],
+            "tips": [
+                "Near expiry? Renew sebelum kadaluarsa",
+                "SOP Keluhan untuk adverse event",
+                "SOP Recall untuk penarikan produk"
+            ]
+        },
+        {
+            "path": "/hrl_reg_alkes/reg_alkes_control_tower.php",
+            "module": "PQP",
+            "title": "Reg Alkes Control Tower",
+            "purpose": "Overview registrasi alkes. Deteksi near expiry, recall. Filter, drill ke detail, eskalasi renew.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Lihat daftar registrasi",
+                "Filter by status/expiry",
+                "Eskalasi near expiry",
+                "Drill ke reg_alkes untuk detail"
+            ],
+            "tips": [
+                "Near expiry? Renew segera",
+                "reg_alkes untuk input",
+                "SOP Reg Alkes untuk prosedur"
+            ]
+        },
+        {
+            "path": "/hrl_reg_alkes/reg_alkes_case.php",
+            "module": "PQP",
+            "title": "Reg Alkes Case",
+            "purpose": "Kelola kasus: recall, keluhan, adverse event. Buat case, upload dokumen, follow-up sampai closed.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Buat/lengkapi case",
+                "Upload dokumen pendukung",
+                "Update status",
+                "Follow-up sampai closed"
+            ],
+            "tips": [
+                "SOP Keluhan untuk adverse event",
+                "SOP Recall untuk penarikan produk",
+                "reg_alkes_control_tower untuk overview"
+            ]
+        },
+        {
+            "path": "/hrl_reg_alkes/reg_alkes_sku_by_nie.php",
+            "module": "PQP",
+            "title": "Reg Alkes SKU by NIE",
+            "purpose": "Cari registrasi alkes per NIE (Nomor Izin Edar). Lihat daftar SKU terdaftar, cek masa berlaku.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Input NIE",
+                "Lihat daftar SKU terdaftar",
+                "Cek masa berlaku",
+                "Drill ke reg_alkes jika perlu"
+            ],
+            "tips": [
+                "NIE = Nomor Izin Edar",
+                "reg_alkes untuk input data",
+                "SOP Data SKU Batch"
+            ]
+        },
+        {
+            "path": "/hrl_reg_alkes/reg_alkes_expiry_check.php",
+            "module": "PQP",
+            "title": "Reg Alkes Expiry Check",
+            "purpose": "Cek masa berlaku registrasi alkes. Lihat near expiry, filter periode, eskalasi renew.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Lihat daftar near expiry",
+                "Filter by periode",
+                "Eskalasi untuk renew",
+                "reg_alkes untuk update"
+            ],
+            "tips": [
+                "Near expiry? Renew segera",
+                "Control Tower untuk overview",
+                "SOP Produk Expired/Near Expiry"
+            ]
+        },
+        {
+            "path": "/hrl_reg_alkes/reg_alkes_export_compliance.php",
+            "module": "PQP",
+            "title": "Reg Alkes Export Compliance",
+            "purpose": "Export data registrasi alkes untuk compliance. Laporan ke regulator, audit.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Pilih periode & filter",
+                "Export format (Excel/CSV)",
+                "Validasi data",
+                "Arsip untuk compliance"
+            ],
+            "tips": [
+                "reg_alkes untuk data sumber",
+                "Control Tower untuk overview",
+                "SOP Reg Alkes untuk prosedur"
+            ]
+        },
+        {
+            "path": "/master/master_products.php",
+            "module": "WQS",
+            "title": "Master Produk",
+            "purpose": "Data produk/SKU. Wajib sebelum transaksi.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Input SKU, nama, unit, kategori",
+                "Set status active",
+                "Validasi: tidak duplikat SKU"
+            ],
+            "tips": [
+                "SKU unik wajib",
+                "Produk dulu sebelum DO/PO"
+            ]
+        },
+        {
+            "path": "/master/master_customers.php",
+            "module": "CRM",
+            "title": "Master Customer",
+            "purpose": "Data pelanggan. Dasar untuk Sales DO.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Input kode, nama, alamat",
+                "Set office & segment",
+                "Pastikan kode unik"
+            ],
+            "tips": [
+                "Customer dulu sebelum buat DO",
+                "Pricelist untuk harga khusus"
+            ]
+        },
+        {
+            "path": "/master/master_vendors.php",
+            "module": "SCM",
+            "title": "Master Vendor",
+            "purpose": "Data vendor. Dasar untuk PO.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Input kode, nama, PIC",
+                "Set bank & term",
+                "Pastikan kode unik"
+            ],
+            "tips": [
+                "Vendor dulu sebelum buat PO",
+                "Bank untuk pembayaran AP"
+            ]
+        },
+        {
+            "path": "/master/master_manufactures.php",
+            "module": "PQP",
+            "title": "Master Manufacture",
+            "purpose": "Data principal/manufacture (pabrikan). Sumber produk import. Link ke vendor untuk PO. Input kode, nama, negara.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Input kode manufacture (unik)",
+                "Nama principal, negara asal",
+                "Link ke vendor jika manufacture punya vendor lokal",
+                "Validasi sebelum dipakai di PO import",
+                "Produk dari manufacture di master_products"
+            ],
+            "tips": [
+                "Principal untuk PO import",
+                "Link vendor untuk pembayaran",
+                "SOP PQP untuk alur procurement"
+            ]
+        },
+        {
+            "path": "/master/master_office.php",
+            "module": "ITC",
+            "title": "Master Office",
+            "purpose": "Data kantor/cabang. Dasar office_code. Input paling awal.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Input kode, nama, kota",
+                "Set status active",
+                "Jangan hapus jika sudah dipakai"
+            ],
+            "tips": [
+                "Office dulu sebelum modul lain",
+                "Jangan hapus jika ada transaksi"
+            ]
+        },
+        {
+            "path": "/master/master_departements.php",
+            "module": "ITC",
+            "title": "Master Departemen",
+            "purpose": "Data dept & mapping ke office.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Input kode, nama",
+                "Mapping ke office",
+                "Validasi konsistensi"
+            ],
+            "tips": [
+                "Dept untuk RBAC & reporting",
+                "Mapping ke office wajib"
+            ]
+        },
+        {
+            "path": "/master/master_employees.php",
+            "module": "HRL",
+            "title": "Master Karyawan",
+            "purpose": "Data karyawan: nama, dept, office.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Input NIK, nama",
+                "Set dept & office",
+                "Link ke user login jika perlu"
+            ],
+            "tips": [
+                "Karyawan untuk HRL Process",
+                "Link ke master_system_login"
+            ]
+        },
+        {
+            "path": "/master/master_system_login.php",
+            "module": "ITC",
+            "title": "Master System Login",
+            "purpose": "Kelola akun, role, akses. Hanya ITC/Admin.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Tambah/edit user",
+                "Set role & dept",
+                "Set office_code",
+                "Cek account_readiness"
+            ],
+            "tips": [
+                "account_readiness untuk validasi",
+                "Role menentukan akses modul"
+            ]
+        },
+        {
+            "path": "/master/index.php",
+            "module": "ITC",
+            "title": "Master Data",
+            "purpose": "Pusat data master. Input dulu sebelum transaksi. Urutan: Office → Dept → Produk/Customer/Vendor → Pricelist.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Office & Dept dulu",
+                "Products, Customers, Vendors, Manufactures",
+                "Pricelist, Rekening, Tax, Term",
+                "Validasi sebelum go-live"
+            ],
+            "tips": [
+                "Urutan: Office → Dept → Lainnya",
+                "Validasi sebelum transaksi",
+                "master_data.php untuk quick links"
+            ]
+        },
+        {
+            "path": "/master/master_pricelist.php",
+            "module": "CRM",
+            "title": "Master Pricelist",
+            "purpose": "Buy + Markup → Sell. Hanya ADMIN/PQP/FIN. Sync Landed Cost dari Import Control.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Pilih produk, office, customer",
+                "Set Buy Price (atau sync dari PO)",
+                "Set Markup% → Sell auto",
+                "Validasi oleh owner"
+            ],
+            "tips": [
+                "Buy Price hanya ADMIN/PQP/FIN",
+                "Sync dari Import Control View",
+                "master_pricelist_sell untuk CRM (tanpa Buy)"
+            ]
+        },
+        {
+            "path": "/master/master_pricelist_sell.php",
+            "module": "CRM",
+            "title": "Pricelist Jual",
+            "purpose": "Lihat harga jual per produk. Tanpa Buy & Markup (untuk CRM/MPR).",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Pilih office/customer scope",
+                "Lihat daftar produk & sell price",
+                "Filter by SKU/nama"
+            ],
+            "tips": [
+                "CRM/MPR: hanya Sell price",
+                "Kelola Pricelist disembunyikan untuk CRM/MPR"
+            ]
+        },
+        {
+            "path": "/master/master_data.php",
+            "module": "ITC",
+            "title": "Master Data (Quick Links)",
+            "purpose": "Pusat quick links ke semua master. Office, Dept, Produk, Customer, Vendor, dll.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Klik link ke master yang dibutuhkan",
+                "Office & Dept dulu",
+                "Produk, Customer, Vendor",
+                "Pricelist, Rekening"
+            ],
+            "tips": [
+                "Urutan input: Office → Dept → Lainnya",
+                "master/index.php untuk daftar lengkap"
+            ]
+        },
+        {
+            "path": "/master/company_bank_accounts.php",
+            "module": "FIN",
+            "title": "Rekening Perusahaan",
+            "purpose": "Data rekening bank untuk pembayaran. Master data untuk AP/AR.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Input nomor rekening",
+                "Set bank & cabang",
+                "Mapping untuk AP/AR"
+            ],
+            "tips": [
+                "Wajib untuk AP Payment",
+                "Pilih rekening saat bayar",
+                "Bagian dari Master Data"
+            ]
+        },
+        {
+            "path": "/master/master_tax.php",
+            "module": "FIN",
+            "title": "Master Pajak",
+            "purpose": "Data tarif pajak (PPN, PPh).",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Input kode pajak",
+                "Set tarif %",
+                "Validasi sebelum dipakai"
+            ],
+            "tips": [
+                "PPN 11% default",
+                "PPh untuk vendor"
+            ]
+        },
+        {
+            "path": "/master/master_payment_terms.php",
+            "module": "SCM",
+            "title": "Master Payment Terms",
+            "purpose": "Data syarat pembayaran (COD, Net 30, dll).",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Input kode term",
+                "Set hari jatuh tempo",
+                "Mapping ke vendor/customer"
+            ],
+            "tips": [
+                "Net 30 = bayar 30 hari",
+                "COD untuk tunai"
+            ]
+        },
+        {
+            "path": "/master/master_import_products.php",
+            "module": "WQS",
+            "title": "Import Produk",
+            "purpose": "Import bulk produk dari Excel.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Download template",
+                "Isi data produk",
+                "Upload & validasi"
+            ],
+            "tips": [
+                "Template wajib sesuai format",
+                "master_products untuk manual"
+            ]
+        },
+        {
+            "path": "/master/master_import_customers.php",
+            "module": "CRM",
+            "title": "Import Customer",
+            "purpose": "Import bulk customer dari Excel.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Download template",
+                "Isi data customer",
+                "Upload & validasi"
+            ],
+            "tips": [
+                "Template wajib sesuai format",
+                "master_customers untuk manual"
+            ]
+        },
+        {
+            "path": "/master/master_import_vendors.php",
+            "module": "SCM",
+            "title": "Import Vendor",
+            "purpose": "Import bulk vendor dari Excel.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Download template",
+                "Isi data vendor",
+                "Upload & validasi"
+            ],
+            "tips": [
+                "Template wajib sesuai format",
+                "master_vendors untuk manual"
+            ]
+        },
+        {
+            "path": "/master/account_readiness.php",
+            "module": "ITC",
+            "title": "Account Readiness",
+            "purpose": "Validasi kelengkapan akun: office, dept, produk, dll.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Cek checklist readiness",
+                "Perbaiki yang belum lengkap",
+                "Validasi sebelum go-live"
+            ],
+            "tips": [
+                "master_system_login untuk user",
+                "Office & Dept wajib lengkap"
+            ]
+        },
+        {
+            "path": "/dashboards/regulatory/license_docs_dashboard.php",
+            "module": "HRL",
+            "title": "License Docs Dashboard",
+            "purpose": "Masa berlaku izin & dokumen regulasi. Pantau near expiry, eskalasi renew sebelum kadaluarsa.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Pantau masa berlaku",
+                "Eskalasi jika near expiry",
+                "Renew sebelum kadaluarsa",
+                "Reg Alkes untuk detail"
+            ],
+            "tips": [
+                "Near expiry? Eskalasi ke PIC",
+                "Reg Alkes untuk detail",
+                "SOP Reg Alkes untuk prosedur"
+            ]
+        },
+        {
+            "path": "/dashboards/sales/sales_dashboard.php",
+            "module": "CRM",
+            "title": "Sales Dashboard",
+            "purpose": "KPI penjualan: volume DO, SLA, trend. Overview harian/mingguan. Drill ke Control Tower.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat KPI harian/mingguan",
+                "Cek SLA compliance",
+                "Drill ke Control Tower untuk detail"
+            ],
+            "tips": [
+                "Control Tower untuk DO stuck",
+                "sales_do untuk buat DO baru",
+                "CRM Manual untuk panduan"
+            ]
+        },
+        {
+            "path": "/dashboards/warehouse/wqs_dashboard.php",
+            "module": "WQS",
+            "title": "WQS Dashboard",
+            "purpose": "Overview gudang: stok, picking, incoming. Summary per office. Expiry <90 hari perlu perhatian. Quick links ke wqs_stock, wqs_do_tasks.",
+            "diagram_title": "Alur WQS Gudang",
+            "steps": [
+                "Lihat summary stok",
+                "Cek picking backlog",
+                "Monitor incoming dari GR",
+                "Drill ke wqs_stock untuk detail"
+            ],
+            "tips": [
+                "wqs_stock untuk detail saldo",
+                "Expiry <90 hari perlu perhatian",
+                "wqs_do_tasks untuk picking"
+            ]
+        },
+        {
+            "path": "/dashboards/procurement/import_po_dashboard.php",
+            "module": "PQP",
+            "title": "Procurement Dashboard",
+            "purpose": "Overview procurement: PO open, GR pending, status import. Monitor AP aging & PO stuck. Quick links ke purchases_po, purchases_gr.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat PO open per office/vendor",
+                "Cek GR pending — barang belum diterima",
+                "Monitor AP aging untuk prioritas bayar",
+                "Deteksi PO stuck di Import Control Tower",
+                "Quick link ke purchases_po, purchases_gr, purchases_invoice_ap"
+            ],
+            "tips": [
+                "Buat PO di purchases_po",
+                "GR di purchases_gr (WQS)",
+                "Import Control Tower untuk tracking PO import"
+            ]
+        },
+        {
+            "path": "/dashboards/finance/ar_ap_cash_dashboard.php",
+            "module": "FIN",
+            "title": "Finance Dashboard",
+            "purpose": "AR, AP, cash flow overview. Ringkasan piutang, hutang, cash. Tekan F1 untuk panduan.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat AR Outstanding & Overdue",
+                "Cek AP Due This Week",
+                "Quick Links: FIN DO Tasks, AP Invoice/Payment",
+                "Tax Invoice, Rekening Perusahaan"
+            ],
+            "tips": [
+                "AR dari sales_do status wait_payment",
+                "AP dari purchases_invoice_ap",
+                "Cash balance manual di KPI_FIN config"
+            ]
+        },
+        {
+            "path": "/dashboards/index.php",
+            "module": "ALL",
+            "title": "Dashboards",
+            "purpose": "Overview per modul. Pilih sesuai role. Sales, Stock, Finance, Procurement, HRL. Tekan F1 untuk detail.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih dashboard (Sales/Stock/Finance/dll)",
+                "Lihat KPI & summary",
+                "Drill-down jika perlu detail"
+            ],
+            "tips": [
+                "F1 di tiap dashboard untuk panduan",
+                "Quick links ke proses detail",
+                "dashboard_center untuk pusat"
+            ]
+        },
+        {
+            "path": "/dashboards/dashboard_center.php",
+            "module": "ALL",
+            "title": "Dashboard Center",
+            "purpose": "Pusat dashboard. Pilih Sales, Stock, Finance, Procurement, HRL, dll. Quick links per modul.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih modul dashboard",
+                "Lihat KPI & quick links",
+                "Drill ke modul detail"
+            ],
+            "tips": [
+                "Role menentukan dashboard yang tampil",
+                "F1 untuk panduan per dashboard",
+                "dashboards/index untuk overview"
+            ]
+        },
+        {
+            "path": "/dashboards/act/act_dashboard.php",
+            "module": "ACT",
+            "title": "ACT Dashboard",
+            "purpose": "Dashboard Accounting. Overview jurnal, AR, AP, GL. Quick links ke act_do_tasks.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat summary accounting",
+                "Quick links ke act_do_tasks",
+                "Monitor posting"
+            ],
+            "tips": [
+                "ACT untuk jurnal & validasi",
+                "FIN untuk invoice & payment",
+                "ACT Manual untuk prosedur"
+            ]
+        },
+        {
+            "path": "/dashboards/scm/scm_dashboard.php",
+            "module": "SCM",
+            "title": "SCM Dashboard",
+            "purpose": "Dashboard SCM. Overview delivery, DO tasks, forwarding. Quick links ke scm_do_tasks.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat DO delivery backlog",
+                "Quick links ke scm_do_tasks",
+                "Monitor Forwarding Tasks"
+            ],
+            "tips": [
+                "DO done dari WQS → SCM deliver",
+                "Forwarding untuk import",
+                "SCM Manual untuk prosedur"
+            ]
+        },
+        {
+            "path": "/dashboards/itc/itc_dashboard.php",
+            "module": "ITC",
+            "title": "ITC Dashboard",
+            "purpose": "Dashboard IT/Admin. User, system config, audit.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Lihat summary system",
+                "Quick links ke master_system_login",
+                "Monitor account readiness"
+            ],
+            "tips": [
+                "ITC untuk user & akses",
+                "account_readiness untuk validasi"
+            ]
+        },
+        {
+            "path": "/dashboards/quality/qc_complaint_dashboard.php",
+            "module": "PQP",
+            "title": "QC Complaint Dashboard",
+            "purpose": "Overview keluhan & quality. Link ke Reg Alkes case.",
+            "diagram_title": "Alur Reg Alkes",
+            "steps": [
+                "Lihat daftar keluhan",
+                "Filter by status",
+                "Drill ke reg_alkes_case"
+            ],
+            "tips": [
+                "SOP Keluhan untuk adverse event",
+                "Reg Alkes untuk recall"
+            ]
+        },
+        {
+            "path": "/dashboards/finance/cek_crm_submitted.php",
+            "module": "FIN",
+            "title": "Cek DO CRM Submitted",
+            "purpose": "Cek DO yang sudah submit dari CRM. Filter by office/tanggal. Drill ke detail. Untuk monitoring alur CRM → WQS → SCM → FIN.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat DO submitted",
+                "Filter by office/tanggal",
+                "Drill ke detail",
+                "Control Tower untuk tracking lengkap"
+            ],
+            "tips": [
+                "Control Tower untuk tracking",
+                "WQS untuk picking",
+                "FIN DO Tasks untuk invoice"
+            ]
+        },
+        {
+            "path": "/dashboards/finance/gl_rekap.php",
+            "module": "FIN",
+            "title": "Rekap GL",
+            "purpose": "Rekap General Ledger per periode. Ringkasan biaya per akun. Filter periode, lihat detail, export untuk laporan keuangan.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih periode (bulan/tahun)",
+                "Lihat rekap per akun: debit, kredit, saldo",
+                "Filter by office jika multi-branch",
+                "Drill ke detail jurnal jika perlu",
+                "Export ke Excel untuk laporan"
+            ],
+            "tips": [
+                "ACT posting jurnal ke GL",
+                "FIN input invoice & payment",
+                "Closing period lock data"
+            ]
+        },
+        {
+            "path": "/dashboards/finance/target_rekap.php",
+            "module": "FIN",
+            "title": "Rekap Target KPI",
+            "purpose": "Rekap target vs actual KPI per periode. Bandingkan target penjualan, DO, AP dengan realisasi. Untuk planning & evaluasi.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih periode (bulan/tahun)",
+                "Lihat target vs actual per KPI",
+                "Filter by office/divisi",
+                "Identifikasi gap (target vs realisasi)",
+                "Export untuk laporan manajemen"
+            ],
+            "tips": [
+                "Target di-set di KPI config",
+                "Actual dari DO, AP, AR",
+                "KPI dashboard untuk detail"
+            ]
+        },
+        {
+            "path": "/dashboards/finance/ap_rekap.php",
+            "module": "FIN",
+            "title": "Rekap Hutang (AP)",
+            "purpose": "Rekap Accounts Payable per vendor & periode. Lihat outstanding, overdue, aging. Prioritas bayar untuk vendor yang overdue.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Pilih periode (bulan/tahun)",
+                "Lihat AP outstanding per vendor",
+                "Filter by vendor, office",
+                "Cek aging: current, 30, 60, 90+ hari",
+                "Prioritas bayar di purchases_payment_ap"
+            ],
+            "tips": [
+                "Input invoice di purchases_invoice_ap",
+                "Bayar di purchases_payment_ap",
+                "Overdue = prioritas tinggi"
+            ]
+        },
+        {
+            "path": "/dashboards/finance/sales_do_rekap.php",
+            "module": "FIN",
+            "title": "Rekap Sales DO",
+            "purpose": "Rekap Delivery Order per periode & office. Jumlah DO, nilai total, status per stage. Untuk laporan penjualan & AR.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih periode (bulan/tahun)",
+                "Filter by office/customer",
+                "Lihat rekap: jumlah DO, nilai Rp, status",
+                "Drill ke Control Tower untuk detail"
+            ],
+            "tips": [
+                "Buat DO di sales_do",
+                "Control Tower untuk tracking",
+                "FIN DO Tasks untuk invoice"
+            ]
+        },
+        {
+            "path": "/dashboards/finance/dashboard_detail.php",
+            "module": "FIN",
+            "title": "Dashboard Detail",
+            "purpose": "Dashboard detail Finance. Ringkasan AR, AP, cash.",
+            "diagram_title": "Alur P2P Import",
+            "steps": [
+                "Lihat summary",
+                "Quick links ke modul",
+                "Monitor aging"
+            ],
+            "tips": [
+                "ar_ap_cash_dashboard untuk overview",
+                "Hanya Admin untuk full access"
+            ]
+        },
+        {
+            "path": "/dashboards/hrl/hrl_dashboard.php",
+            "module": "HRL",
+            "title": "HRL Dashboard",
+            "purpose": "Dashboard HRL. Overview dokumen, process, reg alkes. Quick links ke hrl_docs, hrl_process. Monitor expiry.",
+            "diagram_title": "Alur Proses HRL",
+            "steps": [
+                "Lihat summary HRL",
+                "Quick links ke hrl_docs, hrl_process",
+                "Monitor expiry",
+                "Drill ke HRL Tower untuk detail"
+            ],
+            "tips": [
+                "HRL Tower untuk dokumen",
+                "HRL Process Tower untuk pengajuan",
+                "Near expiry? Renew sebelum kadaluarsa"
+            ]
+        },
+        {
+            "path": "/dashboards/owner/exec_summary.php",
+            "module": "ALL",
+            "title": "Executive Summary",
+            "purpose": "Ringkasan eksekutif untuk Owner. KPI, trend, alert. Hanya Owner/Admin. Drill ke dashboard detail.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat KPI utama",
+                "Cek trend",
+                "Eskalasi alert",
+                "Drill ke dashboard detail"
+            ],
+            "tips": [
+                "Hanya Owner/Admin",
+                "Drill ke dashboard detail",
+                "KPI Center untuk detail"
+            ]
+        },
+        {
+            "path": "/kpi/index.php",
+            "module": "CRM",
+            "title": "KPI Center",
+            "purpose": "Pusat KPI: Daily & Monthly Dashboard. Volume DO, SLA, bottleneck, trend.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "KPI Daily: volume harian, SLA, bottleneck",
+                "KPI Monthly: trend, target",
+                "Drill ke Control Tower untuk detail"
+            ],
+            "tips": [
+                "kpi_dashboard_daily untuk harian",
+                "kpi_dashboard_monthly untuk bulanan",
+                "Control Tower untuk DO stuck"
+            ]
+        },
+        {
+            "path": "/kpi/kpi_dashboard_daily.php",
+            "module": "CRM",
+            "title": "KPI Daily Dashboard",
+            "purpose": "KPI DO harian. Volume, SLA, bottleneck. Identifikasi stage yang tertahan. Drill ke Control Tower.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat KPI harian",
+                "Cek SLA compliance",
+                "Identifikasi bottleneck",
+                "Drill ke Control Tower untuk detail"
+            ],
+            "tips": [
+                "kpi_do_sla untuk detail",
+                "Control Tower untuk DO stuck",
+                "SOP KPI Center untuk prosedur"
+            ]
+        },
+        {
+            "path": "/kpi/kpi_dashboard_monthly.php",
+            "module": "CRM",
+            "title": "KPI Monthly Dashboard",
+            "purpose": "KPI DO bulanan. Trend, target vs actual. Bandingkan performa. Export untuk laporan manajemen.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat KPI bulanan",
+                "Bandingkan target vs actual",
+                "Export untuk report",
+                "target_rekap untuk rekap detail"
+            ],
+            "tips": [
+                "target_rekap untuk rekap",
+                "Sales dashboard untuk overview",
+                "SOP KPI Center untuk prosedur"
+            ]
+        },
+        {
+            "path": "/tools/index.php",
+            "module": "ITC",
+            "title": "Tools & Maintenance",
+            "purpose": "Operational control center: health, readiness, backup, governance. Hanya Admin/ITC.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Health & Readiness: cek sistem",
+                "Backup: verify, schedule",
+                "Ops: Control Center, Plan Summary",
+                "RBAC: seed, verify"
+            ],
+            "tips": [
+                "Hanya TOOLS.VIEW / Admin",
+                "Control Center untuk ops",
+                "Doctor untuk diagnosa"
+            ]
+        },
+        {
+            "path": "/tools/ops/control_center.php",
+            "module": "ITC",
+            "title": "Tools Control Center",
+            "purpose": "Control center ops: backup, hardening, alerts. Status sistem, workflow. Hanya Admin/ITC.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Lihat status ops",
+                "Backup & hardening",
+                "Alerts workflow",
+                "Drill ke tools/index untuk dashboard"
+            ],
+            "tips": [
+                "tools/index untuk dashboard",
+                "Hanya Admin",
+                "SOP ITC untuk prosedur"
+            ]
+        },
+        {
+            "path": "/rbac/index.php",
+            "module": "ITC",
+            "title": "RBAC",
+            "purpose": "Role-Based Access Control. Kelola role & permission. manager, staff, sys. Hanya Admin/ITC.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Lihat daftar role",
+                "Edit permission per role",
+                "Validasi akses",
+                "master_system_login untuk assign user ke role"
+            ],
+            "tips": [
+                "Hanya Admin/ITC",
+                "master_system_login untuk user",
+                "SOP ITC untuk prosedur"
+            ]
+        },
+        {
+            "path": "/rbac/v1_legacy.php",
+            "module": "ITC",
+            "title": "RBAC Legacy",
+            "purpose": "RBAC versi legacy. Mapping role lama. Migrasi ke RBAC baru (rbac/index). Hanya Admin.",
+            "diagram_title": "Alur Master Data",
+            "steps": [
+                "Lihat mapping legacy",
+                "Cek kompatibilitas",
+                "Migrasi ke rbac/index jika perlu",
+                "Validasi akses setelah migrasi"
+            ],
+            "tips": [
+                "Hanya Admin",
+                "rbac/index untuk RBAC baru",
+                "Backward compat: ADMIN/SUPERADMIN tetap valid"
+            ]
+        },
+        {
+            "path": "/chat/index.php",
+            "module": "ALL",
+            "title": "Internal Chat",
+            "purpose": "Kolaborasi tim internal via channel. Kirim pesan, mention @user, share file. Channel per modul/topik (Sales, Purchases, WQS, dll).",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih channel dari sidebar (per modul/topik)",
+                "Baca pesan terbaru, kirim balasan",
+                "Mention @username untuk tag rekan",
+                "Upload file jika perlu (format allowed)",
+                "Notifikasi untuk mention & reply"
+            ],
+            "tips": [
+                "@username untuk mention",
+                "Channel per topik: Sales, WQS, FIN, dll",
+                "CHAT Manual untuk panduan lengkap"
+            ]
+        },
+        {
+            "path": "/chat/admin_exports.php",
+            "module": "ITC",
+            "title": "Chat Admin Exports",
+            "purpose": "Export data chat untuk admin/audit. Pilih periode, channel, format. Backup atau investigasi. Hanya Admin/ITC.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih periode (tanggal awal–akhir)",
+                "Pilih channel (atau semua)",
+                "Pilih format: CSV atau Excel",
+                "Download file export",
+                "Backup atau audit sesuai kebijakan"
+            ],
+            "tips": [
+                "Hanya Admin/ITC yang akses",
+                "chat/index untuk user biasa",
+                "SOP ITC Admin untuk prosedur"
+            ]
+        },
+        {
+            "path": "/chat/admin_settings.php",
+            "module": "ITC",
+            "title": "Chat Admin Settings",
+            "purpose": "Pengaturan chat untuk admin: kelola channel, set permission user per channel, konfigurasi. Hanya Admin/ITC.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat daftar channel existing",
+                "Tambah channel baru (nama, deskripsi)",
+                "Set permission: siapa bisa akses channel",
+                "Edit/archive channel jika perlu",
+                "Simpan perubahan"
+            ],
+            "tips": [
+                "Hanya Admin/ITC",
+                "Channel per modul: Sales, WQS, FIN",
+                "admin/channels untuk kelola channel"
+            ]
+        },
+        {
+            "path": "/chat/admin/audit.php",
+            "module": "ITC",
+            "title": "Chat Admin Audit",
+            "purpose": "Audit log chat untuk admin. Lihat history aktivitas: login, kirim pesan, edit. Filter by channel/user/periode. Investigasi jika perlu.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Pilih periode (tanggal)",
+                "Filter by channel, user",
+                "Lihat audit log: aksi, waktu, user",
+                "Drill ke detail jika perlu",
+                "Export untuk laporan"
+            ],
+            "tips": [
+                "Hanya Admin/ITC",
+                "admin_exports untuk export data chat",
+                "SOP ITC untuk audit"
+            ]
+        },
+        {
+            "path": "/chat/admin/channels.php",
+            "module": "ITC",
+            "title": "Chat Admin Channels",
+            "purpose": "Kelola channel chat untuk admin.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "Lihat daftar channel",
+                "Tambah/edit channel",
+                "Set permission"
+            ],
+            "tips": [
+                "Hanya Admin",
+                "admin_settings untuk pengaturan"
+            ]
+        },
+        {
+            "path": "/docs/help_center.php",
+            "module": "ALL",
+            "title": "Help Center",
+            "purpose": "Pusat manual, SOP, checklist. F1 di tiap halaman untuk panduan spesifik. INDEX v3.1 untuk daftar lengkap.",
+            "diagram_title": "Alur O2C DO",
+            "steps": [
+                "INDEX v3.1: Daftar dokumen lengkap",
+                "Panduan Cepat: Untuk user baru",
+                "F1 di modul: Sales, Purchases, Stock, HRL, Master",
+                "Download PDF/DOCX jika tersedia"
+            ],
+            "tips": [
+                "Tekan F1 di halaman modul untuk diagram & SOP",
+                "Help Center untuk akses semua dokumen",
+                "Panduan Cepat untuk onboarding"
+            ],
+            "links": [
+                {
+                    "label": "Help Center",
+                    "url": "/docs/help_center.php"
+                }
+            ]
+        }
+    ]
+}

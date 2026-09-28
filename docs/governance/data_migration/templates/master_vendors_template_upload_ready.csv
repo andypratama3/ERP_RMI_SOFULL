@@ -1,0 +1,4 @@
+vendors_code,vendors_name,vendor_type,city,phone,email,npwp,status
+VEND001,PT Vendor Satu,Forwarding,Jakarta,0211112222,vendor1@example.com,01.111.222.3-444.000,active
+VEND002,PT Vendor Dua,Logistic/Expedisi,Surabaya,0311112222,vendor2@example.com,02.111.222.3-444.000,active
+VEND003,PT Vendor Tiga,Lainnya,Bandung,0221112222,vendor3@example.com,03.111.222.3-444.000,inactive

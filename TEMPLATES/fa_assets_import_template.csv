@@ -1,0 +1,4 @@
+<pre>PHP Error: fputcsv(): the $escape parameter must be provided as its default value will change
+File: /volume4/web/ERP_RMI_SOFULL/Fixed_Asset/assets.php:29</pre>asset_code,asset_name,office_code,dept_code,custodian_employee_id,acq_date,acq_cost,salvage_value,category,tax_group_code,dep_method,status,notes
+<pre>PHP Error: fputcsv(): the $escape parameter must be provided as its default value will change
+File: /volume4/web/ERP_RMI_SOFULL/Fixed_Asset/assets.php:30</pre>LAP-001,"Laptop Dell Latitude",BOGOR,ITC,12,2025-12-29,15000000,0,IT,G1,SL,ACTIVE,contoh

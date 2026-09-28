@@ -1,0 +1,2 @@
+source_id,payment_no,payment_date,invoice_no,amount,currency,method,bank_name,reference,note
+1,PP-0001,2026-01-10,PI-0001,550000,IDR,BANK,BCA,TRX-001,Payment full AP PI-0001

@@ -1,0 +1,32 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Pipeline Plans — One Pager</title>
+<style>body{font-family:Arial,sans-serif;font-size:11px;margin:12px;color:#111}
+table{width:100%;border-collapse:collapse;font-size:10px}th,td{border:1px solid #ddd;padding:4px;vertical-align:top}
+h1,h2{margin:4px 0}@media print{@page{size:A4;margin:7mm}body{margin:0;font-size:10px}}</style></head><body>
+<h1>Pipeline Plans — One Pager (Non‑IT)</h1>
+<p>Generated at: 2026-02-16T12:00:31+00:00</p>
+<h2>Cara Memilih Plan (ringkas)</h2><ul>
+<li><b>PR kecil:</b> staging_gate_before_merge</li>
+<li><b>PR besar / banyak ubah route/API:</b> staging_gate_before_merge_strict_http</li>
+<li><b>Perubahan security/dependency:</b> staging_gate_security_lite</li>
+<li><b>Perubahan DB/migration:</b> staging_gate_migration_hygiene</li>
+<li><b>Nightly baseline:</b> nightly_staging_full_gate</li>
+<li><b>Release candidate:</b> staging_release_candidate</li>
+<li><b>Cutover final production:</b> prod_stage16_final</li>
+<li><b>Ops cek cepat freshness:</b> ops_freshness_gate</li>
+<li><b>UI changes besar:</b> ui_regression_optional_playwright</li>
+<li><b>Mobile API changes:</b> mobile_contract_gate</li>
+</ul><h2>Tabel 1 halaman</h2><table><thead><tr><th>Plan ID</th><th>Kapan Dipakai</th><th>Siapa</th><th>ETA</th><th>Output</th><th>Catatan</th></tr></thead><tbody>
+<tr><td>stageXX_staging_draft (00–16)</td><td>Cek stage spesifik (dev/QA)</td><td>DEV, QA</td><td>3–15 menit</td><td>PASS/FAIL + laporan</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>stage16_staging_strict</td><td>Cek stage 16 ketat</td><td>DEV, QA</td><td>3–15 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>staging_gate_before_merge</td><td>PR kecil</td><td>DEV, QA</td><td>1–3 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>staging_gate_before_merge_strict_http</td><td>PR besar / banyak ubah route/API</td><td>DEV, QA</td><td>2–5 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>staging_gate_security_lite</td><td>Perubahan security/dependency</td><td>DEV, QA</td><td>2–6 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>staging_gate_migration_hygiene</td><td>Perubahan DB/migration</td><td>DEV, QA</td><td>2–5 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>nightly_staging_full_gate</td><td>Nightly baseline</td><td>OPS, QA</td><td>6–15 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>staging_release_candidate</td><td>Release candidate</td><td>RELEASE, QA</td><td>10–25 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh --rfc=RFC-XXXX, TOOLS_BASE_URL</td></tr>
+<tr><td>ui_regression_optional_playwright</td><td>UI changes besar (optional)</td><td>DEV, QA</td><td>5–20 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>mobile_contract_gate</td><td>Mobile API changes</td><td>DEV, QA</td><td>2–8 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>ops_freshness_gate</td><td>Ops cek cepat freshness</td><td>OPS</td><td>&lt; 1 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Tidak butuh TOOLS_BASE_URL</td></tr>
+<tr><td>full_staging_00_16</td><td>Full run 00→16 (stop-on-fail)</td><td>QA, RELEASE</td><td>20–90 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh TOOLS_BASE_URL</td></tr>
+<tr><td>prod_stage16_final</td><td>Cutover final production</td><td>RELEASE, QA</td><td>15–45 menit</td><td>PASS/FAIL + laporan (plan_&lt;id&gt;_&lt;run&gt;.json, .md, .html)</td><td>Butuh RFC + confirm (--i-understand --confirm=...)</td></tr>
+</tbody></table></body></html>

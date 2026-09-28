@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP RMI — Training Detail untuk Tim</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/theme/black.css" id="theme">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyber-cyan: #00f5ff;
+      --cyber-purple: #a855f7;
+      --cyber-pink: #ec4899;
+      --cyber-green: #22c55e;
+      --dark-bg: #0a0a12;
+      --card-bg: rgba(20, 20, 40, 0.85);
+      --border-glow: rgba(0, 245, 255, 0.4);
+    }
+    .reveal { font-family: 'Exo 2', sans-serif; background: linear-gradient(135deg, #0a0a12 0%, #0d0d1a 50%, #0a0a12 100%); }
+    .reveal h1, .reveal h2, .reveal h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; text-shadow: 0 0 30px rgba(0, 245, 255, 0.5); }
+    .reveal h1 { color: var(--cyber-cyan); font-size: 1.8em; }
+    .reveal h2 { color: var(--cyber-cyan); font-size: 1.4em; border-bottom: 2px solid var(--cyber-cyan); padding-bottom: 0.2em; }
+    .reveal h3 { color: var(--cyber-purple); font-size: 1em; }
+    .reveal p, .reveal li { font-size: 0.75em; line-height: 1.45; }
+    .reveal table { font-size: 0.6em; border-collapse: collapse; }
+    .reveal th, .reveal td { border: 1px solid rgba(0, 245, 255, 0.3); padding: 0.3em 0.4em; }
+    .reveal th { background: rgba(0, 245, 255, 0.15); color: var(--cyber-cyan); }
+    .reveal td { color: #e0e0e0; }
+    .reveal .subtitle { color: var(--cyber-purple); font-size: 0.55em; margin-top: 0.4em; }
+    .cyber-badge { display: inline-block; background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-purple)); color: #0a0a12; padding: 0.15em 0.5em; border-radius: 4px; font-weight: 600; font-size: 0.7em; margin: 0.08em; }
+    .grid-bg { background-image: linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px); background-size: 40px 40px; }
+    .glow-box { border: 1px solid var(--border-glow); border-radius: 8px; padding: 0.8em; background: var(--card-bg); box-shadow: 0 0 20px rgba(0, 245, 255, 0.1); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; text-align: left; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8em; text-align: left; }
+    .reveal .small-table th, .reveal .small-table td { font-size: 0.55em; padding: 0.2em 0.35em; }
+    ul.compact { font-size: 0.68em; margin: 0.3em 0; }
+    .tip-box { background: rgba(34, 197, 94, 0.15); border-left: 4px solid var(--cyber-green); padding: 0.5em 0.8em; margin: 0.4em 0; font-size: 0.65em; text-align: left; }
+    .step-num { display: inline-block; width: 1.4em; height: 1.4em; line-height: 1.3em; text-align: center; background: var(--cyber-cyan); color: #0a0a12; border-radius: 50%; font-weight: 700; font-size: 0.8em; margin-right: 0.3em; }
+    .flow-arrow { color: var(--cyber-cyan); font-weight: bold; }
+    .dept-tag { font-size: 0.6em; padding: 0.1em 0.35em; border-radius: 3px; background: rgba(168,85,247,0.3); }
+    .where-click { font-size: 0.58em; color: var(--cyber-green); }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides grid-bg">
+
+      <!-- 1. Title -->
+      <section>
+        <h1>ERP RMI — Training Detail</h1>
+        <p class="subtitle">Rizqullah Mediska Indonesia</p>
+        <p style="margin-top: 1.5em; font-size: 0.65em;">Untuk memudahkan training ke tim</p>
+        <p style="font-size: 0.55em; color: rgba(255,255,255,0.6);">Menu • Sub-halaman • Langkah Kerja • Tips</p>
+      </section>
+
+      <!-- 2. Glosarium -->
+      <section>
+        <h2>Glosarium — Istilah Penting</h2>
+        <table class="small-table">
+          <tr><th>Istilah</th><th>Arti</th></tr>
+          <tr><td>O2C</td><td>Order to Cash — alur dari order sampai pembayaran diterima</td></tr>
+          <tr><td>DO</td><td>Delivery Order — surat jalan pengiriman barang ke customer</td></tr>
+          <tr><td>flow_status</td><td>Status alur DO (DRAFT, crm_to_wqs, wqs_processing, delivered, paid, dll)</td></tr>
+          <tr><td>POD</td><td>Proof of Delivery — bukti barang diterima customer</td></tr>
+          <tr><td>PR</td><td>Purchase Request — permintaan pembelian</td></tr>
+          <tr><td>PO</td><td>Purchase Order — order pembelian ke vendor</td></tr>
+          <tr><td>GR</td><td>Goods Receipt — penerimaan barang</td></tr>
+          <tr><td>AP</td><td>Accounts Payable — hutang ke vendor</td></tr>
+          <tr><td>NIE</td><td>Nomor Izin Edar — izin edar alat kesehatan</td></tr>
+        </table>
+      </section>
+
+      <!-- 3. Agenda -->
+      <section>
+        <h2>Agenda Training</h2>
+        <ol class="compact" style="text-align: left; max-width: 85%; margin: 0 auto; font-size: 0.62em;">
+          <li>Glosarium & Struktur Kantor</li>
+          <li>Role, Dept & Cara Akses Menu</li>
+          <li>MAIN — Dashboards, Chat, Help</li>
+          <li>Master Data — Sub-halaman</li>
+          <li>CRM — O2C Step-by-Step (detail per stage)</li>
+          <li>PQP — Purchases</li>
+          <li>WQS — Stock (Incoming, Picking)</li>
+          <li>Pembelian Antar Kantor</li>
+          <li>HRL — Docs, Process, Reg Alkes, Absensi, KPI</li>
+          <li>FIN, MPR, ACT</li>
+          <li>O2C Flow Lengkap & Siapa Lakukan Apa</li>
+          <li>Kesalahan Umum & Tips</li>
+        </ol>
+      </section>
+
+      <!-- 3. Struktur Kantor -->
+      <section>
+        <h2>Struktur Kantor RMI</h2>
+        <div class="two-col">
+          <div class="glow-box">
+            <h4 style="color: var(--cyber-cyan);">6 Branch</h4>
+            <p class="compact">BGR Bogor • BKS Bekasi • TGR Tangerang • BDG Bandung • SLO Solo • SMG Semarang</p>
+          </div>
+          <div class="glow-box">
+            <h4 style="color: var(--cyber-purple);">2 Depo</h4>
+            <p class="compact">KAL Kalimantan • JGY Jogyakarta</p>
+          </div>
+        </div>
+        <p class="tip-box">Kode office muncul di DO (RMI-BGR-260306-001), stock per kantor, master_office</p>
+      </section>
+
+      <!-- 4. Role & Permission -->
+      <section>
+        <h2>Role & Permission</h2>
+        <p><span class="cyber-badge">manager</span> <span class="cyber-badge">staff</span> <span class="cyber-badge">sys</span></p>
+        <table class="small-table">
+          <tr><th>Modul</th><th>Dept</th><th>Permission</th></tr>
+          <tr><td>Master</td><td>ITC, SYS</td><td>MASTER.VIEW</td></tr>
+          <tr><td>Sales</td><td>CRM</td><td>SALES.VIEW</td></tr>
+          <tr><td>Purchases</td><td>PQP, SCM</td><td>PQP.VIEW</td></tr>
+          <tr><td>Stock</td><td>WQS</td><td>WQS.*, STOCK.*</td></tr>
+          <tr><td>HRL</td><td>HRL</td><td>HRL.PROCESS_VIEW, HRL.REG_ALKES_VIEW</td></tr>
+          <tr><td>Absensi</td><td>ALL</td><td>ABSENSI.VIEW, ABSENSI.CHECKIN</td></tr>
+          <tr><td>KPI</td><td>ALL</td><td>KPI.VIEW</td></tr>
+        </table>
+      </section>
+
+      <!-- 5. Menu View Filter -->
+      <section>
+        <h2>Menu View Filter</h2>
+        <p class="compact">Menu ERP bisa difilter sesuai kebutuhan:</p>
+        <ul class="compact">
+          <li><strong>Sesuai Dept</strong> — Tampilkan hanya modul yang relevan dengan dept user (default)</li>
+          <li><strong>Semua Modul</strong> — Tampilkan semua (Admin)</li>
+          <li><strong>Per Dept</strong> — CRM, PQP, WQS, FIN, HRL, ACT, ITC, MPR, SYS</li>
+        </ul>
+        <p class="tip-box">Tekan <strong>F1</strong> di halaman mana pun untuk bantuan konteks (diagram, langkah, SOP)</p>
+      </section>
+
+      <!-- 5b. Cara Akses Menu -->
+      <section>
+        <h2>Cara Akses Menu</h2>
+        <p class="compact">Contoh: akses Sales (CRM)</p>
+        <ol class="compact">
+          <li>Login → Sidebar kiri tampil menu</li>
+          <li>Klik <strong>CRM (Customer Relationship Management)</strong></li>
+          <li>Klik <strong>Sales (CRM)</strong> → redirect ke sales_dashboard.php</li>
+          <li>Dari dashboard: tombol <strong>Open</strong> per stage (CRM, WQS, SCM, ACT, FIN)</li>
+        </ol>
+        <p class="where-click">CRM Stage Open → sales_do.php | WQS Stage Open → stock/wqs_picking.php | Control Tower → sales_control_tower.php</p>
+      </section>
+
+      <!-- 6. MAIN -->
+      <section>
+        <h2>MAIN — Menu Utama</h2>
+        <table class="small-table">
+          <tr><th>Menu</th><th>URL</th><th>Fungsi</th></tr>
+          <tr><td>Dashboards</td><td>dashboards/</td><td>Dashboard Center per dept</td></tr>
+          <tr><td>Internal Chat</td><td>chat/</td><td>Chat internal, channels</td></tr>
+          <tr><td>Help Center</td><td>docs/help_center.php</td><td>Manual, SOP, Office Pack</td></tr>
+          <tr><td>Executive Summary</td><td>dashboards/owner/</td><td>Ringkasan Owner (SYS only)</td></tr>
+          <tr><td>Quality & Complaint</td><td>dashboards/quality/</td><td>Incoming QC, lot/serial/exp</td></tr>
+        </table>
+      </section>
+
+      <!-- 6a. Master Data — Prasyarat -->
+      <section>
+        <h2>Master Data — Prasyarat</h2>
+        <p class="compact">Sebelum buat DO/PO, pastikan data ini sudah ada:</p>
+        <table class="small-table">
+          <tr><th>Untuk</th><th>Master yang harus ada</th></tr>
+          <tr><td>Buat DO</td><td>Customer, Product, Office, Pricelist (jika pakai)</td></tr>
+          <tr><td>Buat PO</td><td>Vendor, Product, Manufacture (untuk import)</td></tr>
+          <tr><td>Pembelian antar kantor</td><td>Customer BGR-INT/BKS-INT, Manufacture KANTOR-BKS/BGR</td></tr>
+          <tr><td>Absensi</td><td>Office + GeoFence (admin/offices)</td></tr>
+        </table>
+      </section>
+
+      <!-- 7. Master Data — Sub-halaman -->
+      <section>
+        <h2>Master Data — Sub-halaman</h2>
+        <div class="two-col">
+          <table class="small-table">
+            <tr><th>Kartu</th><th>File</th></tr>
+            <tr><td>Products</td><td>master_products.php</td></tr>
+            <tr><td>Products Import</td><td>master_import_products.php</td></tr>
+            <tr><td>Customers</td><td>master_customers.php</td></tr>
+            <tr><td>Customers Import</td><td>master_import_customers.php</td></tr>
+            <tr><td>Vendors</td><td>master_vendors.php</td></tr>
+            <tr><td>Manufactures</td><td>master_manufactures.php</td></tr>
+            <tr><td>Employees</td><td>master_employees.php</td></tr>
+          </table>
+          <table class="small-table">
+            <tr><th>Kartu</th><th>File</th></tr>
+            <tr><td>Pricelist Jual</td><td>master_pricelist_sell.php</td></tr>
+            <tr><td>Pricelist Buy</td><td>master_pricelist.php</td></tr>
+            <tr><td>Offices</td><td>master_office.php</td></tr>
+            <tr><td>Departements</td><td>master_departements.php</td></tr>
+            <tr><td>Tax</td><td>master_tax.php</td></tr>
+            <tr><td>Payment Terms</td><td>master_payment_terms.php</td></tr>
+            <tr><td>Company Bank</td><td>company_bank_accounts.php</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 8. CRM — Langkah O2C Ringkas -->
+      <section>
+        <h2>CRM — O2C Ringkas</h2>
+        <p class="compact"><span class="step-num">1</span> CRM: Buat DO → Submit</p>
+        <p class="compact"><span class="step-num">2</span> WQS: Pick DO → Foto stok → READY SCM</p>
+        <p class="compact"><span class="step-num">3</span> SCM: Atur pengiriman → DELIVERED + POD</p>
+        <p class="compact"><span class="step-num">4</span> ACT: Tukar faktur → Set WAIT PAYMENT</p>
+        <p class="compact"><span class="step-num">5</span> FIN: Upload bukti bayar → POSTING → paid</p>
+        <p class="tip-box">Control Tower untuk tracking. Tax Invoice untuk faktur pajak.</p>
+      </section>
+
+      <!-- 8a. CRM Stage 1 — Detail -->
+      <section>
+        <h2>Stage 1: CRM — Buat DO</h2>
+        <p class="dept-tag">Dept: CRM</p>
+        <p class="compact"><strong>Halaman:</strong> sales_do.php (Menu CRM → Sales → Open CRM Stage)</p>
+        <ol class="compact">
+          <li>Pilih <strong>Customer</strong> (harus ada di master_customers)</li>
+          <li>Pilih <strong>Office</strong> (BGR, BKS, dll — sesuai cabang yang jual)</li>
+          <li>Tambah item: <strong>Produk, Qty</strong> (cek pricelist jika harga otomatis)</li>
+          <li>Simpan → Status DRAFT</li>
+          <li>Klik <strong>Submit</strong> → Status berubah crm_to_wqs / sent_wqs → DO masuk ke WQS</li>
+        </ol>
+        <p class="tip-box">DO Code otomatis: RMI-{OFFICE}-YYMMDD-XXX (contoh: RMI-BGR-260306-001)</p>
+      </section>
+
+      <!-- 8b. CRM Stage 2 — WQS -->
+      <section>
+        <h2>Stage 2: WQS — Pick & Siap Kirim</h2>
+        <p class="dept-tag">Dept: WQS</p>
+        <p class="compact"><strong>Halaman:</strong> wqs_picking.php (Menu Stock → Picking) atau stock/wqs_do_tasks.php</p>
+        <ol class="compact">
+          <li>Lihat DO yang status <strong>sent_wqs / crm_to_wqs</strong></li>
+          <li>Klik <strong>Start</strong> → status wqs_processing</li>
+          <li><strong>Upload foto kartu stok</strong> (wajib — bukti fisik)</li>
+          <li>Set <strong>READY SCM</strong> → status ready_scm / wqs_done</li>
+          <li>Stock kantor pengirim <strong>berkurang</strong></li>
+        </ol>
+        <p class="tip-box">Tanpa foto stok, jangan set READY SCM. Control Tower untuk cek DO stuck.</p>
+      </section>
+
+      <!-- 8c. CRM Stage 3 — SCM -->
+      <section>
+        <h2>Stage 3: SCM — Pengiriman & POD</h2>
+        <p class="dept-tag">Dept: SCM</p>
+        <p class="compact"><strong>Halaman:</strong> scm_do_tasks.php (Menu CRM → SCM Stage Tasks)</p>
+        <ol class="compact">
+          <li>Lihat DO yang <strong>ready_scm / wqs_done</strong></li>
+          <li>Atur pengiriman (carrier, tracking)</li>
+          <li>Set status <strong>on_delivery</strong> saat barang dikirim</li>
+          <li>Saat barang sampai: <strong>Upload POD</strong> (Proof of Delivery)</li>
+          <li>Set <strong>DELIVERED</strong> → status delivered / scm_done</li>
+        </ol>
+        <p class="tip-box">POD wajib — bukti barang diterima customer. Tanpa POD jangan set DELIVERED.</p>
+      </section>
+
+      <!-- 8d. CRM Stage 4 & 5 — ACT & FIN -->
+      <section>
+        <h2>Stage 4 & 5: ACT → FIN</h2>
+        <p class="dept-tag">Dept: ACT, FIN</p>
+        <p class="compact"><strong>ACT (act_do_tasks.php):</strong> Tukar faktur dengan customer → Upload dokumen tukar faktur → Set <strong>WAIT PAYMENT</strong> → status wait_payment</p>
+        <p class="compact"><strong>FIN (fin_do_tasks.php):</strong> Upload bukti pembayaran → Isi tanggal bayar → Klik <strong>POSTING</strong> → status paid → Selesai</p>
+        <p class="tip-box">Tax Invoice (tax_invoices.php) untuk input faktur pajak. Setelah paid, DO closed.</p>
+      </section>
+
+      <!-- 9. CRM — Sub-halaman -->
+      <section>
+        <h2>CRM — Sub-halaman</h2>
+        <table class="small-table">
+          <tr><th>Halaman</th><th>File</th><th>Fungsi</th></tr>
+          <tr><td>Sales DO</td><td>sales_do.php</td><td>Buat/edit DO</td></tr>
+          <tr><td>DO View</td><td>sales_do_view.php</td><td>Detail DO</td></tr>
+          <tr><td>Control Tower</td><td>sales_control_tower.php</td><td>Tracking DO</td></tr>
+          <tr><td>Tax Invoices</td><td>tax_invoices.php</td><td>Faktur pajak</td></tr>
+          <tr><td>CRM Leads</td><td>crm_leads.php</td><td>Pipeline leads</td></tr>
+          <tr><td>WQS Tasks</td><td>stock/wqs_do_tasks.php</td><td>Task WQS</td></tr>
+          <tr><td>SCM Tasks</td><td>scm_do_tasks.php</td><td>Task SCM</td></tr>
+          <tr><td>ACT Tasks</td><td>act_do_tasks.php</td><td>Task ACT</td></tr>
+          <tr><td>FIN Tasks</td><td>fin_do_tasks.php</td><td>Task FIN</td></tr>
+        </table>
+      </section>
+
+      <!-- 10. PQP — Sub-halaman -->
+      <section>
+        <h2>PQP (Purchases) — Sub-halaman</h2>
+        <table class="small-table">
+          <tr><th>Halaman</th><th>File</th></tr>
+          <tr><td>Dashboard</td><td>purchases_dashboard.php</td></tr>
+          <tr><td>Import Control Tower</td><td>purchases_import_control_tower.php</td></tr>
+          <tr><td>PO</td><td>purchases_po.php</td></tr>
+          <tr><td>GR</td><td>purchases_gr.php</td></tr>
+          <tr><td>Invoice AP</td><td>purchases_invoice_ap.php</td></tr>
+          <tr><td>Payment AP</td><td>purchases_payment_ap.php</td></tr>
+          <tr><td>Forwarder Quotes</td><td>purchases_forwarder_quotes.php</td></tr>
+          <tr><td>Forwarding Tasks</td><td>purchases_forwarding_tasks.php</td></tr>
+          <tr><td>CEISA PIB</td><td>purchases_ceisa_pib.php</td></tr>
+          <tr><td>Bank Recon</td><td>bank_recon.php</td></tr>
+        </table>
+      </section>
+
+      <!-- 10a. PQP — Alur Singkat -->
+      <section>
+        <h2>PQP — Alur Pembelian</h2>
+        <p class="compact"><span class="flow-arrow">PR</span> (WQS) → <span class="flow-arrow">PO</span> (PQP) → <span class="flow-arrow">GR</span> (terima barang) → <span class="flow-arrow">Invoice AP</span> → <span class="flow-arrow">Payment AP</span></p>
+        <p class="compact"><strong>Import:</strong> PO → Forwarder → CEISA PIB → GR → Invoice → Payment</p>
+        <p class="tip-box">Import Control Tower untuk tracking pembelian import. Stock Update from GR untuk update stok dari GR.</p>
+      </section>
+
+      <!-- 11. WQS — Sub-halaman -->
+      <section>
+        <h2>WQS (Stock) — Sub-halaman</h2>
+        <table class="small-table">
+          <tr><th>Halaman</th><th>File</th></tr>
+          <tr><td>Stock</td><td>wqs_stock.php</td></tr>
+          <tr><td>Incoming</td><td>wqs_incoming.php</td></tr>
+          <tr><td>Allocation</td><td>wqs_allocation.php</td></tr>
+          <tr><td>Picking</td><td>wqs_picking.php</td></tr>
+          <tr><td>DO Tasks</td><td>wqs_do_tasks.php</td></tr>
+          <tr><td>PR</td><td>wqs_pr.php</td></tr>
+          <tr><td>Stock Transfer</td><td>wqs_stock_transfer.php</td></tr>
+          <tr><td>Stock Adjustment</td><td>wqs_stock_adjustment.php</td></tr>
+          <tr><td>Stock Opname</td><td>wqs_stock_opname.php</td></tr>
+        </table>
+      </section>
+
+      <!-- 11a. WQS — Incoming (Detail) -->
+      <section>
+        <h2>WQS — Incoming (Terima Barang)</h2>
+        <p class="compact"><strong>Halaman:</strong> wqs_incoming.php</p>
+        <ol class="compact">
+          <li>Pilih <strong>PO Code</strong> (untuk barang dari pembelian) atau <strong>DO Code</strong> (untuk transfer antar kantor)</li>
+          <li>Input qty received per item</li>
+          <li>Upload foto kartu stok / bukti terima</li>
+          <li>Simpan → Stock kantor penerima <strong>bertambah</strong></li>
+        </ol>
+        <p class="tip-box">Pembelian antar kantor: BKS harus pick DO dulu, baru BGR input Incoming. Jika terbalik → stock dobel!</p>
+      </section>
+
+      <!-- 11b. Pembelian Antar Kantor -->
+      <section>
+        <h2>Pembelian Antar Kantor — Step-by-Step</h2>
+        <p class="compact">BGR beli dari BKS. via PO + Sales DO (bukan Transfer).</p>
+        <table class="small-table">
+          <tr><th>Langkah</th><th>Pihak</th><th>Aksi</th></tr>
+          <tr><td>1</td><td>BGR (penerima)</td><td>Buat PR → PO ke manufacture "Kantor BKS"</td></tr>
+          <tr><td>2</td><td>BKS (supplier)</td><td>Buat Sales DO (customer=BGR-INT, office=BKS)</td></tr>
+          <tr><td>3</td><td>BKS</td><td>Pick DO → foto stok → READY SCM → stock BKS berkurang</td></tr>
+          <tr><td>4</td><td>BGR</td><td>Terima via WQS Incoming (PO code) → stock BGR bertambah</td></tr>
+        </table>
+        <p class="tip-box">Urutan wajib: BKS pick dulu, baru BGR Incoming. Customer BGR-INT, BKS-INT, dll di master_customers.</p>
+      </section>
+
+      <!-- 12. HRL — Modul -->
+      <section>
+        <h2>HRL — 5 Modul</h2>
+        <table class="small-table">
+          <tr><th>Modul</th><th>Fungsi</th><th>Dept</th></tr>
+          <tr><td>HRL Docs</td><td>Dokumen, Ack Report, Tower</td><td>HRL</td></tr>
+          <tr><td>HRL Process</td><td>Request, PIN approval, Tower</td><td>Semua dept</td></tr>
+          <tr><td>Reg Alkes</td><td>15 tahap, NIE, SKU, Expiry</td><td>HRL</td></tr>
+          <tr><td>Absensi</td><td>Check-in/out, Izin, Approval</td><td>ALL</td></tr>
+          <tr><td>KPI Center</td><td>Daily, Monthly, Employee, Office, Stock, DO Audit/SLA</td><td>ALL</td></tr>
+        </table>
+      </section>
+
+      <!-- 13. HRL — Sub-halaman -->
+      <section>
+        <h2>HRL — Sub-halaman Penting</h2>
+        <div class="two-col">
+          <div>
+            <h4>HRL Process</h4>
+            <p class="compact">request_view, my_pin, tower, download</p>
+            <h4>Reg Alkes</h4>
+            <p class="compact">reg_alkes, reg_alkes_case, reg_alkes_control_tower, reg_alkes_sku_by_nie, reg_alkes_expiry_check</p>
+          </div>
+          <div>
+            <h4>Absensi</h4>
+            <p class="compact">checkin, checkout, request, approval, admin/rekap, admin/offices</p>
+            <h4>KPI Center</h4>
+            <p class="compact">kpi_center, kpi_dashboard_daily, kpi_dashboard_monthly, kpi_employee, kpi_office, kpi_do_audit, kpi_do_sla</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13a. Absensi — Step-by-Step -->
+      <section>
+        <h2>Absensi — Step-by-Step</h2>
+        <p class="compact"><strong>Check-in:</strong> absensi/checkin.php — Buka di HP/laptop, pastikan di dalam GeoFence office, klik Check-in</p>
+        <p class="compact"><strong>Check-out:</strong> absensi/checkout.php — Klik Check-out saat pulang</p>
+        <p class="compact"><strong>Izin/Sakit/Dinas:</strong> absensi/request.php — Buat request → Manager approve di approval.php</p>
+        <p class="tip-box">GeoFence office harus di-set (admin/offices). Jika tidak ada GeoFence, check-in tidak bisa.</p>
+      </section>
+
+      <!-- 14. FIN, MPR, ACT -->
+      <section>
+        <h2>FIN • MPR • ACT</h2>
+        <div class="three-col">
+          <div class="glow-box">
+            <h4>FIN</h4>
+            <p class="compact">Payroll: payroll_run, salary_matrix, loans, payslip, audit. Rekening: company_bank_accounts</p>
+          </div>
+          <div class="glow-box">
+            <h4>MPR</h4>
+            <p class="compact">mpr_dashboard, mpr_plans, mpr_budget_fin (FIN approval), mpr_ops_daily_fin</p>
+          </div>
+          <div class="glow-box">
+            <h4>ACT</h4>
+            <p class="compact">assets, ops, depreciation, audit, tax_annual, disposals, transfers</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 15. O2C Flow Lengkap -->
+      <section>
+        <h2>O2C — Status & Transisi Lengkap</h2>
+        <table class="small-table">
+          <tr><th>Status</th><th>Dept</th><th>Aksi berikutnya</th></tr>
+          <tr><td>DRAFT</td><td>CRM</td><td>Submit DO</td></tr>
+          <tr><td>crm_to_wqs, sent_wqs</td><td>WQS</td><td>Mulai proses, cek stok</td></tr>
+          <tr><td>wqs_processing</td><td>WQS</td><td>Upload foto stok, set READY SCM</td></tr>
+          <tr><td>ready_scm, wqs_done</td><td>SCM</td><td>Atur pengiriman</td></tr>
+          <tr><td>on_delivery</td><td>SCM</td><td>Konfirmasi DELIVERED + POD</td></tr>
+          <tr><td>delivered, scm_done</td><td>ACT</td><td>Tukar faktur, set WAIT PAYMENT</td></tr>
+          <tr><td>wait_payment, act_done</td><td>FIN</td><td>Proses pembayaran</td></tr>
+          <tr><td>paid, fin_done, closed</td><td>-</td><td>Selesai</td></tr>
+          <tr><td>cancelled</td><td>-</td><td>DO dibatalkan</td></tr>
+        </table>
+      </section>
+
+      <!-- 15a. Siapa Lakukan Apa -->
+      <section>
+        <h2>Siapa Lakukan Apa — O2C</h2>
+        <table class="small-table">
+          <tr><th>Dept</th><th>Tanggung Jawab</th></tr>
+          <tr><td>CRM</td><td>Buat DO, submit, kelola leads, pantau Control Tower</td></tr>
+          <tr><td>WQS</td><td>Pick DO, foto stok, READY SCM, Incoming (terima barang)</td></tr>
+          <tr><td>SCM</td><td>Atur pengiriman, DELIVERED + POD</td></tr>
+          <tr><td>ACT</td><td>Tukar faktur, set WAIT PAYMENT</td></tr>
+          <tr><td>FIN</td><td>Upload bukti bayar, POSTING, tutup DO</td></tr>
+        </table>
+      </section>
+
+      <!-- 15b. DO Code Contoh -->
+      <section>
+        <h2>DO Code — Format & Contoh</h2>
+        <p class="compact"><strong>Format:</strong> RMI-{OFFICE}-YYMMDD-XXX</p>
+        <p class="compact"><strong>Contoh:</strong> RMI-BGR-260306-001</p>
+        <ul class="compact">
+          <li><strong>RMI</strong> — Prefix perusahaan</li>
+          <li><strong>BGR</strong> — Office (Bogor)</li>
+          <li><strong>260306</strong> — Tanggal (26 Maret 2006 atau 26-03-06)</li>
+          <li><strong>001</strong> — Nomor urut per hari</li>
+        </ul>
+        <p class="tip-box">DO Code otomatis saat simpan. Office menentukan DO dari cabang mana.</p>
+      </section>
+
+      <!-- 16. Tips Training -->
+      <section>
+        <h2>Tips Training untuk Tim</h2>
+        <ul class="compact">
+          <li><strong>F1</strong> — Bantuan konteks di setiap halaman (diagram, langkah, SOP)</li>
+          <li><strong>Help Center</strong> — Manual, SOP, Office Pack lengkap</li>
+          <li><strong>Branch Playbook</strong> — Panduan per cabang (branch_pack_real)</li>
+          <li><strong>Control Tower</strong> — Untuk tracking DO, Import, Reg Alkes</li>
+          <li><strong>Menu Sesuai Dept</strong> — User hanya lihat modul yang relevan</li>
+        </ul>
+      </section>
+
+      <!-- 17. Hal Perlu Diperhatikan -->
+      <section>
+        <h2>Hal Perlu Diperhatikan</h2>
+        <ul class="compact">
+          <li><strong>Pembelian antar kantor:</strong> BKS pick DO dulu, baru BGR input Incoming</li>
+          <li><strong>DO Code:</strong> RMI-{OFFICE}-YYMMDD-XXX</li>
+          <li><strong>Reg Alkes:</strong> 15 tahap, link NIE ke SKU via reg_alkes_sku_by_nie</li>
+          <li><strong>Absensi:</strong> GeoFence office harus di-set (admin/offices)</li>
+          <li><strong>RBAC:</strong> Role manager/staff/sys — permission per modul</li>
+        </ul>
+      </section>
+
+      <!-- 17a. Kesalahan Umum -->
+      <section>
+        <h2>Kesalahan Umum — Hindari!</h2>
+        <table class="small-table">
+          <tr><th>Kesalahan</th><th>Akibat</th><th>Solusi</th></tr>
+          <tr><td>BGR Incoming sebelum BKS pick</td><td>Stock dobel hitung</td><td>BKS pick dulu, baru BGR Incoming</td></tr>
+          <tr><td>Set DELIVERED tanpa POD</td><td>Data tidak valid</td><td>Upload POD dulu</td></tr>
+          <tr><td>Set READY SCM tanpa foto stok</td><td>Audit gagal</td><td>Upload foto kartu stok</td></tr>
+          <tr><td>Customer/Produk belum di master</td><td>DO tidak bisa dibuat</td><td>Input ke master dulu</td></tr>
+          <tr><td>Check-in di luar GeoFence</td><td>Check-in gagal</td><td>Set GeoFence atau minta ITC</td></tr>
+        </table>
+      </section>
+
+      <!-- 18. Dokumen Referensi -->
+      <section>
+        <h2>Dokumen Referensi</h2>
+        <table class="small-table">
+          <tr><th>Dokumen</th><th>Path</th></tr>
+          <tr><td>Menu & Workflow</td><td>docs/ERP_MENU_WORKFLOW_REFERENCE.md</td></tr>
+          <tr><td>Dashboard Landing</td><td>docs/DASHBOARD_LANDING_PAGES.md</td></tr>
+          <tr><td>Sales DO Flow</td><td>docs/dashboard_sales_do_flow.md</td></tr>
+          <tr><td>RBAC Matrix</td><td>docs/governance/RBAC_MATRIX_RMI.md</td></tr>
+          <tr><td>SOP per Modul</td><td>docs/officepack/dept_training/</td></tr>
+        </table>
+      </section>
+
+      <!-- 19. Q&A -->
+      <section>
+        <h2>Q&A</h2>
+        <p style="font-size: 0.8em;">Sesi tanya jawab</p>
+        <p class="subtitle">ERP RMI — Rizqullah Mediska Indonesia</p>
+      </section>
+
+      <!-- 20. Thank You -->
+      <section>
+        <h1>Terima Kasih</h1>
+        <p class="subtitle">ERP RMI — Training Detail untuk Tim</p>
+        <p style="font-size: 0.55em; margin-top: 1.5em;">Referensi: docs/ERP_MENU_WORKFLOW_REFERENCE.md • docs/presentations/</p>
+      </section>
+
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      transition: 'slide',
+      backgroundTransition: 'fade',
+      center: true,
+      progress: true,
+      controls: true,
+      slideNumber: 'c/t',
+      plugins: [ RevealNotes ]
+    });
+  </script>
+</body>
+</html>

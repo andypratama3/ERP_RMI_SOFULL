@@ -1,0 +1,31 @@
+--- Summary of changes for RMI_NAS_BASEPATH_WEBSITE_HARDENING_CYRILLIC_BAN_v1 ---
+Generated: 2026-03-03
+
+A) PATH LOCK
+- tools/nas/guard_app_root.sh: set -e, cd /volume4/web/ERP_RMI_SOFULL, pwd check, exit 2 on mismatch
+- tools/_shared/app_root_guard.php: NEW - PHP guard for APP_ROOT
+- tools/nas/run_all_tools_auto.sh: source guard_app_root.sh
+- docs/governance/NAS_BASEPATH_LOCK.md: NEW
+- docs/governance/ASSUMPTIONS_LOG.md: NEW
+
+B) WEBSITE HARDENING
+- /volume4/web/website/rmi_website/robots.txt: Allow /, Sitemap
+- /volume4/web/website/rmi_website/sitemap.xml: urlset
+- /volume4/web/website/rmi_website/.htaccess: www redirect, cache, Options -Indexes
+- tools/qa/check_company_sitemap.php: NEW - sitemap/robots check
+- tools/qa/http_endpoints_company_website.json: NEW
+- docs/governance/WEBSITE_HARDENING_REPORT.md: NEW
+- docs/governance/WEBSITE_REDIRECT_TODO.md: NEW
+- docs/governance/WEBSITE_CACHE_HEADERS_SNIPPET.md: NEW
+
+C) CYRILLIC BAN
+- tools/dev/scan_cyrillic.php: NEW - scan path & content for Cyrillic
+- tools/qa/contract_check.php: ADD cyrillic_ban check (runs scan_cyrillic, fails if has_critical)
+- docs/governance/CYRILLIC_BAN_POLICY.md: NEW
+
+D) OUTPUT FILES
+- storage/logs/cyrillic_scan_last.json
+- storage/logs/company_website_checks.last.json
+- storage/logs/smoke_http_last.json
+- storage/logs/contract_check_last.json
+- storage/logs/cutover_checks.last.json

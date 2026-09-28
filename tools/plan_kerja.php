@@ -1,0 +1,2527 @@
+<?php
+// tools/plan_kerja.php
+// UI Plan Kerja (checklist tersimpan di localStorage browser).
+
+require_once __DIR__ . '/../master/auth.php';
+require_login();
+require_role(['SYS', 'ADMIN', 'SUPERADMIN']);
+if (!function_exists('h')) {
+  function h(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
+}
+
+$plan_json = '';
+$json_path = __DIR__ . '/plan_kerja_data.json';
+$q = trim((string)($_GET['q'] ?? ''));
+$ownerPic = 'PM TBD';
+$lastUpdated = date('Y-m-d H:i:s', (int)@filemtime($json_path ?: __FILE__));
+
+if (is_file($json_path)) {
+  $plan_json = file_get_contents($json_path);
+} else {
+  $plan_json = <<<'JSON'
+{
+  "project": "ERP_RMI_SOFULL (A)",
+  "version": "v1",
+  "generated_at": "2026-01-29T23:10:40",
+  "modules_order": [
+    "Fixed_Asset",
+    "_shared",
+    "absensi",
+    "api",
+    "dashboards",
+    "hrl",
+    "hrl_process",
+    "hrl_reg_alkes",
+    "kpi",
+    "master",
+    "mpr",
+    "payroll",
+    "purchases",
+    "rbac",
+    "root",
+    "sales",
+    "stock",
+    "tools"
+  ],
+  "modules": {
+    "Fixed_Asset": {
+      "summary": {
+        "files": 9,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 1,
+        "h_unguarded": 0,
+        "write": 6,
+        "csrf": {
+          "count": 4,
+          "den": 6,
+          "pct": 66.66666666666666
+        },
+        "audit": {
+          "count": 2,
+          "den": 6,
+          "pct": 33.33333333333333
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 0,
+        "display_errors": 1,
+        "hardcoded_db": 0
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "Fixed_Asset/assets.php"
+        ],
+        "upload_no_safe": [],
+        "write": [
+          "Fixed_Asset/_inc/bootstrap.php",
+          "Fixed_Asset/_inc/fa_helpers.php",
+          "Fixed_Asset/assets.php",
+          "Fixed_Asset/audit.php",
+          "Fixed_Asset/depreciation.php",
+          "Fixed_Asset/ops.php"
+        ],
+        "write_no_csrf": [
+          "Fixed_Asset/_inc/fa_helpers.php",
+          "Fixed_Asset/ops.php"
+        ],
+        "write_no_audit": [
+          "Fixed_Asset/assets.php",
+          "Fixed_Asset/audit.php",
+          "Fixed_Asset/depreciation.php",
+          "Fixed_Asset/ops.php"
+        ],
+        "display_errors": [
+          "Fixed_Asset/_inc/bootstrap.php"
+        ],
+        "hardcoded_db": [],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "_shared": {
+      "summary": {
+        "files": 12,
+        "missing_login": {
+          "count": 4,
+          "pct": 33.33333333333333
+        },
+        "upload": 1,
+        "h_unguarded": 0,
+        "write": 7,
+        "csrf": {
+          "count": 1,
+          "den": 7,
+          "pct": 14.285714285714285
+        },
+        "audit": {
+          "count": 1,
+          "den": 7,
+          "pct": 14.285714285714285
+        },
+        "bootstrap": 2,
+        "upload_no_safe": 0,
+        "display_errors": 0,
+        "hardcoded_db": 1
+      },
+      "evidence": {
+        "missing_login": [
+          "_shared/db.php",
+          "_shared/helpers.php",
+          "_shared/rmi_layout.php",
+          "_shared/upload_safety.php"
+        ],
+        "upload": [
+          "_shared/upload_safety.php"
+        ],
+        "upload_no_safe": [],
+        "write": [
+          "_shared/enterprise_guard.php",
+          "_shared/erp_audit.php",
+          "_shared/helpers.php",
+          "_shared/rbac.php",
+          "_shared/rbac_v1.php",
+          "_shared/rbac_v2.php",
+          "_shared/upload_safety.php"
+        ],
+        "write_no_csrf": [
+          "_shared/enterprise_guard.php",
+          "_shared/erp_audit.php",
+          "_shared/rbac.php",
+          "_shared/rbac_v1.php",
+          "_shared/rbac_v2.php",
+          "_shared/upload_safety.php"
+        ],
+        "write_no_audit": [
+          "_shared/enterprise_guard.php",
+          "_shared/helpers.php",
+          "_shared/rbac.php",
+          "_shared/rbac_v1.php",
+          "_shared/rbac_v2.php",
+          "_shared/upload_safety.php"
+        ],
+        "display_errors": [],
+        "hardcoded_db": [
+          "_shared/db.php"
+        ],
+        "uses_shared_bootstrap": [
+          "_shared/bootstrap.php",
+          "_shared/db.php"
+        ]
+      },
+      "notes": []
+    },
+    "absensi": {
+      "summary": {
+        "files": 30,
+        "missing_login": {
+          "count": 1,
+          "pct": 3.3333333333333335
+        },
+        "upload": 2,
+        "h_unguarded": 0,
+        "write": 11,
+        "csrf": {
+          "count": 0,
+          "den": 11,
+          "pct": 0.0
+        },
+        "audit": {
+          "count": 0,
+          "den": 11,
+          "pct": 0.0
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 0,
+        "display_errors": 0,
+        "hardcoded_db": 2
+      },
+      "evidence": {
+        "missing_login": [
+          "absensi/_inc/csrf.php"
+        ],
+        "upload": [
+          "absensi/_inc/upload.php",
+          "absensi/request.php"
+        ],
+        "upload_no_safe": [],
+        "write": [
+          "absensi/_inc/audit.php",
+          "absensi/_inc/geo.php",
+          "absensi/_inc/pin.php",
+          "absensi/_inc/schema.php",
+          "absensi/_inc/upload.php",
+          "absensi/admin/approval.php",
+          "absensi/admin/offices.php",
+          "absensi/admin/users.php",
+          "absensi/checkin.php",
+          "absensi/checkout.php",
+          "absensi/request.php"
+        ],
+        "write_no_csrf": [
+          "absensi/_inc/audit.php",
+          "absensi/_inc/geo.php",
+          "absensi/_inc/pin.php",
+          "absensi/_inc/schema.php",
+          "absensi/_inc/upload.php",
+          "absensi/admin/approval.php",
+          "absensi/admin/offices.php",
+          "absensi/admin/users.php",
+          "absensi/checkin.php",
+          "absensi/checkout.php",
+          "absensi/request.php"
+        ],
+        "write_no_audit": [
+          "absensi/_inc/audit.php",
+          "absensi/_inc/geo.php",
+          "absensi/_inc/pin.php",
+          "absensi/_inc/schema.php",
+          "absensi/_inc/upload.php",
+          "absensi/admin/approval.php",
+          "absensi/admin/offices.php",
+          "absensi/admin/users.php",
+          "absensi/checkin.php",
+          "absensi/checkout.php",
+          "absensi/request.php"
+        ],
+        "display_errors": [],
+        "hardcoded_db": [
+          "absensi/_inc/db.php",
+          "absensi/_layout_top.php"
+        ],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "api": {
+      "summary": {
+        "files": 1,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 0,
+        "h_unguarded": 0,
+        "write": 0,
+        "csrf": {
+          "count": 0,
+          "den": 0,
+          "pct": 0
+        },
+        "audit": {
+          "count": 0,
+          "den": 0,
+          "pct": 0
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 0,
+        "display_errors": 0,
+        "hardcoded_db": 0
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [],
+        "upload_no_safe": [],
+        "write": [],
+        "write_no_csrf": [],
+        "write_no_audit": [],
+        "display_errors": [],
+        "hardcoded_db": [],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "dashboards": {
+      "summary": {
+        "files": 12,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 0,
+        "h_unguarded": 0,
+        "write": 2,
+        "csrf": {
+          "count": 0,
+          "den": 2,
+          "pct": 0.0
+        },
+        "audit": {
+          "count": 0,
+          "den": 2,
+          "pct": 0.0
+        },
+        "bootstrap": 1,
+        "upload_no_safe": 0,
+        "display_errors": 1,
+        "hardcoded_db": 2
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [],
+        "upload_no_safe": [],
+        "write": [
+          "dashboards/index.php",
+          "dashboards/owner/exec_summary.php"
+        ],
+        "write_no_csrf": [
+          "dashboards/index.php",
+          "dashboards/owner/exec_summary.php"
+        ],
+        "write_no_audit": [
+          "dashboards/index.php",
+          "dashboards/owner/exec_summary.php"
+        ],
+        "display_errors": [
+          "dashboards/_health.php"
+        ],
+        "hardcoded_db": [
+          "dashboards/_dashboard_bootstrap.php",
+          "dashboards/procurement/import_po_dashboard.php"
+        ],
+        "uses_shared_bootstrap": [
+          "dashboards/_health.php"
+        ]
+      },
+      "notes": []
+    },
+    "hrl": {
+      "summary": {
+        "files": 10,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 3,
+        "h_unguarded": 0,
+        "write": 3,
+        "csrf": {
+          "count": 3,
+          "den": 3,
+          "pct": 100.0
+        },
+        "audit": {
+          "count": 0,
+          "den": 3,
+          "pct": 0.0
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 3,
+        "display_errors": 1,
+        "hardcoded_db": 0
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "hrl/hrl_doc_view.php",
+          "hrl/hrl_docs.php",
+          "hrl/hrl_tower.php"
+        ],
+        "upload_no_safe": [
+          "hrl/hrl_doc_view.php",
+          "hrl/hrl_docs.php",
+          "hrl/hrl_tower.php"
+        ],
+        "write": [
+          "hrl/hrl_doc_view.php",
+          "hrl/hrl_docs.php",
+          "hrl/hrl_tower.php"
+        ],
+        "write_no_csrf": [],
+        "write_no_audit": [
+          "hrl/hrl_doc_view.php",
+          "hrl/hrl_docs.php",
+          "hrl/hrl_tower.php"
+        ],
+        "display_errors": [
+          "hrl/_inc/bootstrap.php"
+        ],
+        "hardcoded_db": [],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "hrl_process": {
+      "summary": {
+        "files": 10,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 3,
+        "h_unguarded": 0,
+        "write": 4,
+        "csrf": {
+          "count": 4,
+          "den": 4,
+          "pct": 100.0
+        },
+        "audit": {
+          "count": 0,
+          "den": 4,
+          "pct": 0.0
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 3,
+        "display_errors": 0,
+        "hardcoded_db": 0
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "hrl_process/_inc/bootstrap.php",
+          "hrl_process/request_view.php",
+          "hrl_process/tower.php"
+        ],
+        "upload_no_safe": [
+          "hrl_process/_inc/bootstrap.php",
+          "hrl_process/request_view.php",
+          "hrl_process/tower.php"
+        ],
+        "write": [
+          "hrl_process/_inc/bootstrap.php",
+          "hrl_process/my_pin.php",
+          "hrl_process/request_view.php",
+          "hrl_process/tower.php"
+        ],
+        "write_no_csrf": [],
+        "write_no_audit": [
+          "hrl_process/_inc/bootstrap.php",
+          "hrl_process/my_pin.php",
+          "hrl_process/request_view.php",
+          "hrl_process/tower.php"
+        ],
+        "display_errors": [],
+        "hardcoded_db": [],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "hrl_reg_alkes": {
+      "summary": {
+        "files": 4,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 3,
+        "h_unguarded": 0,
+        "write": 3,
+        "csrf": {
+          "count": 3,
+          "den": 3,
+          "pct": 100.0
+        },
+        "audit": {
+          "count": 1,
+          "den": 3,
+          "pct": 33.33333333333333
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 0,
+        "display_errors": 0,
+        "hardcoded_db": 0
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "hrl_reg_alkes/reg_alkes.php",
+          "hrl_reg_alkes/reg_alkes_case.php",
+          "hrl_reg_alkes/reg_alkes_control_tower.php"
+        ],
+        "upload_no_safe": [],
+        "write": [
+          "hrl_reg_alkes/reg_alkes.php",
+          "hrl_reg_alkes/reg_alkes_case.php",
+          "hrl_reg_alkes/reg_alkes_control_tower.php"
+        ],
+        "write_no_csrf": [],
+        "write_no_audit": [
+          "hrl_reg_alkes/reg_alkes_case.php",
+          "hrl_reg_alkes/reg_alkes_control_tower.php"
+        ],
+        "display_errors": [],
+        "hardcoded_db": [],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "kpi": {
+      "summary": {
+        "files": 16,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 4,
+        "h_unguarded": 0,
+        "write": 7,
+        "csrf": {
+          "count": 4,
+          "den": 7,
+          "pct": 57.14285714285714
+        },
+        "audit": {
+          "count": 2,
+          "den": 7,
+          "pct": 28.57142857142857
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 0,
+        "display_errors": 0,
+        "hardcoded_db": 0
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "kpi/kpi_employee.php",
+          "kpi/kpi_office.php",
+          "kpi/kpi_purchases.php",
+          "kpi/kpi_stock.php"
+        ],
+        "upload_no_safe": [],
+        "write": [
+          "kpi/_kpi_bootstrap.php",
+          "kpi/kpi_center.php",
+          "kpi/kpi_employee.php",
+          "kpi/kpi_office.php",
+          "kpi/kpi_purchases.php",
+          "kpi/kpi_snapshot.php",
+          "kpi/kpi_stock.php"
+        ],
+        "write_no_csrf": [
+          "kpi/_kpi_bootstrap.php",
+          "kpi/kpi_center.php",
+          "kpi/kpi_snapshot.php"
+        ],
+        "write_no_audit": [
+          "kpi/kpi_employee.php",
+          "kpi/kpi_office.php",
+          "kpi/kpi_purchases.php",
+          "kpi/kpi_snapshot.php",
+          "kpi/kpi_stock.php"
+        ],
+        "display_errors": [],
+        "hardcoded_db": [],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "master": {
+      "summary": {
+        "files": 35,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 13,
+        "h_unguarded": 0,
+        "write": 24,
+        "csrf": {
+          "count": 14,
+          "den": 24,
+          "pct": 58.333333333333336
+        },
+        "audit": {
+          "count": 5,
+          "den": 24,
+          "pct": 20.833333333333336
+        },
+        "bootstrap": 5,
+        "upload_no_safe": 9,
+        "display_errors": 15,
+        "hardcoded_db": 14
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "master/import_rekening_final.php",
+          "master/manufactures_docs.php",
+          "master/master_customers.php",
+          "master/master_departements.php",
+          "master/master_employees.php",
+          "master/master_manufactures.php",
+          "master/master_office.php",
+          "master/master_pricelist.php",
+          "master/master_products.php",
+          "master/master_products_doc.php",
+          "master/master_system_login.php",
+          "master/master_user.php",
+          "master/master_vendors.php"
+        ],
+        "upload_no_safe": [
+          "master/import_rekening_final.php",
+          "master/master_customers.php",
+          "master/master_employees.php",
+          "master/master_manufactures.php",
+          "master/master_pricelist.php",
+          "master/master_products_doc.php",
+          "master/master_system_login.php",
+          "master/master_user.php",
+          "master/master_vendors.php"
+        ],
+        "write": [
+          "master/company_bank_accounts.php",
+          "master/import_rekening_final.php",
+          "master/itc_reset_password.php",
+          "master/login.php",
+          "master/manufactures_docs.php",
+          "master/master_customers.php",
+          "master/master_data.php",
+          "master/master_departements.php",
+          "master/master_emailcompany.php",
+          "master/master_employees.php",
+          "master/master_export_customers.php",
+          "master/master_manufactures.php",
+          "master/master_office.php",
+          "master/master_payment_terms.php",
+          "master/master_pricelist.php",
+          "master/master_pricelist_sell.php",
+          "master/master_products.php",
+          "master/master_products_doc.php",
+          "master/master_products_package.php",
+          "master/master_system_login.php",
+          "master/master_tax.php",
+          "master/master_user.php",
+          "master/master_vendors.php",
+          "master/products_media_view.php"
+        ],
+        "write_no_csrf": [
+          "master/login.php",
+          "master/master_customers.php",
+          "master/master_data.php",
+          "master/master_export_customers.php",
+          "master/master_pricelist.php",
+          "master/master_pricelist_sell.php",
+          "master/master_products.php",
+          "master/master_products_doc.php",
+          "master/master_user.php",
+          "master/products_media_view.php"
+        ],
+        "write_no_audit": [
+          "master/import_rekening_final.php",
+          "master/itc_reset_password.php",
+          "master/login.php",
+          "master/master_customers.php",
+          "master/master_data.php",
+          "master/master_departements.php",
+          "master/master_emailcompany.php",
+          "master/master_employees.php",
+          "master/master_export_customers.php",
+          "master/master_manufactures.php",
+          "master/master_office.php",
+          "master/master_payment_terms.php",
+          "master/master_pricelist_sell.php",
+          "master/master_products_doc.php",
+          "master/master_products_package.php",
+          "master/master_tax.php",
+          "master/master_user.php",
+          "master/master_vendors.php",
+          "master/products_media_view.php"
+        ],
+        "display_errors": [
+          "master/manufactures_docs.php",
+          "master/master_customers.php",
+          "master/master_departements.php",
+          "master/master_emailcompany.php",
+          "master/master_employees.php",
+          "master/master_export_customers.php",
+          "master/master_manufactures.php",
+          "master/master_office.php",
+          "master/master_payment_terms.php",
+          "master/master_products.php",
+          "master/master_products_package.php",
+          "master/master_tax.php",
+          "master/master_user.php",
+          "master/master_vendors.php",
+          "master/products_media_view.php"
+        ],
+        "hardcoded_db": [
+          "master/auth.php",
+          "master/manufactures_docs.php",
+          "master/master_customers.php",
+          "master/master_emailcompany.php",
+          "master/master_employees.php",
+          "master/master_export_customers.php",
+          "master/master_manufactures.php",
+          "master/master_office.php",
+          "master/master_payment_terms.php",
+          "master/master_products.php",
+          "master/master_products_package.php",
+          "master/master_tax.php",
+          "master/master_vendors.php",
+          "master/products_media_view.php"
+        ],
+        "uses_shared_bootstrap": [
+          "master/master_departments.php",
+          "master/master_products_doc.php",
+          "master/master_system_config.php",
+          "master/products_doc.php",
+          "master/products_print.php"
+        ]
+      },
+      "notes": []
+    },
+    "mpr": {
+      "summary": {
+        "files": 14,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 2,
+        "h_unguarded": 0,
+        "write": 5,
+        "csrf": {
+          "count": 3,
+          "den": 5,
+          "pct": 60.0
+        },
+        "audit": {
+          "count": 1,
+          "den": 5,
+          "pct": 20.0
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 2,
+        "display_errors": 1,
+        "hardcoded_db": 0
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "mpr/mpr_plan_view.php",
+          "mpr/mpr_plans.php"
+        ],
+        "upload_no_safe": [
+          "mpr/mpr_plan_view.php",
+          "mpr/mpr_plans.php"
+        ],
+        "write": [
+          "mpr/_inc/schema.php",
+          "mpr/mpr_budget_fin.php",
+          "mpr/mpr_ops_daily_fin_pay.php",
+          "mpr/mpr_plan_view.php",
+          "mpr/mpr_plans.php"
+        ],
+        "write_no_csrf": [
+          "mpr/_inc/schema.php",
+          "mpr/mpr_ops_daily_fin_pay.php"
+        ],
+        "write_no_audit": [
+          "mpr/_inc/schema.php",
+          "mpr/mpr_budget_fin.php",
+          "mpr/mpr_plan_view.php",
+          "mpr/mpr_plans.php"
+        ],
+        "display_errors": [
+          "mpr/_inc/bootstrap.php"
+        ],
+        "hardcoded_db": [],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "payroll": {
+      "summary": {
+        "files": 8,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 1,
+        "h_unguarded": 0,
+        "write": 5,
+        "csrf": {
+          "count": 1,
+          "den": 5,
+          "pct": 20.0
+        },
+        "audit": {
+          "count": 4,
+          "den": 5,
+          "pct": 80.0
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 0,
+        "display_errors": 1,
+        "hardcoded_db": 0
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "payroll/salary_matrix.php"
+        ],
+        "upload_no_safe": [],
+        "write": [
+          "payroll/index.php",
+          "payroll/loans.php",
+          "payroll/payroll_run.php",
+          "payroll/payroll_settings.php",
+          "payroll/salary_matrix.php"
+        ],
+        "write_no_csrf": [
+          "payroll/index.php",
+          "payroll/loans.php",
+          "payroll/payroll_run.php",
+          "payroll/payroll_settings.php"
+        ],
+        "write_no_audit": [
+          "payroll/payroll_settings.php"
+        ],
+        "display_errors": [
+          "payroll/_inc/bootstrap.php"
+        ],
+        "hardcoded_db": [],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "purchases": {
+      "summary": {
+        "files": 25,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 9,
+        "h_unguarded": 0,
+        "write": 15,
+        "csrf": {
+          "count": 10,
+          "den": 15,
+          "pct": 66.66666666666666
+        },
+        "audit": {
+          "count": 1,
+          "den": 15,
+          "pct": 6.666666666666667
+        },
+        "bootstrap": 1,
+        "upload_no_safe": 9,
+        "display_errors": 1,
+        "hardcoded_db": 1
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "purchases/purchases_ceisa_pib_view.php",
+          "purchases/purchases_forwarder_invoice.php",
+          "purchases/purchases_forwarder_payment.php",
+          "purchases/purchases_forwarder_quotes.php",
+          "purchases/purchases_forwarding_tasks.php",
+          "purchases/purchases_import_control_view.php",
+          "purchases/purchases_invoice_ap.php",
+          "purchases/purchases_invoice_ap_edit.php",
+          "purchases/purchases_payment_ap.php"
+        ],
+        "upload_no_safe": [
+          "purchases/purchases_ceisa_pib_view.php",
+          "purchases/purchases_forwarder_invoice.php",
+          "purchases/purchases_forwarder_payment.php",
+          "purchases/purchases_forwarder_quotes.php",
+          "purchases/purchases_forwarding_tasks.php",
+          "purchases/purchases_import_control_view.php",
+          "purchases/purchases_invoice_ap.php",
+          "purchases/purchases_invoice_ap_edit.php",
+          "purchases/purchases_payment_ap.php"
+        ],
+        "write": [
+          "purchases/_purchases_lib.php",
+          "purchases/purchases_ceisa_pib_view.php",
+          "purchases/purchases_dashboard.php",
+          "purchases/purchases_forwarder_invoice.php",
+          "purchases/purchases_forwarder_payment.php",
+          "purchases/purchases_forwarder_quotes.php",
+          "purchases/purchases_forwarding_tasks.php",
+          "purchases/purchases_import_control_tower.php",
+          "purchases/purchases_import_control_view.php",
+          "purchases/purchases_invoice_ap.php",
+          "purchases/purchases_invoice_ap_edit.php",
+          "purchases/purchases_payment_ap.php",
+          "purchases/purchases_po.php",
+          "purchases/purchases_po_view.php",
+          "purchases/stock_update_from_gr.php"
+        ],
+        "write_no_csrf": [
+          "purchases/_purchases_lib.php",
+          "purchases/purchases_dashboard.php",
+          "purchases/purchases_import_control_tower.php",
+          "purchases/purchases_po.php",
+          "purchases/stock_update_from_gr.php"
+        ],
+        "write_no_audit": [
+          "purchases/purchases_ceisa_pib_view.php",
+          "purchases/purchases_dashboard.php",
+          "purchases/purchases_forwarder_invoice.php",
+          "purchases/purchases_forwarder_payment.php",
+          "purchases/purchases_forwarder_quotes.php",
+          "purchases/purchases_forwarding_tasks.php",
+          "purchases/purchases_import_control_tower.php",
+          "purchases/purchases_import_control_view.php",
+          "purchases/purchases_invoice_ap.php",
+          "purchases/purchases_invoice_ap_edit.php",
+          "purchases/purchases_payment_ap.php",
+          "purchases/purchases_po.php",
+          "purchases/purchases_po_view.php",
+          "purchases/stock_update_from_gr.php"
+        ],
+        "display_errors": [
+          "purchases/purchases_gr_load_items.php"
+        ],
+        "hardcoded_db": [
+          "purchases/purchases_gr_load_items.php"
+        ],
+        "uses_shared_bootstrap": [
+          "purchases/_purchases_bootstrap.php"
+        ]
+      },
+      "notes": []
+    },
+    "rbac": {
+      "summary": {
+        "files": 2,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 1,
+        "h_unguarded": 0,
+        "write": 1,
+        "csrf": {
+          "count": 1,
+          "den": 1,
+          "pct": 100.0
+        },
+        "audit": {
+          "count": 0,
+          "den": 1,
+          "pct": 0.0
+        },
+        "bootstrap": 0,
+        "upload_no_safe": 1,
+        "display_errors": 0,
+        "hardcoded_db": 1
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "rbac/index.php"
+        ],
+        "upload_no_safe": [
+          "rbac/index.php"
+        ],
+        "write": [
+          "rbac/index.php"
+        ],
+        "write_no_csrf": [],
+        "write_no_audit": [
+          "rbac/index.php"
+        ],
+        "display_errors": [],
+        "hardcoded_db": [
+          "rbac/index.php"
+        ],
+        "uses_shared_bootstrap": []
+      },
+      "notes": []
+    },
+    "root": {
+      "summary": {
+        "files": 7,
+        "missing_login": {
+          "count": 1,
+          "pct": 14.285714285714285
+        },
+        "upload": 0,
+        "h_unguarded": 0,
+        "write": 2,
+        "csrf": {
+          "count": 1,
+          "den": 2,
+          "pct": 50.0
+        },
+        "audit": {
+          "count": 0,
+          "den": 2,
+          "pct": 0.0
+        },
+        "bootstrap": 3,
+        "upload_no_safe": 0,
+        "display_errors": 3,
+        "hardcoded_db": 3
+      },
+      "evidence": {
+        "missing_login": [
+          "index.php"
+        ],
+        "upload": [],
+        "upload_no_safe": [],
+        "write": [
+          "helpers.php",
+          "master_system_config.php"
+        ],
+        "write_no_csrf": [
+          "master_system_config.php"
+        ],
+        "write_no_audit": [
+          "helpers.php",
+          "master_system_config.php"
+        ],
+        "display_errors": [
+          "bootstrap.php",
+          "config.php",
+          "master_system_config.php"
+        ],
+        "hardcoded_db": [
+          "config.php",
+          "db.php",
+          "master_system_config.php"
+        ],
+        "uses_shared_bootstrap": [
+          "bootstrap.php",
+          "db.php",
+          "index.php"
+        ]
+      },
+      "notes": []
+    },
+    "sales": {
+      "summary": {
+        "files": 17,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 4,
+        "h_unguarded": 0,
+        "write": 10,
+        "csrf": {
+          "count": 5,
+          "den": 10,
+          "pct": 50.0
+        },
+        "audit": {
+          "count": 1,
+          "den": 10,
+          "pct": 10.0
+        },
+        "bootstrap": 1,
+        "upload_no_safe": 0,
+        "display_errors": 13,
+        "hardcoded_db": 13
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "sales/act_do_tasks.php",
+          "sales/fin_do_tasks.php",
+          "sales/scm_do_tasks.php",
+          "stock/wqs_do_tasks.php"
+        ],
+        "upload_no_safe": [],
+        "write": [
+          "sales/act_do_tasks.php",
+          "sales/backfill_sales_do_audit_crm.php",
+          "sales/backfill_sales_do_audit_stages.php",
+          "sales/fin_do_tasks.php",
+          "sales/sales_control_tower.php",
+          "sales/sales_dashboard.php",
+          "sales/sales_do.php",
+          "sales/sales_do_view.php",
+          "sales/scm_do_tasks.php",
+          "stock/wqs_do_tasks.php"
+        ],
+        "write_no_csrf": [
+          "sales/backfill_sales_do_audit_crm.php",
+          "sales/backfill_sales_do_audit_stages.php",
+          "sales/sales_control_tower.php",
+          "sales/sales_dashboard.php",
+          "sales/sales_do_view.php"
+        ],
+        "write_no_audit": [
+          "sales/act_do_tasks.php",
+          "sales/backfill_sales_do_audit_crm.php",
+          "sales/backfill_sales_do_audit_stages.php",
+          "sales/fin_do_tasks.php",
+          "sales/sales_control_tower.php",
+          "sales/sales_dashboard.php",
+          "sales/sales_do_view.php",
+          "sales/scm_do_tasks.php",
+          "stock/wqs_do_tasks.php"
+        ],
+        "display_errors": [
+          "sales/act_do_tasks.php",
+          "sales/backfill_sales_do_audit_crm.php",
+          "sales/backfill_sales_do_audit_stages.php",
+          "sales/export_kpi_do_csv.php",
+          "sales/fin_do_tasks.php",
+          "sales/kpi_do_audit.php",
+          "sales/kpi_do_sla.php",
+          "sales/sales_dashboard.php",
+          "sales/sales_do.php",
+          "sales/sales_do_print_cf.php",
+          "sales/sales_do_view.php",
+          "sales/scm_do_tasks.php",
+          "stock/wqs_do_tasks.php"
+        ],
+        "hardcoded_db": [
+          "sales/act_do_tasks.php",
+          "sales/backfill_sales_do_audit_crm.php",
+          "sales/backfill_sales_do_audit_stages.php",
+          "sales/export_kpi_do_csv.php",
+          "sales/fin_do_tasks.php",
+          "sales/kpi_do_audit.php",
+          "sales/kpi_do_sla.php",
+          "sales/sales_dashboard.php",
+          "sales/sales_do.php",
+          "sales/sales_do_print_cf.php",
+          "sales/sales_do_view.php",
+          "sales/scm_do_tasks.php",
+          "stock/wqs_do_tasks.php"
+        ],
+        "uses_shared_bootstrap": [
+          "sales/sales_control_tower.php"
+        ]
+      },
+      "notes": []
+    },
+    "stock": {
+      "summary": {
+        "files": 16,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 5,
+        "h_unguarded": 0,
+        "write": 8,
+        "csrf": {
+          "count": 2,
+          "den": 8,
+          "pct": 25.0
+        },
+        "audit": {
+          "count": 4,
+          "den": 8,
+          "pct": 50.0
+        },
+        "bootstrap": 1,
+        "upload_no_safe": 0,
+        "display_errors": 8,
+        "hardcoded_db": 9
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "stock/wqs_allocation.php",
+          "stock/wqs_incoming.php",
+          "stock/wqs_incoming_view.php",
+          "stock/wqs_picking.php",
+          "stock/wqs_stock.php"
+        ],
+        "upload_no_safe": [],
+        "write": [
+          "stock/wqs_allocation.php",
+          "stock/wqs_incoming.php",
+          "stock/wqs_incoming_view.php",
+          "stock/wqs_picking.php",
+          "stock/wqs_pr.php",
+          "stock/wqs_pr_view.php",
+          "stock/wqs_stock.php",
+          "stock/wqs_stock_adjustment.php"
+        ],
+        "write_no_csrf": [
+          "stock/wqs_allocation.php",
+          "stock/wqs_incoming.php",
+          "stock/wqs_picking.php",
+          "stock/wqs_pr.php",
+          "stock/wqs_pr_view.php",
+          "stock/wqs_stock_adjustment.php"
+        ],
+        "write_no_audit": [
+          "stock/wqs_incoming_view.php",
+          "stock/wqs_pr.php",
+          "stock/wqs_pr_view.php",
+          "stock/wqs_stock.php"
+        ],
+        "display_errors": [
+          "stock/wqs_allocation.php",
+          "stock/wqs_incoming.php",
+          "stock/wqs_incoming_view.php",
+          "stock/wqs_picking.php",
+          "stock/wqs_picking_view.php",
+          "stock/wqs_stock.php",
+          "stock/wqs_stock_adjustment.php",
+          "stock/wqs_stock_audit.php"
+        ],
+        "hardcoded_db": [
+          "stock/wqs_allocation.php",
+          "stock/wqs_incoming.php",
+          "stock/wqs_incoming_po_api.php",
+          "stock/wqs_incoming_view.php",
+          "stock/wqs_picking.php",
+          "stock/wqs_picking_view.php",
+          "stock/wqs_stock.php",
+          "stock/wqs_stock_adjustment.php",
+          "stock/wqs_stock_audit.php"
+        ],
+        "uses_shared_bootstrap": [
+          "stock/_wqs_bootstrap.php"
+        ]
+      },
+      "notes": []
+    },
+    "tools": {
+      "summary": {
+        "files": 10,
+        "missing_login": {
+          "count": 0,
+          "pct": 0.0
+        },
+        "upload": 3,
+        "h_unguarded": 0,
+        "write": 7,
+        "csrf": {
+          "count": 1,
+          "den": 7,
+          "pct": 14.285714285714285
+        },
+        "audit": {
+          "count": 1,
+          "den": 7,
+          "pct": 14.285714285714285
+        },
+        "bootstrap": 5,
+        "upload_no_safe": 1,
+        "display_errors": 1,
+        "hardcoded_db": 1
+      },
+      "evidence": {
+        "missing_login": [],
+        "upload": [
+          "tools/enforce_upload_safety.php",
+          "tools/enterprise_audit.php",
+          "tools/purchases_m2_apply.php"
+        ],
+        "upload_no_safe": [
+          "tools/purchases_m2_apply.php"
+        ],
+        "write": [
+          "tools/enforce_h_guard.php",
+          "tools/enforce_upload_safety.php",
+          "tools/enterprise_audit.php",
+          "tools/purchases_m2_apply.php",
+          "tools/rbac_seed_act_purchases.php",
+          "tools/rbac_seed_fin_purchases.php",
+          "tools/rbac_seed_scm_purchases.php"
+        ],
+        "write_no_csrf": [
+          "tools/enforce_h_guard.php",
+          "tools/enforce_upload_safety.php",
+          "tools/purchases_m2_apply.php",
+          "tools/rbac_seed_act_purchases.php",
+          "tools/rbac_seed_fin_purchases.php",
+          "tools/rbac_seed_scm_purchases.php"
+        ],
+        "write_no_audit": [
+          "tools/enforce_h_guard.php",
+          "tools/enforce_upload_safety.php",
+          "tools/purchases_m2_apply.php",
+          "tools/rbac_seed_act_purchases.php",
+          "tools/rbac_seed_fin_purchases.php",
+          "tools/rbac_seed_scm_purchases.php"
+        ],
+        "display_errors": [
+          "tools/diag_boot.php"
+        ],
+        "hardcoded_db": [
+          "tools/enterprise_audit.php"
+        ],
+        "uses_shared_bootstrap": [
+          "tools/diag_boot.php",
+          "tools/purchases_m2_apply.php",
+          "tools/rbac_seed_act_purchases.php",
+          "tools/rbac_seed_fin_purchases.php",
+          "tools/rbac_seed_scm_purchases.php"
+        ]
+      },
+      "notes": []
+    }
+  },
+  "global": {
+    "tasks": [
+      {
+        "id": "ENV-01",
+        "title": "Implement .env + .env.example (ambil konsep B) dan pindahkan semua kredensial keluar repo",
+        "priority": "P0",
+        "acceptance": [
+          "Ada file .env.example (tanpa secret) dan .env (di .gitignore)",
+          "config.php / bootstrap.php membaca env untuk DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASS",
+          "Tidak ada lagi hardcoded 'root/8889/ERP_RMI_SOFULL' di file PHP"
+        ]
+      },
+      {
+        "id": "DBG-01",
+        "title": "Standarisasi APP_ENV & APP_DEBUG untuk mengontrol error_reporting dan display_errors",
+        "priority": "P0",
+        "acceptance": [
+          "APP_DEBUG=false di production, display_errors=0",
+          "Tidak ada lagi ini_set('display_errors',1) tersebar di banyak file",
+          "Error ditulis ke log (file) saat production"
+        ]
+      },
+      {
+        "id": "DB-01",
+        "title": "Refactor koneksi DB: gunakan satu fungsi db_pdo() (atau wrapper) + PDO options standar",
+        "priority": "P0",
+        "acceptance": [
+          "Tidak ada lagi new PDO() tersebar tanpa wrapper",
+          "Semua modul menggunakan db_pdo() / shared db helper",
+          "PDO::ATTR_ERRMODE, emulation, charset diset konsisten"
+        ]
+      },
+      {
+        "id": "CSRF-01",
+        "title": "Standarisasi CSRF helper (token generate + verify) dan pastikan semua write-action terproteksi",
+        "priority": "P1",
+        "acceptance": [
+          "Ada helper CSRF di _shared/ (mis. rmi_csrf_token, rmi_csrf_verify)",
+          "Semua write-action (INSERT/UPDATE/DELETE/REPLACE/TRUNCATE, upload) melakukan verify token",
+          "Form POST menyertakan hidden csrf_token"
+        ]
+      },
+      {
+        "id": "AUDIT-01",
+        "title": "Audit trail: pastikan semua write-action memanggil audit_log/erp_audit dengan payload yang cukup",
+        "priority": "P1",
+        "acceptance": [
+          "Ada helper audit_log yang konsisten (user_id, module, aksi, entity_id, before/after)",
+          "Write-action tanpa audit berkurang hingga 0 (atau sesuai kebijakan)",
+          "Ada halaman laporan audit (opsional)"
+        ]
+      },
+      {
+        "id": "UPLOAD-01",
+        "title": "Hardening upload: safe_filename, allowlist ekstensi, validasi MIME, size limit, storage non-webroot",
+        "priority": "P1",
+        "acceptance": [
+          "Semua file upload memakai safe_filename/sanitize_filename",
+          "Upload disimpan di folder di luar public (atau diberi .htaccess deny)",
+          "Ada limit ukuran & type, dan sanitize path traversal"
+        ]
+      },
+      {
+        "id": "REPO-01",
+        "title": "Bersihkan repo dari file besar (PDF/DOCX/MP4) dan pindahkan ke storage (S3/NAS) + link DB",
+        "priority": "P2",
+        "acceptance": [
+          "Folder uploads/ tidak lagi di-commit (atau hanya placeholder)",
+          "Ada mekanisme storage external dan migrasi file",
+          "Deployment jadi lebih ringan"
+        ]
+      },
+      {
+        "id": "TOOLS-01",
+        "title": "Amankan tools/: pastikan require_login + RBAC, dan nonaktifkan tool berbahaya di production",
+        "priority": "P2",
+        "acceptance": [
+          "Semua tools/ page butuh login & role tertentu",
+          "Tidak ada endpoint publik yang bisa eksekusi operasi sensitif",
+          "Tambahkan banner 'STAGING/PROD' di tools"
+        ]
+      }
+    ],
+    "evidence": {
+      "display_errors": [
+        "Fixed_Asset/_inc/bootstrap.php",
+        "dashboards/_health.php",
+        "hrl/_inc/bootstrap.php",
+        "master/manufactures_docs.php",
+        "master/master_customers.php",
+        "master/master_departements.php",
+        "master/master_emailcompany.php",
+        "master/master_employees.php",
+        "master/master_export_customers.php",
+        "master/master_manufactures.php",
+        "master/master_office.php",
+        "master/master_payment_terms.php",
+        "master/master_products.php",
+        "master/master_products_package.php",
+        "master/master_tax.php",
+        "master/master_user.php",
+        "master/master_vendors.php",
+        "master/products_media_view.php",
+        "mpr/_inc/bootstrap.php",
+        "payroll/_inc/bootstrap.php",
+        "purchases/purchases_gr_load_items.php",
+        "bootstrap.php",
+        "config.php",
+        "master_system_config.php",
+        "sales/act_do_tasks.php",
+        "sales/backfill_sales_do_audit_crm.php",
+        "sales/backfill_sales_do_audit_stages.php",
+        "sales/export_kpi_do_csv.php",
+        "sales/fin_do_tasks.php",
+        "sales/kpi_do_audit.php",
+        "sales/kpi_do_sla.php",
+        "sales/sales_dashboard.php",
+        "sales/sales_do.php",
+        "sales/sales_do_print_cf.php",
+        "sales/sales_do_view.php",
+        "sales/scm_do_tasks.php",
+        "stock/wqs_do_tasks.php",
+        "stock/wqs_allocation.php",
+        "stock/wqs_incoming.php",
+        "stock/wqs_incoming_view.php",
+        "stock/wqs_picking.php",
+        "stock/wqs_picking_view.php",
+        "stock/wqs_stock.php",
+        "stock/wqs_stock_adjustment.php",
+        "stock/wqs_stock_audit.php",
+        "tools/diag_boot.php"
+      ],
+      "hardcoded_db": [
+        "_shared/db.php",
+        "absensi/_inc/db.php",
+        "absensi/_layout_top.php",
+        "dashboards/_dashboard_bootstrap.php",
+        "dashboards/procurement/import_po_dashboard.php",
+        "master/auth.php",
+        "master/manufactures_docs.php",
+        "master/master_customers.php",
+        "master/master_emailcompany.php",
+        "master/master_employees.php",
+        "master/master_export_customers.php",
+        "master/master_manufactures.php",
+        "master/master_office.php",
+        "master/master_payment_terms.php",
+        "master/master_products.php",
+        "master/master_products_package.php",
+        "master/master_tax.php",
+        "master/master_vendors.php",
+        "master/products_media_view.php",
+        "purchases/purchases_gr_load_items.php",
+        "rbac/index.php",
+        "config.php",
+        "db.php",
+        "master_system_config.php",
+        "sales/act_do_tasks.php",
+        "sales/backfill_sales_do_audit_crm.php",
+        "sales/backfill_sales_do_audit_stages.php",
+        "sales/export_kpi_do_csv.php",
+        "sales/fin_do_tasks.php",
+        "sales/kpi_do_audit.php",
+        "sales/kpi_do_sla.php",
+        "sales/sales_dashboard.php",
+        "sales/sales_do.php",
+        "sales/sales_do_print_cf.php",
+        "sales/sales_do_view.php",
+        "sales/scm_do_tasks.php",
+        "stock/wqs_do_tasks.php",
+        "stock/wqs_allocation.php",
+        "stock/wqs_incoming.php",
+        "stock/wqs_incoming_po_api.php",
+        "stock/wqs_incoming_view.php",
+        "stock/wqs_picking.php",
+        "stock/wqs_picking_view.php",
+        "stock/wqs_stock.php",
+        "stock/wqs_stock_adjustment.php",
+        "stock/wqs_stock_audit.php",
+        "tools/enterprise_audit.php"
+      ],
+      "upload_no_safe": [
+        "hrl/hrl_doc_view.php",
+        "hrl/hrl_docs.php",
+        "hrl/hrl_tower.php",
+        "hrl_process/_inc/bootstrap.php",
+        "hrl_process/request_view.php",
+        "hrl_process/tower.php",
+        "master/import_rekening_final.php",
+        "master/master_customers.php",
+        "master/master_employees.php",
+        "master/master_manufactures.php",
+        "master/master_pricelist.php",
+        "master/master_products_doc.php",
+        "master/master_system_login.php",
+        "master/master_user.php",
+        "master/master_vendors.php",
+        "mpr/mpr_plan_view.php",
+        "mpr/mpr_plans.php",
+        "purchases/purchases_ceisa_pib_view.php",
+        "purchases/purchases_forwarder_invoice.php",
+        "purchases/purchases_forwarder_payment.php",
+        "purchases/purchases_forwarder_quotes.php",
+        "purchases/purchases_forwarding_tasks.php",
+        "purchases/purchases_import_control_view.php",
+        "purchases/purchases_invoice_ap.php",
+        "purchases/purchases_invoice_ap_edit.php",
+        "purchases/purchases_payment_ap.php",
+        "rbac/index.php",
+        "tools/purchases_m2_apply.php"
+      ],
+      "write_no_csrf": [
+        "Fixed_Asset/_inc/fa_helpers.php",
+        "Fixed_Asset/ops.php",
+        "_shared/enterprise_guard.php",
+        "_shared/erp_audit.php",
+        "_shared/rbac.php",
+        "_shared/rbac_v1.php",
+        "_shared/rbac_v2.php",
+        "_shared/upload_safety.php",
+        "absensi/_inc/audit.php",
+        "absensi/_inc/geo.php",
+        "absensi/_inc/pin.php",
+        "absensi/_inc/schema.php",
+        "absensi/_inc/upload.php",
+        "absensi/admin/approval.php",
+        "absensi/admin/offices.php",
+        "absensi/admin/users.php",
+        "absensi/checkin.php",
+        "absensi/checkout.php",
+        "absensi/request.php",
+        "dashboards/index.php",
+        "dashboards/owner/exec_summary.php",
+        "kpi/_kpi_bootstrap.php",
+        "kpi/kpi_center.php",
+        "kpi/kpi_snapshot.php",
+        "master/login.php",
+        "master/master_customers.php",
+        "master/master_data.php",
+        "master/master_export_customers.php",
+        "master/master_pricelist.php",
+        "master/master_pricelist_sell.php",
+        "master/master_products.php",
+        "master/master_products_doc.php",
+        "master/master_user.php",
+        "master/products_media_view.php",
+        "mpr/_inc/schema.php",
+        "mpr/mpr_ops_daily_fin_pay.php",
+        "payroll/index.php",
+        "payroll/loans.php",
+        "payroll/payroll_run.php",
+        "payroll/payroll_settings.php",
+        "purchases/_purchases_lib.php",
+        "purchases/purchases_dashboard.php",
+        "purchases/purchases_import_control_tower.php",
+        "purchases/purchases_po.php",
+        "purchases/stock_update_from_gr.php",
+        "master_system_config.php",
+        "sales/backfill_sales_do_audit_crm.php",
+        "sales/backfill_sales_do_audit_stages.php",
+        "sales/sales_control_tower.php",
+        "sales/sales_dashboard.php",
+        "sales/sales_do_view.php",
+        "stock/wqs_allocation.php",
+        "stock/wqs_incoming.php",
+        "stock/wqs_picking.php",
+        "stock/wqs_pr.php",
+        "stock/wqs_pr_view.php",
+        "stock/wqs_stock_adjustment.php",
+        "tools/enforce_h_guard.php",
+        "tools/enforce_upload_safety.php",
+        "tools/purchases_m2_apply.php",
+        "tools/rbac_seed_act_purchases.php",
+        "tools/rbac_seed_fin_purchases.php",
+        "tools/rbac_seed_scm_purchases.php"
+      ],
+      "write_no_audit": [
+        "Fixed_Asset/assets.php",
+        "Fixed_Asset/audit.php",
+        "Fixed_Asset/depreciation.php",
+        "Fixed_Asset/ops.php",
+        "_shared/enterprise_guard.php",
+        "_shared/helpers.php",
+        "_shared/rbac.php",
+        "_shared/rbac_v1.php",
+        "_shared/rbac_v2.php",
+        "_shared/upload_safety.php",
+        "absensi/_inc/audit.php",
+        "absensi/_inc/geo.php",
+        "absensi/_inc/pin.php",
+        "absensi/_inc/schema.php",
+        "absensi/_inc/upload.php",
+        "absensi/admin/approval.php",
+        "absensi/admin/offices.php",
+        "absensi/admin/users.php",
+        "absensi/checkin.php",
+        "absensi/checkout.php",
+        "absensi/request.php",
+        "dashboards/index.php",
+        "dashboards/owner/exec_summary.php",
+        "hrl/hrl_doc_view.php",
+        "hrl/hrl_docs.php",
+        "hrl/hrl_tower.php",
+        "hrl_process/_inc/bootstrap.php",
+        "hrl_process/my_pin.php",
+        "hrl_process/request_view.php",
+        "hrl_process/tower.php",
+        "hrl_reg_alkes/reg_alkes_case.php",
+        "hrl_reg_alkes/reg_alkes_control_tower.php",
+        "kpi/kpi_employee.php",
+        "kpi/kpi_office.php",
+        "kpi/kpi_purchases.php",
+        "kpi/kpi_snapshot.php",
+        "kpi/kpi_stock.php",
+        "master/import_rekening_final.php",
+        "master/itc_reset_password.php",
+        "master/login.php",
+        "master/master_customers.php",
+        "master/master_data.php",
+        "master/master_departements.php",
+        "master/master_emailcompany.php",
+        "master/master_employees.php",
+        "master/master_export_customers.php",
+        "master/master_manufactures.php",
+        "master/master_office.php",
+        "master/master_payment_terms.php",
+        "master/master_pricelist_sell.php",
+        "master/master_products_doc.php",
+        "master/master_products_package.php",
+        "master/master_tax.php",
+        "master/master_user.php",
+        "master/master_vendors.php",
+        "master/products_media_view.php",
+        "mpr/_inc/schema.php",
+        "mpr/mpr_budget_fin.php",
+        "mpr/mpr_plan_view.php",
+        "mpr/mpr_plans.php",
+        "payroll/payroll_settings.php",
+        "purchases/purchases_ceisa_pib_view.php",
+        "purchases/purchases_dashboard.php",
+        "purchases/purchases_forwarder_invoice.php",
+        "purchases/purchases_forwarder_payment.php",
+        "purchases/purchases_forwarder_quotes.php",
+        "purchases/purchases_forwarding_tasks.php",
+        "purchases/purchases_import_control_tower.php",
+        "purchases/purchases_import_control_view.php",
+        "purchases/purchases_invoice_ap.php",
+        "purchases/purchases_invoice_ap_edit.php",
+        "purchases/purchases_payment_ap.php",
+        "purchases/purchases_po.php",
+        "purchases/purchases_po_view.php",
+        "purchases/stock_update_from_gr.php",
+        "rbac/index.php",
+        "helpers.php",
+        "master_system_config.php",
+        "sales/act_do_tasks.php",
+        "sales/backfill_sales_do_audit_crm.php",
+        "sales/backfill_sales_do_audit_stages.php",
+        "sales/fin_do_tasks.php",
+        "sales/sales_control_tower.php",
+        "sales/sales_dashboard.php",
+        "sales/sales_do_view.php",
+        "sales/scm_do_tasks.php",
+        "stock/wqs_do_tasks.php",
+        "stock/wqs_incoming_view.php",
+        "stock/wqs_pr.php",
+        "stock/wqs_pr_view.php",
+        "stock/wqs_stock.php",
+        "tools/enforce_h_guard.php",
+        "tools/enforce_upload_safety.php",
+        "tools/purchases_m2_apply.php",
+        "tools/rbac_seed_act_purchases.php",
+        "tools/rbac_seed_fin_purchases.php",
+        "tools/rbac_seed_scm_purchases.php"
+      ],
+      "missing_login": [
+        "_shared/db.php",
+        "_shared/helpers.php",
+        "_shared/rmi_layout.php",
+        "_shared/upload_safety.php",
+        "absensi/_inc/csrf.php",
+        "index.php"
+      ]
+    }
+  },
+  "definitions": {
+    "missing_login": "File tidak mengandung require_login()/auth_require_login()/rmi_require_login().",
+    "upload": "File mengandung $_FILES atau move_uploaded_file().",
+    "write": "File mengandung keyword SQL (INSERT/UPDATE/DELETE/REPLACE/TRUNCATE) atau mengandung upload.",
+    "csrf": "Write file mengandung kata 'csrf' dan ('token' atau '$_SESSION').",
+    "audit": "Write file mengandung audit_log/erp_audit atau memanggil fungsi audit(...).",
+    "bootstrap": "File mengandung path '_shared/bootstrap.php'.",
+    "upload_no_safe": "Upload file tidak mengandung safe_filename()/sanitize_filename().",
+    "display_errors": "File menyalakan display_errors=1 atau error_reporting(E_ALL).",
+    "hardcoded_db": "File mengandung indikasi kredensial DB hardcoded (root/ERP_RMI_SOFULL/8889)."
+  }
+}
+JSON;
+}
+
+// Hindari penutupan tag script secara tidak sengaja
+$plan_json_safe = str_replace('</', '<\/', $plan_json);
+
+?>
+<?php
+require_once __DIR__ . '/../_shared/rmi_layout.php';
+$baseProject = rmi_layout_base_project();
+
+rmi_header('Plan Kerja', [
+  'active' => 'tools',
+  'breadcrumbs' => [
+    ['label' => 'Tools', 'url' => $baseProject . '/tools/index.php'],
+    'Plan Kerja',
+  ],
+  'extra_head' => '<style>
+    :root {
+      --bg: #0b1020;
+      --panel: #0f172a;
+      --panel2:#0b1224;
+      --text: #e5e7eb;
+      --muted:#94a3b8;
+      --border:#243145;
+      --border2:#1f2a3d;
+      --pill:#101a33;
+      --ok:#10b981;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --accent:#7c3aed;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin:0;
+      background: radial-gradient(1200px 700px at 30% -10%, rgba(124,58,237,.25), transparent 60%),
+                  radial-gradient(800px 600px at 90% 20%, rgba(16,185,129,.12), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height: 1.35;
+    }
+    .wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 22px 18px 32px;
+    }
+    .topbar {
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .title {
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .title h1 {
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.2px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    button {
+      background: rgba(124,58,237,.18);
+      border:1px solid rgba(124,58,237,.35);
+      color: var(--text);
+      padding: 9px 11px;
+      border-radius: 10px;
+      cursor:pointer;
+      font-size: 12.5px;
+    }
+    button:hover {
+      background: rgba(124,58,237,.28);
+    }
+    button.secondary {
+      background: rgba(148,163,184,.10);
+      border:1px solid rgba(148,163,184,.22);
+    }
+    button.danger {
+      background: rgba(239,68,68,.14);
+      border:1px solid rgba(239,68,68,.30);
+    }
+    .grid {
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 14px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(15,23,42,.92), rgba(10,16,32,.92));
+      border:1px solid var(--border);
+      border-radius: 14px;
+      overflow:hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .card .head {
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--border2);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap:10px;
+    }
+    .head .hint {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .tablewrap {
+      overflow:auto;
+      max-height: 72vh;
+    }
+    table {
+      width:100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+    thead th {
+      position: sticky;
+      top:0;
+      background: rgba(10,16,32,.96);
+      border-bottom: 1px solid var(--border2);
+      padding: 9px 10px;
+      text-align: left;
+      color: #cbd5e1;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    tbody td {
+      border-bottom: 1px solid rgba(36,49,69,.65);
+      padding: 8px 10px;
+      color: #e2e8f0;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+    tbody tr {
+      cursor:pointer;
+    }
+    tbody tr:hover {
+      background: rgba(124,58,237,.10);
+    }
+    tbody tr.active {
+      background: rgba(124,58,237,.16);
+      outline: 1px solid rgba(124,58,237,.35);
+    }
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(245,158,11,.55);
+      background: rgba(245,158,11,.10);
+      color: #fde68a;
+      font-weight: 600;
+    }
+    .pill.green {
+      border-color: rgba(16,185,129,.55);
+      background: rgba(16,185,129,.10);
+      color: #a7f3d0;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .kpi {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top: 6px;
+    }
+    .chip {
+      border: 1px solid rgba(148,163,184,.22);
+      background: rgba(148,163,184,.08);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      color:#e2e8f0;
+    }
+    .chip b { font-weight: 700; }
+    .progress {
+      height: 7px;
+      background: rgba(148,163,184,.12);
+      border: 1px solid rgba(148,163,184,.16);
+      border-radius: 999px;
+      overflow:hidden;
+      margin-top: 10px;
+    }
+    .progress > div {
+      height: 100%;
+      background: linear-gradient(90deg, rgba(124,58,237,.9), rgba(16,185,129,.9));
+      width: 0%;
+    }
+    .detail {
+      padding: 14px;
+    }
+    .detail h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .detail .sub {
+      color: var(--muted);
+      font-size: 12.5px;
+      margin-bottom: 12px;
+    }
+    details.cat {
+      border:1px solid rgba(36,49,69,.7);
+      background: rgba(15,23,42,.55);
+      border-radius: 12px;
+      padding: 10px 10px 0;
+      margin: 10px 0;
+    }
+    details.cat[open] {
+      background: rgba(15,23,42,.70);
+    }
+    details.cat summary {
+      list-style: none;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+    details.cat summary::-webkit-details-marker { display:none; }
+    .catTitle {
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .catTitle .name {
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .catTitle .meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .catTools {
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .catTools button {
+      padding: 7px 9px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .list {
+      padding: 8px 2px 10px;
+      border-top: 1px solid rgba(36,49,69,.6);
+      max-height: 260px;
+      overflow:auto;
+    }
+    .item {
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding: 6px 6px;
+      border-radius: 10px;
+    }
+    .item:hover {
+      background: rgba(148,163,184,.06);
+    }
+    .item code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color:#dbeafe;
+      white-space: nowrap;
+    }
+    input[type="checkbox"] {
+      margin-top: 2px;
+      transform: scale(1.05);
+    }
+    .search {
+      width: 100%;
+      padding: 9px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(148,163,184,.20);
+      background: rgba(10,16,32,.75);
+      color: var(--text);
+      outline:none;
+      margin: 10px 0 0;
+      font-size: 12.5px;
+    }
+    .footerNote {
+      color: var(--muted);
+      font-size: 11.5px;
+      margin-top: 12px;
+    }
+    .split {
+      border-top:1px solid rgba(36,49,69,.6);
+      margin: 12px 0;
+    }
+    .globalTasks {
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      padding: 10px 0 2px;
+    }
+    .task {
+      display:flex;
+      gap:10px;
+      padding: 8px 10px;
+      border:1px solid rgba(36,49,69,.65);
+      background: rgba(15,23,42,.55);
+      border-radius: 12px;
+    }
+    .task .ttext {
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width: 0;
+    }
+    .task .ttext .tname {
+      font-weight: 700;
+      font-size: 12.8px;
+    }
+    .task .ttext .tmeta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      border:1px solid rgba(148,163,184,.22);
+      background: rgba(148,163,184,.08);
+      color:#e2e8f0;
+      margin-left: 6px;
+    }
+  </style>',
+]);
+?>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="title">
+      <h1>Plan Kerja — ERP_RMI_SOFULL (A)</h1>
+      <div class="subtitle">Klik module untuk lihat evidence + checklist. Query filter didukung via <code>?q=keyword</code>.</div>
+      <div class="subtitle">Owner/PIC: <b><?= h($ownerPic) ?></b> • Last updated: <b><?= h($lastUpdated) ?></b></div>
+      <div class="subtitle">SOP Links: <a href="../DEPLOY_RUNBOOK.md">DEPLOY_RUNBOOK.md</a> • <a href="../TESTPLAN_DEPLOY.md">TESTPLAN_DEPLOY.md</a> • <a href="../TOOLS_DASHBOARD_SPEC.md">TOOLS_DASHBOARD_SPEC.md</a></div>
+    </div>
+    <div class="actions">
+      <button class="secondary" id="btnExport">Export progress</button>
+      <button class="secondary" id="btnImport">Import progress</button>
+      <button class="danger" id="btnReset">Reset progress</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none"/>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="head">
+        <div>
+          <div style="font-weight:700">Module Summary</div>
+          <div class="hint">Tabel baseline (static scan). Klik baris untuk detail & checklist.</div>
+        </div>
+        <div class="hint" id="overallProgress">Progress: -</div>
+      </div>
+
+      <div class="tablewrap">
+        <table id="modTable">
+          <thead>
+            <tr>
+              <th>Module</th>
+              <th>Files</th>
+              <th>Missing Login</th>
+              <th>Upload</th>
+              <th>h() unguarded</th>
+              <th>Write</th>
+              <th>CSRF Cov</th>
+              <th>Audit Cov</th>
+              <th>Bootstrap</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="head">
+        <div>
+          <div style="font-weight:700">Detail & Checklist</div>
+          <div class="hint">Gunakan search untuk cepat menemukan file.</div>
+        </div>
+        <div class="hint" id="selectedModuleHint">Belum memilih module</div>
+      </div>
+
+      <div class="detail" id="detailPane">
+        <div class="muted">Pilih 1 module dari tabel kiri.</div>
+
+        <div class="split"></div>
+
+        <h2 style="margin-top:0">Global Tasks (Lintas Modul)</h2>
+        <div class="sub">Ini biasanya dikerjakan dulu (P0/P1) karena berdampak ke seluruh aplikasi.</div>
+        <div class="globalTasks" id="globalTasks"></div>
+
+        <div class="footerNote">
+          Generated: <span id="genAt"></span> • Version: <span id="ver"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script id="planData" type="application/json"><?php echo $plan_json_safe; ?></script>
+<script>
+(function(){
+  const initialQ = <?= json_encode($q, JSON_UNESCAPED_SLASHES) ?> || "";
+  const data = JSON.parse(document.getElementById('planData').textContent);
+  const prefix = "planKerja:" + data.project + ":" + data.version + ":";
+  const tbody = document.querySelector("#modTable tbody");
+  const detail = document.getElementById("detailPane");
+  const overall = document.getElementById("overallProgress");
+  const selHint = document.getElementById("selectedModuleHint");
+  document.getElementById("genAt").textContent = data.generated_at;
+  document.getElementById("ver").textContent = data.version;
+
+  // --- progress storage helpers
+  function keyItem(module, category, file) {
+    return prefix + "item:" + module + ":" + category + ":" + file;
+  }
+  function keyGlobal(taskId) {
+    return prefix + "global:" + taskId;
+  }
+  function isChecked(k) {
+    return localStorage.getItem(k) === "1";
+  }
+  function setChecked(k, val) {
+    if(val) localStorage.setItem(k, "1");
+    else localStorage.removeItem(k);
+  }
+
+  const progressCats = ["missing_login","hardcoded_db","display_errors","upload_no_safe","write_no_csrf","write_no_audit"];
+
+  function moduleProgress(moduleName) {
+    const ev = data.modules[moduleName].evidence;
+    let total = 0;
+    let done = 0;
+    for (const c of progressCats) {
+      const list = (ev[c] || []);
+      total += list.length;
+      for (const f of list) {
+        if (isChecked(keyItem(moduleName, c, f))) done++;
+      }
+    }
+    return {total, done, pct: total ? (done/total*100) : 100};
+  }
+
+  function overallProgress() {
+    let total=0, done=0;
+    for (const m of data.modules_order) {
+      const p = moduleProgress(m);
+      total += p.total;
+      done += p.done;
+    }
+    // global tasks
+    for (const t of data.global.tasks) {
+      total += 1;
+      if (isChecked(keyGlobal(t.id))) done += 1;
+    }
+    return {total, done, pct: total ? (done/total*100) : 100};
+  }
+
+  function fmtPct(x) {
+    return Math.round(x) + "%";
+  }
+
+  function badgeForProgress(pct) {
+    if (pct >= 95) return '<span class="badge" style="border-color:rgba(16,185,129,.45);background:rgba(16,185,129,.10);color:#a7f3d0">OK</span>';
+    if (pct >= 50) return '<span class="badge" style="border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.10);color:#fde68a">On going</span>';
+    return '<span class="badge" style="border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.10);color:#fecaca">To do</span>';
+  }
+
+  function renderModuleTable() {
+    tbody.innerHTML = "";
+    for (const m of data.modules_order) {
+      const s = data.modules[m].summary;
+      const p = moduleProgress(m);
+      const tr = document.createElement("tr");
+      tr.dataset.module = m;
+      tr.innerHTML = `
+        <td>
+          <span class="pill">${m}</span>
+          <div class="kpi">
+            <span class="chip"><b>${Math.round(p.pct)}%</b> done</span>
+            <span class="chip"><b>${p.done}</b>/${p.total}</span>
+          </div>
+        </td>
+        <td>${s.files}</td>
+        <td>${s.missing_login.count} (${Math.round(s.missing_login.pct)}%)</td>
+        <td>${s.upload}</td>
+        <td>${s.h_unguarded}</td>
+        <td>${s.write}</td>
+        <td>${s.csrf.count}/${s.csrf.den} (${Math.round(s.csrf.pct)}%)</td>
+        <td>${s.audit.count}/${s.audit.den} (${Math.round(s.audit.pct)}%)</td>
+        <td>${s.bootstrap}</td>
+      `;
+      tr.addEventListener("click", () => selectModule(m));
+      tbody.appendChild(tr);
+    }
+    const op = overallProgress();
+    overall.textContent = "Progress: " + op.done + "/" + op.total + " (" + fmtPct(op.pct) + ")";
+  }
+
+  function renderGlobalTasks() {
+    const wrap = document.getElementById("globalTasks");
+    wrap.innerHTML = "";
+    for (const t of data.global.tasks) {
+      const k = keyGlobal(t.id);
+      const div = document.createElement("div");
+      div.className = "task";
+      div.innerHTML = `
+        <input type="checkbox" ${isChecked(k) ? "checked" : ""} aria-label="toggle global task"/>
+        <div class="ttext">
+          <div class="tname">${t.id} <span class="badge">${t.priority}</span> — ${t.title}</div>
+          <div class="tmeta">${(t.acceptance||[]).slice(0,2).join(" • ")}${(t.acceptance||[]).length>2 ? " …" : ""}</div>
+        </div>
+      `;
+      div.querySelector("input").addEventListener("change", (e) => {
+        setChecked(k, e.target.checked);
+        renderModuleTable();
+      });
+      wrap.appendChild(div);
+    }
+  }
+
+  function categoryBlock(moduleName, title, categoryKey, items, extraNote) {
+    const p = moduleProgress(moduleName);
+    const total = items.length;
+    let done = 0;
+    for (const f of items) {
+      if (isChecked(keyItem(moduleName, categoryKey, f))) done++;
+    }
+    const pct = total ? (done/total*100) : 100;
+
+    const det = document.createElement("details");
+    det.className = "cat";
+    det.open = (total > 0);
+    det.innerHTML = `
+      <summary>
+        <div class="catTitle">
+          <div class="name">${title} ${badgeForProgress(pct)}</div>
+          <div class="meta">${done}/${total} checked • ${extraNote || ""}</div>
+        </div>
+        <div class="catTools">
+          <button class="secondary" type="button">Mark all</button>
+          <button class="secondary" type="button">Unmark</button>
+        </div>
+      </summary>
+      <div class="list"></div>
+    `;
+
+    const btnMark = det.querySelectorAll("button")[0];
+    const btnUnmark = det.querySelectorAll("button")[1];
+    btnMark.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      for (const f of items) setChecked(keyItem(moduleName, categoryKey, f), true);
+      selectModule(moduleName, true);
+    });
+    btnUnmark.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      for (const f of items) setChecked(keyItem(moduleName, categoryKey, f), false);
+      selectModule(moduleName, true);
+    });
+
+    const list = det.querySelector(".list");
+    if (total === 0) {
+      list.innerHTML = `<div class="muted" style="padding:8px 6px">Tidak ada item.</div>`;
+    } else {
+      for (const f of items) {
+        const k = keyItem(moduleName, categoryKey, f);
+        const row = document.createElement("div");
+        row.className = "item";
+        row.innerHTML = `
+          <input type="checkbox" ${isChecked(k) ? "checked" : ""} aria-label="toggle item"/>
+          <div style="min-width:0">
+            <code>${f}</code>
+          </div>
+        `;
+        row.querySelector("input").addEventListener("change", (e) => {
+          setChecked(k, e.target.checked);
+          // update metrics
+          renderModuleTable();
+          // update category badge quickly
+          // (simple approach: re-render module panel)
+          selectModule(moduleName, true);
+        });
+        list.appendChild(row);
+      }
+    }
+
+    return det;
+  }
+
+  function selectModule(moduleName, keepActiveRow) {
+    // active row highlight
+    if (!keepActiveRow) {
+      document.querySelectorAll("#modTable tbody tr").forEach(tr => {
+        tr.classList.toggle("active", tr.dataset.module === moduleName);
+      });
+    }
+
+    const mod = data.modules[moduleName];
+    const s = mod.summary;
+    const ev = mod.evidence;
+
+    selHint.textContent = "Module: " + moduleName;
+
+    // Build detail content
+    detail.innerHTML = `
+      <h2>${moduleName}</h2>
+      <div class="sub">Checklist di bawah ini fokus ke item yang bisa langsung ditutup (file-level). Baseline metrik ada di tabel kiri.</div>
+
+      <div class="kpi">
+        <span class="chip">Files <b>${s.files}</b></span>
+        <span class="chip">Missing Login <b>${s.missing_login.count}</b></span>
+        <span class="chip">Upload <b>${s.upload}</b></span>
+        <span class="chip">Write <b>${s.write}</b></span>
+        <span class="chip">CSRF <b>${s.csrf.count}/${s.csrf.den}</b></span>
+        <span class="chip">Audit <b>${s.audit.count}/${s.audit.den}</b></span>
+        <span class="chip">Hardcoded DB <b>${s.hardcoded_db}</b></span>
+        <span class="chip">Display Errors <b>${s.display_errors}</b></span>
+        <span class="chip">Upload no safe <b>${s.upload_no_safe}</b></span>
+      </div>
+
+      <div class="progress"><div id="modProgBar"></div></div>
+      <div class="footerNote" id="modProgText"></div>
+
+      <input class="search" id="searchBox" placeholder="Filter file (ketik sebagian path)..." />
+
+      <div id="catWrap"></div>
+
+      <div class="split"></div>
+
+      <h2 style="margin-top:0">Global Tasks (Lintas Modul)</h2>
+      <div class="sub">Biasanya dikerjakan dulu (P0/P1) karena berdampak ke seluruh aplikasi.</div>
+      <div class="globalTasks" id="globalTasks"></div>
+
+      <div class="footerNote">
+        Generated: <span>${data.generated_at}</span> • Version: <span>${data.version}</span>
+      </div>
+    `;
+
+    // module progress bar
+    const mp = moduleProgress(moduleName);
+    const bar = detail.querySelector("#modProgBar");
+    bar.style.width = (mp.total ? mp.pct : 100) + "%";
+    detail.querySelector("#modProgText").textContent = "Progress module: " + mp.done + "/" + mp.total + " (" + fmtPct(mp.pct) + ")";
+
+    // render categories
+    const wrap = detail.querySelector("#catWrap");
+    const cats = [
+      {
+        key: "missing_login",
+        title: "Missing Login Guard",
+        note: "Tambahkan require_login / auth_require_login pada entrypoint yang butuh proteksi"
+      },
+      {
+        key: "hardcoded_db",
+        title: "Hardcoded DB Config",
+        note: "Pindah ke .env/config terpusat (hindari root/8889/ERP_RMI_SOFULL di kode)"
+      },
+      {
+        key: "display_errors",
+        title: "Display Errors / Debug ON",
+        note: "Hapus ini_set('display_errors',1) & error_reporting(E_ALL) di production"
+      },
+      {
+        key: "upload_no_safe",
+        title: "Upload tanpa safe_filename",
+        note: "Wajib sanitize filename + allowlist type/size"
+      },
+      {
+        key: "write_no_csrf",
+        title: "Write-action tanpa CSRF",
+        note: "Pastikan token + verify pada request yang mengubah data"
+      },
+      {
+        key: "write_no_audit",
+        title: "Write-action tanpa Audit Log",
+        note: "Tambahkan audit_log/erp_audit untuk tindakan INSERT/UPDATE/DELETE/REPLACE/TRUNCATE/upload"
+      },
+      {
+        key: "uses_shared_bootstrap",
+        title: "Menggunakan _shared/bootstrap.php",
+        note: "Info: jumlah file yang sudah include _shared/bootstrap.php"
+      }
+    ];
+
+    const blocks = [];
+    for (const c of cats) {
+      const items = (ev[c.key] || []);
+      const b = categoryBlock(moduleName, c.title, c.key, items, c.note);
+      wrap.appendChild(b);
+      blocks.push(b);
+    }
+
+    // search filter
+    const searchBox = detail.querySelector("#searchBox");
+    searchBox.value = initialQ;
+    function applyFilter() {
+      const q = (searchBox.value || "").toLowerCase().trim();
+      for (const det of blocks) {
+        const rows = det.querySelectorAll(".item");
+        let any = false;
+        rows.forEach(r => {
+          const t = (r.textContent || "").toLowerCase();
+          const show = !q || t.includes(q);
+          r.style.display = show ? "" : "none";
+          if (show) any = true;
+        });
+        // if no rows (or empty) just keep
+        if (rows.length) {
+          det.style.display = any ? "" : "none";
+        }
+      }
+    }
+    searchBox.addEventListener("input", applyFilter);
+    applyFilter();
+
+    // render global tasks
+    renderGlobalTasks();
+
+    // update overall progress in header
+    const op = overallProgress();
+    overall.textContent = "Progress: " + op.done + "/" + op.total + " (" + fmtPct(op.pct) + ")";
+  }
+
+  // Export / Import / Reset
+  function exportProgress() {
+    const payload = {};
+    for (let i=0; i<localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(prefix)) {
+        payload[k] = localStorage.getItem(k);
+      }
+    }
+    const blob = new Blob([JSON.stringify({project:data.project, version:data.version, exported_at:new Date().toISOString(), data:payload}, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "plan_kerja_progress.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function importProgressFile(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const obj = JSON.parse(reader.result);
+        const d = obj.data || {};
+        // apply only keys with our prefix to prevent junk
+        Object.keys(d).forEach(k => {
+          if (k.startsWith(prefix)) {
+            localStorage.setItem(k, d[k]);
+          }
+        });
+        renderModuleTable();
+        // if a module is active, re-render it
+        const active = document.querySelector("#modTable tbody tr.active");
+        if (active) selectModule(active.dataset.module, true);
+        alert("Import berhasil.");
+      } catch(e) {
+        alert("Import gagal: " + e);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function resetProgress() {
+    const keys = [];
+    for (let i=0; i<localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(prefix)) keys.push(k);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
+    renderModuleTable();
+    const active = document.querySelector("#modTable tbody tr.active");
+    if (active) selectModule(active.dataset.module, true);
+  }
+
+  document.getElementById("btnExport").addEventListener("click", exportProgress);
+  document.getElementById("btnImport").addEventListener("click", () => document.getElementById("importFile").click());
+  document.getElementById("importFile").addEventListener("change", (e) => {
+    if (e.target.files && e.target.files[0]) importProgressFile(e.target.files[0]);
+    e.target.value = "";
+  });
+  document.getElementById("btnReset").addEventListener("click", () => {
+    if (confirm("Reset semua checklist?")) resetProgress();
+  });
+
+  // init
+  renderModuleTable();
+  renderGlobalTasks();
+})();
+</script>
+<?php rmi_footer(); ?>

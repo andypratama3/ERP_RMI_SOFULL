@@ -1,0 +1,48 @@
+---
+description: ERP_RMI_SOFULL — Saat ubah UI, sesuaikan semua link terkait
+alwaysApply: true
+---
+
+# UI Link Consistency — ERP_RMI_SOFULL
+
+## Prinsip
+
+**Saat perubahan UI (label, link, struktur, rename modul), WAJIB sesuaikan semua referensi di seluruh frontend.**
+
+## Area Frontend yang Harus Dicek
+
+| Area | Lokasi | Contoh |
+|------|--------|--------|
+| **Topbar actions** | `rmi_header(..., ['actions' => [...]])` di tiap halaman | RFQ, PO, Import Control Tower |
+| **Sidebar** | `_shared/rmi_layout.php` — `$u[...]` + nav-link | PQP (Dashboard), RFQ, PO, AP, Forwarding |
+| **Content cards** | Body halaman (dashboard, index) | Cards di PQP Dashboard |
+| **Breadcrumb** | `rmi_header(..., ['breadcrumbs' => [...]])` | PQP → Dashboard |
+| **Back links** | Tombol "← Kembali" di halaman detail | ← PQP Dashboard, ← RFQ |
+| **Master Data** | `master/master_data.php` — mod_card() | Card PQP Dashboard |
+| **Cross-module links** | Halaman modul lain yang link ke modul ini | wqs_pr.php → PQP Dashboard |
+
+## Checklist Saat Ubah UI
+
+- [ ] **Topbar actions** — Hapus/tambah/ubah di `rmi_header()` halaman terkait
+- [ ] **Sidebar** — Cek `rmi_layout.php`: `$u` array + nav-link data-roles
+- [ ] **Content** — Cards, tombol, link di body halaman
+- [ ] **Breadcrumb** — Label & URL di `rmi_header()`
+- [ ] **Back links** — Tombol kembali di halaman child (view, edit, dll.)
+- [ ] **master_data.php** — mod_card jika modul punya entry di Master Data Center
+- [ ] **Cross-reference** — Grep modul/label lama di seluruh codebase
+
+## Contoh: Rename "Purchases Dashboard" → "PQP Dashboard"
+
+File yang perlu diupdate:
+- `purchases/purchases_dashboard.php` — rmi_header title, breadcrumb
+- `purchases/purchases_import_control_tower.php` — back link
+- `stock/wqs_pr.php` — button label
+- `master/master_data.php` — mod_card title
+- `_shared/rmi_layout.php` — sidebar nav-link label
+
+## Grep untuk Cek
+
+```bash
+grep -r "Purchases Dashboard" --include="*.php" .
+grep -r "purchases_dashboard" --include="*.php" .
+```

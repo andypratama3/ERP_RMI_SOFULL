@@ -1,0 +1,31 @@
+---
+description: Office codes — ERP_RMI_SOFULL
+alwaysApply: true
+---
+
+# Office Codes — ERP_RMI_SOFULL
+
+## NOTE: Tidak Menggunakan HO
+
+**HO (Head Office) TIDAK digunakan.** Office code hanya yang terdaftar di `master_office`.
+
+## Office Code yang Valid
+
+| Code | Keterangan |
+|------|------------|
+| BGR | Bogor |
+| BDG | Bandung |
+| BKS | Bekasi |
+| TGR | Tangerang |
+| SLO | Solo |
+| SMG | Semarang |
+| KAL | (Kalimantan / cabang lain) |
+| JGY | Yogyakarta |
+| SYS | System |
+
+## Aturan
+
+- **Default office** saat kosong: gunakan **BGR** (depo utama) — bukan HO.
+- **Single source of truth:** `RMI_DEFAULT_OFFICE_CODE` dan `wqs_stock_default_office()` di `stock/_stock_office_helper.php`. Jangan hardcode 'BGR' di tempat lain.
+- Semua fallback `office_code` kosong → `wqs_stock_default_office()`.
+- Jangan tambahkan HO ke dropdown, migration, atau helper.

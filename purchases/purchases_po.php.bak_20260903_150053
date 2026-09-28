@@ -1,0 +1,567 @@
+<?php
+/**
+ * ERP_RMI_SOFULL - purchases_po.php workflow hardening patch
+ *
+ * Usage from project root:
+ *   php apply_purchases_po_workflow_fix.php purchases/purchases_po.php
+ *
+ * What this patch changes:
+ * - Status mutation moves from GET to POST + CSRF.
+ * - Soft delete / restore moves from GET to POST + CSRF.
+ * - Quick status can NEVER cancel a PO.
+ * - Explicit status transition guard.
+ * - Cancel/revision remains delegated to purchases_po_view.php, because
+ *   that page owns mandatory reason + downstream guards.
+ * - UI separates "Revisi / Cancel" from quick status controls.
+ * - Keeps existing audit calls.
+ *
+ * IMPORTANT:
+ * This patch intentionally does NOT implement GR/AP/payment reversal here.
+ * Cancellation business logic must remain in purchases_po_view.php.
+ */
+
+$target = $argv[1] ?? (__DIR__ . '/purchases_po.php');
+if (!is_file($target)) {
+    fwrite(STDERR, "Target not found: {$target}\n");
+    exit(2);
+}
+
+$src = file_get_contents($target);
+if ($src === false) {
+    fwrite(STDERR, "Cannot read target: {$target}\n");
+    exit(3);
+}
+
+$backup = $target . '.bak_' . date('Ymd_His');
+if (!copy($target, $backup)) {
+    fwrite(STDERR, "Cannot create backup: {$backup}\n");
+    exit(4);
+}
+
+function replace_once(string &$src, string $old, string $new, string $label): void {
+    $count = substr_count($src, $old);
+    if ($count !== 1) {
+        throw new RuntimeException("Patch anchor '{$label}' expected 1 occurrence, found {$count}.");
+    }
+    $src = str_replace($old, $new, $src);
+}
+
+try {
+    // 1) Replace GET status mutation with POST status mutation.
+    $old = <<<'OLD'
+// status change (manager+)
+if (isset($_GET['set_status']) && isset($_GET['id']) && p_is_manager_plus()) {
+  verify_csrf((string)($_GET['csrf_token'] ?? ''));
+  $id=(int)$_GET['id']; $stt=up($_GET['set_status']);
+  if (!in_array($stt,['DRAFT','OPEN','IN_PRODUCTION','READY','CLOSED','CANCELLED'],true)) $stt='OPEN';
+  if ($stt === 'CANCELLED') {
+    p_flash_set('danger','Pembatalan PO tidak boleh dari quick status. Buka View PO lalu gunakan "Batalkan PO & Kembalikan ke WQS" agar alasan, audit, dan pengecekan GR/AP/payment dijalankan.');
+    rmi_redirect('purchases_po_view.php?id='.$id);
+  }
+  try {
+    $before = null;
+    $after = null;
+    $st=$pdo->prepare("SELECT * FROM purchases_po WHERE id=? LIMIT 1"); $st->execute([$id]); $before=$st->fetch();
+    $code=(string)($before['po_code'] ?? '');
+    $pdo->prepare("UPDATE purchases_po SET status=? WHERE id=?")->execute([$stt,$id]);
+    $st2=$pdo->prepare("SELECT * FROM purchases_po WHERE id=? LIMIT 1"); $st2->execute([$id]); $after=$st2->fetch();
+
+    // Business cancellation is handled in purchases_po_view.php with mandatory reason and downstream guards.
+    // PATCH_3_AUDIT
+    rmi_audit_safe('UPDATE', 'PURCHASES.PO', $id, $before, $after, [
+      'event' => 'set_status',
+      'to_status' => $stt,
+      'po_code' => $code,
+    ]);
+    if (function_exists('master_audit')) {
+      master_audit($pdo, 'purchases_po', 'purchases_po', 'SET_STATUS', $id, $code, "PO status -> {$stt}", ['status' => $stt]);
+    }
+    p_audit($pdo,'PO',$code,'SET_STATUS',['status'=>$stt,'id'=>$id]);
+    p_flash_set('success',"Status PO -> {$stt}");
+    try {
+      require_once __DIR__ . '/../_shared/chat_notice.php';
+      $st = $pdo->prepare("SELECT office_code FROM purchases_po WHERE id=? LIMIT 1");
+      $st->execute([$id]);
+      $docOffice = strtoupper(trim((string)$st->fetchColumn()));
+      $pic = $pdo->prepare("SELECT id FROM master_system_login WHERE LOWER(COALESCE(status,'active'))='active' AND UPPER(COALESCE(department,'')) IN ('PQP','SCM') AND (?='' OR UPPER(COALESCE(office_code,''))=?) ORDER BY id ASC LIMIT 5");
+      $pic->execute([$docOffice, $docOffice]);
+      $userIds = array_map('intval', $pic->fetchAll(PDO::FETCH_COLUMN));
+      chat_notice_po($pdo, $id, 'STATUS_' . $stt, 'PO #' . $id . ' (' . $code . ') status -> ' . $stt, $userIds);
+    } catch (Throwable $e) { /* non-fatal */ }
+  } catch (Throwable $e) {
+    if (function_exists('rmi_log_module_error')) rmi_log_module_error('purchases_po', $e, ['action' => 'SET_STATUS_PO', 'id' => $id ?? null]);
+    p_flash_set('danger',$e->getMessage());
+  }
+  rmi_redirect("purchases_po.php");
+}
+OLD;
+
+    $new = <<<'NEW'
+// status change (manager+) - MUTATION WAJIB POST + CSRF
+if ($action === 'set_status_po') {
+  if (!p_is_manager_plus()) {
+    http_response_code(403);
+    p_flash_set('danger','Akses ditolak: hanya Manager+/Admin/SYS yang boleh mengubah status PO.');
+    rmi_redirect('purchases_po.php');
+  }
+
+  $id  = (int)($_POST['po_id'] ?? 0);
+  $stt = up($_POST['set_status'] ?? '');
+
+  // CANCELLED tidak pernah boleh lewat quick status.
+  // Cancel/revisi wajib lewat purchases_po_view.php agar reason + downstream guard dijalankan.
+  if ($stt === 'CANCELLED') {
+    p_flash_set('danger','Pembatalan PO wajib melalui View → Revisi / Batalkan PO agar alasan, audit, dan pengecekan GR/AP/payment dijalankan.');
+    rmi_redirect('purchases_po_view.php?id='.$id);
+  }
+
+  $allowedStatuses = ['OPEN','IN_PRODUCTION','READY','CLOSED'];
+  if ($id <= 0 || !in_array($stt, $allowedStatuses, true)) {
+    p_flash_set('danger','Permintaan perubahan status PO tidak valid.');
+    rmi_redirect('purchases_po.php');
+  }
+
+  // State machine sederhana:
+  // OPEN -> IN_PRODUCTION -> READY -> CLOSED
+  // Manager boleh mempertahankan status yang sama (idempotent), tetapi tidak boleh mundur
+  // lewat quick status. Koreksi bisnis dilakukan melalui flow revisi.
+  $transition = [
+    'DRAFT'         => ['OPEN'],
+    'OPEN'          => ['OPEN','IN_PRODUCTION'],
+    'IN_PRODUCTION' => ['IN_PRODUCTION','READY'],
+    'READY'         => ['READY','CLOSED'],
+    'CLOSED'        => ['CLOSED'],
+    'CANCELLED'     => [],
+  ];
+
+  try {
+    $pdo->beginTransaction();
+
+    $st = $pdo->prepare("SELECT * FROM purchases_po WHERE id=? AND deleted_at IS NULL LIMIT 1 FOR UPDATE");
+    $st->execute([$id]);
+    $before = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$before) {
+      throw new RuntimeException('PO tidak ditemukan atau sudah dihapus.');
+    }
+
+    $current = up($before['status'] ?? '');
+    if (!isset($transition[$current]) || !in_array($stt, $transition[$current], true)) {
+      throw new RuntimeException("Transisi status tidak diizinkan: {$current} → {$stt}. Gunakan alur revisi bila perlu koreksi.");
+    }
+
+    // BRANCH scope tetap dijaga walaupun tombol status biasanya tidak tampil untuk branch.
+    if ($_ppo_scope !== null && up($before['office_code'] ?? '') !== $_ppo_scope) {
+      throw new RuntimeException('Akses ditolak: PO berada di luar scope kantor Anda.');
+    }
+
+    $code = (string)($before['po_code'] ?? '');
+
+    if ($current !== $stt) {
+      $pdo->prepare("UPDATE purchases_po SET status=? WHERE id=?")->execute([$stt,$id]);
+    }
+
+    $st2 = $pdo->prepare("SELECT * FROM purchases_po WHERE id=? LIMIT 1");
+    $st2->execute([$id]);
+    $after = $st2->fetch(PDO::FETCH_ASSOC);
+
+    $pdo->commit();
+
+    rmi_audit_safe('UPDATE', 'PURCHASES.PO', $id, $before, $after, [
+      'event' => 'set_status',
+      'from_status' => $current,
+      'to_status' => $stt,
+      'po_code' => $code,
+    ]);
+    if (function_exists('master_audit')) {
+      master_audit(
+        $pdo,
+        'purchases_po',
+        'purchases_po',
+        'SET_STATUS',
+        $id,
+        $code,
+        "PO status {$current} -> {$stt}",
+        ['from_status'=>$current,'to_status'=>$stt]
+      );
+    }
+    p_audit($pdo,'PO',$code,'SET_STATUS',[
+      'id'=>$id,
+      'from_status'=>$current,
+      'to_status'=>$stt,
+    ]);
+
+    p_flash_set('success',"Status PO {$code}: {$current} → {$stt}");
+
+    try {
+      require_once __DIR__ . '/../_shared/chat_notice.php';
+      $docOffice = up($after['office_code'] ?? '');
+      $pic = $pdo->prepare("SELECT id FROM master_system_login WHERE LOWER(COALESCE(status,'active'))='active' AND UPPER(COALESCE(department,'')) IN ('PQP','SCM') AND (?='' OR UPPER(COALESCE(office_code,''))=?) ORDER BY id ASC LIMIT 5");
+      $pic->execute([$docOffice, $docOffice]);
+      $userIds = array_map('intval', $pic->fetchAll(PDO::FETCH_COLUMN));
+      chat_notice_po(
+        $pdo,
+        $id,
+        'STATUS_' . $stt,
+        'PO #' . $id . ' (' . $code . ') status ' . $current . ' -> ' . $stt,
+        $userIds
+      );
+    } catch (Throwable $e) {
+      // Notification non-fatal.
+    }
+  } catch (Throwable $e) {
+    if ($pdo->inTransaction()) $pdo->rollBack();
+    if (function_exists('rmi_log_module_error')) {
+      rmi_log_module_error('purchases_po', $e, ['action'=>'SET_STATUS_PO','id'=>$id ?? null,'to_status'=>$stt ?? null]);
+    }
+    p_flash_set('danger','Gagal mengubah status PO: '.$e->getMessage());
+  }
+
+  rmi_redirect('purchases_po.php');
+}
+NEW;
+    replace_once($src, $old, $new, 'status mutation');
+
+    // 2) Replace GET soft delete/restore handlers with POST handlers and stricter rules.
+    $start = strpos($src, "// soft delete/restore admin+");
+    $end   = strpos($src, "// List", $start);
+    if ($start === false || $end === false || $end <= $start) {
+        throw new RuntimeException("Cannot locate soft delete/restore block.");
+    }
+
+    $newDeleteBlock = <<<'NEW'
+// soft delete / restore admin+ - MUTATION WAJIB POST + CSRF
+if ($action === 'soft_delete_po') {
+  if (!p_is_admin_plus()) {
+    http_response_code(403);
+    p_flash_set('danger','Akses ditolak: hanya Admin+/SYS yang boleh soft delete PO.');
+    rmi_redirect('purchases_po.php');
+  }
+
+  $id = (int)($_POST['po_id'] ?? 0);
+  if ($id <= 0) {
+    p_flash_set('danger','PO tidak valid.');
+    rmi_redirect('purchases_po.php');
+  }
+
+  try {
+    $pdo->beginTransaction();
+
+    $st = $pdo->prepare("SELECT * FROM purchases_po WHERE id=? LIMIT 1 FOR UPDATE");
+    $st->execute([$id]);
+    $before = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$before) throw new RuntimeException('PO tidak ditemukan.');
+    if (!empty($before['deleted_at'])) throw new RuntimeException('PO sudah berstatus deleted.');
+
+    $statusNow = up($before['status'] ?? '');
+
+    // Dokumen bisnis tidak boleh dihapus sebagai pengganti proses cancel/reversal.
+    // Hanya DRAFT/CANCELLED yang boleh soft delete.
+    if (!in_array($statusNow, ['DRAFT','CANCELLED'], true)) {
+      throw new RuntimeException("PO status {$statusNow} tidak boleh dihapus. Gunakan Revisi / Batalkan PO dari halaman View.");
+    }
+
+    $code = (string)($before['po_code'] ?? '');
+    $pdo->prepare("UPDATE purchases_po SET deleted_at=NOW() WHERE id=?")->execute([$id]);
+
+    // Rollback PR hanya jika memang tidak ada PO aktif lain.
+    if (!empty($before['pr_id'])) {
+      $prIdRb = (int)$before['pr_id'];
+      $stOther = $pdo->prepare("
+        SELECT COUNT(*)
+        FROM purchases_po
+        WHERE pr_id=?
+          AND id<>?
+          AND deleted_at IS NULL
+          AND status NOT IN ('CANCELLED')
+      ");
+      $stOther->execute([$prIdRb, $id]);
+
+      if ((int)$stOther->fetchColumn() === 0) {
+        // Jangan menimpa status workflow revisi milik WQS.
+        $pdo->prepare("
+          UPDATE wqs_pr
+          SET status='SUBMITTED'
+          WHERE id=?
+            AND status='PO_CREATED'
+        ")->execute([$prIdRb]);
+      }
+    }
+
+    $stA = $pdo->prepare("SELECT * FROM purchases_po WHERE id=? LIMIT 1");
+    $stA->execute([$id]);
+    $after = $stA->fetch(PDO::FETCH_ASSOC);
+
+    $pdo->commit();
+
+    rmi_audit_safe('DELETE', 'PURCHASES.PO', $id, $before, $after, [
+      'event'=>'soft_delete',
+      'po_code'=>$code,
+      'status_before'=>$statusNow,
+    ]);
+    if (function_exists('master_audit')) {
+      master_audit($pdo,'purchases_po','purchases_po','SOFT_DELETE',$id,$code,"PO soft deleted: {$code}",[
+        'status_before'=>$statusNow
+      ]);
+    }
+    p_audit($pdo,'PO',$code,'SOFT_DELETE',['id'=>$id,'status_before'=>$statusNow]);
+    p_flash_set('success','PO '.$code.' berhasil di-soft delete.');
+  } catch (Throwable $e) {
+    if ($pdo->inTransaction()) $pdo->rollBack();
+    if (function_exists('rmi_log_module_error')) {
+      rmi_log_module_error('purchases_po',$e,['action'=>'SOFT_DELETE_PO','id'=>$id ?? null]);
+    }
+    p_flash_set('danger','Gagal soft delete PO: '.$e->getMessage());
+  }
+
+  rmi_redirect('purchases_po.php');
+}
+
+if ($action === 'restore_po') {
+  if (!p_is_admin_plus()) {
+    http_response_code(403);
+    p_flash_set('danger','Akses ditolak: hanya Admin+/SYS yang boleh restore PO.');
+    rmi_redirect('purchases_po.php');
+  }
+
+  $id = (int)($_POST['po_id'] ?? 0);
+  if ($id <= 0) {
+    p_flash_set('danger','PO tidak valid.');
+    rmi_redirect('purchases_po.php');
+  }
+
+  try {
+    $pdo->beginTransaction();
+
+    $st = $pdo->prepare("SELECT * FROM purchases_po WHERE id=? LIMIT 1 FOR UPDATE");
+    $st->execute([$id]);
+    $before = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$before) throw new RuntimeException('PO tidak ditemukan.');
+    if (empty($before['deleted_at'])) throw new RuntimeException('PO tidak dalam status deleted.');
+
+    $poStatus = up($before['status'] ?? '');
+
+    // Restore CANCELLED hanya mengembalikan visibilitas histori, bukan mengaktifkan PO.
+    // Restore PO aktif dicegah jika PR sudah mempunyai PO aktif lain.
+    if ($poStatus !== 'CANCELLED' && !empty($before['pr_id'])) {
+      $stOther = $pdo->prepare("
+        SELECT po_code
+        FROM purchases_po
+        WHERE pr_id=?
+          AND id<>?
+          AND deleted_at IS NULL
+          AND status NOT IN ('CANCELLED')
+        ORDER BY id DESC
+        LIMIT 1
+      ");
+      $stOther->execute([(int)$before['pr_id'], $id]);
+      $activeOther = (string)($stOther->fetchColumn() ?: '');
+      if ($activeOther !== '') {
+        throw new RuntimeException('Restore ditolak: PR sudah mempunyai PO aktif '.$activeOther.'.');
+      }
+    }
+
+    $pdo->prepare("UPDATE purchases_po SET deleted_at=NULL WHERE id=?")->execute([$id]);
+
+    if (!empty($before['pr_id']) && $poStatus !== 'CANCELLED') {
+      $pdo->prepare("
+        UPDATE wqs_pr
+        SET status='PO_CREATED'
+        WHERE id=?
+          AND status='SUBMITTED'
+      ")->execute([(int)$before['pr_id']]);
+    }
+
+    $stA = $pdo->prepare("SELECT * FROM purchases_po WHERE id=? LIMIT 1");
+    $stA->execute([$id]);
+    $after = $stA->fetch(PDO::FETCH_ASSOC);
+
+    $pdo->commit();
+
+    $code = (string)($before['po_code'] ?? '');
+    rmi_audit_safe('UPDATE','PURCHASES.PO',$id,$before,$after,[
+      'event'=>'restore',
+      'po_code'=>$code,
+      'status'=>$poStatus,
+    ]);
+    if (function_exists('master_audit')) {
+      master_audit($pdo,'purchases_po','purchases_po','RESTORE',$id,$code,"PO restored: {$code}",[
+        'status'=>$poStatus
+      ]);
+    }
+    p_audit($pdo,'PO',$code,'RESTORE',['id'=>$id,'status'=>$poStatus]);
+    p_flash_set('success','PO '.$code.' berhasil direstore.');
+  } catch (Throwable $e) {
+    if ($pdo->inTransaction()) $pdo->rollBack();
+    if (function_exists('rmi_log_module_error')) {
+      rmi_log_module_error('purchases_po',$e,['action'=>'RESTORE_PO','id'=>$id ?? null]);
+    }
+    p_flash_set('danger','Gagal restore PO: '.$e->getMessage());
+  }
+
+  rmi_redirect('purchases_po.php');
+}
+
+NEW;
+
+    $src = substr($src, 0, $start) . $newDeleteBlock . substr($src, $end);
+
+    // 3) Replace quick status dropdown GET links with POST forms.
+    $oldUi = <<<'OLD'
+                <?php if (p_is_manager_plus() && !$r['deleted_at']): ?>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-soft btn-sm dropdown-toggle" data-bs-toggle="dropdown">Status</button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                      <li><a class="dropdown-item" href="?set_status=OPEN&id=<?=h($r['id'])?>&csrf_token=<?=csrf_token()?>">OPEN</a></li>
+                      <li><a class="dropdown-item" href="?set_status=IN_PRODUCTION&id=<?=h($r['id'])?>&csrf_token=<?=csrf_token()?>">IN_PRODUCTION</a></li>
+                      <li><a class="dropdown-item" href="?set_status=READY&id=<?=h($r['id'])?>&csrf_token=<?=csrf_token()?>">READY</a></li>
+                      <li><a class="dropdown-item" href="?set_status=CLOSED&id=<?=h($r['id'])?>&csrf_token=<?=csrf_token()?>">CLOSED</a></li>
+                    </ul>
+                  </div>
+                <?php endif; ?>
+                <?php if (p_is_admin_plus()): ?>
+                  <?php if (!$r['deleted_at']): ?>
+                    <a class="btn btn-danger btn-sm" href="?delete=<?=h($r['id'])?>&csrf_token=<?=csrf_token()?>" onclick="return confirm('Soft delete PO?')">Delete</a>
+                  <?php else: ?>
+                    <a class="btn btn-success btn-sm" href="?restore=<?=h($r['id'])?>&csrf_token=<?=csrf_token()?>" onclick="return confirm('Restore PO?')">Restore</a>
+                  <?php endif; ?>
+                <?php endif; ?>
+OLD;
+
+    $newUi = <<<'NEW'
+                <?php if (p_is_manager_plus() && !$r['deleted_at'] && !in_array(strtoupper((string)($r['status'] ?? '')),['CANCELLED','CLOSED'],true)): ?>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-soft btn-sm dropdown-toggle" data-bs-toggle="dropdown">Status</button>
+                    <ul class="dropdown-menu dropdown-menu-dark p-2" style="min-width:210px">
+                      <?php
+                        $curUi = strtoupper((string)($r['status'] ?? ''));
+                        $nextUi = [
+                          'DRAFT' => ['OPEN'],
+                          'OPEN' => ['IN_PRODUCTION'],
+                          'IN_PRODUCTION' => ['READY'],
+                          'READY' => ['CLOSED'],
+                        ][$curUi] ?? [];
+                      ?>
+                      <?php if (!$nextUi): ?>
+                        <li><span class="dropdown-item-text text-muted">Tidak ada transisi cepat.</span></li>
+                      <?php else: ?>
+                        <?php foreach ($nextUi as $nextStatus): ?>
+                          <li>
+                            <form method="post" class="m-0" onsubmit="return confirm('Ubah status PO <?=h($r['po_code'] ?? '')?>: <?=h($curUi)?> → <?=h($nextStatus)?> ?');">
+                              <input type="hidden" name="action" value="set_status_po">
+                              <input type="hidden" name="po_id" value="<?=h($r['id'])?>">
+                              <input type="hidden" name="set_status" value="<?=h($nextStatus)?>">
+                              <button type="submit" class="dropdown-item"><?=h($nextStatus)?></button>
+                            </form>
+                          </li>
+                        <?php endforeach; ?>
+                      <?php endif; ?>
+                    </ul>
+                  </div>
+                <?php endif; ?>
+
+                <?php if (p_is_admin_plus()): ?>
+                  <?php if (!$r['deleted_at'] && in_array(strtoupper((string)($r['status'] ?? '')),['DRAFT','CANCELLED'],true)): ?>
+                    <form method="post" class="d-inline" onsubmit="return confirm('Soft delete hanya menyembunyikan histori PO. Lanjutkan?');">
+                      <input type="hidden" name="action" value="soft_delete_po">
+                      <input type="hidden" name="po_id" value="<?=h($r['id'])?>">
+                      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                  <?php elseif ($r['deleted_at']): ?>
+                    <form method="post" class="d-inline" onsubmit="return confirm('Restore PO ini? Sistem akan mengecek PO aktif lain dari PR yang sama.');">
+                      <input type="hidden" name="action" value="restore_po">
+                      <input type="hidden" name="po_id" value="<?=h($r['id'])?>">
+                      <button type="submit" class="btn btn-success btn-sm">Restore</button>
+                    </form>
+                  <?php endif; ?>
+                <?php endif; ?>
+NEW;
+    replace_once($src, $oldUi, $newUi, 'status/delete UI');
+
+    // 4) Improve revision/cancel CTA wording.
+    $oldCta = <<<'OLD'
+                  <a class="btn btn-warning btn-sm" href="purchases_po_view.php?id=<?=h($r['id'])?>">Revisi / Cancel</a>
+OLD;
+    $newCta = <<<'NEW'
+                  <a class="btn btn-warning btn-sm" href="purchases_po_view.php?id=<?=h($r['id'])?>"
+                     title="Revisi dan pembatalan diproses terpisah di detail PO dengan alasan wajib dan downstream guard.">Revisi / Batalkan</a>
+NEW;
+    replace_once($src, $oldCta, $newCta, 'revision cancel CTA');
+
+    // 5) Add explanatory note above PO table.
+    $oldListHeading = <<<'OLD'
+      <div class="fw-semibold">PO List</div>
+OLD;
+    $newListHeading = <<<'NEW'
+      <div>
+        <div class="fw-semibold">PO List</div>
+        <div class="muted">Quick status hanya maju: OPEN → IN_PRODUCTION → READY → CLOSED. Revisi/Cancel wajib dari View PO; Cancel tidak boleh dipakai untuk menghapus histori atau reversal transaksi downstream.</div>
+      </div>
+NEW;
+    replace_once($src, $oldListHeading, $newListHeading, 'PO list heading');
+
+    // 6) Add explicit duplicate active-PO guard during create, with row lock.
+    $oldCheck = <<<'OLD'
+  if (strtoupper($prCheck['status'] ?? '') !== 'SUBMITTED') {
+    p_flash_set('danger','PR '.$prCheck['pr_code'].' sudah berstatus '.strtoupper($prCheck['status'] ?? '').'. PO tidak bisa dibuat dari PR yang bukan SUBMITTED.');
+    rmi_redirect("purchases_po.php");
+  }
+OLD;
+    $newCheck = <<<'NEW'
+  if (strtoupper($prCheck['status'] ?? '') !== 'SUBMITTED') {
+    p_flash_set('danger','PR '.$prCheck['pr_code'].' sudah berstatus '.strtoupper($prCheck['status'] ?? '').'. PO tidak bisa dibuat dari PR yang bukan SUBMITTED.');
+    rmi_redirect("purchases_po.php");
+  }
+
+  // Defense-in-depth: jangan pernah membuat PO aktif kedua untuk PR yang sama.
+  // Ini juga melindungi flow revisi: PO lama harus sudah CANCELLED sebelum PO pengganti dibuat.
+  $stActivePo = $pdo->prepare("
+    SELECT po_code
+    FROM purchases_po
+    WHERE pr_id=?
+      AND deleted_at IS NULL
+      AND status NOT IN ('CANCELLED')
+    ORDER BY id DESC
+    LIMIT 1
+  ");
+  $stActivePo->execute([$pr_id]);
+  $activePoCode = (string)($stActivePo->fetchColumn() ?: '');
+  if ($activePoCode !== '') {
+    p_flash_set('danger','PR '.$prCheck['pr_code'].' masih mempunyai PO aktif '.$activePoCode.'. Selesaikan alur revisi/cancel PO lama terlebih dahulu.');
+    rmi_redirect("purchases_po.php");
+  }
+NEW;
+    replace_once($src, $oldCheck, $newCheck, 'active PO duplicate guard');
+
+    // 7) Add a warning around return_pr_revision semantics.
+    $oldRevisionText = <<<'OLD'
+      <div class="col-12 muted">Gunakan hanya untuk salah produk/qty/unit/kebutuhan. Kesalahan harga, supplier, diskon, PPN, currency, dan payment term diperbaiki di PQP tanpa mengembalikan PR.</div>
+OLD;
+    $newRevisionText = <<<'NEW'
+      <div class="col-12 muted">
+        Gunakan hanya sebelum ada PO aktif, untuk salah produk/qty/unit/kebutuhan.
+        Jika PO sudah ada, buka detail PO dan gunakan alur <b>Revisi</b> atau <b>Batalkan</b>.
+        Kesalahan harga, supplier, diskon, PPN, currency, dan payment term diperbaiki di PQP tanpa mengembalikan PR.
+      </div>
+NEW;
+    replace_once($src, $oldRevisionText, $newRevisionText, 'revision help text');
+
+    if (file_put_contents($target, $src) === false) {
+        throw new RuntimeException("Failed writing patched file.");
+    }
+
+    echo "PATCH OK\n";
+    echo "Target : {$target}\n";
+    echo "Backup : {$backup}\n";
+    echo "\nNEXT REQUIRED CHECK:\n";
+    echo "1. php -l {$target}\n";
+    echo "2. Review purchases_po_view.php cancel/revision handler.\n";
+    echo "3. Test OPEN -> IN_PRODUCTION -> READY -> CLOSED.\n";
+    echo "4. Confirm CANCEL cannot be done via quick status.\n";
+    echo "5. Confirm soft delete only works for DRAFT/CANCELLED.\n";
+} catch (Throwable $e) {
+    // Restore original on patch failure.
+    copy($backup, $target);
+    fwrite(STDERR, "PATCH FAILED: ".$e->getMessage()."\n");
+    fwrite(STDERR, "Original restored from backup.\n");
+    exit(10);
+}

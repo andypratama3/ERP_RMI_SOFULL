@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "title": "Panduan operasional ERP — per modul",
+  "description": "Prioritas: panduan dalam aplikasi (HTML di modul) bila tersedia; ringkasan Markdown sebagai pelengkap. Lihat field panduan_in_app di registry.",
+  "modules": [
+    {
+      "id": "crm_o2c",
+      "title": "CRM & Sales (O2C)",
+      "icon": "🧾",
+      "depts": "CRM, SYS",
+      "summary": "Order-to-Cash: DO, task WQS/SCM/ACT/FIN, Control Tower, KPI DO.",
+      "file": "crm_o2c.md"
+    },
+    {
+      "id": "wqs",
+      "title": "WQS — Gudang & Stok",
+      "icon": "📦",
+      "depts": "WQS, SYS",
+      "summary": "Stok, incoming, picking, alokasi, PR, adjustment, audit stok.",
+      "file": "wqs.md"
+    },
+    {
+      "id": "pqp_p2p",
+      "title": "PQP & Pembelian (P2P)",
+      "icon": "🛒",
+      "depts": "PQP, SCM, FIN, SYS",
+      "summary": "PR, PO, GR, AP, pembayaran, import, RFQ, forwarding.",
+      "file": "pqp_p2p.md",
+      "panduan_in_app": "/purchases/panduan.php"
+    },
+    {
+      "id": "scm_import",
+      "title": "SCM — Import & Logistik",
+      "icon": "🚢",
+      "depts": "SCM, PQP, WQS, SYS",
+      "summary": "Forwarding, CEISA/PIB, task pengiriman DO, vendor logistik.",
+      "file": "scm_import.md",
+      "panduan_in_app": "/purchases/panduan_import_tower.php"
+    },
+    {
+      "id": "fin",
+      "title": "FIN — Piutang & Pembayaran",
+      "icon": "💳",
+      "depts": "FIN, ACT, SYS",
+      "summary": "Task DO tahap pembayaran, AP, dashboard keuangan terkait.",
+      "file": "fin.md"
+    },
+    {
+      "id": "hrl",
+      "title": "HRL — People & Absensi/Payroll",
+      "icon": "🧑‍💼",
+      "depts": "HRL, SYS",
+      "summary": "Absensi enterprise, payroll, dokumen HRL, proses tower.",
+      "file": "hrl.md"
+    },
+    {
+      "id": "mpr_reg",
+      "title": "MPR & Reg Alkes",
+      "icon": "📋",
+      "depts": "MPR, PQP, HRL, SYS",
+      "summary": "MPR plans/dashboard; regulatory Alkes control tower.",
+      "file": "mpr_reg.md"
+    },
+    {
+      "id": "kpi_analytics",
+      "title": "KPI & Analytics",
+      "icon": "📈",
+      "depts": "ALL, SYS",
+      "summary": "KPI Center, snapshot, SLA DO; mutasi kebijakan khusus SYS.",
+      "file": "kpi_analytics.md"
+    },
+    {
+      "id": "master_data",
+      "title": "Master Data & Office",
+      "icon": "🏢",
+      "depts": "PQP, FIN, HRL, CRM, SYS",
+      "summary": "Master Data Center, office, produk, customer, vendor, config.",
+      "file": "master_data.md"
+    },
+    {
+      "id": "sys_itc",
+      "title": "SYS / ITC — Akses & Operasi",
+      "icon": "🔐",
+      "depts": "ITC, SYS",
+      "summary": "RBAC, Audit Log, Monitoring Center, Tools, sesi login, MFA.",
+      "file": "sys_itc.md"
+    },
+    {
+      "id": "fixed_asset",
+      "title": "Fixed Asset",
+      "icon": "🏷️",
+      "depts": "ACT, FIN, SYS",
+      "summary": "Aset tetap, depresiasi, audit aset.",
+      "file": "fixed_asset.md"
+    },
+    {
+      "id": "branch",
+      "title": "Branch (Kantor Cabang)",
+      "icon": "🏠",
+      "depts": "BRANCH",
+      "summary": "Dashboard cabang, DO, WQS ringkas, HRL process.",
+      "file": "branch.md"
+    }
+  ]
+}

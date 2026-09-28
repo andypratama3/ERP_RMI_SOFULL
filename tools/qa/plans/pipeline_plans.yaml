@@ -1,0 +1,301 @@
+state_version: 1
+plans:
+  - id: "stage00_staging_draft"
+    description: "Stage 00 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "00"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage01_staging_draft"
+    description: "Stage 01 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "01"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage02_staging_draft"
+    description: "Stage 02 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "02"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage03_staging_draft"
+    description: "Stage 03 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "03"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage04_staging_draft"
+    description: "Stage 04 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "04"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage05_staging_draft"
+    description: "Stage 05 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "05"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage06_staging_draft"
+    description: "Stage 06 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "06"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage07_staging_draft"
+    description: "Stage 07 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "07"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage08_staging_draft"
+    description: "Stage 08 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "08"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage09_staging_draft"
+    description: "Stage 09 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "09"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage10_staging_draft"
+    description: "Stage 10 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "10"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage11_staging_draft"
+    description: "Stage 11 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "11"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage12_staging_draft"
+    description: "Stage 12 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "12"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage13_staging_draft"
+    description: "Stage 13 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "13"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage14_staging_draft"
+    description: "Stage 14 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "14"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage15_staging_draft"
+    description: "Stage 15 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "15"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage16_staging_draft"
+    description: "Stage 16 — staging draft checks"
+    env: "staging"
+    type: "single"
+    stage: "16"
+    mode: "draft"
+    strict: "auto"
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    notes: "Safe default; no silent skip."
+  - id: "stage16_staging_strict"
+    description: "Stage 16 — staging strict gate"
+    env: "staging"
+    type: "single"
+    stage: "16"
+    mode: "final"
+    strict: true
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+  - id: "prod_stage16_final"
+    description: "Stage 16 — Production Final Gate"
+    env: "production"
+    type: "single"
+    stage: "16"
+    mode: "final"
+    strict: true
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "full"
+    core_flows_profile: "read-only"
+    require_rfc: true
+    require_confirm: true
+    stop_on_fail: true
+  - id: "full_staging_00_16"
+    description: "Run Stage 00→16 sequential in staging (stop-on-fail), evidence per stage + 1 exec summary"
+    env: "staging"
+    type: "multi"
+    stages: ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16"]
+    mode: "draft"
+    strict: false
+    allow_autogen_whitelists: false
+    require_tools_base_url: true
+    release_verify_mode: "quick"
+    core_flows_profile: "normal"
+    require_rfc: false
+    require_confirm: false
+    stop_on_fail: true
+    per_stage_run_id_suffix: true
+    generate_plan_exec_summary: true

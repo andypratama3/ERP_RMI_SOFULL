@@ -1,0 +1,58 @@
+---
+description: ERP_RMI_SOFULL — Coding standards & consistency
+alwaysApply: true
+---
+
+# Coding Standards — ERP_RMI_SOFULL
+
+## Database
+
+- **Use PDO** via `rmi_db_pdo()` — avoid mysqli for new code.
+- **Prepared statements only** — never interpolate user input into SQL.
+  ```php
+  // BAD
+  $q = $pdo->query("SELECT * FROM t WHERE id = '$id'");
+  // GOOD
+  $st = $pdo->prepare("SELECT * FROM t WHERE id = ?");
+  $st->execute([$id]);
+  ```
+- For `IN (...)` clauses, build placeholders: `implode(',', array_fill(0, count($ids), '?'))` then `execute($ids)`.
+
+## XSS / Output Escaping
+
+- **Use `rmi_h()`** for all dynamic output (HTML, attributes).
+- Do not define local `h()` — use `rmi_h()` from `_shared/helpers.php`.
+- Escape before output: `<?= rmi_h($value) ?>` or `echo rmi_h($row['field']);`
+
+## Security
+
+- **CSRF**: Use `verify_csrf()` for POST forms; include `csrf_token()` in forms.
+- **Input validation**: Validate and cast (`(int)`, `trim()`, `preg_match`) before use.
+- **Auth**: Use `require_login()`, `require_any_permission()` from `master/auth.php`.
+- **RBAC vs SYS (dua lapisan):** `*.VIEW` / `rbac_require()` = buka halaman. **Mutasi kebijakan / master berbahaya** = level **SYS** lewat `_shared/rmi_sys_gate.php` (`rmi_is_sys_session()`, `auth_is_sys()`). Jangan mengandalkan `*.EDIT` generik sebagai satu-satunya gate. Lihat `docs/KPI_SYS_GOVERNANCE.md`.
+
+## Naming
+
+- **Files**: `snake_case` (e.g. `sales_do.php`, `master_products.php`).
+- **Classes**: `PascalCase` (e.g. `DashboardDetailService`).
+- **Functions**: `snake_case`; shared helpers use `rmi_` prefix (e.g. `rmi_h()`, `rmi_db_pdo()`).
+
+## Bootstrap
+
+- **Dashboards**: Use `_dashboard_bootstrap.php` or `_shared/bootstrap.php`.
+- **API**: Use `_shared/bootstrap.php` or module-specific bootstrap.
+- **Auth**: `require_once __DIR__ . '/../master/auth.php'` for pages needing login.
+
+## Strict Types
+
+- Add `declare(strict_types=1);` to new and refactored PHP files.
+
+## Config
+
+- Prefer `config-db.php` or `.env` for DB credentials.
+- Use `rmi_env()` for env vars; avoid hardcoded URLs.
+- Base URL: set `APP_URL` or `TOOLS_BASE_URL_INTERNAL` in `.env`; tools use `tools_default_base_url()`.
+
+## Verification
+
+Setelah perbaikan, tambahkan langkah pengecekan di `README.md` (bagian "Langkah Pengecekan") agar user bisa memverifikasi perubahan.

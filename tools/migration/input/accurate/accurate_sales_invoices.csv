@@ -1,0 +1,2 @@
+No,InvoiceNo,InvoiceDate,CustomerNo,WarehouseCode,NetAmount,TaxAmount,Currency,Status
+1,SI-ACC-0001,2026-01-06,ACCCUST01,BGR,200000,22000,IDR,POSTED

@@ -1,0 +1,2 @@
+source_id,receipt_no,receipt_date,invoice_no,customer_code,amount,currency,method,note
+1,RC-0001,2026-01-08,SI-0001,CUST001,111000,IDR,BANK,Payment full invoice SI-0001

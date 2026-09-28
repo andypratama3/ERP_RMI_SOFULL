@@ -1,0 +1,4 @@
+manufacture_code,manufacture_name,brand_name,origin_type,country,city,address,phone,email,pic_name,pic_position,pic_phone,pic_email,bank_name,bank_account_name,bank_account_number,bank_swift_code,bank_iban,bank_currency,website,status
+MNF001,Manufacture Satu,Brand Satu,Import,China,Suzhou,Alamat principal 1,0215550001,mnf001@example.com,Andi,Sales Manager,081200000003,andi@example.com,ABC Bank,PT Manufacture Satu,1234567890,ABCIDJA,ID1234567890,IDR,https://example.com,active
+MNF002,Manufacture Dua,Brand Dua,Local,Indonesia,Bogor,Alamat principal 2,02515550002,mnf002@example.com,Budi,Director,081200000004,budi@example.com,DEF Bank,PT Manufacture Dua,2233445566,,ID9988776655,IDR,https://example.org,active
+MNF003,Manufacture Tiga,Brand Tiga,Import,Germany,Berlin,Alamat principal 3,030123456,mnf003@example.com,Citra,Procurement Lead,081200000005,citra@example.com,GHI Bank,PT Manufacture Tiga,9988776655,GHIIDEBB,DE1122334455,EUR,https://example.net,inactive

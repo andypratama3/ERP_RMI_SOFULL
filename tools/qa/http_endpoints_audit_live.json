@@ -1,0 +1,13 @@
+{
+  "state_version": "audit_live_v1",
+  "endpoints": [
+    "/api/v1/health.php",
+    "/master/login.php",
+    "/tools/index.php",
+    "/dashboards/index.php",
+    "/master/index.php",
+    "/sales/index.php",
+    "/purchases/index.php",
+    "/stock/index.php"
+  ]
+}

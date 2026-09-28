@@ -1,0 +1,84 @@
+diff --git a/tools/ops/_lib/ops_helpers.php b/tools/ops/_lib/ops_helpers.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tools/ops/_lib/ops_helpers.php
+@@ -0,0 +1,260 @@
+++Add shared helpers for masking, safe JSON contract read/write, trend generation, and SVG sparkline rendering.
++
+diff --git a/tools/ops/generate_ops_snapshot.php b/tools/ops/generate_ops_snapshot.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tools/ops/generate_ops_snapshot.php
+@@ -0,0 +1,130 @@
+++Add daily source-of-truth snapshot writer and executive summary state refresh.
++
+diff --git a/tools/ops/generate_weekly_ops_report.php b/tools/ops/generate_weekly_ops_report.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tools/ops/generate_weekly_ops_report.php
+@@ -0,0 +1,190 @@
+++Add deterministic weekly JSON/MD report generation and pointer update.
++
+diff --git a/tools/ops/generate_ops_trend.php b/tools/ops/generate_ops_trend.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tools/ops/generate_ops_trend.php
+@@ -0,0 +1,40 @@
+++Add 7d/30d trend state file generator.
++
+diff --git a/tools/ops/evaluate_alerts.php b/tools/ops/evaluate_alerts.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tools/ops/evaluate_alerts.php
+@@ -0,0 +1,290 @@
+++Add strict severity rules, throttle state, and auto-open/merge findings.
++
+diff --git a/tools/ops/executive_ops_summary.php b/tools/ops/executive_ops_summary.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tools/ops/executive_ops_summary.php
+@@ -0,0 +1,190 @@
+++Add admin-only one-page summary with print CSS and inline SVG trend charts.
++
+diff --git a/tools/ops/findings.php b/tools/ops/findings.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tools/ops/findings.php
+@@ -0,0 +1,230 @@
+++Add admin findings management UI (OPEN/IN_PROGRESS/RESOLVED) with POST+CSRF.
++
+diff --git a/tools/ops/mutation_hardening_audit.php b/tools/ops/mutation_hardening_audit.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/tools/ops/mutation_hardening_audit.php
+@@ -0,0 +1,145 @@
+++Add static hardening scan and write OPS hardening markdown report.
++
+diff --git a/tools/index.php b/tools/index.php
+index 2222222..3333333 100644
+--- a/tools/index.php
++++ b/tools/index.php
+@@ -80,6 +80,8 @@
+++Register Ops Monitoring links and render ops alert banner.
++
+diff --git a/tools/tools_access_matrix.php b/tools/tools_access_matrix.php
+index 4444444..5555555 100644
+--- a/tools/tools_access_matrix.php
++++ b/tools/tools_access_matrix.php
+@@ -12,6 +12,8 @@
+++Add RBAC entries for ops executive summary and findings.
++
+diff --git a/docs/governance/* b/docs/governance/*
+new file mode 100644
+--- /dev/null
++++ b/docs/governance/*
+@@
+++Add OPS specs, runbook, Synology scheduler guide, SLA owners map, and testplan.

@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+set -eu
+
+GRADLE_VERSION="8.8"
+DIST_NAME="gradle-${GRADLE_VERSION}-bin.zip"
+DIST_URL="https://services.gradle.org/distributions/${DIST_NAME}"
+ROOT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+CACHE_DIR="${ROOT_DIR}/.gradle-wrapper-cache"
+DIST_DIR="${CACHE_DIR}/gradle-${GRADLE_VERSION}"
+
+if [ ! -d "${DIST_DIR}" ]; then
+  mkdir -p "${CACHE_DIR}"
+  ARCHIVE_PATH="${CACHE_DIR}/${DIST_NAME}"
+  if [ ! -f "${ARCHIVE_PATH}" ]; then
+    if command -v curl >/dev/null 2>&1; then
+      curl -fsSL "${DIST_URL}" -o "${ARCHIVE_PATH}"
+    elif command -v wget >/dev/null 2>&1; then
+      wget -q "${DIST_URL}" -O "${ARCHIVE_PATH}"
+    else
+      echo "ERROR: curl/wget tidak tersedia untuk download Gradle." >&2
+      exit 1
+    fi
+  fi
+  unzip -q -o "${ARCHIVE_PATH}" -d "${CACHE_DIR}"
+fi
+
+exec "${DIST_DIR}/bin/gradle" -p "${ROOT_DIR}" "$@"

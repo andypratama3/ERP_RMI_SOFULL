@@ -1,0 +1,205 @@
+# Tools Doctor Report
+
+- Generated: 2026-03-10T16:45:05+07:00
+- Mode: check
+- Overall: FAIL
+- Critical: 1
+
+## Findings
+
+- [WARN] tools/_shared/app_root_guard.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/_shared/cli_capability.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/_shared/cli_capability.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/_shared/safe_io.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/_shared/tools_path_policy.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/_shared/workspace_lock.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/audit/audit_center.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/audit/run_audit_center.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/backup_manager.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/backup_now.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/backup_verify.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/cek_funnel_ready.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/cek_workspace_path.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/change/rfc_list.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/change/rfc_new.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/change/rfc_view.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/ci/kpi_improvement.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/ci/postmortem_list.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/ci/postmortem_new.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/compliance/evidence_export.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/compliance/evidence_index.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/compliance/handover_final_pack.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/compliance/verify_evidence_pack.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/compliance/verify_handover_final_pack.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/cron/audit_live_cron.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/cron/audit_live_cron.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/dev/ban_non_ascii_paths.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/check_crm_submitted_do.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/check_transaction_status.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/cyrillic_fix.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/db_diag.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/lock_app_root.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/php_driver_check.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/scan_cyrillic.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/verify_app_root.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/verify_clean_room.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/verify_help_map.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/verify_includes.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/verify_routes.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dev/verify_sop_links.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/diagrams/generate_diagrams.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/diagrams/generate_diagrams.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/diagrams/lib/graph_build.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/diagrams/lib/parse_php.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/diagrams/lib/render_dot.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/diagrams/lib/render_dot.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/diagrams/lib/sanitize.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/diagrams/lib/scan.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/diagrams/lib/svg_stamp.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/diagrams/lib/write_evidence.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/dr/backup_db.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/dr/backup_db.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/dr/dr_log.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/dr/restore_db.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/dr/restore_db.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/e2e_trail_runner.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/enterprise_audit.php: MISSING_CSRF — POST handler may need CSRF verification
+- [WARN] tools/index.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/migration/migrate.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/nas/assert_app_root.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/nas/check_db_config.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/nas/debug_blank.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/nas/fix_admin_role.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/nas/fix_admin_role.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/ops/alert_engine.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/alert_engine.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/ops/alerts.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/ops/build_audit_exec_summary.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/build_executive_ops_summary.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/build_executive_ops_summary.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/ops/build_ops_metrics.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/control_center.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/ops/evaluate_alerts.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/executive_ops_summary.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/ops/generate_executive_summary.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/generate_fix_backlog.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/generate_fix_backlog_trend.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/generate_ops_score_trend.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/generate_ops_snapshot.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/generate_ops_trend.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/generate_weekly_ops_report.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/module_governance_tracker.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/ops/mutation_hardening_audit.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/ops_freshness_check.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/refresh_control_center.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/ops/snapshot_fix_backlog.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/snapshot_ops_score.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/update_alerting_policy.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/ops/validate_alerting_policy.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/validate_executive_summary.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/validate_ops_thresholds.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/weekly_ops_report.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/ops/weekly_ops_report.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/perf/cleanup_runner.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/perf/perf_baseline.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/perf/perf_budget.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/pwa/generate_icons.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/_shared/audit_schema_detect.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/all_checks_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/audit_live_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/chat_api_smoke_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/chat_schema_smoke_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/chat_smoke.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/check_company_sitemap.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/contract_check_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/cutover_checks_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/dashboard_role_smoke.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/dashboard_role_smoke_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/erp_hardening_triage_web.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/evidence_pack_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/generate_plan_one_pager.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/hypercare_checkpoint_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/hypercare_summary_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/manifest_lock_suggest.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/mobile_api_contract_check.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/mobile_api_contract_check_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/mobile_api_smoke.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/mobile_api_smoke_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/mobile_auth_policy_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/mobile_master_policy_smoke.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/mobile_negative_auth_test.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/negative_tests_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/no_cyrillic_guard.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/plans/run_plan.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/run_pipeline_final.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/sales_tracking_checks_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/sales_tracking_smoke.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/sales_tracking_smoke_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/signoff_ops_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/signoff_verdict_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/smoke_http.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/smoke_http_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/smoke_pwa.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/smoke_tools_dashboard.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/testsprite_gate.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/tools_dashboard_smoke_web.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/qa/validate_plan_exec_summary.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/qa/validate_stage_assets.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rbac_verify_config.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/release/deploy_size_audit.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/release/deploy_size_audit_runner.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/release/generate_manifest_from_zip.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/release/generate_release_notes.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/release/generate_release_notes.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/release/generate_release_notes_skeleton.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/release/go_live_readiness_one_click.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/release/go_live_readiness_one_click.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/release/make_deploy_zip.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/release/make_deploy_zip.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/release/release_artifacts.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/release/release_artifacts.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/release/release_gate.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/release/release_gate.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/release/release_notes.php: MISSING_ADMIN_GUARD — Web page may need admin guard
+- [WARN] tools/release/verify_all_release_packs.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/release/verify_release_pack.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/repo_health_gaps.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/restore.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/restore_now.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/rfc/collect_rfc_usage.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_approve.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_check_required.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_create.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_dashboard.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/rfc/rfc_download.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/rfc/rfc_index_scan.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_quality_lint.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_quality_lint.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/rfc/rfc_status_set.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_summary.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_validate.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/rfc/rfc_view.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_chat_migration_104.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_120.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_144.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_147.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_149.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_150.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_151.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_152.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_153.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_migration_154.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_wqs_incoming_migration_102.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_wqs_incoming_migration_102_cli.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/run_wqs_stock_migration_125.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [WARN] tools/test/php_mobile_router.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/tools_access_helpers.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/tools_access_matrix.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/tools_remote_check.php: MISSING_BOOTSTRAP — File may need tools bootstrap include
+- [WARN] tools/uat_smoke.php: SHELL_IN_WEB — Web page uses shell_exec/exec; consider HTTP/state read
+- [CRITICAL] tools/cron/audit_live_cron.php: LINT_FAIL — PHP Parse error:  syntax error, unexpected token "*" in /volume4/web/ERP_RMI_SOFULL/tools/cron/audit_live_cron.php on line 5  Parse error: syntax error, unexpected token "*" in /volume4/web/ERP_RMI_SOFULL/tools/cron/audit_live_cron.php on line 5 Errors parsing /volume4/web/ERP_RMI_SOFULL/tools/cron/audit_live_cron.php
+
+## Next Actions
+
+1. Fix CRITICAL findings (lint, path leak, shell disabled).
+2. Run `php tools/qa/tools_doctor.php --check` to verify.

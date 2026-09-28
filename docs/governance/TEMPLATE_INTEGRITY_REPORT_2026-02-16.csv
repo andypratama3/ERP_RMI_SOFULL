@@ -1,0 +1,8 @@
+file_path,check_status,details
+data_migration/templates/IMPORT_TEMPLATE_PACK_UPLOAD_READY.xlsx,PASS,sheets=9; missing=none
+data_migration/templates/IMPORT_TEMPLATE_PACK_UPLOAD_STRICT.xlsx,PASS,sheets=9; missing=none
+data_migration/templates/master_products_template_upload_ready.csv,PASS,rows=4; header_cols=5; expected_cols=5
+data_migration/templates/master_customers_template_upload_ready.csv,PASS,rows=4; header_cols=11; expected_cols=11
+data_migration/templates/master_vendors_template_upload_ready.csv,PASS,rows=4; header_cols=8; expected_cols=8
+data_migration/templates/master_manufactures_template_upload_ready.csv,PASS,rows=4; header_cols=21; expected_cols=21
+data_migration/templates/master_employees_template_upload_ready.csv,PASS,rows=4; header_cols=17; expected_cols=17

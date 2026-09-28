@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Template Memo Keputusan Go-Live</title>
+  <style>
+    :root {
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #d1d5db;
+      --brand: #0f766e;
+      --paper-max: 920px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font: 14px/1.5 Arial, Helvetica, sans-serif;
+      background: #f3f4f6;
+    }
+    .paper {
+      max-width: var(--paper-max);
+      margin: 24px auto;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      padding: 28px 34px 26px;
+    }
+    .doc-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--brand);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .org {
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+      color: #0b3f3a;
+    }
+    h2 {
+      margin: 20px 0 8px;
+      font-size: 16px;
+      color: #1f2937;
+    }
+    p { margin: 6px 0; }
+    ul, ol { margin: 8px 0 8px 18px; padding: 0; }
+    li { margin: 4px 0; }
+    .meta, .checklist, .sign-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+    .meta td, .checklist th, .checklist td, .sign-table th, .sign-table td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .meta td:first-child, .checklist th, .sign-table th {
+      background: #f9fafb;
+      font-weight: 600;
+    }
+    .meta td:first-child { width: 220px; }
+    .sig-space { height: 56px; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border: 1px dashed #9ca3af;
+      background: #f9fafb;
+      color: #374151;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .small { color: var(--muted); font-size: 12px; }
+    .paraf-box {
+      margin-top: 10px;
+      border: 1px dashed #9ca3af;
+      padding: 8px;
+      display: inline-block;
+      font-size: 12px;
+      color: #4b5563;
+      min-width: 220px;
+      text-align: center;
+    }
+    .placeholder { color: #6b7280; font-style: italic; }
+
+    @media print {
+      @page { size: A4; margin: 14mm 12mm 14mm; }
+      body { background: #fff; }
+      .paper {
+        max-width: none;
+        margin: 0;
+        border: none;
+        padding: 0;
+      }
+      .print-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        font-size: 10px;
+        color: #6b7280;
+        border-top: 1px solid #d1d5db;
+        padding-top: 4px;
+      }
+      .page-break { page-break-before: always; }
+      .no-break { page-break-inside: avoid; }
+      .paraf-box { float: right; }
+    }
+  </style>
+</head>
+<body>
+  <div class="paper">
+    <header class="doc-header">
+      <div>
+        <div class="org">[Nama Perusahaan]</div>
+        <h1>Template Memo Keputusan Go-Live</h1>
+      </div>
+      <div class="small">
+        <div><strong>Dokumen:</strong> GO_LIVE_DECISION_MEMO_TEMPLATE_ID</div>
+        <div><strong>Proyek:</strong> <span class="placeholder">[Nama Proyek]</span></div>
+        <div><strong>Tanggal:</strong> <span class="placeholder">[YYYY-MM-DD]</span></div>
+        <div><strong>Status:</strong> <span class="badge">GO / NO-GO / GO Bersyarat</span></div>
+      </div>
+    </header>
+
+    <section class="no-break">
+      <h2>1) Ringkasan Eksekutif</h2>
+      <p class="placeholder">
+        [Isi ringkasan 3-5 kalimat tentang hasil uji, readiness, dan rekomendasi eksekutif.]
+      </p>
+      <div class="paraf-box">Paraf Reviewer Halaman 1</div>
+    </section>
+
+    <section class="no-break">
+      <h2>2) Informasi & Bukti Utama</h2>
+      <table class="meta">
+        <tr><td>Lingkungan Verifikasi</td><td><span class="placeholder">[STAGING/UAT]</span></td></tr>
+        <tr><td>Run ID Utama</td><td><span class="placeholder">[run_id_1, run_id_2, ...]</span></td></tr>
+        <tr><td>Laporan Validasi</td><td><span class="placeholder">[nama_file_report]</span></td></tr>
+        <tr><td>Backup Pra-eksekusi</td><td><span class="placeholder">[lokasi file backup + checksum]</span></td></tr>
+      </table>
+    </section>
+
+    <section class="no-break">
+      <h2>3) Gate Checklist Sebelum Go-Live</h2>
+      <table class="checklist">
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th>Checklist</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Data & Accounting</td><td>Rekonsiliasi data inti lulus</td><td><span class="placeholder">Siap / Tidak</span></td></tr>
+          <tr><td>Data & Accounting</td><td>Bukti backup + hash tersedia</td><td><span class="placeholder">Siap / Tidak</span></td></tr>
+          <tr><td>Security & Governance</td><td>Audit trail, SOP, runbook tersedia</td><td><span class="placeholder">Siap / Tidak</span></td></tr>
+          <tr><td>Operasional</td><td>Freeze window disetujui</td><td><span class="placeholder">Siap / Tidak</span></td></tr>
+          <tr><td>Operasional</td><td>War-room dan PIC on-call ditetapkan</td><td><span class="placeholder">Siap / Tidak</span></td></tr>
+          <tr><td>Deploy</td><td>Rehearsal produksi selesai</td><td><span class="placeholder">Siap / Tidak</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="page-break"></div>
+
+    <section class="no-break">
+      <h2>4) Risiko Utama & Mitigasi</h2>
+      <ul>
+        <li><strong>Risiko 1:</strong> <span class="placeholder">[deskripsi]</span> - <strong>Mitigasi:</strong> <span class="placeholder">[aksi]</span></li>
+        <li><strong>Risiko 2:</strong> <span class="placeholder">[deskripsi]</span> - <strong>Mitigasi:</strong> <span class="placeholder">[aksi]</span></li>
+        <li><strong>Risiko 3:</strong> <span class="placeholder">[deskripsi]</span> - <strong>Mitigasi:</strong> <span class="placeholder">[aksi]</span></li>
+      </ul>
+      <div class="paraf-box">Paraf Reviewer Halaman 2</div>
+    </section>
+
+    <section class="no-break">
+      <h2>5) Rencana Eksekusi Hari H (Ringkas)</h2>
+      <ol>
+        <li><span class="placeholder">[Langkah 1]</span></li>
+        <li><span class="placeholder">[Langkah 2]</span></li>
+        <li><span class="placeholder">[Langkah 3]</span></li>
+        <li><span class="placeholder">[Langkah 4]</span></li>
+        <li><span class="placeholder">[Langkah 5]</span></li>
+      </ol>
+    </section>
+
+    <section class="no-break">
+      <h2>6) Persetujuan Manajemen (GO/NO-GO)</h2>
+      <table class="sign-table">
+        <thead>
+          <tr>
+            <th>Peran</th>
+            <th>Nama</th>
+            <th>Keputusan</th>
+            <th>Tanggal</th>
+            <th>Tanda Tangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Project Sponsor / Owner</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+          <tr><td>Finance Director / Lead</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+          <tr><td>Head of IT / DevOps</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+          <tr><td>Security Lead</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+          <tr><td>Project Manager</td><td></td><td>GO / NO-GO</td><td></td><td class="sig-space"></td></tr>
+        </tbody>
+      </table>
+      <p class="small">Catatan: isi placeholder sebelum final print/PDF.</p>
+    </section>
+
+    <footer class="print-footer">
+      TEMPLATE - GO_LIVE_DECISION_MEMO_TEMPLATE_ID_PRINT | Internal Use
+    </footer>
+  </div>
+</body>
+</html>

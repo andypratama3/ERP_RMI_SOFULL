@@ -1,0 +1,102 @@
+/* RMI Global Readability Overrides */
+/* Applies high-contrast styles for helper texts and form controls across pages */
+
+:root {
+  --rmi-muted: rgba(229, 231, 235, 0.9);
+  --rmi-contrast-bg: #ffffff;
+  --rmi-contrast-text: #111827;
+  --rmi-highlight-bg: rgba(148, 163, 184, 0.15);
+  --rmi-accent: #93c5fd;
+}
+
+/* Labels: high-contrast for dark backgrounds */
+label,
+.form-label {
+  color: #f9fafb !important;
+  font-weight: 600;
+}
+
+/* Ensure checkbox/radio labels and input group texts are readable */
+.card .form-label,
+.card label,
+.form-check-label,
+.input-group-text {
+  color: #f9fafb !important;
+}
+
+/* Keep helper texts readable but secondary */
+.form-text,
+small.form-text,
+.text-muted {
+  color: var(--rmi-muted) !important;
+  font-size: 12px;
+}
+
+.text-muted-small {
+  color: var(--rmi-muted) !important;
+  font-size: 12px;
+}
+
+.form-note {
+  display: block;
+  color: #e5e7eb;
+  background: var(--rmi-highlight-bg);
+  border-left: 3px solid var(--rmi-accent);
+  padding: 8px 10px;
+  border-radius: 4px;
+}
+
+/* Inputs/selects: white background and dark text for readability */
+.form-control,
+.form-select,
+textarea.form-control {
+  background-color: var(--rmi-contrast-bg);
+  border: 1px solid #c9d2df;
+  color: var(--rmi-contrast-text);
+}
+
+.form-control::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
+.form-control:focus,
+.form-select:focus,
+textarea.form-control:focus {
+  background-color: #ffffff;
+  color: #111827;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+.form-select option {
+  color: #111827;
+}
+
+/* Autofill fix to keep text readable */
+input.form-control:-webkit-autofill,
+input.form-control:-webkit-autofill:hover,
+input.form-control:-webkit-autofill:focus,
+textarea.form-control:-webkit-autofill,
+textarea.form-control:-webkit-autofill:hover,
+textarea.form-control:-webkit-autofill:focus,
+select.form-select:-webkit-autofill,
+select.form-select:-webkit-autofill:hover,
+select.form-select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #111827;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+  box-shadow: 0 0 0px 1000px #ffffff inset;
+}
+
+/* DataTables search/length inputs */
+div.dataTables_wrapper .dataTables_filter input {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #c9d2df !important;
+}
+
+div.dataTables_wrapper .dataTables_length select {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border: 1px solid #c9d2df !important;
+}

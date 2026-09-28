@@ -1,0 +1,2 @@
+# Deny all direct access to tests folder
+Require all denied

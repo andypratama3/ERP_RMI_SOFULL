@@ -1,0 +1,166 @@
+{
+  "version": 1,
+  "doc": {
+    "company_line": "Rizqullah Mediska Indonesia — Dokumen Resmi",
+    "title": "🏢 Struktur Organisasi",
+    "sub": "Susunan Divisi & Jabatan Perusahaan",
+    "number": "ORG-RMI-001",
+    "revision": "01",
+    "badge": "🏥 Distribusi & Importir Alat Kesehatan → Manufacture"
+  },
+  "vision": [
+    { "icon": "🎯", "label": "Visi", "text": "Menjadi perusahaan alat kesehatan terpercaya & terkemuka di Indonesia" },
+    { "icon": "🚀", "label": "Misi", "text": "Mendistribusikan alat kesehatan berkualitas ke seluruh wilayah Indonesia" },
+    { "icon": "🏢", "label": "Kantor", "text": "8 Cabang aktif — Jawa & Kalimantan" },
+    { "icon": "📦", "label": "Arah", "text": "Distribusi → Importir → Manufacture" }
+  ],
+  "legend": [
+    { "color": "#10b981", "label": "Keuangan" },
+    { "color": "#f59e0b", "label": "Supply Chain" },
+    { "color": "#3b82f6", "label": "Penjualan" },
+    { "color": "#ef4444", "label": "HR & Legal" },
+    { "color": "#8b5cf6", "label": "ITC" },
+    { "color": "#06b6d4", "label": "Cabang" },
+    { "color": "#6b7280", "label": "Future (Manufacture)", "dim": true }
+  ],
+  "director": {
+    "title": "Pimpinan Perusahaan",
+    "name": "Direktur Utama",
+    "sub": "Rizqullah Mediska Indonesia"
+  },
+  "divisions": [
+    {
+      "box_class": "div-fin",
+      "icon": "💰",
+      "title": "Keuangan & Akuntansi",
+      "code": "FIN · ACT",
+      "future": false,
+      "units": [
+        "Finance (AR/AP/GL)",
+        "Accounting & Tax",
+        "Fixed Asset",
+        "Bank Rekonsiliasi",
+        "Dashboard KPI"
+      ]
+    },
+    {
+      "box_class": "div-scm",
+      "icon": "🛒",
+      "title": "Supply Chain & Procurement",
+      "code": "PQP · SCM · WQS",
+      "future": false,
+      "units": [
+        "Purchasing (RFQ/PO)",
+        "Good Receipt (GR)",
+        "Forwarding & Impor",
+        "Warehouse & Stok",
+        "Stock Opname"
+      ]
+    },
+    {
+      "box_class": "div-sales",
+      "icon": "💼",
+      "title": "Penjualan & Marketing",
+      "code": "CRM · MPR",
+      "future": false,
+      "units": [
+        "CRM & Lead",
+        "Delivery Order (DO)",
+        "Sales Control Tower",
+        "Marketing Planning",
+        "Budget Realisasi"
+      ]
+    },
+    {
+      "box_class": "div-hrl",
+      "icon": "👥",
+      "title": "HR, Legal & Reg Alkes",
+      "code": "HRL",
+      "future": false,
+      "units": [
+        "Human Resource",
+        "Absensi & Payroll",
+        "Legal & Dokumen",
+        "Reg Alkes (BPOM)",
+        "HRL Process"
+      ]
+    },
+    {
+      "box_class": "div-itc",
+      "icon": "💻",
+      "title": "IT & Communication",
+      "code": "ITC",
+      "future": false,
+      "units": [
+        "Sistem ERP",
+        "Infrastruktur & NAS",
+        "Keamanan & MFA",
+        "User Management",
+        "Help Desk"
+      ]
+    },
+    {
+      "box_class": "div-mfg",
+      "icon": "🏭",
+      "title": "Produksi & QC",
+      "code": "MFG",
+      "future": true,
+      "future_caption": "🚀 Rencana ke depan",
+      "units": [
+        "R&D Produk",
+        "Quality Control",
+        "Produksi Alkes",
+        "Regulatory Affairs"
+      ]
+    }
+  ],
+  "branch_block": {
+    "title": "Jaringan Cabang (Branch)",
+    "subtitle": "8 Cabang Aktif — Jawa & Kalimantan",
+    "branches": [
+      { "code": "BGR", "city": "Bogor ⭐ HQ", "hq": true },
+      { "code": "BDG", "city": "Bandung", "hq": false },
+      { "code": "BKS", "city": "Bekasi", "hq": false },
+      { "code": "TGR", "city": "Tangerang", "hq": false },
+      { "code": "SMG", "city": "Semarang", "hq": false },
+      { "code": "SLO", "city": "Solo", "hq": false },
+      { "code": "JGY", "city": "Yogyakarta", "hq": false },
+      { "code": "KAL", "city": "Kalimantan", "hq": false }
+    ]
+  },
+  "notes": [
+    {
+      "title": "💡 Catatan Operasional",
+      "items": [
+        { "icon": "📌", "text": "Setiap cabang dipimpin Branch Manager yang bertanggung jawab ke Divisi masing-masing" },
+        { "icon": "📌", "text": "FIN di BGR (HQ) mengawasi laporan keuangan seluruh cabang" },
+        { "icon": "📌", "text": "WQS mengelola stok per cabang dengan transfer inter-office" },
+        { "icon": "📌", "text": "Budget marketing (MPR) wajib disetujui FIN sebelum dieksekusi" }
+      ]
+    },
+    {
+      "title": "🔐 Keamanan & Sistem",
+      "items": [
+        { "icon": "🔒", "text": "Semua akun ERP wajib aktifkan MFA (SOP-ITC-001)" },
+        { "icon": "🛡️", "text": "Akses dibatasi per role & departemen (RBAC)" },
+        { "icon": "💾", "text": "Backup otomatis harian ke Synology C2 (Cloud)" },
+        { "icon": "📊", "text": "Monitoring real-time via Executive Dashboard" }
+      ]
+    },
+    {
+      "title": "🚀 Roadmap Organisasi",
+      "items": [
+        { "icon": "✅", "text": "Fase 1: Distribusi & Impor (Sekarang)" },
+        { "icon": "🔄", "text": "Fase 2: Ekspansi cabang + sistem terintegrasi" },
+        { "icon": "🏭", "text": "Fase 3: Divisi Manufacture Alat Kesehatan" },
+        { "icon": "🌏", "text": "Fase 4: Ekspor produk ke ASEAN" }
+      ]
+    }
+  ],
+  "signatures": [
+    { "line": "Dibuat oleh", "label": "Divisi ITC", "dept": "Rizqullah Mediska Indonesia" },
+    { "line": "Diperiksa oleh", "label": "Divisi HRL", "dept": "Rizqullah Mediska Indonesia" },
+    { "line": "Disetujui oleh", "label": "Direktur Utama", "dept": "Rizqullah Mediska Indonesia" }
+  ],
+  "footer": "Rizqullah Mediska Indonesia • ORG-RMI-001"
+}

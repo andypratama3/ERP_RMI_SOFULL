@@ -1,0 +1,33 @@
+{
+  "state_version": "audit_live_v1",
+  "window_days_strict": 90,
+  "window_days_legacy_report": 3650,
+  "sample_size_per_doc": 200,
+  "backup_max_age_hours": 24,
+  "thresholds": {
+    "critical_fail_if": [
+      "tools_base_url_missing",
+      "smoke_http_fail_gt",
+      "contract_check_ok_false",
+      "unicode_guard_fail",
+      "volumes_path_detected",
+      "office_missing_in_doc_gt",
+      "depo_missing_in_stock_doc_gt",
+      "posted_gr_media_missing_gt",
+      "rbac_guest_can_access_tools",
+      "rbac_staff_can_access_admin",
+      "sales_tracking_checks_fail",
+      "finance_schema_guard_fail"
+    ],
+    "smoke_http_fail_gt": 0,
+    "office_missing_in_doc_gt": 0,
+    "depo_missing_in_stock_doc_gt": 0,
+    "posted_gr_media_missing_gt": 0,
+    "warning_if": [
+      "legacy_data_anomaly_count_gt",
+      "slow_endpoint_p95_ms_gt"
+    ],
+    "legacy_data_anomaly_count_gt": 0,
+    "slow_endpoint_p95_ms_gt": 2500
+  }
+}

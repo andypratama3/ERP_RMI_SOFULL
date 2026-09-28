@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOP Admin/ITC - Bootstrap Akun & Mapping Employee</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 32px; color: #111; line-height: 1.5; }
+    .wrap { max-width: 900px; margin: 0 auto; }
+    h1 { margin: 0 0 8px; font-size: 26px; }
+    h2 { margin-top: 20px; font-size: 18px; }
+    .meta { color: #555; margin-bottom: 14px; }
+    ul, ol { margin-top: 6px; }
+    .box { border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; background: #fafafa; }
+    code { background: #f2f2f2; padding: 1px 4px; border-radius: 4px; }
+    @media print {
+      body { margin: 12mm; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>SOP Singkat Admin/ITC - Bootstrap Akun & Mapping Employee</h1>
+    <div class="meta">
+      Dokumen operasional internal<br>
+      Tujuan: onboarding akun cepat dan terkontrol dari <code>master_departements</code>.
+    </div>
+
+    <h2>Prasyarat</h2>
+    <ul>
+      <li>Login sebagai <b>ADMIN</b> atau <b>SUPERADMIN</b> (untuk seed akun otomatis).</li>
+      <li>Data <code>master_departements</code> sudah tersedia dan status <b>active</b>.</li>
+      <li>Data <code>master_employees</code> tersedia untuk mapping holder.</li>
+    </ul>
+
+    <h2>Langkah 1 - Seed akun otomatis</h2>
+    <ol>
+      <li>Buka <code>master/master_system_login.php</code>.</li>
+      <li>Di panel kiri pilih section <b>Seed Akun dari Master Departements (Fase 3)</b>.</li>
+      <li>Isi <code>default_password</code> (atau default <code>1234</code>) lalu klik <b>Seed Akun Otomatis</b>.</li>
+    </ol>
+    <div class="box">
+      Hasil akun: <code>Mgr{DEPT}_{OFFICE}</code> dan <code>Staff{DEPT}_{OFFICE}</code>.<br>
+      Jika username sudah ada, sistem otomatis skip (idempotent).
+    </div>
+
+    <h2>Langkah 2 - Mapping holder employee</h2>
+    <ol>
+      <li>Di halaman yang sama, cari user lalu klik <b>Edit</b>.</li>
+      <li>Masuk ke section <b>Holder Employee (Akun Jabatan)</b>.</li>
+      <li>Isi <code>Employee Code</code>, opsional <code>Catatan</code>, lalu klik <b>Set Holder</b>.</li>
+      <li>Untuk melepas holder, klik <b>Clear Holder</b>.</li>
+    </ol>
+    <div class="box">
+      Alternatif massal: gunakan <b>Import Holder CSV</b><br>
+      Header wajib: <code>username,holder_employee_code</code><br>
+      Header opsional: <code>note</code>
+    </div>
+
+    <h2>Langkah 3 - Verifikasi & kontrol</h2>
+    <ol>
+      <li>Buka <code>master/account_readiness.php</code> untuk cek akun active yang belum lengkap assignment.</li>
+      <li>Buka <code>tools/review_kit_workspace.php?mode=single</code> untuk monitoring terpadu.</li>
+      <li>Cek jejak audit pada:
+        <ul>
+          <li><code>uploads/audit_logs/audit_master_system_login.log</code></li>
+          <li>Panel <b>Unified Module Audit Log</b> di <code>tools/review_kit_workspace.php</code></li>
+        </ul>
+      </li>
+    </ol>
+
+    <h2>Catatan Kontrol Akses</h2>
+    <ul>
+      <li>Seed akun otomatis hanya untuk <b>ADMIN/SUPERADMIN</b>.</li>
+      <li><b>ITC Manager</b> dibatasi untuk akun yang diperbolehkan kebijakan RBAC.</li>
+      <li>Seluruh aksi sensitif diproses via POST + verifikasi CSRF.</li>
+    </ul>
+  </div>
+</body>
+</html>

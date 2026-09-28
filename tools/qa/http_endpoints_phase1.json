@@ -1,0 +1,11 @@
+{
+  "phase": 1,
+  "description": "HTTP endpoints for Phase 1 - Stock Opname Mobile API",
+  "endpoints": [
+    {"method": "GET", "path": "/api/v1/mobile/stock/opname_list.php", "auth": true},
+    {"method": "GET", "path": "/api/v1/mobile/stock/opname_detail.php", "auth": true, "query": ["id"]},
+    {"method": "POST", "path": "/api/v1/mobile/stock/opname_create.php", "auth": true, "idempotency": true},
+    {"method": "POST", "path": "/api/v1/mobile/stock/opname_input_qty.php", "auth": true, "idempotency": true},
+    {"method": "POST", "path": "/api/v1/mobile/stock/opname_apply.php", "auth": true, "idempotency": true}
+  ]
+}

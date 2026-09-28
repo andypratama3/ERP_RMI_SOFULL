@@ -1,0 +1,20 @@
+entity,source_system,source_file,source_column,target_table,target_column,transform_rule,is_required,example
+COA,accurate,accurate_coa.csv,AccountNo,gl_accounts,code,trim+uppercase,yes,110101
+COA,accurate,accurate_coa.csv,AccountName,gl_accounts,name,trim,yes,Kas Besar
+COA,accurate,accurate_coa.csv,Type,gl_accounts,account_type,map ASSET/LIABILITY/EQUITY/REVENUE/EXPENSE,yes,ASSET
+TAX,legacy,tax_codes.csv,tax_code,master_tax,tax_code,trim+uppercase,yes,PPN11
+CUSTOMER,legacy,customers.csv,customer_code,master_customers,customers_code,trim+uppercase,yes,CUST001
+VENDOR,legacy,vendors.csv,vendor_code,master_vendors,vendors_code,trim+uppercase,yes,VEND001
+ITEM,legacy,items.csv,item_code,master_products,sku,trim+uppercase,yes,ITEM-001
+UNIT,legacy,units.csv,unit_code,master_units,unit_code,trim+uppercase,yes,PCS
+WAREHOUSE,legacy,warehouses.csv,warehouse_code,master_office,office_code,trim+uppercase,yes,WH01
+OPENING_GL,legacy,opening_gl.csv,amount,gl_journal_lines,dr_amount/cr_amount,sign split to DR/CR,yes,1000000
+OPENING_AR,legacy,opening_ar.csv,invoice_no,sales_do,do_code,trim,yes,AR-INV-001
+OPENING_AP,legacy,opening_ap.csv,invoice_no,purchases_invoice_ap,ap_code,trim,yes,AP-INV-001
+OPENING_STOCK,legacy,opening_stock.csv,qty_on_hand,wqs_stock,stock_qty,numeric normalize,yes,25
+SALES_INVOICE,accurate,accurate_sales_invoices.csv,InvoiceNo,sales_do,do_code,trim,yes,SI-0001
+SALES_PAYMENT,accurate,accurate_sales_receipts.csv,ReceiptNo,migration_sales_receipts,receipt_no,trim,yes,RC-0001
+PURCHASE_INVOICE,accurate,accurate_purchase_invoices.csv,InvoiceNo,purchases_invoice_ap,ap_code,trim,yes,PI-0001
+PURCHASE_PAYMENT,accurate,accurate_purchase_payments.csv,PaymentNo,purchases_payment_ap,pay_code,trim,yes,PP-0001
+GENERAL_JOURNAL,legacy,general_journal.csv,journal_no,gl_journal_headers,journal_no,trim,yes,GJ-0001
+INVENTORY_ADJ,legacy,inventory_adjustments.csv,qty_delta,wqs_stock_adjustments,delta_qty,numeric normalize,yes,-2

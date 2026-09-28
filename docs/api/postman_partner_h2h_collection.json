@@ -1,0 +1,38 @@
+{
+  "info": {
+    "name": "ERP RMI — Partner H2H (v1)",
+    "description": "Import ke Postman. Set variable `base_url` (mis. https://host/ERP_RMI_SOFULL) dan `api_key`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://localhost/ERP_RMI_SOFULL" },
+    { "key": "api_key", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "GET health",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "X-API-Key", "value": "{{api_key}}" }
+        ],
+        "url": "{{base_url}}/api/v1/partner/health.php"
+      }
+    },
+    {
+      "name": "POST order_create (placeholder body)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "X-API-Key", "value": "{{api_key}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customers_code\": \"\",\n  \"office_code\": \"BGR\",\n  \"do_date\": \"2026-03-11\",\n  \"external_order_id\": \"TEST-001\",\n  \"idempotency_key\": \"TEST-001\",\n  \"lines\": []\n}"
+        },
+        "url": "{{base_url}}/api/v1/partner/order_create.php"
+      }
+    }
+  ]
+}

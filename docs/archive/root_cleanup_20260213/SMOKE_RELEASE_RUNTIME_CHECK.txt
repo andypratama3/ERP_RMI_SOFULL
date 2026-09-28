@@ -1,0 +1,7 @@
+SMOKE RELEASE RUNTIME CHECK
+/tools/index.php|code=200|fatal_or_sqlstate=false|result=PASS
+/tools/health.php|code=200|fatal_or_sqlstate=false|result=PASS
+/tools/backup_manager.php|code=200|fatal_or_sqlstate=false|result=PASS
+/sales/crm_leads.php|code=200|fatal_or_sqlstate=false|result=PASS
+/purchases/purchases_po.php|code=200|fatal_or_sqlstate=false|result=PASS
+/stock/wqs_incoming.php|code=200|fatal_or_sqlstate=false|result=PASS

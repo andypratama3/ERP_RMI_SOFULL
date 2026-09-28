@@ -1,0 +1,12 @@
+{
+  "_note": "Edit via web: master/doc_numbering_edit.php (SYS only). Placeholder: {CATEGORY}=BMHP/ALKES/AKSESORIS, {OFFICE}=kode cabang, {DATE}=YYMMDD, {YEAR}=YYYY.",
+  "do":      "{CATEGORY}-{OFFICE}-{DATE}-",
+  "po":      "{CATEGORY}-PO-{OFFICE}-{DATE}-",
+  "pr":      "{CATEGORY}-PR-{OFFICE}-{DATE}-",
+  "ap":      "RMI-AP-{OFFICE}-{DATE}-",
+  "pay":     "RMI-PAY-{OFFICE}-{DATE}-",
+  "fap":     "RMI-FAP-{OFFICE}-{DATE}-",
+  "fpay":    "RMI-FPAY-{OFFICE}-{DATE}-",
+  "pib_pay": "RMI-PIB-PAY-{OFFICE}-{DATE}-",
+  "rfq":     "RFQ-{YEAR}-"
+}

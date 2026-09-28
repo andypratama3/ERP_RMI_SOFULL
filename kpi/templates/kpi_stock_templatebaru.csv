@@ -1,0 +1,2 @@
+month_ym,office_code,status,stock_value_available,stock_qty_available,unallocated_qty,allocation_sla_pct,expiring_90_value,expired_value,adjustment_count_mtd,adjustment_abs_qty_mtd,stock_note,source_stock
+2026-01,OFFICE1,DRAFT,0,0,0,0,0,0,0,0,,manual

@@ -1,0 +1,193 @@
+# PATCH: Framework Standardization — CDN to Local Vendor Assets
+# Date: 2026-02-09
+# Total files modified: 71 PHP files
+# New files: _shared/assets.php + 16 vendor assets + 2 migration tools + 2 reports
+#
+# This patch documents all CDN URL replacements performed.
+# Each file had its CDN references replaced with local vendor paths.
+#
+# ═══════════════════════════════════════════════════════════════════
+# REPLACEMENT MAP (applied to ALL affected files):
+# ═══════════════════════════════════════════════════════════════════
+#
+# --- CSS ---
+# - https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css
+# + <?= rmi_assets_base() ?>/public/assets/vendor/bootstrap/5.3.3/css/bootstrap.min.css?v=20260209
+#
+# - https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables/1.13.8/css/dataTables.bootstrap5.min.css?v=20260209
+#
+# - https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables/1.13.8/css/dataTables.bootstrap5.min.css?v=20260209
+#
+# - https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables/1.13.8/css/jquery.dataTables.min.css?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/css/buttons.dataTables.min.css?v=20260209
+#
+# --- JS ---
+# - https://code.jquery.com/jquery-3.7.1.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/jquery/3.7.1/jquery.min.js?v=20260209
+#
+# - https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/bootstrap/5.3.3/js/bootstrap.bundle.min.js?v=20260209
+#
+# - https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables/1.13.8/js/jquery.dataTables.min.js?v=20260209
+#
+# - https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables/1.13.8/js/dataTables.bootstrap5.min.js?v=20260209
+#
+# - https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables/1.13.8/js/jquery.dataTables.min.js?v=20260209
+#
+# - https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables/1.13.8/js/dataTables.bootstrap5.min.js?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/js/dataTables.buttons.min.js?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/js/buttons.bootstrap5.min.js?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/js/buttons.html5.min.js?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/js/buttons.print.min.js?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/js/dataTables.buttons.min.js?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/js/buttons.html5.min.js?v=20260209
+#
+# - https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/datatables-buttons/2.4.2/js/buttons.print.min.js?v=20260209
+#
+# - https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/jszip/3.10.1/jszip.min.js?v=20260209
+#
+# - https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/pdfmake/0.2.9/pdfmake.min.js?v=20260209
+#
+# - https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/pdfmake/0.2.9/vfs_fonts.js?v=20260209
+#
+# - https://cdn.jsdelivr.net/npm/pdfmake@0.2.7/build/pdfmake.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/pdfmake/0.2.9/pdfmake.min.js?v=20260209
+#
+# - https://cdn.jsdelivr.net/npm/pdfmake@0.2.9/build/pdfmake.min.js
+# + <?= rmi_assets_base() ?>/public/assets/vendor/pdfmake/0.2.9/pdfmake.min.js?v=20260209
+#
+# ═══════════════════════════════════════════════════════════════════
+# INJECTION: Each modified PHP file received this line near the top:
+# ═══════════════════════════════════════════════════════════════════
+#
+# + require_once __DIR__ . '/../_shared/assets.php'; // RMI asset loader
+#   (path varies by depth: ../, ../../, etc.)
+#
+# ═══════════════════════════════════════════════════════════════════
+# FILES AFFECTED (71):
+# ═══════════════════════════════════════════════════════════════════
+#
+# Module Layouts (7):
+#   mpr/_layout_top.php
+#   mpr/_layout_bottom.php
+#   hrl/_layout_top.php
+#   hrl/_layout_bottom.php
+#   hrl_process/_layout_top.php
+#   hrl_process/_layout_bottom.php
+#   Fixed_Asset/_inc/layout.php
+#
+# Master (17):
+#   master/master_manufactures.php
+#   master/master_employees.php
+#   master/master_payment_terms.php
+#   master/master_customers.php
+#   master/master_office.php
+#   master/master_tax.php
+#   master/master_emailcompany.php
+#   master/master_vendors.php
+#   master/master_user.php
+#   master/master_departements.php
+#   master/master_products.php
+#   master/master_products_package.php
+#   master/master_pricelist.php
+#   master/master_pricelist_sell.php
+#   master/master_system_login.php
+#   master/manufactures_docs.php
+#   master/products_media_view.php
+#
+# Sales/Stock/Purchases (21):
+#   sales/sales_do.php
+#   sales/sales_control_tower.php
+#   stock/wqs_allocation.php
+#   stock/wqs_stock.php
+#   stock/wqs_stock_adjustment.php
+#   stock/wqs_stock_audit.php
+#   stock/wqs_picking.php
+#   stock/wqs_incoming.php
+#   stock/wqs_pr.php
+#   stock/wqs_incoming_view.php
+#   stock/wqs_picking_view.php
+#   purchases/purchases_po.php
+#   purchases/purchases_forwarding_tasks.php
+#   purchases/purchases_forwarder_payment.php
+#   purchases/purchases_forwarder_invoice.php
+#   purchases/purchases_forwarder_quotes.php
+#   purchases/purchases_payment_ap.php
+#   purchases/purchases_invoice_ap.php
+#   purchases/purchases_ceisa_pib.php
+#   purchases/purchases_reports.php
+#   purchases/purchases_import_control_tower.php
+#
+# Other (26):
+#   master_system_config.php
+#   master/master_data.php
+#   master/master_products_doc.php
+#   master/master_system_config.php
+#   master/itc_reset_password.php
+#   stock/wqs_pr_view.php
+#   dashboards/quality/qc_complaint_dashboard.php
+#   dashboards/warehouse/wqs_dashboard.php
+#   dashboards/finance/ar_ap_cash_dashboard.php
+#   dashboards/regulatory/license_docs_dashboard.php
+#   dashboards/owner/exec_summary.php
+#   hrl_reg_alkes/reg_alkes.php
+#   hrl_reg_alkes/reg_alkes_control_tower.php
+#   hrl_reg_alkes/reg_alkes_sku_by_nie.php
+#   hrl_reg_alkes/reg_alkes_case.php
+#   purchases/purchases_ceisa_pib_view.php
+#   purchases/purchases_import_control_view.php
+#   purchases/purchases_invoice_ap_edit.php
+#   purchases/purchases_po_view.php
+#   purchases/purchases_gr.php
+#   purchases/fin_gl_auto.php
+#   purchases/stock_update_from_gr.php
+#   kpi/kpi_dashboard_daily.php
+#   kpi/kpi_dashboard_monthly.php
+#   absensi/admin/rekap.php
+#   Fixed_Asset/_inc/bootstrap.php
+#   _shared/rmi_layout.php
+#
+# ═══════════════════════════════════════════════════════════════════
+# VERSION STANDARDIZATION SUMMARY:
+# ═══════════════════════════════════════════════════════════════════
+#
+# DataTables:  1.13.6 → 1.13.8  (12 files upgraded)
+# Buttons:     2.4.1  → 2.4.2   (12 files upgraded)
+# pdfmake:     0.2.7  → 0.2.9   (21 files upgraded)
+# jQuery:      3.7.1  (unchanged, localized only)
+# Bootstrap:   5.3.3  (unchanged, localized only)
+# JSZip:       3.10.1 (unchanged, localized only)
+#
+# All CDN references eliminated from production code.
+# All assets now served from /public/assets/vendor/ with ?v=20260209 cache-bust.

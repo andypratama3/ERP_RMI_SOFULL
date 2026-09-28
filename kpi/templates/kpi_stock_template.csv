@@ -1,0 +1,2 @@
+month_ym,office_code,status,adjustment_stock_value,adjustment_stock_qty,adjustment_unallocated_qty,adjustment_allocation_sla_pct,adjustment_expiring_90_value,adjustment_expired_value,adjustment_count,adjustment_abs_qty,reason,checker_username
+2026-07,BGR,DRAFT,0,0,0,0,0,0,0,0,Koreksi resmi stok,MgrWQS

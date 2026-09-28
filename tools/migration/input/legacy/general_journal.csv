@@ -1,0 +1,3 @@
+source_id,journal_no,journal_date,line_no,account_code,debit,credit,memo
+1,GJ-0001,2026-01-12,1,110101,200000,0,Manual adjustment debit
+2,GJ-0001,2026-01-12,2,410101,0,200000,Manual adjustment credit

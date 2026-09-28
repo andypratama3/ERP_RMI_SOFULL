@@ -1,0 +1,2 @@
+source_id,invoice_no,invoice_date,customer_code,office_code,net_amount,tax_amount,currency,status
+1,SI-0001,2026-01-05,CUST001,BGR,100000,11000,IDR,POSTED

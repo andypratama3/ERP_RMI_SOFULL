@@ -1,0 +1,50 @@
+---
+description: Guard akun SYS, username valid, dan prosedur perubahan RBAC — wajib diikuti setiap sesi
+alwaysApply: true
+---
+
+# SYS Users & RBAC Guard — ERP_RMI_SOFULL
+
+## 5 Username SYS yang Valid (Tidak Boleh Diubah Tanpa Persetujuan Eksplisit)
+
+| Username | Role | Level | Dept | Fungsi |
+|---|---|---|---|---|
+| `admin` | `sys` | `SYS` | `SYS` | Akun sistem utama |
+| `superadmin` | `sys` | `SYS` | `SYS` | Akun sistem utama |
+| `RizqullahMediskaSYS` | `sys` | `SYS` | `SYS` | Akun owner |
+| `SmokeSYS_SYS` | `sys` | `SYS` | `SYS` | Akun smoke test admin |
+| `SmokeBRANCH_SYS` | `staff` | `STAFF` | `BRANCH` | Akun smoke test staff |
+
+## Larangan Keras (DILARANG tanpa persetujuan eksplisit user)
+
+- **DILARANG** menambah username baru ke daftar SYS di atas
+- **DILARANG** menambah username ke fallback login.php selain `admin` dan `superadmin`
+- **DILARANG** menambah role baru selain: `sys`, `manager`, `staff`
+- **DILARANG** menambah dept baru selain: `SYS`, `ACT`, `CRM`, `WQS`, `SCM`, `FIN`, `PQP`, `ITC`, `HRL`, `MPR`, `BRANCH`
+- **DILARANG** menambah logika redirect, guard, atau fallback baru tanpa konfirmasi
+
+## Prosedur Wajib Sebelum Eksekusi Perubahan
+
+Sebelum menulis kode apapun yang menyentuh auth/RBAC/user, AI **WAJIB** menyebut:
+
+1. **File yang akan diubah** — nama file dan baris berapa
+2. **Apa yang diubah** — sebelum vs sesudah
+3. **Alasannya** — kenapa perubahan ini diperlukan
+4. **Risikonya** — apa yang bisa rusak
+
+Baru eksekusi setelah user menyatakan setuju.
+
+## Aturan Konsistensi Username
+
+Format username operasional: `{Prefix}{Dept}_{OfficeCode}`
+- Prefix: `Mgr` (manager) atau `Staff` (staff) atau `Smoke` (test)
+- Dept: uppercase, sesuai daftar canonical
+- OfficeCode: `BGR`, `BDG`, `BKS`, `TGR`, `SLO`, `SMG`, `KAL`, `JGY`, `SYS`
+
+Contoh valid: `MgrCRM_BGR`, `StaffFIN_BKS`, `SmokeSYS_SYS`
+
+Username yang **tidak mengikuti format ini** (misal: `administrator`, `sys`, `smoke_admin`) = TIDAK VALID, jangan pernah ditambahkan.
+
+## Jika Ragu
+
+Tanya user terlebih dahulu. Jangan menambahkan sesuatu "untuk jaga-jaga" tanpa konfirmasi.

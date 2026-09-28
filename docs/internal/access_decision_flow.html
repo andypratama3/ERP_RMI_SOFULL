@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alur keputusan akses — Login × RBAC</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 960px; margin: 24px auto; padding: 0 16px; color: #1e293b; background: #f8fafc; }
+    h1 { font-size: 1.35rem; }
+    .note { font-size: 0.9rem; color: #64748b; margin: 12px 0 20px; line-height: 1.5; }
+    .svg-wrap { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; overflow: auto; }
+    .svg-wrap img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+    a { color: #2563eb; }
+    code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+  </style>
+</head>
+<body>
+  <h1>Alur keputusan akses — <code>master_system_login</code> × RBAC</h1>
+  <p class="note">
+    SVG di bawah = hasil render dari <code>docs/officepack/diagrams/DGM_Access_Decision_RBAC.dot</code> (Graphviz).
+    Dokumen teks + Mermaid: <a href="ACCESS_DECISION_FLOW.md">ACCESS_DECISION_FLOW.md</a>.
+    Di dalam ERP (setelah login): buka lewat <strong>Officepack viewer</strong> dengan path <code>diagrams/DGM_Access_Decision_RBAC.svg</code>.
+  </p>
+  <div class="svg-wrap">
+    <img src="../officepack/diagrams/DGM_Access_Decision_RBAC.svg" alt="Diagram alur keputusan akses ERP RMI — login dan RBAC" width="900" height="1200">
+  </div>
+  <p class="note" style="margin-top:20px">
+    Regenerasi dari repo root (perlu <code>dot</code> terpasang):<br>
+    <code>dot -Tsvg -o docs/officepack/diagrams/DGM_Access_Decision_RBAC.svg docs/officepack/diagrams/DGM_Access_Decision_RBAC.dot</code>
+  </p>
+</body>
+</html>

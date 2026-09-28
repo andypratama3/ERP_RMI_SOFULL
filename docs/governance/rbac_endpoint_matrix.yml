@@ -1,0 +1,705 @@
+---
+# RBAC Endpoint Matrix — ERP_RMI_SOFULL
+# Source: ERP_MENU_WORKFLOW_REFERENCE.md + RBAC_MATRIX_RMI.md
+# Generated: 2026-03-15
+# Consumed by: tools/qa/rbac_matrix_http_check.php
+#
+# HTTP code convention:
+#   guest: 302   (redirect to login — unauthenticated)
+#   authorized: 200  (or 302 for redirecting index pages)
+#   unauthorized: 403  (authenticated but no permission)
+#
+# Smoke accounts (seeded at test time):
+#   SmokeSYS_SYS    -> SYS dept, sys role, SYS level
+#   SmokeBRANCH_SYS -> BRANCH dept, staff role, STAFF level
+#   MgrFIN_BGR      -> FIN dept, manager role, MANAGER level + FIN Central Approver
+#   StaffFIN_BGR    -> FIN dept, staff role, STAFF level
+#   MgrFIN_BDG      -> FIN dept, manager role, MANAGER level (non-BGR, cannot approve outflow)
+#   StaffWQS_BGR    -> WQS dept, staff role, STAFF level
+#   StaffCRM_BGR    -> CRM dept, staff role, STAFF level
+#   MgrITC_BGR      -> ITC dept, manager role, MANAGER level
+
+meta:
+  base_project: "/volume4/web/ERP_RMI_SOFULL"
+  base_url_env: "TOOLS_BASE_URL_INTERNAL"
+  base_url_default: "http://10.10.60.20/ERP_RMI_SOFULL"
+  login_path: "/master/login.php"
+  spec_version: "2.0"
+
+smoke_accounts:
+  - username: SmokeSYS_SYS
+    password: "SmokePass#2026!"
+    role: sys
+    level: SYS
+    dept: SYS
+    label: "SYS (superadmin)"
+
+  - username: SmokeBRANCH_SYS
+    password: "SmokePass#2026!"
+    role: staff
+    level: STAFF
+    dept: BRANCH
+    label: "BRANCH staff"
+
+  - username: MgrFIN_BGR
+    password: "SmokePass#2026!"
+    role: manager
+    level: MANAGER
+    dept: FIN
+    label: "FIN Central Approver (MgrFIN_BGR)"
+
+  - username: StaffFIN_BGR
+    password: "SmokePass#2026!"
+    role: staff
+    level: STAFF
+    dept: FIN
+    label: "FIN Staff (cannot approve outflow)"
+
+  - username: MgrFIN_BDG
+    password: "SmokePass#2026!"
+    role: manager
+    level: MANAGER
+    dept: FIN
+    label: "FIN Manager non-BGR (cannot approve outflow)"
+
+  - username: StaffWQS_BGR
+    password: "SmokePass#2026!"
+    role: staff
+    level: STAFF
+    dept: WQS
+    label: "WQS Staff"
+
+  - username: StaffCRM_BGR
+    password: "SmokePass#2026!"
+    role: staff
+    level: STAFF
+    dept: CRM
+    label: "CRM Staff"
+
+  - username: MgrITC_BGR
+    password: "SmokePass#2026!"
+    role: manager
+    level: MANAGER
+    dept: ITC
+    label: "ITC Manager"
+
+endpoints:
+
+  # ── SECTION: MAIN (all departments) ───────────────────────────────────────
+
+  - id: MAIN_01
+    module: MAIN
+    label: "Dashboard Center"
+    path: /dashboards/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      MgrFIN_BGR: 200
+      StaffFIN_BGR: 200
+      StaffWQS_BGR: 200
+      StaffCRM_BGR: 200
+      MgrITC_BGR: 200
+
+  - id: MAIN_02
+    module: MAIN
+    label: "Internal Chat"
+    path: /chat/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      MgrFIN_BGR: 200
+      StaffCRM_BGR: 200
+
+  - id: MAIN_03
+    module: MAIN
+    label: "Help Center"
+    path: /docs/help_center.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      StaffCRM_BGR: 200
+
+  - id: MAIN_04
+    module: MAIN
+    label: "Quality Dashboard"
+    path: /dashboards/quality/qc_complaint_dashboard.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      StaffWQS_BGR: 200
+      StaffCRM_BGR: 403
+
+  - id: MAIN_05
+    module: MAIN
+    label: "Absensi"
+    path: /absensi/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      StaffCRM_BGR: 200
+      StaffWQS_BGR: 200
+
+  - id: MAIN_06
+    module: MAIN
+    label: "KPI Center"
+    path: /kpi/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      StaffCRM_BGR: 200
+      StaffWQS_BGR: 200
+
+  # ── SECTION: MASTER DATA ──────────────────────────────────────────────────
+
+  - id: MASTER_01
+    module: MASTER
+    label: "Master Data Center"
+    path: /master/index.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 403
+      MgrITC_BGR: 200
+      StaffCRM_BGR: 403
+
+  - id: MASTER_02
+    module: MASTER
+    label: "System Login (SYS only)"
+    path: /master/master_system_login.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 403
+      MgrFIN_BGR: 403
+      MgrITC_BGR: 403
+      StaffCRM_BGR: 403
+
+  - id: MASTER_03
+    module: MASTER
+    label: "System Config (SYS only)"
+    path: /master/master_system_config.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 403
+      MgrFIN_BGR: 403
+      MgrITC_BGR: 403
+
+  - id: MASTER_04
+    module: MASTER
+    label: "Nav Manager (SYS only)"
+    path: /master/nav_manager.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 403
+      MgrITC_BGR: 403
+
+  - id: MASTER_05
+    module: MASTER
+    label: "Company Bank Accounts"
+    path: /master/company_bank_accounts.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrFIN_BGR: 200
+      StaffFIN_BGR: 200
+      SmokeBRANCH_SYS: 403
+      StaffCRM_BGR: 403
+
+  # ── SECTION: CRM / SALES ──────────────────────────────────────────────────
+
+  - id: CRM_01
+    module: CRM
+    label: "Sales index (→ redirect dashboard)"
+    path: /sales/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    notes: "redirects 302 to sales_dashboard.php — SYS also gets 302"
+    roles:
+      SmokeSYS_SYS: 302
+      StaffCRM_BGR: 302
+      SmokeBRANCH_SYS: 302
+      StaffWQS_BGR: 403
+
+  - id: CRM_02
+    module: CRM
+    label: "Sales Dashboard"
+    path: /sales/sales_dashboard.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffCRM_BGR: 200
+      SmokeBRANCH_SYS: 200
+      StaffWQS_BGR: 403
+      MgrFIN_BGR: 403
+
+  - id: CRM_03
+    module: CRM
+    label: "Sales DO"
+    path: /sales/sales_do.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffCRM_BGR: 200
+      SmokeBRANCH_SYS: 200
+      StaffWQS_BGR: 200
+      MgrFIN_BGR: 200
+      MgrITC_BGR: 403
+
+  - id: CRM_04
+    module: CRM
+    label: "WQS DO Tasks"
+    path: /sales/wqs_do_tasks.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffWQS_BGR: 200
+      StaffCRM_BGR: 403
+      SmokeBRANCH_SYS: 403
+
+  # ── SECTION: PURCHASES / PQP ──────────────────────────────────────────────
+
+  - id: PQP_01
+    module: PQP
+    label: "Purchases index (→ redirect)"
+    path: /purchases/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    notes: "redirects 302 to purchases_dashboard.php"
+    roles:
+      SmokeSYS_SYS: 302
+      StaffCRM_BGR: 403
+      SmokeBRANCH_SYS: 302
+      StaffWQS_BGR: 302
+
+  - id: PQP_02
+    module: PQP
+    label: "Purchases Dashboard"
+    path: /purchases/purchases_dashboard.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      StaffWQS_BGR: 200
+      StaffCRM_BGR: 403
+      MgrITC_BGR: 403
+
+  - id: PQP_03
+    module: PQP
+    label: "Purchase Order"
+    path: /purchases/purchases_po.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      StaffWQS_BGR: 200
+      StaffCRM_BGR: 403
+      MgrFIN_BGR: 403
+
+  - id: PQP_04
+    module: PQP
+    label: "Invoice AP"
+    path: /purchases/purchases_invoice_ap.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrFIN_BGR: 200
+      StaffFIN_BGR: 200
+      SmokeBRANCH_SYS: 403
+      StaffWQS_BGR: 403
+
+  - id: PQP_05
+    module: PQP
+    label: "Payment AP — GET (view)"
+    path: /purchases/purchases_payment_ap.php
+    method: GET
+    risk: HIGH
+    cash_out: true
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrFIN_BGR: 200
+      StaffFIN_BGR: 200
+      SmokeBRANCH_SYS: 403
+      StaffCRM_BGR: 403
+      StaffWQS_BGR: 403
+      MgrITC_BGR: 403
+
+  - id: PQP_06
+    module: PQP
+    label: "Payment AP — POST approve (FIN Central only)"
+    path: /purchases/purchases_payment_ap.php
+    method: POST
+    action: create_pay
+    risk: HIGH
+    cash_out: true
+    fin_central_only: true
+    guest: 302
+    notes: "POST create_pay: only MgrFIN_BGR + SYS. All others 403."
+    roles:
+      SmokeSYS_SYS: 200
+      MgrFIN_BGR: 200
+      StaffFIN_BGR: 403
+      MgrFIN_BDG: 403
+      SmokeBRANCH_SYS: 403
+      StaffCRM_BGR: 403
+      StaffWQS_BGR: 403
+
+  - id: PQP_07
+    module: PQP
+    label: "GL Reversal Approvals — GET"
+    path: /purchases/gl_reversal_approvals.php
+    method: GET
+    risk: HIGH
+    cash_out: true
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrFIN_BGR: 200
+      StaffFIN_BGR: 200
+      SmokeBRANCH_SYS: 403
+      StaffWQS_BGR: 403
+
+  - id: PQP_08
+    module: PQP
+    label: "Import Control Tower"
+    path: /purchases/purchases_import_control_tower.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      StaffWQS_BGR: 200
+      StaffCRM_BGR: 403
+      MgrITC_BGR: 403
+
+  # ── SECTION: WQS / STOCK ──────────────────────────────────────────────────
+
+  - id: WQS_01
+    module: WQS
+    label: "Stock index (→ redirect)"
+    path: /stock/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    notes: "redirects to wqs_stock.php"
+    roles:
+      SmokeSYS_SYS: 302
+      StaffWQS_BGR: 302
+      MgrFIN_BGR: 403
+      StaffCRM_BGR: 403
+
+  - id: WQS_02
+    module: WQS
+    label: "WQS Dashboard"
+    path: /dashboards/warehouse/wqs_dashboard.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffWQS_BGR: 200
+      SmokeBRANCH_SYS: 200
+      StaffCRM_BGR: 403
+      MgrFIN_BGR: 403
+
+  - id: WQS_03
+    module: WQS
+    label: "Stock on Hand"
+    path: /stock/wqs_stock.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffWQS_BGR: 200
+      SmokeBRANCH_SYS: 200
+      MgrFIN_BGR: 403
+      StaffCRM_BGR: 403
+      MgrITC_BGR: 403
+
+  - id: WQS_04
+    module: WQS
+    label: "Purchase Request"
+    path: /stock/wqs_pr.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffWQS_BGR: 200
+      SmokeBRANCH_SYS: 200
+      MgrFIN_BGR: 403
+      StaffCRM_BGR: 403
+
+  - id: WQS_05
+    module: WQS
+    label: "Incoming"
+    path: /stock/wqs_incoming.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffWQS_BGR: 200
+      SmokeBRANCH_SYS: 200
+      MgrFIN_BGR: 403
+      StaffCRM_BGR: 403
+
+  - id: WQS_06
+    module: WQS
+    label: "Stock Adjustment (MANAGER only)"
+    path: /stock/wqs_stock_adjustment.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffWQS_BGR: 403
+      SmokeBRANCH_SYS: 403
+      MgrFIN_BGR: 403
+
+  - id: WQS_07
+    module: WQS
+    label: "Picking"
+    path: /stock/wqs_picking.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffWQS_BGR: 200
+      SmokeBRANCH_SYS: 200
+      MgrFIN_BGR: 403
+      StaffCRM_BGR: 403
+
+  - id: WQS_08
+    module: WQS
+    label: "Allocation"
+    path: /stock/wqs_allocation.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffWQS_BGR: 200
+      SmokeBRANCH_SYS: 200
+      MgrFIN_BGR: 403
+      StaffCRM_BGR: 403
+
+  # ── SECTION: HRL ──────────────────────────────────────────────────────────
+
+  - id: HRL_01
+    module: HRL
+    label: "HRL Docs"
+    path: /hrl/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    notes: "redirects to hrl_docs.php"
+    roles:
+      SmokeSYS_SYS: 302
+      StaffCRM_BGR: 403
+      SmokeBRANCH_SYS: 403
+
+  - id: HRL_02
+    module: HRL
+    label: "HRL Reg Alkes"
+    path: /hrl_reg_alkes/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      StaffCRM_BGR: 403
+      SmokeBRANCH_SYS: 403
+      StaffWQS_BGR: 403
+
+  - id: HRL_03
+    module: HRL
+    label: "HRL Process (all depts)"
+    path: /hrl_process/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 200
+      StaffCRM_BGR: 200
+      StaffWQS_BGR: 200
+      MgrFIN_BGR: 200
+
+  # ── SECTION: PAYROLL ──────────────────────────────────────────────────────
+
+  - id: PAY_01
+    module: PAYROLL
+    label: "Payroll"
+    path: /payroll/index.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrFIN_BGR: 200
+      StaffFIN_BGR: 200
+      SmokeBRANCH_SYS: 403
+      StaffCRM_BGR: 403
+      StaffWQS_BGR: 403
+
+  # ── SECTION: MPR ──────────────────────────────────────────────────────────
+
+  - id: MPR_01
+    module: MPR
+    label: "MPR index (dept-aware redirect)"
+    path: /mpr/index.php
+    method: GET
+    risk: LOW
+    guest: 302
+    notes: "MPR dept → mpr_dashboard; FIN dept → mpr_budget_fin; else 403"
+    roles:
+      SmokeSYS_SYS: 302
+      MgrFIN_BGR: 302
+      SmokeBRANCH_SYS: 403
+      StaffWQS_BGR: 403
+      StaffCRM_BGR: 403
+
+  # ── SECTION: FIXED ASSET ──────────────────────────────────────────────────
+
+  - id: ACT_01
+    module: FIXED_ASSET
+    label: "Fixed Asset"
+    path: /Fixed_Asset/index.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrFIN_BGR: 200
+      SmokeBRANCH_SYS: 403
+      StaffCRM_BGR: 403
+      StaffWQS_BGR: 403
+
+  # ── SECTION: SETTINGS (SYS / ITC only) ────────────────────────────────────
+
+  - id: SET_01
+    module: SETTINGS
+    label: "RBAC Center (SYS only)"
+    path: /rbac/index.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      SmokeBRANCH_SYS: 403
+      MgrFIN_BGR: 403
+      MgrITC_BGR: 403
+      StaffCRM_BGR: 403
+
+  - id: SET_02
+    module: SETTINGS
+    label: "Tools index (SYS + ITC can view)"
+    path: /tools/index.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrITC_BGR: 200
+      SmokeBRANCH_SYS: 403
+      MgrFIN_BGR: 403
+      StaffCRM_BGR: 403
+
+  - id: SET_03
+    module: SETTINGS
+    label: "Tools health (SYS only)"
+    path: /tools/health.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrITC_BGR: 403
+      SmokeBRANCH_SYS: 403
+      MgrFIN_BGR: 403
+
+  - id: SET_04
+    module: SETTINGS
+    label: "Tools backup_manager (SYS only)"
+    path: /tools/backup_manager.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrITC_BGR: 403
+      SmokeBRANCH_SYS: 403
+
+  - id: SET_05
+    module: SETTINGS
+    label: "Tools backup_schedule (SYS only)"
+    path: /tools/backup_schedule.php
+    method: GET
+    risk: HIGH
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrITC_BGR: 403
+      SmokeBRANCH_SYS: 403
+
+  - id: SET_06
+    module: SETTINGS
+    label: "Finance AR/AP Cash Dashboard (FIN Manager only)"
+    path: /dashboards/finance/ar_ap_cash_dashboard.php
+    method: GET
+    risk: MED
+    guest: 302
+    roles:
+      SmokeSYS_SYS: 200
+      MgrFIN_BGR: 200
+      StaffFIN_BGR: 403
+      SmokeBRANCH_SYS: 403
+      StaffCRM_BGR: 403

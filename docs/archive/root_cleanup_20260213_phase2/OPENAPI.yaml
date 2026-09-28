@@ -1,0 +1,960 @@
+openapi: 3.0.3
+info:
+  title: ERP_RMI_SOFULL API
+  version: 1.0.0
+  description: Minimal standardized API v1 spec
+servers:
+  - url: /ERP_RMI_SOFULL
+paths:
+  /api/v1/health:
+    get:
+      summary: Health check
+      tags: [System]
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkHealth'
+        '503':
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/v1/internal/bank_recon_summary.php:
+    get:
+      summary: Bank reconciliation summary by period
+      tags: [BankRecon]
+      parameters:
+        - in: query
+          name: period
+          required: true
+          schema:
+            type: string
+            example: "2026-02"
+      responses:
+        '200':
+          description: Internal summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /api/v1/internal/tax_invoice_status.php:
+    get:
+      summary: Tax invoice status by sales reference
+      tags: [TaxInvoice]
+      parameters:
+        - in: query
+          name: sales_ref
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tax status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /api/v1/internal/gl_summary.php:
+    get:
+      summary: GL summary and balancing status
+      tags: [GL]
+      parameters:
+        - in: query
+          name: date_from
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: GL summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /api/v1/internal/gl_journal_listing.php:
+    get:
+      summary: GL journal listing by filter
+      tags: [GL]
+      parameters:
+        - in: query
+          name: date_from
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: source_module
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: source_ref
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: per_page
+          required: false
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: GL journals
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /api/v1/internal/gl_trial_balance.php:
+    get:
+      summary: GL trial balance with filters and pagination
+      tags: [GL]
+      parameters:
+        - in: query
+          name: date_from
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: account_type
+          required: false
+          schema:
+            type: string
+            enum: [ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE]
+        - in: query
+          name: search
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: per_page
+          required: false
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Trial balance result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /api/v1/internal/gl_ledger.php:
+    get:
+      summary: General ledger by account with pagination
+      tags: [GL]
+      parameters:
+        - in: query
+          name: account_id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: date_from
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: per_page
+          required: false
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: Ledger result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /api/v1/internal/gl_enqueue_posting.php:
+    post:
+      summary: Enqueue async GL posting job
+      tags: [GL]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [module, event, source_ref, amount]
+              properties:
+                module:
+                  type: string
+                event:
+                  type: string
+                source_ref:
+                  type: string
+                amount:
+                  type: number
+                  format: float
+                description:
+                  type: string
+                run_at:
+                  type: string
+                  description: "YYYY-MM-DD or YYYY-MM-DD HH:MM:SS"
+      responses:
+        '201':
+          description: Job enqueued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '429':
+          description: Rate limit exceeded
+  /api/v1/internal/crm_leads_summary.php:
+    get:
+      summary: CRM leads funnel summary by period
+      tags: [CRM]
+      parameters:
+        - in: query
+          name: date_from
+          required: false
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: CRM funnel summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+  /api/v1/internal/crm_leads_listing.php:
+    get:
+      summary: CRM leads listing with filters and pagination
+      tags: [CRM]
+      parameters:
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: status
+          required: false
+          schema:
+            type: string
+            enum: [DRAFT, SUBMITTED, APPROVED, CLOSED, CANCELLED]
+        - in: query
+          name: priority
+          required: false
+          schema:
+            type: string
+            enum: [LOW, MEDIUM, HIGH]
+        - in: query
+          name: date_from
+          required: false
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          required: false
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: per_page
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: CRM leads list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+  /api/v1/internal/crm_lead_detail.php:
+    get:
+      summary: CRM lead detail with timeline logs
+      tags: [CRM]
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: CRM lead detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+  /api/v1/internal/crm_lead_action.php:
+    post:
+      summary: CRM lead workflow action (submit/approve/close/cancel)
+      tags: [CRM]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [id, action]
+              properties:
+                id:
+                  type: integer
+                action:
+                  type: string
+                  enum: [submit, approve, close, cancel]
+                cancel_reason:
+                  type: string
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Action processed (can be idempotent=true)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '409':
+          description: Invalid transition or concurrency conflict
+        '422':
+          description: Validation error
+  /api/v1/chat/channels.php:
+    get:
+      summary: List accessible channels and unread counters
+      tags: [Chat]
+      responses:
+        '200':
+          description: Chat channel list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiOkGeneric'
+    post:
+      summary: Channel actions (join/create_dm/create_channel)
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [join, create_dm, create_channel]
+                channel_id:
+                  type: integer
+                target_user_id:
+                  type: integer
+                name:
+                  type: string
+                is_private:
+                  type: integer
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Action success
+        '403':
+          description: Forbidden
+        '422':
+          description: Validation error
+  /api/v1/chat/messages.php:
+    get:
+      summary: Get channel messages with pagination and search
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: channel_id
+          required: true
+          schema:
+            type: integer
+        - in: query
+          name: before_id
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: after_id
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 30
+        - in: query
+          name: q
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Channel messages
+    post:
+      summary: Send message (text + optional attachments)
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [channel_id, message_text, csrf_token]
+              properties:
+                channel_id:
+                  type: integer
+                message_text:
+                  type: string
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Message sent
+        '403':
+          description: Forbidden
+        '429':
+          description: Rate limit exceeded
+  /api/v1/chat/read.php:
+    post:
+      summary: Mark channel as read
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [channel_id, last_read_message_id, csrf_token]
+              properties:
+                channel_id:
+                  type: integer
+                last_read_message_id:
+                  type: integer
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Mark read success
+  /api/v1/chat/users.php:
+    get:
+      summary: Mention autocomplete user search
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 8
+      responses:
+        '200':
+          description: Mention user candidates
+  /api/v1/chat/message_delete.php:
+    post:
+      summary: Soft delete message (ADMIN/SUPERADMIN only)
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [message_id, csrf_token]
+              properties:
+                message_id:
+                  type: integer
+                reason:
+                  type: string
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Message soft deleted
+        '403':
+          description: Forbidden
+  /api/v1/chat/attachment_download.php:
+    get:
+      summary: Download chat attachment (member only)
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: attachment_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Binary download
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+  /api/v1/chat/reaction.php:
+    post:
+      summary: Toggle emoji reaction on a message
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [message_id, emoji, csrf_token]
+              properties:
+                message_id:
+                  type: integer
+                emoji:
+                  type: string
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Reaction toggled
+  /api/v1/chat/typing.php:
+    get:
+      summary: Get active typing users in channel
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: channel_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Active typing users
+    post:
+      summary: Ping typing state
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [channel_id, csrf_token]
+              properties:
+                channel_id:
+                  type: integer
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Typing ping accepted
+  /api/v1/chat/pin.php:
+    post:
+      summary: Pin or unpin message
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [action, message_id, csrf_token]
+              properties:
+                action:
+                  type: string
+                  enum: [pin, unpin]
+                message_id:
+                  type: integer
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Pin state changed
+  /api/v1/chat/pins.php:
+    get:
+      summary: List pinned messages for channel
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: channel_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Pinned list
+  /api/v1/chat/emojis.php:
+    get:
+      summary: List allowed emoji set (default + custom)
+      tags: [Chat]
+      responses:
+        '200':
+          description: Emoji set
+  /api/v1/chat/thread.php:
+    get:
+      summary: Get thread messages from root message
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: message_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Thread messages
+  /api/v1/chat/presence.php:
+    get:
+      summary: Get channel member presence
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: channel_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Presence list
+    post:
+      summary: Update current user presence
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [status, csrf_token]
+              properties:
+                status:
+                  type: string
+                  enum: [ONLINE, AWAY, OFFLINE]
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Presence updated
+  /api/v1/chat/prefs.php:
+    get:
+      summary: Get current user preference for channel
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: channel_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Channel preference
+    post:
+      summary: Set current user preference for channel
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [channel_id, is_muted, notify_level, csrf_token]
+              properties:
+                channel_id:
+                  type: integer
+                is_muted:
+                  type: integer
+                notify_level:
+                  type: string
+                  enum: [ALL, MENTIONS, NONE]
+                mute_until:
+                  type: string
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Channel preference updated
+  /api/v1/chat/pin_policy.php:
+    post:
+      summary: Update channel pin policy (admin only)
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [channel_id, pin_policy, csrf_token]
+              properties:
+                channel_id:
+                  type: integer
+                pin_policy:
+                  type: string
+                  enum: [ADMIN_ONLY, MEMBER]
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: Pin policy updated
+  /api/v1/chat/acl.php:
+    get:
+      summary: Get per-channel ACL matrix (admin only)
+      tags: [Chat]
+      parameters:
+        - in: query
+          name: channel_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ACL matrix
+    post:
+      summary: Set per-channel ACL matrix (admin only)
+      tags: [Chat]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [channel_id, rows_json, csrf_token]
+              properties:
+                channel_id:
+                  type: integer
+                rows_json:
+                  type: string
+                csrf_token:
+                  type: string
+      responses:
+        '200':
+          description: ACL updated
+  /api/v1/chat/channels/{id}/messages:
+    get:
+      summary: Alias endpoint for channel messages (mapped internally)
+      tags: [Chat]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Channel messages
+    post:
+      summary: Alias endpoint for send message (mapped internally)
+      tags: [Chat]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Message sent
+  /api/v1/chat/channels/{id}/read:
+    post:
+      summary: Alias endpoint for mark read (mapped internally)
+      tags: [Chat]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Mark read success
+  /api/v1/chat/messages/{id}/delete:
+    post:
+      summary: Alias endpoint for soft delete (mapped internally)
+      tags: [Chat]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Message soft deleted
+components:
+  schemas:
+    ApiMeta:
+      type: object
+      properties:
+        request_id:
+          type: string
+        ts:
+          type: string
+          format: date-time
+    ApiErrorDetail:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ApiError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        data:
+          nullable: true
+        error:
+          $ref: '#/components/schemas/ApiErrorDetail'
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApiOkHealth:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+          properties:
+            app:
+              type: string
+            db:
+              type: string
+            env:
+              type: string
+        error:
+          nullable: true
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+    ApiOkGeneric:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [true]
+        data:
+          type: object
+        error:
+          nullable: true
+        meta:
+          $ref: '#/components/schemas/ApiMeta'

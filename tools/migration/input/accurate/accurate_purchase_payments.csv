@@ -1,0 +1,2 @@
+No,PaymentNo,PaymentDate,InvoiceNo,Amount,Currency,Method,BankName,ReferenceNo,Description
+1,PP-ACC-0001,2026-01-11,PI-ACC-0001,660000,IDR,BANK,BCA,TRX-ACC-001,Payment PI-ACC-0001

@@ -1,0 +1,9 @@
+RewriteEngine On
+
+<IfModule mod_headers.c>
+  Header always unset Permissions-Policy
+  Header always set Permissions-Policy "geolocation=(self)"
+</IfModule>
+
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

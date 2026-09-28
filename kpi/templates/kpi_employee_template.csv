@@ -1,0 +1,2 @@
+month_ym,dept_code,employee_id,status,tasks_done,productivity,quality,on_time_rate,errors,note
+2025-12,WQS,EMP-0001,DRAFT,0,0,0,0,0,""

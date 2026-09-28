@@ -1,0 +1,185 @@
+--- /mnt/data/work/ERP_RMI_SOFULL_src/ERP_RMI_SOFULL/_shared/rmi_layout.php	2026-01-28 23:22:00.000000000 +0000
++++ /mnt/data/work/ERP_RMI_SOFULL_PATCH/ERP_RMI_SOFULL/_shared/rmi_layout.php	2026-01-30 03:04:42.018299433 +0000
+@@ -369,6 +369,52 @@
+       border-radius:12px!important;
+     }
+ 
++
++    /* Assist UI (Help + Role Filter) */
++    .rmi-kbd{
++      display:inline-flex; align-items:center; justify-content:center;
++      padding: 1px 6px;
++      border-radius: 8px;
++      border: 1px solid rgba(255,255,255,0.16);
++      background: rgba(255,255,255,0.08);
++      font-size: 11px;
++      line-height: 1.4;
++      margin-left: 4px;
++    }
++    .rmi-rolefilter{
++      padding: 10px 12px;
++      border-radius: 16px;
++      border: 1px solid rgba(255,255,255,0.10);
++      background: rgba(255,255,255,0.04);
++    }
++    .rmi-help-box{
++      border:1px solid rgba(255,255,255,0.12);
++      background: rgba(255,255,255,0.06);
++      border-radius: 16px;
++      padding: 12px;
++    }
++    .rmi-help-box h6{ font-weight:800; margin:0 0 6px 0; }
++    .rmi-help-box ul{ padding-left: 18px; margin: 6px 0 0 0; }
++    .rmi-help-box li{ margin: 0 0 6px 0; }
++    .rmi-help-link{
++      display:inline-flex; gap:8px; align-items:center;
++      padding: 6px 10px;
++      border-radius: 12px;
++      border: 1px solid rgba(255,255,255,0.14);
++      background: rgba(255,255,255,0.06);
++      color: rgba(229,231,235,0.95);
++      text-decoration:none;
++      margin: 6px 6px 0 0;
++      font-size: 12px;
++    }
++    .rmi-help-link:hover{ background: rgba(255,255,255,0.10); color:#fff; }
++    .rmi-help-diagram{
++      width:100%;
++      border-radius: 14px;
++      border: 1px solid rgba(255,255,255,0.12);
++      margin-top: 10px;
++    }
++
+     /* Responsive: stack sidebar on small screens */
+     @media (max-width: 991.98px){
+       .rmi-shell{ flex-direction:column; }
+@@ -377,7 +423,7 @@
+     }
+   </style>
+ </head>
+-<body class="<?= htmlspecialchars($bodyClass) ?>">
++<body class="<?= htmlspecialchars($bodyClass) ?>" data-base-project="<?= htmlspecialchars($baseProject) ?>" data-user-role="<?= htmlspecialchars($role) ?>" data-user-level="<?= htmlspecialchars($level) ?>">
+ <div class="rmi-shell">
+   <aside class="rmi-sidebar">
+     <div class="rmi-brand">
+@@ -385,46 +431,72 @@
+       <div class="rmi-brand-sub">Unified Layout</div>
+     </div>
+ 
++
++    <?php
++      $isAdminUi = in_array($role, ['ADMIN','SUPERADMIN'], true) || in_array($level, ['ADMIN','SUPERADMIN'], true);
++    ?>
++    <div class="rmi-rolefilter mb-2">
++      <div class="small opacity-75 mb-1">Menu view</div>
++      <select id="rmiRoleView" class="form-select form-select-sm">
++        <option value="AUTO">Sesuai Role (<?= htmlspecialchars($role !== '' ? $role : 'USER') ?>)</option>
++        <option value="ALL">Semua Modul</option>
++        <?php if ($isAdminUi): ?>
++          <option value="CRM">CRM / Sales</option>
++          <option value="PQP">PQP / Purchases</option>
++          <option value="SCM">SCM / Import</option>
++          <option value="WQS">WQS / Warehouse</option>
++          <option value="FIN">FIN / Finance</option>
++          <option value="HRL">HRL / HR</option>
++          <option value="ACT">ACT / Asset</option>
++          <option value="ITC">ITC / IT</option>
++          <option value="MPR">MPR</option>
++          <option value="OWNER">OWNER</option>
++        <?php endif; ?>
++      </select>
++      <div class="form-text rmi-muted">Tip: Tekan <span class="rmi-kbd">F1</span> untuk bantuan halaman ini.</div>
++    </div>
++
+     <nav class="nav flex-column rmi-nav">
+       <div class="rmi-nav-section">MAIN</div>
+-      <a class="nav-link <?= ($activeKey==='dashboard'?'active':'') ?>" href="<?= $u['dashboard'] ?>">📊 Dashboards</a>
+-      <a class="nav-link <?= ($activeKey==='exec_summary'?'active':'') ?>" href="<?= $u['exec_summary'] ?>">🧭 Executive Summary</a>
+-      <a class="nav-link <?= ($activeKey==='quality'?'active':'') ?>" href="<?= $u['quality'] ?>">✅ Quality & Complaint</a>
++      <a class="nav-link <?= ($activeKey==='dashboard'?'active':'') ?>" data-roles="ALL" href="<?= $u['dashboard'] ?>">📊 Dashboards</a>
++      <a class="nav-link" data-roles="ALL" href="<?= $baseProject ?>/docs/help_center.php">❓ Help Center</a>
++      <a class="nav-link <?= ($activeKey==='exec_summary'?'active':'') ?>" data-roles="OWNER,ADMIN,SUPERADMIN" href="<?= $u['exec_summary'] ?>">🧭 Executive Summary</a>
++      <a class="nav-link <?= ($activeKey==='quality'?'active':'') ?>" data-roles="ALL" href="<?= $u['quality'] ?>">✅ Quality & Complaint</a>
+ 
+       <div class="rmi-nav-section">MASTER DATA</div>
+-      <a class="nav-link <?= ($activeKey==='master'?'active':'') ?>" href="<?= $u['master'] ?>">🏠 Master Data</a>
++      <a class="nav-link <?= ($activeKey==='master'?'active':'') ?>" data-roles="ITC,ADMIN,SUPERADMIN" href="<?= $u['master'] ?>">🏠 Master Data</a>
+ 
+       <div class="rmi-nav-section">CRM</div>
+-      <a class="nav-link <?= ($activeKey==='sales'?'active':'') ?>" href="<?= $u['sales'] ?>">🧾 Sales (CRM)</a>
++      <a class="nav-link <?= ($activeKey==='sales'?'active':'') ?>" data-roles="CRM,ADMIN,SUPERADMIN" href="<?= $u['sales'] ?>">🧾 Sales (CRM)</a>
+ 
+       <div class="rmi-nav-section">PQP</div>
+-      <a class="nav-link <?= ($activeKey==='purchases'?'active':'') ?>" href="<?= $u['purchases'] ?>">🛒 Purchases (PQP)</a>
++      <a class="nav-link <?= ($activeKey==='purchases'?'active':'') ?>" data-roles="PQP,SCM,ADMIN,SUPERADMIN" href="<?= $u['purchases'] ?>">🛒 Purchases (PQP)</a>
+ 
+       <div class="rmi-nav-section">WQS</div>
+-      <a class="nav-link <?= ($activeKey==='stock'?'active':'') ?>" href="<?= $u['stock'] ?>">📦 Stock (WQS)</a>
++      <a class="nav-link <?= ($activeKey==='stock'?'active':'') ?>" data-roles="WQS,ADMIN,SUPERADMIN" href="<?= $u['stock'] ?>">📦 Stock (WQS)</a>
+ 
+       <div class="rmi-nav-section">HRL</div>
+-      <a class="nav-link <?= ($activeKey==='hrl'?'active':'') ?>" href="<?= $u['hrl'] ?>">📚 HRL (Docs)</a>
+-      <a class="nav-link <?= ($activeKey==='hrl_process'?'active':'') ?>" href="<?= $u['hrl_process'] ?>">🔁 HRL Process</a>
+-      <a class="nav-link <?= ($activeKey==='hrl_reg_alkes'?'active':'') ?>" href="<?= $u['hrl_reg_alkes'] ?>">🧪 HRL Reg Alkes</a>
+-      <a class="nav-link <?= ($activeKey==='absensi'?'active':'') ?>" href="<?= $u['absensi'] ?>">⏱️ Absensi</a>
+-      <a class="nav-link <?= ($activeKey==='kpi'?'active':'') ?>" href="<?= $u['kpi'] ?>">📈 KPI Center</a>
++      <a class="nav-link <?= ($activeKey==='hrl'?'active':'') ?>" data-roles="HRL,ADMIN,SUPERADMIN" href="<?= $u['hrl'] ?>">📚 HRL (Docs)</a>
++      <a class="nav-link <?= ($activeKey==='hrl_process'?'active':'') ?>" data-roles="ALL" href="<?= $u['hrl_process'] ?>">🔁 HRL Process</a>
++      <a class="nav-link <?= ($activeKey==='hrl_reg_alkes'?'active':'') ?>" data-roles="HRL,ADMIN,SUPERADMIN" href="<?= $u['hrl_reg_alkes'] ?>">🧪 HRL Reg Alkes</a>
++      <a class="nav-link <?= ($activeKey==='absensi'?'active':'') ?>" data-roles="ALL" href="<?= $u['absensi'] ?>">⏱️ Absensi</a>
++      <a class="nav-link <?= ($activeKey==='kpi'?'active':'') ?>" data-roles="ALL" href="<?= $u['kpi'] ?>">📈 KPI Center</a>
+ 
+       <div class="rmi-nav-section">FIN</div>
+-      <a class="nav-link <?= ($activeKey==='payroll'?'active':'') ?>" href="<?= $u['payroll'] ?>">💰 Payroll</a>
++      <a class="nav-link <?= ($activeKey==='payroll'?'active':'') ?>" data-roles="FIN,HRL,ADMIN,SUPERADMIN" href="<?= $u['payroll'] ?>">💰 Payroll</a>
+       <?php if ($canFin): ?>
+-        <a class="nav-link <?= ($activeKey==='company_bank'?'active':'') ?>" href="<?= $u['company_bank'] ?>">🏦 Rekening Perusahaan</a>
++        <a class="nav-link <?= ($activeKey==='company_bank'?'active':'') ?>" data-roles="FIN,ADMIN,SUPERADMIN" href="<?= $u['company_bank'] ?>">🏦 Rekening Perusahaan</a>
+       <?php endif; ?>
+ 
+       <div class="rmi-nav-section">MPR</div>
+-      <a class="nav-link <?= ($activeKey==='mpr'?'active':'') ?>" href="<?= $u['mpr'] ?>">🧩 MPR</a>
++      <a class="nav-link <?= ($activeKey==='mpr'?'active':'') ?>" data-roles="MPR,FIN,OWNER,ADMIN,SUPERADMIN" href="<?= $u['mpr'] ?>">🧩 MPR</a>
+ 
+       <div class="rmi-nav-section">ACT</div>
+-      <a class="nav-link <?= ($activeKey==='fixed_asset'?'active':'') ?>" href="<?= $u['fixed_asset'] ?>">🏗️ Asset (ACT)</a>
++      <a class="nav-link <?= ($activeKey==='fixed_asset'?'active':'') ?>" data-roles="ACT,FIN,ADMIN,SUPERADMIN" href="<?= $u['fixed_asset'] ?>">🏗️ Asset (ACT)</a>
+ 
+       <div class="rmi-nav-section">SETTINGS</div>
+-      <a class="nav-link <?= ($activeKey==='rbac'?'active':'') ?>" href="<?= $u['rbac'] ?>">🔐 RBAC</a>
+-      <a class="nav-link <?= ($activeKey==='tools'?'active':'') ?>" href="<?= $u['tools'] ?>">🛠️ Tools</a>
++      <a class="nav-link <?= ($activeKey==='rbac'?'active':'') ?>" data-roles="ITC,ADMIN,SUPERADMIN" href="<?= $u['rbac'] ?>">🔐 RBAC</a>
++      <a class="nav-link <?= ($activeKey==='tools'?'active':'') ?>" data-roles="ITC,ADMIN,SUPERADMIN" href="<?= $u['tools'] ?>">🛠️ Tools</a>
+     </nav>
+ 
+     <div class="rmi-user">
+@@ -448,6 +520,8 @@
+         <?php endif; ?>
+       </div>
+       <div class="rmi-topbar-actions">
++        <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiHelpCanvas" aria-controls="rmiHelpCanvas">❓ Help <span class="rmi-kbd">F1</span></button>
++        <a class="btn btn-outline-light btn-sm" href="<?= $baseProject ?>/docs/help_center.php" target="_blank" rel="noopener">📚 Manual</a>
+         <?php if ($actionsHtml !== '') echo $actionsHtml; ?>
+       </div>
+     </div>
+@@ -464,7 +538,20 @@
+     </div><!-- /.rmi-content -->
+   </main>
+ </div><!-- /.rmi-shell -->
++
++<!-- Help Offcanvas (F1) -->
++<div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="rmiHelpCanvas" aria-labelledby="rmiHelpCanvasLabel">
++  <div class="offcanvas-header">
++    <h5 class="offcanvas-title" id="rmiHelpCanvasLabel">Bantuan Halaman Ini</h5>
++    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
++  </div>
++  <div class="offcanvas-body">
++    <div id="rmiHelpBody" class="small rmi-help-box">Memuat bantuan…</div>
++  </div>
++</div>
++
+ <script src="<?= $baseProject ?>/TEMPLATES/bootstrap.bundle.min.js"></script>
++<script src="<?= $baseProject ?>/_shared/rmi_assist.js"></script>
+ <?php if (trim($extraJs) !== ''): ?>
+ <?= $extraJs ?>
+ <?php endif; ?>

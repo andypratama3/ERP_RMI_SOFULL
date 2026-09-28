@@ -1,0 +1,134 @@
+---
+description: Template standar SOP ERP_RMI_SOFULL — detail, menyeluruh, konsisten
+globs: docs/officepack/dept_training/SOP*.html
+alwaysApply: false
+---
+
+# SOP Template — ERP_RMI_SOFULL
+
+## Prinsip: Detail, Menyeluruh, Konsisten
+
+- **Detail**: Setiap langkah spesifik, urut, bisa diikuti user baru tanpa asumsi.
+- **Menyeluruh**: Semua halaman modul tercakup; tidak ada gap.
+- **Konsisten**: Struktur, format, dan gaya sama di semua SOP.
+
+---
+
+## 1. Struktur Wajib (Urutan Tetap)
+
+Setiap SOP modul ERP wajib mengikuti struktur berikut:
+
+### 1.1 Header
+- **Meta badge**: Doc Code + Versi + Tanggal (mis. `HRL-HR-SOP-ERP-CRM-001` v3.1 — 2026-03)
+- **Judul H1**: Nama SOP
+- **Paragraf intro**: Satu kalimat tujuan + konteks perusahaan (Rizqullah Mediska Indonesia)
+
+### 1.2 Tabel Metadata
+```html
+<table>
+  <tr><th>Doc Code</th><td>HRL-HR-SOP-ERP-XXX-001</td></tr>
+  <tr><th>Judul</th><td>...</td></tr>
+  <tr><th>Versi</th><td>v3.1</td></tr>
+  <tr><th>Owner</th><td>CRM / FIN / WQS / MPR / dll</td></tr>
+  <tr><th>Berlaku sejak</th><td>YYYY-MM</td></tr>
+  <tr><th>Review cycle</th><td>12 bulan</td></tr>
+</table>
+```
+
+### 1.3 Doc Code Konvensi
+- **Modul ERP**: `HRL-HR-SOP-ERP-XXX-001` (CRM, WQS, SCM, ACT, FIN, HRL, PQP, ITC)
+- **Proses Bisnis**: `HRL-HR-SOP-XXX-001` (MPR, Reg Alkes, Stock Opname, dll)
+- **Governance**: `HRL-LEGAL-SOP-*` atau `HRL-HR-SOP-*` sesuai owner
+
+---
+
+## 2. Section Bernomor (H2)
+
+| No | Section | Isi | Wajib |
+|----|---------|-----|-------|
+| 1 | **Tujuan** | Paragraf jelas: apa yang dicapai, siapa bertanggung jawab | ✓ |
+| 2 | **Ruang Lingkup** | Daftar file/path (`<code>path/file.php</code>`) — lengkap semua halaman modul | ✓ |
+| 3 | **Prasyarat** | Login, role, data master, kondisi sebelum mulai | ✓ |
+| 4 | **Langkah Operasional Umum** | 4–6 langkah high-level (ordered list) | ✓ |
+| 5 | **SOP Detail per Halaman** | Subsection H3 per halaman dengan `id="nama_file"` | ✓ |
+| 6 | **Kontrol dan Kepatuhan** | Aturan wajib, compliance |
+| 7 | **Bukti Operasional** | Simpan bukti, dashboard, audit log |
+| 8 | **Eskalasi** | Anomali → PIC + ITC; risiko keamanan → containment |
+| 9 | **Referensi** | SOP terkait, Manual, Help Center |
+
+---
+
+## 3. SOP Detail per Halaman (Section 5)
+
+Setiap halaman modul wajib punya subsection:
+
+```html
+<h3 id="nama_file">nama_file.php — Judul Singkat</h3>
+<p><strong>Tujuan:</strong> Deskripsi singkat (1–2 kalimat).</p>
+<ol>
+  <li>Langkah 1 — spesifik</li>
+  <li>Langkah 2 — spesifik</li>
+  <li>Langkah 3 — spesifik</li>
+  <li>Langkah 4 — spesifik</li>
+  <li>Langkah 5 — jika perlu</li>
+</ol>
+<p><strong>Tips:</strong> Catatan praktis, link ke halaman lain, scope (BRANCH/ADMIN).</p>
+```
+
+### 3.1 Aturan Minimum
+- **Minimal 4 langkah** per halaman (kecuali halaman view-only sederhana).
+- **Langkah**: Spesifik, urut, bisa diikuti user baru tanpa asumsi.
+- **id**: Nama file tanpa `.php` (untuk deep link `#nama_file`).
+- **Tips**: Kondisi khusus, validasi, scope (BRANCH/ADMIN), link ke halaman terkait.
+
+### 3.2 Format Langkah
+- Gunakan kata kerja: "Buka", "Pilih", "Input", "Submit", "Kirim ke", "Validasi".
+- Contoh baik: "Buka <code>/mpr/mpr_plans.php</code>. Input customer, PIC, tanggal, budget. Submit untuk approval."
+- Contoh buruk: "Buat plan." (terlalu singkat)
+
+---
+
+## 4. Sinkronisasi dengan help_sop_map.json
+
+- **steps** di `help_sop_map.json` harus **selaras** dengan langkah di SOP Detail per Halaman.
+- Jika SOP diupdate, update juga `help_sop_map.json` untuk path yang sama.
+- Gunakan `path` tanpa leading slash: `/mpr/mpr_plans.php` di map.
+
+---
+
+## 5. SOP Proses Bisnis (MPR, Reg Alkes, dll)
+
+Untuk SOP yang fokus proses (bukan per-halaman), bisa gunakan:
+
+- **Section 4**: Langkah Operasional dengan sub-section 4.1, 4.2, 4.3 (per proses).
+- **Tetap**: Tujuan, Ruang Lingkup, Prasyarat, Kontrol, Eskalasi, Referensi.
+- **Ruang Lingkup**: Tetap daftar semua file yang tercakup.
+
+---
+
+## 6. Style Konsisten
+- Font: Arial, Helvetica, sans-serif
+- `code`: background #eef2ff, border #c7d2fe
+- Table: border 1px, th background #f1f5f9
+- Badge: background #eef2ff atau #fef3c7, font 11px
+- `@media print { body { margin: 12mm; } }`
+
+---
+
+## 7. Checklist Verifikasi Baru/Edit SOP
+
+- [ ] Semua halaman modul tercakup di Ruang Lingkup
+- [ ] Semua halaman punya subsection di Section 5 (atau 4.1–4.n untuk proses)
+- [ ] Minimal 4 langkah per halaman (kecuali view-only)
+- [ ] Langkah spesifik, urut, bisa diikuti user baru
+- [ ] help_sop_map.json sudah diupdate untuk path terkait
+- [ ] SOP Index sudah mendaftarkan SOP baru
+- [ ] Doc Code format konsisten
+
+---
+
+## 8. Aturan Penambahan SOP Baru
+1. Wajib versi print-ready `.html`
+2. Doc code di header (HRL-HR-SOP-*, HRL-LEGAL-SOP-*)
+3. Daftarkan di `docs/help_sop_map.json`
+4. Daftarkan di SOP Index (A/B/C)

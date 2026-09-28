@@ -1,0 +1,4 @@
+customers_code,customers_name,category,segment,city,office_code,address,phone,email,npwp,status
+CUST001,Customer Satu,RS,Hospital,Bogor,BGR,Jl Contoh 1,081200000001,csatu@example.com,01.234.567.8-999.000,active
+CUST002,Customer Dua,Klinik,Clinic,Jakarta,JKT,Jl Contoh 2,081200000002,cdua@example.com,02.234.567.8-999.000,active
+CUST003,Customer Tiga,Distributor,B2B,Surabaya,SBY,Jl Contoh 3,081200000003,ctiga@example.com,03.234.567.8-999.000,inactive

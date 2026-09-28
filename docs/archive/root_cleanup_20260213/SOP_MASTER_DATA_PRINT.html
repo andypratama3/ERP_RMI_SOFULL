@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOP Master Data ERP_RMI_SOFULL</title>
+  <style>
+    :root { color-scheme: light; }
+    body { font-family: Arial, Helvetica, sans-serif; margin: 28px; color: #111827; line-height: 1.5; }
+    h1, h2, h3 { margin: 0 0 10px; color: #0f172a; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 18px; margin-top: 20px; }
+    h3 { font-size: 15px; margin-top: 14px; }
+    p, li { font-size: 13px; }
+    ul, ol { margin-top: 6px; }
+    .meta { font-size: 12px; color: #334155; margin-bottom: 10px; }
+    .box { border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
+    code { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 4px; padding: 1px 4px; font-size: 12px; }
+    @media print { body { margin: 14mm; } }
+  </style>
+</head>
+<body>
+  <h1>SOP Master Data ERP_RMI_SOFULL</h1>
+  <div class="meta">Dokumen operasional master data untuk Admin/ITC/Owner - versi 2026-02-11</div>
+
+  <p>Tujuan: memastikan pengelolaan master data berjalan konsisten, aman, dan auditable untuk semua modul transaksi ERP.</p>
+
+  <h2>Ruang Lingkup</h2>
+  <p>SOP ini berlaku untuk menu pada <code>master/index.php</code> dan halaman master terkait:</p>
+  <ul>
+    <li><code>master/master_products.php</code></li>
+    <li><code>master/master_customers.php</code></li>
+    <li><code>master/master_vendors.php</code></li>
+    <li><code>master/master_office.php</code></li>
+    <li><code>master/master_departements.php</code></li>
+    <li><code>master/master_system_login.php</code></li>
+    <li><code>master/account_readiness.php</code></li>
+    <li><code>master/master_tax.php</code></li>
+    <li><code>master/master_payment_terms.php</code></li>
+    <li><code>master/master_pricelist.php</code> dan <code>master/master_pricelist_sell.php</code></li>
+    <li><code>master/company_bank_accounts.php</code></li>
+  </ul>
+
+  <h2>Prasyarat Akses</h2>
+  <ul>
+    <li>Operator wajib login.</li>
+    <li>Perubahan master data hanya oleh role berwenang sesuai guard halaman.</li>
+    <li>Semua mutasi dilakukan via POST + CSRF valid.</li>
+  </ul>
+
+  <h2>SOP Inti (Wajib)</h2>
+
+  <h3>1) Validasi sebelum perubahan</h3>
+  <ol>
+    <li>Pastikan data yang akan diubah benar (kode, nama, office, status).</li>
+    <li>Cek potensi duplikasi data di tabel list/search.</li>
+    <li>Untuk data berisiko tinggi (office code, tax, bank account), lakukan verifikasi dua pihak.</li>
+  </ol>
+
+  <h3>2) Eksekusi perubahan</h3>
+  <ol>
+    <li>Lakukan tambah/edit/nonaktif sesuai kebutuhan bisnis.</li>
+    <li>Hindari delete permanen bila data sudah terpakai transaksi; gunakan inactive jika memungkinkan.</li>
+    <li>Simpan perubahan dan pastikan notifikasi sukses muncul.</li>
+  </ol>
+
+  <h3>3) Verifikasi dampak</h3>
+  <ol>
+    <li>Uji minimal 1 alur transaksi terkait (contoh: Sales/PO/DO).</li>
+    <li>Pastikan referensi master muncul benar di dropdown/lookup lintas modul.</li>
+    <li>Jika ada ketidaksesuaian runtime, cek <code>tools/review_kit_workspace.php?mode=single</code> dan <code>tools/readiness_audit.php</code>.</li>
+  </ol>
+
+  <h3>4) Audit dan kontrol</h3>
+  <ol>
+    <li>Pantau audit gabungan di <code>tools/review_kit_workspace.php</code> (Unified Module Audit Log).</li>
+    <li>Untuk akun login, audit detail ada di <code>uploads/audit_logs/audit_master_system_login.log</code>.</li>
+    <li>Simpan bukti perubahan penting (tanggal, operator, alasan perubahan).</li>
+  </ol>
+
+  <h2>SOP Khusus per Domain Master</h2>
+  <div class="box">
+    <p><b>Office & Departements:</b> jaga konsistensi kode referensi lintas modul, import hanya template resmi, dan cek dampak geofence ke Absensi.</p>
+    <p><b>System Login & Readiness:</b> akun ACTIVE wajib punya department + office_code; gunakan <code>master/account_readiness.php</code> untuk remediation.</p>
+    <p><b>Produk/Customer/Vendor:</b> hindari hapus data yang sudah dipakai transaksi; utamakan nonaktif.</p>
+    <p><b>Keuangan Master:</b> perubahan tax/term/pricelist/bank account mengikuti DoA/SoD dan wajib uji dampak transaksi.</p>
+  </div>
+
+  <h2>Checklist Harian Admin Master Data</h2>
+  <ol>
+    <li>Cek issue readiness akun di <code>master/account_readiness.php</code>.</li>
+    <li>Cek anomali audit di <code>tools/review_kit_workspace.php</code>.</li>
+    <li>Cek konsistensi office/dept/master referensi utama.</li>
+    <li>Pastikan tidak ada perubahan master kritikal tanpa approval.</li>
+  </ol>
+
+  <h2>Eskalasi</h2>
+  <ul>
+    <li>Mismatch frontend/backend: cek source data, migration source, dan runtime DB.</li>
+    <li>Temuan keamanan/akses: eskalasi ke Security/ITC dan hold mutasi bila perlu.</li>
+    <li>Temuan audit kritikal: hentikan perubahan lanjutan sampai root cause ditemukan.</li>
+  </ul>
+</body>
+</html>
+

@@ -1,0 +1,2 @@
+source_id,invoice_no,invoice_date,due_date,vendor_code,office_code,total_amount,tax_amount,currency,status
+1,PI-0001,2026-01-06,2026-01-30,VEND001,BGR,550000,50000,IDR,UNPAID

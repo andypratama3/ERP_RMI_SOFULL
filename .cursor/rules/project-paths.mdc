@@ -1,0 +1,21 @@
+---
+description: ERP_RMI_SOFULL — NAS-only, no Mac/MAMP
+alwaysApply: true
+---
+
+# Project Paths — ERP_RMI_SOFULL
+
+## Base Project (NAS Only)
+
+**Proyek berjalan di NAS. Tidak melibatkan Mac atau MAMP Pro.**
+
+| Environment | Path |
+|-------------|------|
+| **NAS** | `/volume4/web/ERP_RMI_SOFULL` |
+
+## Konvensi
+
+- Fokus: `/volume4/web/ERP_RMI_SOFULL` (NAS)
+- DB default: port 3306, host 127.0.0.1 (dari .env/config)
+- Smoke/APP_URL: set via env (SMOKE_BASE_URL, APP_URL) — default http://127.0.0.1
+- CLI dijalankan di NAS via SSH: `ssh user@nas-ip` lalu `cd /volume4/web/ERP_RMI_SOFULL`

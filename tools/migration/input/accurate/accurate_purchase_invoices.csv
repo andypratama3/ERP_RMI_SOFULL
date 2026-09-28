@@ -1,0 +1,2 @@
+No,InvoiceNo,InvoiceDate,DueDate,VendorNo,WarehouseCode,TotalAmount,TaxAmount,Currency,Status
+1,PI-ACC-0001,2026-01-07,2026-01-31,ACCVEND01,BGR,660000,60000,IDR,UNPAID

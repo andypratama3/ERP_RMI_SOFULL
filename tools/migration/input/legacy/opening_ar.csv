@@ -1,0 +1,2 @@
+source_id,balance_date,invoice_no,customer_code,outstanding_amount,currency
+1,2025-12-31,AR-OPEN-001,CUST001,500000,IDR

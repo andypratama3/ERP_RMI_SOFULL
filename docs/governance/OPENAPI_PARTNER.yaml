@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info:
+  title: ERP RMI Partner / H2H API
+  version: 1.0.0
+  description: |
+    API mitra terbatas — **`/api/v1/partner/`**.
+
+    **Auth:** header **`X-API-Key: <key>`** atau **`Authorization: Bearer <key>`** (sama seperti `health.php`).
+
+    **Scope (order_create):** jika kolom scope key tidak kosong, bisa wajibkan `order:create` (lihat `order_create.php`).
+
+    Dokumentasi operasional: `docs/PERSIAPAN_H2H_PO_HERMINA.md`, `docs/CLOUDFLARE_H2H_API.md`.
+servers:
+  - url: /api/v1/partner
+paths:
+  /health.php:
+    get:
+      operationId: partnerHealth
+      security: []
+      summary: Cek API key + koneksi DB
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok, message]
+                properties:
+                  ok: { type: boolean, example: true }
+                  message: { type: string, example: OK }
+                  partner: { type: string }
+                  timestamp: { type: string, format: date-time }
+        '401':
+          description: Missing or invalid API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerError'
+  /order_create.php:
+    post:
+      operationId: partnerOrderCreate
+      summary: Buat DO / order dari PO eksternal (H2H)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Lihat contoh di Postman collection dan dokumen H2H
+      responses:
+        '200':
+          description: Created atau idempotent replay
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad JSON / validasi
+        '401':
+          description: API key
+        '403':
+          description: Scope
+        '405':
+          description: Method not POST
+components:
+  schemas:
+    PartnerError:
+      type: object
+      properties:
+        ok: { type: boolean, example: false }
+        code: { type: string }
+        message: { type: string }

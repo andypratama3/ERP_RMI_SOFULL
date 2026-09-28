@@ -1,0 +1,2 @@
+# Deny all direct access to sql folder
+Require all denied
