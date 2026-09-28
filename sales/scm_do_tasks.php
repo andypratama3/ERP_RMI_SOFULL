@@ -203,7 +203,8 @@ function ensure_column(PDO $pdo, string $table, string $column, string $ddl): vo
 
         // Refresh cache schema setelah ALTER supaya table_has_column() pada request
         // yang sama langsung melihat kolom baru.
-        unset($GLOBALS['__scm_schema_columns'][strtolower($table)]);
+        // NOTE: kunci cache = spl_object_id($pdo).':'.$table (lihat scm_table_columns).
+        unset($GLOBALS['__scm_schema_columns'][spl_object_id($pdo) . ':' . $table]);
         $cols = scm_table_columns($pdo, $table);
         if (!isset($cols[$column])) {
             throw new RuntimeException("Kolom {$table}.{$column} belum terbaca setelah migration.");
@@ -211,7 +212,7 @@ function ensure_column(PDO $pdo, string $table, string $column, string $ddl): vo
     } catch (Throwable $e) {
         // Bisa terjadi dua request bersamaan sama-sama mencoba ADD COLUMN.
         // Cek ulang schema; bila kolom sudah ada, anggap sukses.
-        unset($GLOBALS['__scm_schema_columns'][strtolower($table)]);
+        unset($GLOBALS['__scm_schema_columns'][spl_object_id($pdo) . ':' . $table]);
         $cols = scm_table_columns($pdo, $table);
         if (isset($cols[$column])) return;
 
