@@ -81,3 +81,8 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - Akar: html[data-theme=dark]{--rmi-text:#e5e7eb} + body{color:var(--rmi-text)} → hitam jadi putih di kertas.
 - Fix: @media print timpa --rmi-text/--text→#111827, --rmi-muted/--muted→#374151.
 - Bukti visual PNG DO-52: seluruh teks gelap terbaca, 1 hal. php -l OK.
+
+## Kertas 9x11in + garis TTD sejajar
+- @page size 9in 11in margin 4mm (render: 648x792pt, 1 hal).
+- Kolom customer tanpa TTD digital pakai struktur erp-actor-stamp yang sama + margin judul disamakan → 3 garis sejajar (bukti PNG).
+- php -l OK.

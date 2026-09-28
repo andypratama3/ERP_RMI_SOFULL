@@ -854,6 +854,9 @@ $extraHead = '<style>
             background: #fff;
         }
         .sign-box.customer-sign .sign-title {
+            margin-bottom: 36px;
+        }
+        .sign-box.customer-sign.has-sign .sign-title {
             margin-bottom: 6px;
         }
         .sign-box.customer-sign .sign-name {
@@ -950,7 +953,7 @@ $extraHead = '<style>
                 --muted: #374151 !important;
             }
             @page {
-                size: A4 portrait;
+                size: 9in 11in;
                 margin: 4mm;
             }
 
@@ -1430,7 +1433,7 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
                 <div class="erp-actor-line">Tercatat otomatis oleh ERP</div>
             </div>
         </div>
-        <div class="sign-box customer-sign">
+        <div class="sign-box customer-sign<?= $scm_signature_src !== '' ? ' has-sign' : '' ?>">
             <div class="sign-title">Diterima Customer</div>
             <?php if ($scm_signature_src !== ''): ?>
                 <img class="scm-signature-img" src="<?= htmlspecialchars($scm_signature_src, ENT_QUOTES, 'UTF-8') ?>" alt="TTD Customer">
@@ -1440,7 +1443,10 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
                 </div>
                 <div class="sign-name"><?= $customer_pic !== '' ? htmlspecialchars($customer_pic) : '&nbsp;' ?></div>
             <?php else: ?>
-                <div class="sign-name">&nbsp;</div>
+                <div class="erp-actor-stamp">
+                    <div class="erp-actor-name">&nbsp;</div>
+                    <div class="erp-actor-line">&nbsp;</div>
+                </div>
             <?php endif; ?>
         </div>
     </div>
