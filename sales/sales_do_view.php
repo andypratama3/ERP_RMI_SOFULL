@@ -1019,16 +1019,21 @@ $extraHead = '<style>
                 text-decoration: none !important;
             }
 
-            /* Warna teks: semua harus terbaca di kertas putih.
-               Abu terang dan hijau terlalu pudar untuk printer;
-               gelapkan saat cetak. */
-            .page span[style*="#9ca3af"],
-            .page span[style*="#9CA3AF"] {
-                color: #4b5563 !important;
+            /* Warna teks: paksa gelap agar terbaca di kertas putih.
+               Tema gelap layout menimpa warna body sehingga seluruh
+               isi ikut pudar saat cetak. Kecualikan header tabel. */
+            .page,
+            .page div,
+            .page span,
+            .page p,
+            .page td,
+            .page li,
+            .page h1, .page h2, .page h3, .page h4 {
+                color: #111827 !important;
             }
-            .page .text-secondary,
-            .page small {
-                color: #374151 !important;
+            .page thead th {
+                color: #ffffff !important;
+                background: #111827 !important;
             }
 
             /* Tabel item harus muat di lebar kertas: paksa wrap + susut padding/font. */

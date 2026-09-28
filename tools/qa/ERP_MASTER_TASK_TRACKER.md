@@ -72,3 +72,7 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 ## Thead fit sebaris
 - Label dipadatkan (Lot/Seri, Produk, Disc%) + thead nowrap 9px di print CSS.
 - Bukti visual PNG: NO/SKU/EXP DATE/LOT/SERI/PRODUK/KATEGORI/QTY/SATUAN/HARGA/DISC%/SUBTOTAL sebaris. php -l OK.
+
+## Print teks pudar DO-52
+- Bukti visual: seluruh isi pudar kecuali thead (warna terang tema gelap menimpa). Fix: paksa .page teks #111827, thead putih/hitam.
+- Re-render: teks pekat terbaca, 1 hal. php -l OK.
