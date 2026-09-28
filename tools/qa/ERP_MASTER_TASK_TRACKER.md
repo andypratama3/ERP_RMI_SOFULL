@@ -125,3 +125,8 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - scm_do_tasks__.php ikut dibetulkan. Control tower: kode dept disembunyikan.
 - Print tambah Dibuat Nama (KODE) + tgl (sebelumnya miss).
 - Bukti DO-53 Lilis Wulandari (CRM230801); DO-30 Didi (WQS230901). php -l OK.
+
+## Konsistensi dark/white + print global
+- rmi.css: blok @media print global (var gelap + text-light/white/secondary). Layar tak tersentuh.
+- tax_annual h4 text-white→var(--rmi-text); bukti screenshot dark+light terbaca. Sampah align-items-end dihapus.
+- public/tracking + sales_do_.php (legacy) fixed-dark mandiri, konsisten internal.

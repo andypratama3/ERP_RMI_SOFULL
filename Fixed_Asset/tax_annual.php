@@ -301,7 +301,7 @@ $totalNbv = 0.0;
 ?>
 <div class="d-flex align-items-center justify-content-between mb-3">
   <div>
-    <h4 class="text-white mb-0">Laporan Penyusutan Tahunan (Fiskal/Support)</h4>
+    <h4 class="mb-0" style="color:var(--rmi-text)">Laporan Penyusutan Tahunan (Fiskal/Support)</h4>
     <div class="subtle">Sumber: fa_assets + fa_dep_lines/fa_dep_runs • Tahun <?= h($year) ?></div>
   </div>
   <div class="d-flex gap-2">
@@ -339,7 +339,6 @@ $totalNbv = 0.0;
       </div>
       <?php endif; ?>
       <div class="col-md-7 d-flex align-items-end gap-2">
- align-items-end gap-2">
         <button class="btn btn-primary" type="submit">Tampilkan</button>
         <a class="btn btn-outline-secondary" href="<?= h($BASE_FA) ?>/depreciation.php">Ke Depresiasi</a>
       </div>
