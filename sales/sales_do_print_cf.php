@@ -304,14 +304,28 @@ echo pad_right('RIZQULLAH MEDISKA INDONESIA', 53)
 echo pad_right($officeName, 53)
    . pad_left('DO : ' . $doCode, 54) . "\n";
 
-echo pad_right($officeAddr, 53)
+// Alamat kantor bisa panjang: bungkus ke baris-baris 53 kolom
+// (memakai slot kiri yang kosong di baris Tracking/Tanggal),
+// JANGAN dipotong seperti pad_right.
+$addrChunks = function_exists('mb_str_split')
+    ? mb_str_split($officeAddr, 53)
+    : str_split($officeAddr, 53);
+if (empty($addrChunks)) $addrChunks = [''];
+echo pad_right(array_shift($addrChunks), 53)
    . pad_left('Tracking : ' . $trackCode, 54) . "\n";
 
-echo pad_right('', 53)
+echo pad_right(array_shift($addrChunks) ?? '', 53)
    . pad_left('Tanggal : ' . $doDate, 54) . "\n";
 
-echo pad_right('', 53)
+$lastLeft = implode(' ', $addrChunks);
+echo pad_right(mb_substr($lastLeft, 0, 53), 53)
    . pad_left('Status  : ' . $status, 54) . "\n";
+// Sisa alamat yang sangat panjang: baris tambahan (kiri saja).
+$rest = trim(mb_substr($lastLeft, 53));
+while ($rest !== '') {
+    echo pad_right(mb_substr($rest, 0, 53), 53) . "\n";
+    $rest = trim(mb_substr($rest, 53));
+}
 
 echo str_repeat('-', 107) . "\n";
 

@@ -95,3 +95,7 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 ## Print CF posisi isi
 - Hapus offset top:-24mm (header kepotong) → top:0/left:0; @page tetap 9.5x11in margin 0 (tak diubah).
 - Bukti visual: RIZQULLAH tampil penuh, 1 hal. php -l OK.
+
+## Print CF alamat terpotong
+- pad_right() memotong alamat kantor 53 kolom (buntung di "No. 7 &"). Fix: word-chunk + sisa alamat ke baris kiri kosong.
+- Render DO-52: alamat penuh 3 baris, 1 hal. php -l OK.
