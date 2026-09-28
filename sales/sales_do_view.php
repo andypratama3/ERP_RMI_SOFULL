@@ -938,7 +938,7 @@ $extraHead = '<style>
              */
             @page {
                 size: A4 portrait;
-                margin: 8mm;
+                margin: 4mm;
             }
 
             html, body {
@@ -982,12 +982,27 @@ $extraHead = '<style>
                 left: 0 !important;
                 top: 0 !important;
                 width: 100% !important;
-                max-width: none !important;
+                max-width: 100% !important;
                 margin: 0 !important;
-                padding: 0 !important;
+                padding: 0 2mm !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
                 background: #ffffff !important;
+                overflow-x: hidden !important;
+            }
+
+            /* Tidak boleh ada elemen yang meluber keluar kertas. */
+            .page img,
+            .page svg,
+            .page canvas,
+            .page video {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            .page pre,
+            .page code {
+                white-space: pre-wrap !important;
+                word-break: break-word !important;
             }
 
             /* Hindari blok bukti/signature pecah di tengah halaman jika memungkinkan. */
