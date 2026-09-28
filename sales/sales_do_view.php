@@ -1019,6 +1019,18 @@ $extraHead = '<style>
                 text-decoration: none !important;
             }
 
+            /* Warna teks: semua harus terbaca di kertas putih.
+               Abu terang dan hijau terlalu pudar untuk printer;
+               gelapkan saat cetak. */
+            .page span[style*="#9ca3af"],
+            .page span[style*="#9CA3AF"] {
+                color: #4b5563 !important;
+            }
+            .page .text-secondary,
+            .page small {
+                color: #374151 !important;
+            }
+
             /* Tabel item harus muat di lebar kertas: paksa wrap + susut padding/font. */
             table.items {
                 table-layout: fixed !important;
@@ -1177,16 +1189,16 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
         <thead>
         <tr>
             <th style="width:28px;">No</th>
-            <th style="width:80px;">SKU</th>
-<?php if ($hasItemExpDate): ?><th style="width:70px;">Exp Date</th><?php endif; ?>
-            <th style="width:80px;">Nomor Lot / Seri</th>
+            <th style="width:75px;">SKU</th>
+<?php if ($hasItemExpDate): ?><th style="width:65px;">Exp Date</th><?php endif; ?>
+            <th style="width:70px;">Nomor Lot / Seri</th>
             <th>Nama Produk</th>
-            <th style="width:70px;">Kategori</th>
-            <th style="width:40px;" class="text-right">Qty</th>
-            <th style="width:50px;">Satuan</th>
-            <th style="width:70px;" class="text-right">Harga</th>
-            <th style="width:40px;" class="text-right">Disc %</th>
-            <th style="width:75px;" class="text-right">Subtotal</th>
+            <th style="width:60px;">Kategori</th>
+            <th style="width:38px;" class="text-right">Qty</th>
+            <th style="width:45px;">Satuan</th>
+            <th style="width:85px;" class="text-right">Harga</th>
+            <th style="width:38px;" class="text-right">Disc %</th>
+            <th style="width:90px;" class="text-right">Subtotal</th>
         </tr>
         </thead>
         <tbody>
