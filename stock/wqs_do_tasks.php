@@ -716,8 +716,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     foreach ($legacyRows as $legacyRow) {
                         $legacyId = (int)$legacyRow['id'];
                         $legacyFrom = (string)$legacyRow['status'];
-                        $sets = ["status='cancelled'", "wqs_status='Cancelled'", "wqs_note=?", "last_updated_by='WQS'", "last_updated_at=NOW()"];
-                        $params = [$reason];
+                        $sets = ["status='cancelled'", "wqs_status='Cancelled'", "wqs_note=?", "last_updated_by=?", "last_updated_at=NOW()"];
+                        $params = [$reason, $actorName];
                         if ($hasWqsCancelReasonCol) { $sets[] = "wqs_cancel_reason=?"; $params[] = $reason; }
                         if ($hasWqsCancelledAtCol) { $sets[] = "wqs_cancelled_at=NOW()"; }
                         if ($hasWqsDurationCol) { $sets[] = "wqs_duration_sec=NULL"; }
@@ -728,10 +728,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $upd = $pdo->prepare("UPDATE sales_do SET " . implode(', ', $sets) . " WHERE id=? AND status=?");
                         $upd->execute($params);
                         if ($upd->rowCount() > 0) {
-                            sales_do_audit_append($pdo, $legacyId, $legacyFrom, 'cancelled', 'WQS', $reason);
+                            if (function_exists('sales_do_audit_append')) {
+                                sales_do_audit_append($pdo, $legacyId, $legacyFrom, 'cancelled', 'WQS', $reason);
+                            } else {
+                                error_log('[WQS_AUDIT_GAP] sales_do_audit_append missing for archive_legacy_trials do_id=' . $legacyId);
+                            }
                             if (function_exists('master_audit')) {
                                 $code = (string)($legacyRow['do_code'] ?? '');
                                 master_audit($pdo, 'sales_do', 'sales_do', 'WQS_CANCEL_LEGACY_TRIAL', $legacyId, $code, "DO percobaan lama WQS diarsipkan: {$code}", ['from_status'=>$legacyFrom,'to_status'=>'cancelled','reason'=>$reason]);
+                            } else {
+                                error_log('[WQS_AUDIT_GAP] master_audit missing for archive_legacy_trials do_id=' . $legacyId);
                             }
                         }
                     }
@@ -828,8 +834,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Tidak bisa Simpan. Status sekarang: " . $curStatus);
             }
 
-            $sets = "wqs_note=?, wqs_status=?, last_updated_by='WQS', last_updated_at=NOW()";
-            $params = [$note, $wqs_status];
+            $sets = "wqs_note=?, wqs_status=?, last_updated_by=?, last_updated_at=NOW()";
+            $params = [$note, $wqs_status, $actorName];
             if (table_has_column($pdo, 'sales_do', 'wqs_updated_by')) {
                 $sets .= ", wqs_updated_by=?";
                 $params[] = $actorName;
@@ -867,6 +873,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (function_exists('master_audit')) {
                 $code = (string)($r['do_code'] ?? '');
                 master_audit($pdo, 'sales_do', 'sales_do', 'WQS_SAVE', $id, $code, "DO WQS save: {$code}", []);
+            } else {
+                error_log('[WQS_AUDIT_GAP] master_audit missing for WQS_SAVE do_id=' . $id);
+            }
+
+            if (function_exists('sales_do_audit_append')) {
+                sales_do_audit_append($pdo, $id, $curStatus, $curStatus, 'WQS', $note);
+            } else {
+                error_log('[WQS_AUDIT_GAP] sales_do_audit_append missing for WQS_SAVE do_id=' . $id);
             }
 
             $success = "Tersimpan (WQS).";
@@ -896,13 +910,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "revision_reason=NULL",
                 "revision_requested_by=NULL",
                 "revision_requested_at=NULL",
-                "last_updated_by='WQS'",
+                "last_updated_by=?",
                 "last_updated_at=NOW()",
             ];
             if ($hasWqsReceivedAtCol) {
                 $startSets[] = "wqs_received_at=COALESCE(wqs_received_at, " . ($hasCreatedAtCol ? "created_at, " : "") . ($hasLastUpdatedAtCol ? "last_updated_at, " : "") . "NOW())";
             }
-            $startParams = [];
+            $startParams = [$actorName];
             if (table_has_column($pdo, 'sales_do', 'wqs_started_by')) {
                 $startSets[] = "wqs_started_by=?";
                 $startParams[] = $actorName;
@@ -939,9 +953,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (function_exists('master_audit')) {
                 $code = (string)($r['do_code'] ?? '');
                 master_audit($pdo, 'sales_do', 'sales_do', 'WQS_START', $id, $code, "DO WQS start: {$code} -> wqs_processing", ['to_status' => 'wqs_processing']);
+            } else {
+                error_log('[WQS_AUDIT_GAP] master_audit missing for WQS_START do_id=' . $id);
             }
 
-            sales_do_audit_append($pdo, $id, $curStatus, 'wqs_processing', 'WQS', $note);
+            if (function_exists('sales_do_audit_append')) {
+                sales_do_audit_append($pdo, $id, $curStatus, 'wqs_processing', 'WQS', $note);
+            } else {
+                error_log('[WQS_AUDIT_GAP] sales_do_audit_append missing for WQS_START do_id=' . $id);
+            }
             $success = "WQS: DO masuk proses.";
         }
 
@@ -957,6 +977,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (function_exists('master_audit')) {
                 $code=(string)($r['do_code']??'');
                 master_audit($pdo,'sales_do','sales_do','WQS_HANDOVER_UPLOAD',$id,$code,"Upload bukti serah terima WQS -> SCM: {$code}",['photos'=>count($handoverPhotos),'videos'=>count($handoverVideos)]);
+            } else {
+                error_log('[WQS_AUDIT_GAP] master_audit missing for WQS_HANDOVER_UPLOAD do_id=' . $id);
+            }
+            if (function_exists('sales_do_audit_append')) {
+                sales_do_audit_append($pdo, $id, $curStatus, $curStatus, 'WQS', 'handover media: '.count($handoverPhotos).' photo / '.count($handoverVideos).' video');
+            } else {
+                error_log('[WQS_AUDIT_GAP] sales_do_audit_append missing for WQS_HANDOVER_UPLOAD do_id=' . $id);
             }
             $success = "Bukti serah terima WQS → SCM tersimpan.";
         }
@@ -982,10 +1009,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "status='cancelled'",
                 "wqs_status='Cancelled'",
                 "wqs_note=?",
-                "last_updated_by='WQS'",
+                "last_updated_by=?",
                 "last_updated_at=NOW()",
             ];
-            $cancelParams = [$cancelReason];
+            $cancelParams = [$cancelReason, $actorName];
 
             if ($hasWqsCancelReasonCol) {
                 $cancelSets[] = "wqs_cancel_reason=?";
@@ -1037,9 +1064,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "DO WQS dibatalkan/diarsipkan: {$code}",
                     ['from_status' => $curStatus, 'to_status' => 'cancelled', 'reason' => $cancelReason]
                 );
+            } else {
+                error_log('[WQS_AUDIT_GAP] master_audit missing for WQS_CANCEL do_id=' . $id);
             }
 
-            sales_do_audit_append($pdo, $id, $curStatus, 'cancelled', 'WQS', $cancelReason);
+            if (function_exists('sales_do_audit_append')) {
+                sales_do_audit_append($pdo, $id, $curStatus, 'cancelled', 'WQS', $cancelReason);
+            } else {
+                error_log('[WQS_AUDIT_GAP] sales_do_audit_append missing for WQS_CANCEL do_id=' . $id);
+            }
             $success = "DO dibatalkan/diarsipkan. Tidak diteruskan ke SCM/ACT/FIN dan tidak lagi menjadi antrean aktif WQS.";
         }
 
@@ -1068,14 +1101,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "wqs_status='Done'",
                 "wqs_stock_before=?",
                 "wqs_stock_after=?",
-                "last_updated_by='WQS'",
+                "last_updated_by=?",
                 "last_updated_at=NOW()",
             ];
             if ($hasWqsDurationCol) {
                 // Freeze durasi tepat saat WQS menyerahkan DO ke SCM.
                 $readySets[] = "wqs_duration_sec=GREATEST(0, TIMESTAMPDIFF(SECOND, {$wqsSlaStartExpr}, NOW()))";
             }
-            $readyParams = [$note, $before, $after];
+            $readyParams = [$note, $before, $after, $actorName];
             if (table_has_column($pdo, 'sales_do', 'wqs_ready_by')) {
                 $readySets[] = "wqs_ready_by=?";
                 $readyParams[] = $actorName;
@@ -1109,9 +1142,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (function_exists('master_audit')) {
                 $code = (string)($r['do_code'] ?? '');
                 master_audit($pdo, 'sales_do', 'sales_do', 'WQS_READY', $id, $code, "DO READY SCM: {$code}", ['to_status' => 'ready_scm']);
+            } else {
+                error_log('[WQS_AUDIT_GAP] master_audit missing for WQS_READY do_id=' . $id);
             }
 
-            sales_do_audit_append($pdo, $id, $curStatus, 'ready_scm', 'WQS', $note);
+            if (function_exists('sales_do_audit_append')) {
+                sales_do_audit_append($pdo, $id, $curStatus, 'ready_scm', 'WQS', $note);
+            } else {
+                error_log('[WQS_AUDIT_GAP] sales_do_audit_append missing for WQS_READY do_id=' . $id);
+            }
             $success = "Status: READY SCM ✅";
         }
 

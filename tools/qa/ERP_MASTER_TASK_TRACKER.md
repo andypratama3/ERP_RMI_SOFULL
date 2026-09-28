@@ -108,3 +108,9 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - sales_do_view: helper sdv_actor_label() (login→holder→master_employees); bukti DO-007 tampil "Didi Ferriansyah Maulana (WQS230901)".
 - Bug sdv_table_exists (SHOW TABLES LIKE ? → 1064, audit tak pernah jalan) di-fix; pola sama di 8 file lain tercatat P0.
 - Audit 28 temuan → tools/qa/DARK_WHITE_COLLISION_AUDIT.md; fix P0: kiosk_poster header cetak digelapkan, CF .table-dark-custom digelapkan. KIOSK+CF HTTP200, php -l OK.
+
+## Delegasi 5 agen DONE (aktor tercatat)
+- A/B/C: last_updated_by hardcoded→$actorName + audit gap error_log (sales+stock wqs, scm). C: scm_actor_name nested-session fix.
+- D: SHOW TABLES LIKE ? di-fix di 8 file (erp_audit live-test PASS).
+- E: migrasi kolom aktor → rename 125→163 (tabrakan nomor), RUN1/2/3 OK idempoten.
+- Semua php -l bersih.

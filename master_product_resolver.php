@@ -43,9 +43,15 @@ if (!function_exists('rmi_row_get_ci')) {
 if (!function_exists('rmi_table_exists')) {
     function rmi_table_exists(PDO $pdo, string $table): bool
     {
-        $st = $pdo->prepare("SHOW TABLES LIKE ?");
-        $st->execute([$table]);
-        return (bool)$st->fetchColumn();
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) return false;
+        try {
+            // NOTE: placeholder (?) TIDAK valid di SHOW TABLES LIKE (MySQL 1064).
+            // Interpolasi aman karena $table sudah divalidasi regex di atas.
+            $rows = $pdo->query("SHOW TABLES LIKE '{$table}'")->fetchAll(PDO::FETCH_NUM) ?: [];
+            return count($rows) > 0;
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 }
 

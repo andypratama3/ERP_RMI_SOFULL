@@ -128,10 +128,12 @@ function table_has_column(PDO $pdo, string $table, string $column): bool {
 function fin_table_exists(PDO $pdo, string $table): bool {
     static $cache = [];
     if (array_key_exists($table, $cache)) return $cache[$table];
+    if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) return $cache[$table] = false;
     try {
-        $st = $pdo->prepare("SHOW TABLES LIKE ?");
-        $st->execute([$table]);
-        return $cache[$table] = (bool)$st->fetchColumn();
+        // NOTE: placeholder (?) TIDAK valid di SHOW TABLES LIKE (MySQL 1064).
+        // Interpolasi aman karena $table sudah divalidasi regex di atas.
+        $rows = $pdo->query("SHOW TABLES LIKE '{$table}'")->fetchAll(PDO::FETCH_NUM) ?: [];
+        return $cache[$table] = count($rows) > 0;
     } catch (Throwable $e) { return $cache[$table] = false; }
 }
 

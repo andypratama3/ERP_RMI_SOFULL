@@ -161,10 +161,12 @@ function ap_imp_actor(): string {
     return trim((string)($_SESSION['username'] ?? $_SESSION['user_name'] ?? 'SYSTEM')) ?: 'SYSTEM';
 }
 function ap_imp_table_exists(PDO $pdo, string $table): bool {
+    if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) return false;
     try {
-        $st = $pdo->prepare("SHOW TABLES LIKE ?");
-        $st->execute([$table]);
-        return (bool)$st->fetchColumn();
+        // NOTE: placeholder (?) TIDAK valid di SHOW TABLES LIKE (MySQL 1064).
+        // Interpolasi aman karena $table sudah divalidasi regex di atas.
+        $rows = $pdo->query("SHOW TABLES LIKE '{$table}'")->fetchAll(PDO::FETCH_NUM) ?: [];
+        return count($rows) > 0;
     } catch (Throwable $e) {
         return false;
     }

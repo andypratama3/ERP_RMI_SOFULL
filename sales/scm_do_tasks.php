@@ -153,6 +153,14 @@ function scm_actor_name(): string {
         $v = trim((string)($_SESSION[$key] ?? ''));
         if ($v !== '') return $v;
     }
+    // Nested session shape set by master/login.php: $_SESSION['user']['username'].
+    // Tanpa ini, sesi bertipe nested jatuh ke label dept ('SCM') dan pelaku tak ketahuan.
+    if (isset($_SESSION['user']) && is_array($_SESSION['user'])) {
+        foreach (['username','user_name','name','full_name'] as $key) {
+            $v = trim((string)($_SESSION['user'][$key] ?? ''));
+            if ($v !== '') return $v;
+        }
+    }
     return scm_actor_label();
 }
 
@@ -745,6 +753,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             rmi_audit_safe('UPDATE', 'SALES.DO', $id, null, null, ['event' => 'scm_save', 'do_code' => $code]);
             if (function_exists('master_audit')) {
                 master_audit($pdo, 'sales_do', 'sales_do', 'SCM_SAVE', $id, $code, "DO SCM save: {$code}", []);
+            } else {
+                error_log('[SCM_AUDIT_GAP] master_audit() missing on SCM_SAVE do_id=' . $id . ' do_code=' . $code);
+            }
+            if (function_exists('sales_do_audit_append')) {
+                sales_do_audit_append($pdo, $id, $curStatus, $curStatus, 'SCM', $note);
+            } else {
+                error_log('[SCM_AUDIT_GAP] sales_do_audit_append() missing on SCM_SAVE do_id=' . $id . ' do_code=' . $code);
             }
             $success = "Tersimpan (SCM).";
         }
@@ -790,6 +805,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (function_exists('sales_do_audit_append')) {
                 sales_do_audit_append($pdo, $id, $curStatus, 'revision_requested', 'SCM', $reason);
+            } else {
+                error_log('[SCM_AUDIT_GAP] sales_do_audit_append() missing on SCM_REQUEST_REVISION do_id=' . $id . ' do_code=' . $code);
             }
             rmi_audit_safe('UPDATE', 'SALES.DO', $id, null, null, [
                 'event' => 'scm_request_revision',
@@ -805,6 +822,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'to_status' => 'revision_requested',
                     'revision_type' => $revisionType,
                 ]);
+            } else {
+                error_log('[SCM_AUDIT_GAP] master_audit() missing on SCM_REQUEST_REVISION do_id=' . $id . ' do_code=' . $code);
             }
 
             if ($pdo->inTransaction()) { $pdo->commit(); }
@@ -829,6 +848,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             rmi_audit_safe('UPDATE', 'SALES.DO', $id, null, null, ['event' => 'scm_refresh_tracking', 'do_code' => $code]);
             if (function_exists('master_audit')) {
                 master_audit($pdo, 'sales_do', 'sales_do', 'SCM_REFRESH_TRACKING', $id, $code, "DO SCM refresh tracking: {$code}", []);
+            } else {
+                error_log('[SCM_AUDIT_GAP] master_audit() missing on SCM_REFRESH_TRACKING do_id=' . $id . ' do_code=' . $code);
+            }
+            if (function_exists('sales_do_audit_append')) {
+                sales_do_audit_append($pdo, $id, $curStatus, $curStatus, 'SCM', $note);
+            } else {
+                error_log('[SCM_AUDIT_GAP] sales_do_audit_append() missing on SCM_REFRESH_TRACKING do_id=' . $id . ' do_code=' . $code);
             }
             $sync = $trackingSvc->syncByDoId($pdo, $id, true);
             if (empty($sync['ok'])) {
@@ -905,9 +931,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 rmi_audit_safe('UPDATE', 'SALES.DO', $id, null, null, ['event' => 'scm_on_delivery', 'do_code' => $code, 'to_status' => 'on_delivery']);
                 if (function_exists('master_audit')) {
                     master_audit($pdo, 'sales_do', 'sales_do', 'SCM_ON_DELIVERY', $id, $code, "DO SCM on delivery: {$code}", ['to_status' => 'on_delivery']);
+                } else {
+                    error_log('[SCM_AUDIT_GAP] master_audit() missing on SCM_ON_DELIVERY do_id=' . $id . ' do_code=' . $code);
                 }
                 if (function_exists('sales_do_audit_append')) {
                     sales_do_audit_append($pdo, $id, $curStatus, 'on_delivery', 'SCM', $note);
+                } else {
+                    error_log('[SCM_AUDIT_GAP] sales_do_audit_append() missing on SCM_ON_DELIVERY do_id=' . $id . ' do_code=' . $code);
                 }
                 if ($pdo->inTransaction()) { $pdo->commit(); }
                 $success = "Status: ON DELIVERY. Bukti WQS terverifikasi. Membuka Live Tracker… ✅";
@@ -1011,9 +1041,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 rmi_audit_safe('UPDATE', 'SALES.DO', $id, null, null, ['event' => 'scm_delivered', 'do_code' => $code, 'to_status' => 'delivered']);
                 if (function_exists('master_audit')) {
                     master_audit($pdo, 'sales_do', 'sales_do', 'SCM_DELIVERED', $id, $code, "DO SCM delivered: {$code}", ['to_status' => 'delivered']);
+                } else {
+                    error_log('[SCM_AUDIT_GAP] master_audit() missing on SCM_DELIVERED do_id=' . $id . ' do_code=' . $code);
                 }
                 if (function_exists('sales_do_audit_append')) {
                     sales_do_audit_append($pdo, $id, $curStatus, 'delivered', 'SCM', $note);
+                } else {
+                    error_log('[SCM_AUDIT_GAP] sales_do_audit_append() missing on SCM_DELIVERED do_id=' . $id . ' do_code=' . $code);
                 }
 
                 // Verifikasi final setelah perubahan status; bila gagal seluruh transaksi rollback.
