@@ -169,9 +169,9 @@ rmi_header('Sales Do Print Cf', [
             }
 
             .cf-wrapper {
-                position: fixed !important;
-                top: -24mm !important;
-                left: 4mm !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
                 width: 107ch !important;
                 max-width: 107ch !important;
                 margin: 0 !important;
@@ -186,9 +186,9 @@ rmi_header('Sales Do Print Cf', [
                 background: #fff !important;
             }
 
-            /* Koreksi posisi fisik continuous form.
-               Layout ERP memiliki offset ancestor pada print; kompensasi vertikal
-               dinaikkan 24mm dan digeser 4mm ke kanan agar karakter pertama aman. */
+            /* Posisi fisik continuous form: di dalam area cetak (@page
+               margin 4mm), tanpa offset negatif agar baris pertama
+               tidak terpotong. */
             .cf-document {
                 position: static !important;
                 margin: 0 !important;

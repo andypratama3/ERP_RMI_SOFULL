@@ -91,3 +91,7 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - Gejala: exception scm_receive_photo di scm_do_tasks.php:219 walau ALTER sukses/kolom ada.
 - Akar: cache key scm_table_columns()=spl_object_id+table, tapi unset pakai strtolower(table) → cache basi → re-read gagal.
 - Fix: unset pakai kunci yang benar (2 titik). Verifikasi: SCM Task DO HTTP200 84KB, tak ada exception; server dimatikan lagi. php -l OK.
+
+## Print CF posisi isi
+- Hapus offset top:-24mm (header kepotong) → top:0/left:0; @page tetap 9.5x11in margin 0 (tak diubah).
+- Bukti visual: RIZQULLAH tampil penuh, 1 hal. php -l OK.
