@@ -97,6 +97,20 @@ body{
     width:100%;min-height:100vh;margin:0;box-shadow:none;
     border-radius:0;
   }
+  /* Header gradasi + teks putih/gradasi tak terbaca di kertas:
+     paksa header terang + teks gelap saat cetak. */
+  .poster-header{
+    background:#fff !important;
+  }
+  .poster-brand,
+  .poster-brand-sub{
+    color:#0f172a !important;
+  }
+  .poster-brand-name{
+    background:none !important;
+    -webkit-text-fill-color:#0f172a !important;
+    color:#0f172a !important;
+  }
 }
 
 /* Header bar */

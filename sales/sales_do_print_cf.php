@@ -213,6 +213,16 @@ rmi_header('Sales Do Print Cf', [
                 visibility: hidden !important;
             }
 
+            /* .table-dark-custom memakai teks terang (#e5e7eb): tak terbaca
+               di kertas putih bila dipakai di dokumen. */
+            .table-dark-custom,
+            .table-dark-custom th,
+            .table-dark-custom td,
+            .table-dark-custom .text-muted,
+            .table-dark-custom .text-secondary {
+                color: #111827 !important;
+            }
+
             /* Proteksi tambahan bila class layout ERP berubah. */
             header,
             nav,

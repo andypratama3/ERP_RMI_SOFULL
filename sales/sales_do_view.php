@@ -18,9 +18,10 @@ function sdv_table_exists(PDO $pdo, string $table): bool
 {
     if (!preg_match('/^[A-Za-z0-9_]+$/', $table)) return false;
     try {
-        $st = $pdo->prepare("SHOW TABLES LIKE ?");
-        $st->execute([$table]);
-        return (bool)$st->fetchColumn();
+        // NOTE: placeholder (?) TIDAK valid di SHOW TABLES LIKE (MySQL 1064).
+        // Interpolasi aman karena $table sudah divalidasi regex di atas.
+        $rows = $pdo->query("SHOW TABLES LIKE '{$table}'")->fetchAll(PDO::FETCH_NUM) ?: [];
+        return count($rows) > 0;
     } catch (Throwable $e) {
         return false;
     }
@@ -231,6 +232,38 @@ function sdv_return_status_label(string $status): string
 function rupiah($angka)
 {
     return 'Rp ' . number_format((float)$angka, 2, ',', '.');
+}
+
+/**
+ * Label pelaku untuk blok tanda tangan print.
+ * Rantai: username login -> holder_employee_code -> master_employees.
+ * Hasil: "Nama Karyawan (KODE)" bila terhubung, bila tidak pakai
+ * full_name login, terakhir username apa adanya. Fail-soft.
+ */
+function sdv_actor_label(PDO $pdo, string $username): string
+{
+    static $cache = [];
+    $u = trim($username);
+    if ($u === '') return '';
+    if (isset($cache[$u])) return $cache[$u];
+    try {
+        $st = $pdo->prepare("SELECT full_name, holder_employee_code FROM master_system_login WHERE username=? LIMIT 1");
+        $st->execute([$u]);
+        $login = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+        $code = trim((string)($login['holder_employee_code'] ?? ''));
+        if ($code !== '') {
+            $st2 = $pdo->prepare("SELECT employee_name FROM master_employees WHERE employee_code=? LIMIT 1");
+            $st2->execute([$code]);
+            $emp = $st2->fetch(PDO::FETCH_ASSOC) ?: [];
+            $nm = trim((string)($emp['employee_name'] ?? ''));
+            if ($nm !== '') return $cache[$u] = "{$nm} ({$code})";
+        }
+        $fn = trim((string)($login['full_name'] ?? ''));
+        if ($fn !== '') return $cache[$u] = $fn;
+    } catch (Throwable $e) {
+        // fail-soft
+    }
+    return $cache[$u] = $u;
 }
 
 function sdv_format_exp_date($value): string
@@ -583,6 +616,12 @@ $scm_sent_at_print = trim((string)($do['scm_on_delivery_at'] ?? ''));
 if ($scm_sent_at_print === '') {
     $scm_sent_at_print = trim((string)($do['scm_delivered_at'] ?? ''));
 }
+
+// Hubungkan pelaku ke kode employee (username -> holder -> master_employees).
+// DO-019 contoh: masih crm_to_wqs sehingga WQS/SCM '-' (benar: belum ada aksi).
+$wqs_prepared_by_print = sdv_actor_label($pdo, $wqs_prepared_by_print);
+$scm_sent_by_print = sdv_actor_label($pdo, $scm_sent_by_print);
+$scm_delivered_by_print = sdv_actor_label($pdo, $scm_delivered_by_print);
 
 
 require_once __DIR__ . '/../_shared/rmi_layout.php';
