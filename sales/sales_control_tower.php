@@ -1038,7 +1038,10 @@ rmi_header('Sales Control Tower', 'sales', [
               <?php if ($lastUpdated !== ''): ?>
                 <div class="muted" style="font-size:10px"><?= h(substr($lastUpdated, 0, 16)) ?></div>
                 <?php if ($r['last_updated_by'] ?? ''): ?>
-                  <div class="muted" style="font-size:10px">oleh <?= h($r['last_updated_by']) ?></div>
+                  <?php $__lub = trim((string)$r['last_updated_by']); $__dept = ['WQS','SCM','CRM','FIN','ACT','PQP','MPR','HRL','ITC','SYS','ADMIN','SUPERADMIN','MANAGER','STAFF','BRANCH','SYSTEM']; ?>
+                  <?php if ($__lub !== '' && !in_array(strtoupper($__lub), $__dept, true)): ?>
+                  <div class="muted" style="font-size:10px">oleh <?= h($__lub) ?></div>
+                  <?php endif; ?>
                 <?php endif; ?>
               <?php endif; ?>
             </td>

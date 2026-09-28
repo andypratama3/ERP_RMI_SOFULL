@@ -652,6 +652,19 @@ if (($wqs_prepared_by_print === '' || $scm_sent_by_print === '') && sdv_table_ex
     }
 }
 
+// Pembuat DO (CRM): aksi paling awal, agar tidak miss.
+$crm_created_by_print = '';
+$crm_created_at_print = '';
+if (sdv_table_exists($pdo, 'sales_do_audit')) {
+    try {
+        $stC = $pdo->prepare("SELECT actor_name, created_at FROM sales_do_audit WHERE do_id=? ORDER BY id ASC LIMIT 1");
+        $stC->execute([(int)$do_id]);
+        $cRow = $stC->fetch(PDO::FETCH_ASSOC) ?: [];
+        $crm_created_by_print = sdv_actor_label($pdo, trim((string)($cRow['actor_name'] ?? '')));
+        $crm_created_at_print = trim((string)($cRow['created_at'] ?? ''));
+    } catch (Throwable $e) { /* fail-soft */ }
+}
+
 // Hubungkan pelaku ke kode employee (username -> holder -> master_employees).
 // DO-019 contoh: masih crm_to_wqs sehingga WQS/SCM '-' (benar: belum ada aksi).
 $wqs_prepared_by_print = sdv_actor_label($pdo, $wqs_prepared_by_print);
@@ -1528,6 +1541,9 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
     <div class="footer-info">
         <div>
             Dicetak: <?= htmlspecialchars($printed_at) ?>
+            <?php if ($crm_created_by_print !== ''): ?>
+            <br>Dibuat: <?= htmlspecialchars($crm_created_by_print) ?><?= $crm_created_at_print !== '' ? ' • ' . htmlspecialchars(date('d-m-Y H:i', strtotime($crm_created_at_print))) : '' ?>
+            <?php endif; ?>
         </div>
         <div>
             Sistem ERP_RMI_SOFULL • DO: <?= htmlspecialchars($do_code) ?>

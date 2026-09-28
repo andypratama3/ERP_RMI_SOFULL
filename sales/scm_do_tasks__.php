@@ -27,6 +27,15 @@ require_once __DIR__ . '/_do_task_helpers.php';
 // Catatan: auth/role parkir dulu (sementara), fokus UI/UX & flow.
 // --- DB (centralized) ---
 $pdo = function_exists('rmi_db_pdo') ? rmi_db_pdo() : db_pdo();
+// Aktor username (bukan kode dept) untuk last_updated_by.
+$__scm_actor = 'SCM';
+try {
+    if (function_exists('auth_user')) {
+        $__au = auth_user();
+        $aun = trim((string)(is_array($__au) ? ($__au['username'] ?? '') : $__au));
+        if ($aun !== '') $__scm_actor = $aun;
+    }
+} catch (Throwable $e) { /* fallback 'SCM' */ }
 $trackingSvc = new \App\Services\SalesTrackingService();
 
 // ---------------- helpers ----------------
@@ -281,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($hasCarrierCourierCode) { $sets[] = "carrier_courier_code=?"; $params[] = $carrier_courier_code !== '' ? $carrier_courier_code : null; }
             if ($hasFallbackLiveLocationUrl) { $sets[] = "fallback_live_location_url=?"; $params[] = $fallback_live_location_url !== '' ? $fallback_live_location_url : null; }
             if ($hasTrackingPublicToken) { $sets[] = "tracking_public_token=?"; $params[] = $tracking_public_token; }
-            if ($hasLastUpdatedBy) { $sets[] = "last_updated_by='SCM'"; }
+            if ($hasLastUpdatedBy) { $sets[] = "last_updated_by=" . $pdo->quote($__scm_actor); }
             if ($hasLastUpdatedAt) { $sets[] = "last_updated_at=NOW()"; }
 
             if ($hasScmReceivePhoto && $recv_photo_up) { $sets[] = "scm_receive_photo=?"; $params[] = $recv_photo_up; }
@@ -310,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($hasCarrierCourierCode) { $sets[] = "carrier_courier_code=?"; $params[] = $carrier_courier_code !== '' ? $carrier_courier_code : null; }
             if ($hasFallbackLiveLocationUrl) { $sets[] = "fallback_live_location_url=?"; $params[] = $fallback_live_location_url !== '' ? $fallback_live_location_url : null; }
             if ($hasTrackingPublicToken) { $sets[] = "tracking_public_token=?"; $params[] = $tracking_public_token; }
-            if ($hasLastUpdatedBy) { $sets[] = "last_updated_by='SCM'"; }
+            if ($hasLastUpdatedBy) { $sets[] = "last_updated_by=" . $pdo->quote($__scm_actor); }
             if ($hasLastUpdatedAt) { $sets[] = "last_updated_at=NOW()"; }
             if (!empty($sets)) {
                 $params[] = $id;
@@ -362,7 +371,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($hasDeliveryMode) { $sets[] = "delivery_mode=?"; $params[] = $delivery_mode; }
     if ($hasDeliveryVendorId) { $sets[] = "delivery_vendor_id=?"; $params[] = ($delivery_vendor_id ?: null); }
     if ($hasTrackingPublicToken) { $sets[] = "tracking_public_token=?"; $params[] = $tracking_public_token; }
-    if ($hasLastUpdatedBy) { $sets[] = "last_updated_by='SCM'"; }
+    if ($hasLastUpdatedBy) { $sets[] = "last_updated_by=" . $pdo->quote($__scm_actor); }
     if ($hasLastUpdatedAt) { $sets[] = "last_updated_at=NOW()"; }
     $params[] = $id;
 
@@ -434,7 +443,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($hasDeliveryMode) { $sets[] = "delivery_mode=?"; $params[] = $delivery_mode; }
     if ($hasDeliveryVendorId) { $sets[] = "delivery_vendor_id=?"; $params[] = ($delivery_vendor_id ?: null); }
     if ($hasTrackingPublicToken) { $sets[] = "tracking_public_token=?"; $params[] = $tracking_public_token; }
-    if ($hasLastUpdatedBy) { $sets[] = "last_updated_by='SCM'"; }
+    if ($hasLastUpdatedBy) { $sets[] = "last_updated_by=" . $pdo->quote($__scm_actor); }
     if ($hasLastUpdatedAt) { $sets[] = "last_updated_at=NOW()"; }
     $params[] = $id;
 
