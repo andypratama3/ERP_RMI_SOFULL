@@ -99,3 +99,7 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 ## Print CF alamat terpotong
 - pad_right() memotong alamat kantor 53 kolom (buntung di "No. 7 &"). Fix: word-chunk + sisa alamat ke baris kiri kosong.
 - Render DO-52: alamat penuh 3 baris, 1 hal. php -l OK.
+
+## Print CF tengah + wrap kata
+- Blok 107ch menempel kiri → center via left:0;right:0;margin auto. Alamat wordwrap per kata.
+- Bukti visual: margin kiri-kanan seimbang. php -l OK.

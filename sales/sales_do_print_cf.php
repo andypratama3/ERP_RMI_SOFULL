@@ -172,9 +172,10 @@ rmi_header('Sales Do Print Cf', [
                 position: absolute !important;
                 top: 0 !important;
                 left: 0 !important;
+                right: 0 !important;
                 width: 107ch !important;
                 max-width: 107ch !important;
-                margin: 0 !important;
+                margin: 0 auto !important;
                 padding: 0 !important;
                 white-space: pre !important;
                 font-family: "Courier New", Courier, monospace !important;
@@ -304,12 +305,10 @@ echo pad_right('RIZQULLAH MEDISKA INDONESIA', 53)
 echo pad_right($officeName, 53)
    . pad_left('DO : ' . $doCode, 54) . "\n";
 
-// Alamat kantor bisa panjang: bungkus ke baris-baris 53 kolom
+// Alamat kantor bisa panjang: bungkus per kata ke baris-baris 53 kolom
 // (memakai slot kiri yang kosong di baris Tracking/Tanggal),
 // JANGAN dipotong seperti pad_right.
-$addrChunks = function_exists('mb_str_split')
-    ? mb_str_split($officeAddr, 53)
-    : str_split($officeAddr, 53);
+$addrChunks = explode("\n", wordwrap($officeAddr, 53, "\n", false));
 if (empty($addrChunks)) $addrChunks = [''];
 echo pad_right(array_shift($addrChunks), 53)
    . pad_left('Tracking : ' . $trackCode, 54) . "\n";
