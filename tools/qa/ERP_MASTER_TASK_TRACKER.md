@@ -114,3 +114,8 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - D: SHOW TABLES LIKE ? di-fix di 8 file (erp_audit live-test PASS).
 - E: migrasi kolom aktor → rename 125→163 (tabrakan nomor), RUN1/2/3 OK idempoten.
 - Semua php -l bersih.
+
+## Penanggung jawab terisi otomatis (final)
+- Fallback berlapis: kolom *_by → audit system (READY/START/SAVE) → sales_do_audit → label employee; kode dept ditolak (tampil - bukan nama palsu).
+- Bukti DO-28/30: WQS=Didi (WQS230901); SCM=- (belum aksi, benar); DO-53 -/- (belum aksi, benar).
+- Ke depan: writer simpan $actorName + kolom *_by (migrasi 163) → terisi otomatis. php -l OK.

@@ -235,6 +235,14 @@ function rupiah($angka)
 }
 
 /**
+ * True bila nilai adalah kode dept/role (data lama), bukan username orang.
+ */
+function sdv_is_dept_code(string $v): bool
+{
+    static $codes = ['WQS','SCM','CRM','FIN','ACT','PQP','MPR','HRL','ITC','SYS','ADMIN','SUPERADMIN','MANAGER','STAFF','BRANCH','SYSTEM'];
+    return in_array(strtoupper(trim($v)), $codes, true);
+}
+/**
  * Label pelaku untuk blok tanda tangan print.
  * Rantai: username login -> holder_employee_code -> master_employees.
  * Hasil: "Nama Karyawan (KODE)" bila terhubung, bila tidak pakai
@@ -245,6 +253,8 @@ function sdv_actor_label(PDO $pdo, string $username): string
     static $cache = [];
     $u = trim($username);
     if ($u === '') return '';
+    // Kode dept/role bukan orang (data lama menulis 'WQS'/'SCM'): tolak.
+    if (sdv_is_dept_code($u)) return '';
     if (isset($cache[$u])) return $cache[$u];
     try {
         $st = $pdo->prepare("SELECT full_name, holder_employee_code FROM master_system_login WHERE username=? LIMIT 1");
@@ -581,19 +591,21 @@ $scm_delivery_video_url = '';
 $wqs_prepared_by_print = '';
 foreach (['wqs_ready_by','wqs_completed_by','wqs_updated_by','wqs_by'] as $k) {
     $v = trim((string)($do[$k] ?? ''));
-    if ($v !== '') { $wqs_prepared_by_print = $v; break; }
+    if ($v !== '' && !sdv_is_dept_code($v)) { $wqs_prepared_by_print = $v; break; }
 }
 $wqs_prepared_at_print = trim((string)($do['wqs_ready_at'] ?? ''));
 
 if ($wqs_prepared_by_print === '' && sdv_table_exists($pdo, 'system_audit_logs')) {
     try {
+        // Fallback berlapis: READY dulu, lalu START/SAVE — DO yang sedang
+        // diproses WQS (belum READY) tetap ketahuan pelakunya.
         $stWqsActor = $pdo->prepare("
             SELECT username, created_at
             FROM system_audit_logs
             WHERE module='sales_do'
-              AND action='WQS_READY'
+              AND action IN ('WQS_READY','WQS_START','WQS_SAVE')
               AND record_code=?
-            ORDER BY created_at DESC, id DESC
+            ORDER BY FIELD(action,'WQS_READY','WQS_START','WQS_SAVE'), created_at DESC, id DESC
             LIMIT 1
         ");
         $stWqsActor->execute([(string)($do['do_code'] ?? '')]);
@@ -610,11 +622,34 @@ if ($wqs_prepared_by_print === '' && sdv_table_exists($pdo, 'system_audit_logs')
 $scm_sent_by_print = '';
 foreach (['scm_on_delivery_by','scm_delivered_by','scm_updated_by','last_updated_by'] as $k) {
     $v = trim((string)($do[$k] ?? ''));
-    if ($v !== '') { $scm_sent_by_print = $v; break; }
+    if ($v !== '' && !sdv_is_dept_code($v)) { $scm_sent_by_print = $v; break; }
 }
 $scm_sent_at_print = trim((string)($do['scm_on_delivery_at'] ?? ''));
 if ($scm_sent_at_print === '') {
     $scm_sent_at_print = trim((string)($do['scm_delivered_at'] ?? ''));
+}
+
+// Lapisan terakhir: sales_do_audit (actor_name = username asli per transisi).
+if (($wqs_prepared_by_print === '' || $scm_sent_by_print === '') && sdv_table_exists($pdo, 'sales_do_audit')) {
+    try {
+        $stAud = $pdo->prepare("SELECT actor_dept, actor_name, created_at FROM sales_do_audit WHERE do_id=? ORDER BY id DESC LIMIT 20");
+        $stAud->execute([(int)$do_id]);
+        foreach ($stAud->fetchAll(PDO::FETCH_ASSOC) as $ar) {
+            $dept = strtoupper(trim((string)($ar['actor_dept'] ?? '')));
+            $nm = trim((string)($ar['actor_name'] ?? ''));
+            if ($nm === '') continue;
+            if ($wqs_prepared_by_print === '' && $dept === 'WQS') {
+                $wqs_prepared_by_print = $nm;
+                if ($wqs_prepared_at_print === '') $wqs_prepared_at_print = trim((string)($ar['created_at'] ?? ''));
+            }
+            if ($scm_sent_by_print === '' && $dept === 'SCM') {
+                $scm_sent_by_print = $nm;
+                if ($scm_sent_at_print === '') $scm_sent_at_print = trim((string)($ar['created_at'] ?? ''));
+            }
+        }
+    } catch (Throwable $e) {
+        // fail-soft
+    }
 }
 
 // Hubungkan pelaku ke kode employee (username -> holder -> master_employees).
