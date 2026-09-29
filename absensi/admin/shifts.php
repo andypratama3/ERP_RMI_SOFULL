@@ -172,10 +172,10 @@ try {
     </ol>
   </nav>
   <div class="d-flex flex-wrap gap-2 mb-3">
-    <a class="btn btn-sm btn-outline-secondary" href="rekap.php">📊 Rekap</a>
-    <a class="btn btn-sm btn-outline-secondary" href="offices.php">🏢 Office</a>
-    <a class="btn btn-sm btn-outline-secondary" href="settings.php">⚙️ Jam Kerja</a>
-    <a class="btn btn-sm btn-primary" href="shifts.php">🔄 Shift</a>
+    <a class="btn btn-sm btn-outline-secondary" href="rekap.php"><?=rmi_icon('chart')?> Rekap</a>
+    <a class="btn btn-sm btn-outline-secondary" href="offices.php"><?=rmi_icon('office')?> Office</a>
+    <a class="btn btn-sm btn-outline-secondary" href="settings.php"><?=rmi_icon('gear')?> Jam Kerja</a>
+    <a class="btn btn-sm btn-primary" href="shifts.php"><?=rmi_icon('refresh')?> Shift</a>
   </div>
 
   <!-- Tab -->
@@ -194,7 +194,7 @@ try {
         <div class="col-lg-5">
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-              <h6 class="mb-0">➕ Tambah / Edit Shift</h6>
+              <h6 class="mb-0"><?=rmi_icon('check')?> Tambah / Edit Shift</h6>
             </div>
             <div class="card-body">
               <form method="post" id="formShift">
@@ -269,7 +269,7 @@ try {
 
           <!-- Default shift -->
           <div class="card mt-3">
-            <div class="card-header"><h6 class="mb-0">🎯 Shift Default</h6></div>
+            <div class="card-header"><h6 class="mb-0"><?=rmi_icon('target')?> Shift Default</h6></div>
             <div class="card-body">
               <p class="small text-muted mb-2">
                 User yang <b>tidak memiliki penugasan shift spesifik</b> akan otomatis menggunakan shift ini.
@@ -293,7 +293,7 @@ try {
         <!-- Daftar shift -->
         <div class="col-lg-7">
           <div class="card">
-            <div class="card-header"><h6 class="mb-0">📋 Daftar Shift (<?= count($shifts) ?>)</h6></div>
+            <div class="card-header"><h6 class="mb-0"><?=rmi_icon('clipboard')?> Daftar Shift (<?= count($shifts) ?>)</h6></div>
             <div class="card-body p-0">
               <?php if (empty($shifts)): ?>
                 <p class="p-3 text-muted mb-0">Belum ada shift. Tambahkan di form kiri.</p>
@@ -370,7 +370,7 @@ try {
         <!-- Form assign -->
         <div class="col-lg-4">
           <div class="card">
-            <div class="card-header"><h6 class="mb-0">👤 Tugaskan Shift ke User</h6></div>
+            <div class="card-header"><h6 class="mb-0"><?=rmi_icon('user')?> Tugaskan Shift ke User</h6></div>
             <div class="card-body">
               <p class="small text-muted">
                 User yang tidak ditugaskan akan memakai <b>shift default</b>.
@@ -438,7 +438,7 @@ try {
         <!-- Tabel penugasan -->
         <div class="col-lg-8">
           <div class="card">
-            <div class="card-header"><h6 class="mb-0">📋 Penugasan Shift per User (<?= count($userShifts) ?>)</h6></div>
+            <div class="card-header"><h6 class="mb-0"><?=rmi_icon('clipboard')?> Penugasan Shift per User (<?= count($userShifts) ?>)</h6></div>
             <div class="card-body p-0">
               <?php if (empty($userShifts)): ?>
                 <p class="p-3 text-muted mb-0">

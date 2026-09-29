@@ -138,7 +138,7 @@ rmi_header('Funnel Overview', [
         'Funnel Overview',
     ],
     'actions' => [
-        ['label' => '📚 Panduan', 'url' => $bp . '/dashboards/panduan_funnels.php', 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('books').' Panduan', 'url' => $bp . '/dashboards/panduan_funnels.php', 'class' => 'btn btn-sm btn-outline-light'],
         ['label' => 'API Funnels JSON', 'url' => $bp . '/api/v1/internal/funnels_summary.php?date_from=' . urlencode($date_from) . '&date_to=' . urlencode($date_to), 'class' => 'btn btn-sm btn-outline-light'],
         ['label' => 'CRM Dashboard', 'url' => $bp . '/sales/sales_dashboard.php', 'class' => 'btn btn-sm btn-outline-light'],
         ['label' => 'Reg Alkes Tower', 'url' => $bp . '/hrl_reg_alkes/reg_alkes_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],

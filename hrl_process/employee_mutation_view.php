@@ -100,7 +100,7 @@ require_once __DIR__ . '/_layout_top.php';
 </style>
 
 <a class="btn btn-sm btn-ghost mb-3" href="employee_mutations.php">← Daftar Mutasi</a>
-<h2>🔄 <?= mh($m['mutation_code'] ?: ('#'.$m['id'])) ?></h2>
+<h2><?=rmi_icon('refresh')?> <?= mh($m['mutation_code'] ?: ('#'.$m['id'])) ?></h2>
 
 <?php if ($err): ?><div class="alert alert-danger"><?= mh($err) ?></div><?php endif; ?>
 <?php if ($ok): ?><div class="alert alert-success"><?= mh($ok) ?></div><?php endif; ?>

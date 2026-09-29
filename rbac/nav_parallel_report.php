@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 /**
  * Tampilan web: laporan sumber navigasi paralel (sidebar vs registry vs bootstrap vs mod_card).
  * Guard: sama dengan RBAC Center (SYSTEM.RBAC_MANAGE | SYSTEM.RBAC_VIEW).
@@ -106,8 +107,8 @@ rmi_header('Nav & sidebar — audit sumber', [
         'Nav parallel report',
     ],
     'actions' => [
-        ['label' => '🔐 RBAC Center', 'url' => $base . '/rbac/index.php', 'class' => 'btn btn-sm btn-rmi'],
-        ['label' => '📖 Panduan RBAC', 'url' => $base . '/rbac/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('gear') . ' RBAC Center', 'url' => $base . '/rbac/index.php', 'class' => 'btn btn-sm btn-rmi'],
+        ['label' => rmi_icon('books') . ' Panduan RBAC', 'url' => $base . '/rbac/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 
@@ -123,7 +124,7 @@ rmi_header('Nav & sidebar — audit sumber', [
 </style>
 
 <div class="npr-hero">
-  <h4 class="mb-2" style="font-size:17px">🧭 Audit sumber navigasi (paralel)</h4>
+  <h4 class="mb-2" style="font-size:17px"><?= rmi_icon('target') ?> Audit sumber navigasi (paralel)</h4>
   <?php if ($canonicalThisPage !== ''): ?>
   <div class="alert alert-info py-2 px-3 small mb-3" style="border-radius:10px">
     <strong>URL halaman ini (bookmark):</strong>

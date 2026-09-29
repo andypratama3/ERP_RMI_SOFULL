@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 /**
  * Konten panduan Dashboard Center — gaya pd-* (sama konsep sales/panduan_do_tasks.php).
  * Set $bp = rmi_layout_base_project() sebelum include.
@@ -45,23 +46,23 @@ ul.pd-bullets li{margin-bottom:6px}
 </style>
 
 <div class="pd-hero">
-  <h4 class="mb-1">📚 Panduan Dashboard Center</h4>
+  <h4 class="mb-1"><?=rmi_icon('books')?> Panduan Dashboard Center</h4>
   <div style="font-size:13px;opacity:.85">Satu pintu masuk ke ringkasan KPI dan modul. Kartu yang tampil mengikuti <b>hak akses (RBAC)</b> — staff sering diarahkan langsung ke dashboard departemen setelah login.</div>
 </div>
 
 <div class="pd-flow">
   <div class="pd-step a">
-    <div class="ps-icon">🏠</div>
+    <div class="ps-icon"><?=rmi_icon('home')?></div>
     <div class="ps-dept">1</div>
     <div class="ps-label">Buka Dashboard Center</div>
   </div>
   <div class="pd-step b">
-    <div class="ps-icon">🎯</div>
+    <div class="ps-icon"><?=rmi_icon('target')?></div>
     <div class="ps-dept">2</div>
     <div class="ps-label">Pilih kartu sesuai tugas</div>
   </div>
   <div class="pd-step c">
-    <div class="ps-icon">📖</div>
+    <div class="ps-icon"><?=rmi_icon('books')?></div>
     <div class="ps-dept">3</div>
     <div class="ps-label">Lanjut ke modul / panduan area</div>
   </div>
@@ -69,7 +70,7 @@ ul.pd-bullets li{margin-bottom:6px}
 
 <div class="pd-card">
   <div class="pd-card-head">
-    <div class="ph-icon">📌</div>
+    <div class="ph-icon"><?=rmi_icon('target')?></div>
     <div>
       <div class="ph-title">Yang perlu diketahui</div>
       <div class="ph-sub">Role, dept, dan permission menentukan apa yang Anda lihat</div>
@@ -86,7 +87,7 @@ ul.pd-bullets li{margin-bottom:6px}
 
 <div class="pd-card do">
   <div class="pd-card-head">
-    <div class="ph-icon">🚚</div>
+    <div class="ph-icon"><?=rmi_icon('box')?></div>
     <div>
       <div class="ph-title">Alur Task DO (CRM → WQS → SCM → ACT → FIN)</div>
       <div class="ph-sub">Panduan langkah per departemen — format sama dengan halaman task</div>
@@ -115,7 +116,7 @@ ul.pd-bullets li{margin-bottom:6px}
 
 <div class="pd-card">
   <div class="pd-card-head">
-    <div class="ph-icon">🗺️</div>
+    <div class="ph-icon"><?=rmi_icon('search')?></div>
     <div>
       <div class="ph-title">Panduan per dashboard &amp; area</div>
       <div class="ph-sub">Ringkas per folder — detail di masing-masing halaman</div>
@@ -123,21 +124,21 @@ ul.pd-bullets li{margin-bottom:6px}
   </div>
   <div class="pd-card-body">
     <div class="pd-linkgrid">
-      <a href="<?= rmi_h($bp) ?>/dashboards/panduan_funnels.php">🎯 Funnel Overview</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/branch/panduan.php">🏢 Branch</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/scm/panduan.php">🚢 SCM</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/finance/panduan.php">💰 Finance</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/act/panduan.php">📝 ACT</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/warehouse/panduan.php">📦 Warehouse (WQS)</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/quality/panduan.php">✅ Quality</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/regulatory/panduan.php">🏥 Regulatory</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/hrl/panduan.php">👥 HRL</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/itc/panduan.php">💻 ITC</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/owner/panduan.php">⭐ Executive Summary</a>
-      <a href="<?= rmi_h($bp) ?>/sales/panduan.php">💼 CRM / Sales</a>
-      <a href="<?= rmi_h($bp) ?>/purchases/panduan.php">🛒 Purchases / PQP</a>
-      <a href="<?= rmi_h($bp) ?>/dashboards/procurement/panduan.php">📦 Procurement</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/panduan_funnels.php"><?=rmi_icon('target')?> Funnel Overview</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/branch/panduan.php"><?=rmi_icon('office')?> Branch</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/scm/panduan.php"><?=rmi_icon('box')?> SCM</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/finance/panduan.php"><?=rmi_icon('money')?> Finance</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/act/panduan.php"><?=rmi_icon('memo')?> ACT</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/warehouse/panduan.php"><?=rmi_icon('box')?> Warehouse (WQS)</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/quality/panduan.php"><?=rmi_icon('check')?> Quality</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/regulatory/panduan.php"><?=rmi_icon('office')?> Regulatory</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/hrl/panduan.php"><?=rmi_icon('users')?> HRL</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/itc/panduan.php"><?=rmi_icon('gear')?> ITC</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/owner/panduan.php"><?=rmi_icon('target')?> Executive Summary</a>
+      <a href="<?= rmi_h($bp) ?>/sales/panduan.php"><?=rmi_icon('money')?> CRM / Sales</a>
+      <a href="<?= rmi_h($bp) ?>/purchases/panduan.php"><?=rmi_icon('cart')?> Purchases / PQP</a>
+      <a href="<?= rmi_h($bp) ?>/dashboards/procurement/panduan.php"><?=rmi_icon('box')?> Procurement</a>
     </div>
-    <div class="pd-warn">⚠️ Tombol <b>Panduan</b> di header halaman ERP (jika ada) mengarah ke file <code>panduan_*.php</code> di folder yang sama dengan halaman kerja Anda — tidak melewati daftar ini.</div>
+    <div class="pd-warn"><?=rmi_icon('warn')?> Tombol <b>Panduan</b> di header halaman ERP (jika ada) mengarah ke file <code>panduan_*.php</code> di folder yang sama dengan halaman kerja Anda — tidak melewati daftar ini.</div>
   </div>
 </div>

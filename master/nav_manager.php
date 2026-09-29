@@ -28,22 +28,22 @@ $ALL_ROLES  = ['CRM','SCM','WQS','PQP','FIN','ACT','HRL','ITC','MPR','BRANCH',
 
 // ── Landing page presets (halaman tujuan setelah login) ───────────────────
 $LANDING_PRESETS = [
-    '/master/master_system_login.php'                 => '⚙️ Master System Login (kelola user)',
-    '/dashboards/index.php'                           => '🏠 Dashboard Center (semua dept)',
-    '/sales/sales_dashboard.php'                      => '💼 CRM — Sales Dashboard',
-    '/dashboards/warehouse/wqs_dashboard.php'         => '📦 WQS — Warehouse Dashboard',
-    '/purchases/purchases_dashboard.php'              => '🛒 PQP — Purchases Dashboard',
-    '/dashboards/finance/ar_ap_cash_dashboard.php'    => '💰 FIN — Finance Dashboard',
-    '/dashboards/act/act_dashboard.php'               => '📝 ACT — Accounting Dashboard',
-    '/dashboards/hrl/hrl_dashboard.php'               => '👥 HRL — HR & Legal Dashboard',
-    '/dashboards/scm/scm_dashboard.php'               => '🚢 SCM — Supply Chain Dashboard',
-    '/mpr/mpr_dashboard.php'                          => '🧩 MPR — MPR Dashboard',
-    '/dashboards/itc/itc_dashboard.php'               => '💻 ITC — IT Dashboard',
-    '/dashboards/branch/branch_dashboard.php'         => '🏢 BRANCH — Branch Dashboard',
-    '/dashboards/quality/qc_complaint_dashboard.php'  => '🔬 Quality Dashboard',
-    '/dashboards/owner/exec_summary.php'              => '👑 Executive Summary',
-    '/kpi/kpi_center.php'                             => '📊 KPI Center',
-    '/absensi/index.php'                              => '🕐 Absensi',
+    '/master/master_system_login.php'                 => rmi_icon('gear') . ' Master System Login (kelola user)',
+    '/dashboards/index.php'                           => rmi_icon('home') . ' Dashboard Center (semua dept)',
+    '/sales/sales_dashboard.php'                      => rmi_icon('office') . ' CRM — Sales Dashboard',
+    '/dashboards/warehouse/wqs_dashboard.php'         => rmi_icon('box') . ' WQS — Warehouse Dashboard',
+    '/purchases/purchases_dashboard.php'              => rmi_icon('cart') . ' PQP — Purchases Dashboard',
+    '/dashboards/finance/ar_ap_cash_dashboard.php'    => rmi_icon('money') . ' FIN — Finance Dashboard',
+    '/dashboards/act/act_dashboard.php'               => rmi_icon('memo') . ' ACT — Accounting Dashboard',
+    '/dashboards/hrl/hrl_dashboard.php'               => rmi_icon('users') . ' HRL — HR & Legal Dashboard',
+    '/dashboards/scm/scm_dashboard.php'               => rmi_icon('box') . ' SCM — Supply Chain Dashboard',
+    '/mpr/mpr_dashboard.php'                          => rmi_icon('box') . ' MPR — MPR Dashboard',
+    '/dashboards/itc/itc_dashboard.php'               => rmi_icon('gear') . ' ITC — IT Dashboard',
+    '/dashboards/branch/branch_dashboard.php'         => rmi_icon('office') . ' BRANCH — Branch Dashboard',
+    '/dashboards/quality/qc_complaint_dashboard.php'  => rmi_icon('search') . ' Quality Dashboard',
+    '/dashboards/owner/exec_summary.php'              => rmi_icon('user') . ' Executive Summary',
+    '/kpi/kpi_center.php'                             => rmi_icon('chart') . ' KPI Center',
+    '/absensi/index.php'                              => rmi_icon('calendar') . ' Absensi',
 ];
 
 // ── Helpers (HARUS di atas sebelum dipanggil) ─────────────────────────────
@@ -227,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $flashOk = false;
         } elseif (file_put_contents($ovFile, json_encode($newOv, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) !== false) {
             $navOv   = $newOv;
-            $flash   = '✓ Landing page tersimpan.';
+            $flash   = rmi_icon('tick') . ' Landing page tersimpan.';
             $flashOk = true;
         } else {
             $flash = "Gagal menulis file."; $flashOk = false;
@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $flashOk = false;
     } elseif (file_put_contents($ovFile, json_encode($newOv, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) !== false) {
         $navOv   = $newOv;
-        $flash   = '✓ Tersimpan.';
+        $flash   = rmi_icon('tick') . ' Tersimpan.';
         $flashOk = true;
         // Audit: perubahan konfigurasi sidebar adalah perubahan sistem yang penting
         try {
@@ -336,7 +336,7 @@ $selTab  = in_array($_GET['tab'] ?? 'nav', ['nav','landing'], true) ? ($_GET['ta
 
 // Flash setelah redirect landing save / error
 if (isset($_GET['saved']) && $selTab === 'landing') {
-    $flash = '✓ Landing page tersimpan.'; $flashOk = true;
+    $flash = rmi_icon('tick') . ' Landing page tersimpan.'; $flashOk = true;
 }
 if (isset($_GET['error']) && $selTab === 'landing') {
     $flash = 'Gagal menyimpan landing page (file tidak bisa ditulis atau penulisan gagal). Periksa hak tulis ke _shared/nav_overrides.json.';
@@ -359,17 +359,17 @@ $isAdvanced = !empty($_GET['advanced']) && $nmAdvancedSys;
 
 // Dept meta (warna & ikon)
 $deptMeta = [
-    'CRM'         => ['color' => '#3b82f6', 'icon' => '💼', 'label' => 'CRM'],
-    'SCM'         => ['color' => '#a78bfa', 'icon' => '🚢', 'label' => 'SCM'],
-    'WQS'         => ['color' => '#f97316', 'icon' => '📦', 'label' => 'WQS'],
-    'PQP'         => ['color' => '#eab308', 'icon' => '🛒', 'label' => 'PQP'],
-    'FIN'         => ['color' => '#22c55e', 'icon' => '💰', 'label' => 'FIN'],
-    'ACT'         => ['color' => '#fb923c', 'icon' => '📝', 'label' => 'ACT'],
-    'HRL'         => ['color' => '#ec4899', 'icon' => '👥', 'label' => 'HRL'],
-    'ITC'         => ['color' => '#64748b', 'icon' => '💻', 'label' => 'ITC'],
-    'MPR'         => ['color' => '#14b8a6', 'icon' => '🧩', 'label' => 'MPR'],
-    'BRANCH'      => ['color' => '#10b981', 'icon' => '🏢', 'label' => 'BRANCH'],
-    'SYS'         => ['color' => '#f59e0b', 'icon' => '⚙️', 'label' => 'SYS'],
+    'CRM'         => ['color' => '#3b82f6', 'icon' => rmi_icon('office'), 'label' => 'CRM'],
+    'SCM'         => ['color' => '#a78bfa', 'icon' => rmi_icon('box'), 'label' => 'SCM'],
+    'WQS'         => ['color' => '#f97316', 'icon' => rmi_icon('box'), 'label' => 'WQS'],
+    'PQP'         => ['color' => '#eab308', 'icon' => rmi_icon('cart'), 'label' => 'PQP'],
+    'FIN'         => ['color' => '#22c55e', 'icon' => rmi_icon('money'), 'label' => 'FIN'],
+    'ACT'         => ['color' => '#fb923c', 'icon' => rmi_icon('memo'), 'label' => 'ACT'],
+    'HRL'         => ['color' => '#ec4899', 'icon' => rmi_icon('users'), 'label' => 'HRL'],
+    'ITC'         => ['color' => '#64748b', 'icon' => rmi_icon('gear'), 'label' => 'ITC'],
+    'MPR'         => ['color' => '#14b8a6', 'icon' => rmi_icon('box'), 'label' => 'MPR'],
+    'BRANCH'      => ['color' => '#10b981', 'icon' => rmi_icon('office'), 'label' => 'BRANCH'],
+    'SYS'         => ['color' => '#f59e0b', 'icon' => rmi_icon('gear'), 'label' => 'SYS'],
 ];
 
 rmi_header('Nav Manager', [
@@ -377,7 +377,7 @@ rmi_header('Nav Manager', [
     'subtitle'    => 'Atur menu sidebar per departemen — server-side filtered',
     'breadcrumbs' => [['label' => 'Master Data', 'url' => 'index.php'], 'Nav Manager'],
     'actions'     => [
-        ['label' => '📋 nav_config.php', 'url' => '#', 'class' => 'btn btn-sm btn-ghost'],
+        ['label' => rmi_icon('clipboard') . ' nav_config.php', 'url' => '#', 'class' => 'btn btn-sm btn-ghost'],
     ],
 ]);
 ?>
@@ -393,8 +393,8 @@ rmi_header('Nav Manager', [
     color:var(--rmi-text,#e8ecf4); font-size:12px; font-weight:600;
     border:1.5px solid rgba(255,255,255,.1); transition:all .12s;
     background:rgba(255,255,255,.04) }
-.nm-tab:hover { border-color:rgba(255,255,255,.25); color:#fff; background:rgba(255,255,255,.07) }
-.nm-tab.active { color:#fff; font-weight:700 }
+.nm-tab:hover { border-color:rgba(255,255,255,.25); color:var(--rmi-text); background:rgba(255,255,255,.07) }
+.nm-tab.active { color:var(--rmi-text); font-weight:700 }
 .nm-tab .t-ov { font-size:10px; padding:1px 6px; border-radius:10px;
     background:rgba(245,158,11,.25); color:#fbbf24; border:1px solid rgba(245,158,11,.35) }
 .nm-tab-sep { width:1px; height:22px; background:rgba(255,255,255,.12); margin:0 4px }
@@ -475,10 +475,10 @@ rmi_header('Nav Manager', [
 .lp-dept-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
 .lp-current{font-size:11px;color:var(--rmi-muted,#94a3b8);margin-top:4px;font-family:monospace}
 .lp-select{width:100%;background:rgba(255,255,255,.05)!important;
-    border:1px solid rgba(255,255,255,.12)!important;color:#e2e8f0!important;
+    border:1px solid rgba(255,255,255,.12)!important;color:var(--rmi-text)!important;
     border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer}
 .lp-custom-url{width:100%;margin-top:6px;background:rgba(255,255,255,.05)!important;
-    border:1px solid rgba(245,158,11,.3)!important;color:#e2e8f0!important;
+    border:1px solid rgba(245,158,11,.3)!important;color:var(--rmi-text)!important;
     border-radius:8px;padding:6px 10px;font-size:12px;font-family:monospace}
 .lp-badge-default{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);
     padding:1px 7px;border-radius:6px;font-size:10px;font-weight:700}
@@ -496,7 +496,7 @@ rmi_header('Nav Manager', [
 
 <?php if (!$ovWritable): ?>
 <div class="alert alert-danger mb-3">
-  <strong>⚠️ File tidak bisa ditulis.</strong> SSH ke NAS dan jalankan:
+  <strong><?= rmi_icon('warn') ?> File tidak bisa ditulis.</strong> SSH ke NAS dan jalankan:
   <code style="display:block;margin-top:6px;user-select:all;background:rgba(0,0,0,.3);padding:4px 10px;border-radius:6px"><?= rmi_h($ovFixCmd) ?></code>
 </div>
 <?php endif; ?>
@@ -511,11 +511,11 @@ rmi_header('Nav Manager', [
 <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
   <a href="?tab=nav&dept=<?= rmi_h($selDept) ?>"
      class="btn btn-sm <?= $selTab==='nav' ? 'btn-rmi' : 'btn-ghost' ?>"
-     style="font-size:12px">🗂️ Sidebar Menu</a>
+     style="font-size:12px"><?= rmi_icon('clipboard') ?> Sidebar Menu</a>
   <a href="?tab=landing"
      class="btn btn-sm <?= $selTab==='landing' ? 'btn-rmi' : 'btn-ghost' ?>"
      style="font-size:12px">
-    🏠 Landing Page
+    <?= rmi_icon('home') ?> Landing Page
     <?php $lpCustomCount = count(array_filter($navOv['landing_pages'] ?? [], fn($v)=>!empty($v['url']))); ?>
     <?php if ($lpCustomCount > 0): ?>
       <span style="font-size:10px;padding:1px 6px;border-radius:10px;background:rgba(245,158,11,.25);color:#fbbf24;border:1px solid rgba(245,158,11,.35);margin-left:4px"><?= $lpCustomCount ?></span>
@@ -540,7 +540,7 @@ rmi_header('Nav Manager', [
 
   // Dept tabs
   foreach ($ALL_DEPTS as $d):
-      $m  = $deptMeta[$d] ?? ['color'=>'#94a3b8','icon'=>'🏢','label'=>$d];
+      $m  = $deptMeta[$d] ?? ['color'=>'#94a3b8','icon'=>rmi_icon('office'),'label'=>$d];
       $isActive = ($selDept === $d);
       $ov = $navOv['default'];
       $dOvCount = 0;
@@ -591,7 +591,7 @@ rmi_header('Nav Manager', [
 <div>
 
     <?php
-    $m = $deptMeta[$selDept] ?? ['color'=>'#94a3b8','icon'=>'🏢','label'=>$selDept];
+    $m = $deptMeta[$selDept] ?? ['color'=>'#94a3b8','icon'=>rmi_icon('office'),'label'=>$selDept];
     ?>
 
     <!-- Topbar -->
@@ -617,11 +617,11 @@ rmi_header('Nav Manager', [
       <div class="d-flex gap-2">
         <?php if ($nmAdvancedSys && !$isAdvanced): ?>
         <a href="?dept=<?= rmi_h($selDept) ?>&advanced=1"
-           class="btn btn-sm btn-ghost" style="font-size:11px" title="Hanya akun SYS — atur semua dept per menu">⚙️ Advanced</a>
+           class="btn btn-sm btn-ghost" style="font-size:11px" title="Hanya akun SYS — atur semua dept per menu"><?= rmi_icon('gear') ?> Advanced</a>
         <?php endif; ?>
         <?php if (!in_array($selDept, ['SYS'], true)): ?>
         <button form="frm-main" type="submit" class="btn btn-sm btn-rmi">
-          💾 Simpan <?= rmi_h($selDept) ?>
+          <?= rmi_icon('doc') ?> Simpan <?= rmi_h($selDept) ?>
         </button>
         <?php endif; ?>
       </div>
@@ -631,7 +631,7 @@ rmi_header('Nav Manager', [
     <!-- ADMIN: info only -->
     <div class="nm-card">
       <div class="nm-admin-info">
-        <div class="ai-icon">👑</div>
+        <div class="ai-icon"><?= rmi_icon('user') ?></div>
         <div class="ai-title" style="color:#f59e0b">SYS</div>
         <div class="ai-desc">
           SYS memiliki akses penuh ke <strong>semua menu</strong> tanpa terkecuali.<br><br>
@@ -648,7 +648,7 @@ rmi_header('Nav Manager', [
     <!-- ── ADVANCED MODE (SYS only) — bisa dibuka dari tab SYS atau dept lain ── -->
     <div class="rmi-card p-3 mb-3" style="background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.2)">
       <div style="font-size:12px;color:#fbbf24">
-        ⚙️ <strong>Mode Advanced</strong> (SYS) — atur semua dept sekaligus per menu item.
+        <?= rmi_icon('gear') ?> <strong>Mode Advanced</strong> (SYS) — atur semua dept sekaligus per menu item.
         <a href="?dept=<?= rmi_h($selDept) ?>" style="color:#94a3b8;margin-left:8px">← Kembali<?= $selDept === 'SYS' ? ' ke info SYS' : ' ke mode normal' ?></a>
       </div>
     </div>
@@ -710,7 +710,7 @@ rmi_header('Nav Manager', [
         </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button type="submit" class="btn btn-rmi">💾 Simpan (Advanced)</button>
+        <button type="submit" class="btn btn-rmi"><?= rmi_icon('doc') ?> Simpan (Advanced)</button>
       </div>
     </form>
 
@@ -731,7 +731,7 @@ rmi_header('Nav Manager', [
         <div style="font-size:11px;color:var(--rmi-muted,#9ca3af)">
           Override disimpan ke <code>nav_overrides.json</code> — tidak mengubah <code>nav_config.php</code>
         </div>
-        <button type="submit" class="btn btn-rmi">💾 Simpan <?= rmi_h($selDept) ?></button>
+        <button type="submit" class="btn btn-rmi"><?= rmi_icon('doc') ?> Simpan <?= rmi_h($selDept) ?></button>
       </div>
     </form>
     <?php endif; ?>
@@ -744,7 +744,7 @@ rmi_header('Nav Manager', [
 <!-- ══ LANDING PAGE MANAGER ══════════════════════════════════════════════ -->
 <div class="nm-card p-4 mb-3" style="background:rgba(6,182,212,.04);border-color:rgba(6,182,212,.15)">
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-    <span style="font-size:20px">🏠</span>
+    <span style="font-size:20px"><?= rmi_icon('home') ?></span>
     <div>
       <div style="font-weight:700;font-size:14px">Landing Page per Departemen</div>
       <div style="font-size:12px;color:var(--rmi-muted,#94a3b8);margin-top:2px">
@@ -763,7 +763,7 @@ rmi_header('Nav Manager', [
 
   <div class="lp-grid mb-3">
   <?php foreach ($ALL_DEPTS_FULL as $d):
-    $meta    = $deptMeta[$d] ?? ['color'=>'#94a3b8','icon'=>'🏢','label'=>$d];
+    $meta    = $deptMeta[$d] ?? ['color'=>'#94a3b8','icon'=>rmi_icon('office'),'label'=>$d];
     $default = $landingDefaults[$d] ?? '/dashboards/index.php';
     $ovEntry = $navOv['landing_pages'][$d] ?? null;
     $current = ($ovEntry && !empty($ovEntry['url'])) ? $ovEntry['url'] : $default;
@@ -781,9 +781,9 @@ rmi_header('Nav Manager', [
             <?= rmi_h($meta['label']) ?>
           </span>
           <?php if ($isCustom): ?>
-            <span class="lp-badge-custom">⚡ Custom</span>
+            <span class="lp-badge-custom"><?= rmi_icon('zap') ?> Custom</span>
           <?php else: ?>
-            <span class="lp-badge-default">✓ Default</span>
+            <span class="lp-badge-default"><?= rmi_icon('tick') ?> Default</span>
           <?php endif; ?>
         </div>
         <div class="lp-current"><?= rmi_h($current) ?></div>
@@ -798,7 +798,7 @@ rmi_header('Nav Manager', [
       <!-- Option: default -->
       <option value="<?= rmi_h($default) ?>"
               <?= (!$isCustom || $current === $default) ? 'selected' : '' ?>>
-        🔄 Default: <?= rmi_h($LANDING_PRESETS[$default] ?? $default) ?>
+        <?= rmi_icon('refresh') ?> Default: <?= rmi_h($LANDING_PRESETS[$default] ?? $default) ?>
       </option>
       <!-- Separator -->
       <optgroup label="── Preset Halaman ──">
@@ -813,7 +813,7 @@ rmi_header('Nav Manager', [
       <!-- Custom URL -->
       <option value="__custom__"
               <?= ($isCustom && !$isPreset && $current !== $default) ? 'selected' : '' ?>>
-        ✏️ Custom URL...
+        <?= rmi_icon('memo') ?> Custom URL...
       </option>
     </select>
 
@@ -833,7 +833,7 @@ rmi_header('Nav Manager', [
 
   <!-- SYS / privileged note -->
   <div style="padding:12px 16px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:10px;font-size:12px;margin-bottom:14px">
-    <strong style="color:#fbbf24">👑 Privileged &amp; landing</strong>
+    <strong style="color:#fbbf24"><?= rmi_icon('user') ?> Privileged &amp; landing</strong>
     <span style="color:var(--rmi-muted,#94a3b8)"> — Setelah login, <strong>semua</strong> user (termasuk SYS/ADMIN/SUPERADMIN) memakai landing sesuai <strong>Departemen</strong> di kartu di atas + Nav Manager (sama dengan <code>auth_landing_path_for_dept()</code>). Default dept <strong>SYS</strong>: <code>/dashboards/index.php</code>. Ingin langsung ke kelola user? Pilih preset <strong>Master System Login</strong> atau Custom URL untuk dept terkait.</span>
   </div>
 
@@ -841,7 +841,7 @@ rmi_header('Nav Manager', [
     <div style="font-size:11px;color:var(--rmi-muted,#9ca3af)">
       Efektif langsung setelah disimpan. Berlaku saat login berikutnya.
     </div>
-    <button type="submit" class="btn btn-rmi">💾 Simpan Landing Pages</button>
+    <button type="submit" class="btn btn-rmi"><?= rmi_icon('doc') ?> Simpan Landing Pages</button>
   </div>
 </form>
 

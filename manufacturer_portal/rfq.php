@@ -4,6 +4,7 @@
  * RFQ — Manufacturer lihat RFQ, submit quotation.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_mportal_login();
@@ -193,7 +194,7 @@ foreach ($rfqs as $r) {
             </form>
             ' . (!empty($q['file_rel']) ? '<p class="small mt-2" style="color:#64748b">Attachment: ' . rmi_h(basename($q['file_rel'])) . '</p>' : '') . '
             <div class="mp-rfq-comments">
-                <div class="mp-rfq-comments-title">💬 Diskusi</div>
+                <div class="mp-rfq-comments-title">' . rmi_icon('users') . ' Diskusi</div>
                 ' . (empty($comms) ? '<p class="mp-rfq-comment-meta mb-2">Belum ada komentar.</p>' : '') . '
                 ' . implode('', array_map(function($c) {
                     return '<div class="mp-rfq-comment"><div>' . nl2br(rmi_h($c['body'])) . '</div><div class="mp-rfq-comment-meta">' . rmi_h($c['author_name']) . ' (' . rmi_h($c['author_type']) . ') · ' . rmi_h($c['created_at']) . '</div></div>';
@@ -259,7 +260,7 @@ $content = '
 
 <div class="mp-page-header">
   <div>
-    <h1 class="mp-page-title">📋 ' . rmi_h(mportal_t('rfq')) . '</h1>
+    <h1 class="mp-page-title">' . rmi_icon('clipboard') . ' ' . rmi_h(mportal_t('rfq')) . '</h1>
     <p class="mp-page-sub">' . rmi_h(mportal_t('cases_for')) . ' ' . rmi_h($mc) . '</p>
   </div>
 </div>
@@ -283,7 +284,7 @@ $content = '
   </div>
 </div>
 
-<div class="mp-section-title">📤 Submit Quotation</div>
+<div class="mp-section-title">' . rmi_icon('outbox') . ' Submit Quotation</div>
 ' . $forms . '
 ';
 

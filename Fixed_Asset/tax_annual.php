@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 require_once __DIR__ . '/_inc/layout.php';
 require_once __DIR__ . '/_inc/fa_helpers.php';
 
@@ -351,7 +352,7 @@ $totalNbv = 0.0;
     <div class="card-body">
       <h6 class="mb-2">Cek Missing Months (<?= h($year) ?>)</h6>
       <?php if (!$missingMonths): ?>
-        <div class="alert alert-success mb-0">Aman ✅ Semua bulan sudah ada depreciation run.</div>
+        <div class="alert alert-success mb-0">Aman <?=rmi_icon('check')?> Semua bulan sudah ada depreciation run.</div>
       <?php else: ?>
         <div class="alert alert-warning">
           Bulan yang belum ada depreciation run:

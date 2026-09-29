@@ -319,13 +319,13 @@ foreach ($rows as $r) {
 
     // Status badge HTML
     if ($isLate && $isMissCout) {
-        $statusHtml = '<span style="background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;white-space:nowrap">⏰ Telat + Belum Pulang</span>';
+        $statusHtml = '<span style="background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700;white-space:nowrap">' . rmi_icon("calendar") . ' Telat + Belum Pulang</span>';
     } elseif ($isLate) {
-        $statusHtml = '<span style="background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">⏰ Terlambat</span>';
+        $statusHtml = '<span style="background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">' . rmi_icon("calendar") . ' Terlambat</span>';
     } elseif ($isMissCout) {
-        $statusHtml = '<span style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">⚠️ Belum Pulang</span>';
+        $statusHtml = '<span style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">' . rmi_icon("warn") . ' Belum Pulang</span>';
     } else {
-        $statusHtml = '<span style="background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">✓ Normal</span>';
+        $statusHtml = '<span style="background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">' . rmi_icon("tick") . ' Normal</span>';
     }
 
     // Checkin display with time + late marker

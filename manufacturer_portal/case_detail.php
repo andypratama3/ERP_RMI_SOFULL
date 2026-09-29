@@ -4,6 +4,7 @@
  * Detail case Reg Alkes + upload dokumen.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_once __DIR__ . '/../master/_audit_master.php';
@@ -239,7 +240,7 @@ if (!empty($case['manufacture_id'])) {
 $content = '
 <a href="' . rmi_h($base) . '/manufacturer_portal/cases.php" class="btn btn-outline-secondary btn-sm mb-3">' . rmi_h(mportal_t('back_cases')) . '</a>
 <a href="' . rmi_h($base) . '/manufacturer_portal/" class="btn btn-outline-secondary btn-sm mb-3">' . rmi_h(mportal_t('dashboard')) . '</a>
-<div class="alert alert-primary mb-3"><strong>📤 ' . rmi_h(mportal_t('upload_form_hint')) . '</strong></div>
+<div class="alert alert-primary mb-3"><strong>' . rmi_icon('outbox') . ' ' . rmi_h(mportal_t('upload_form_hint')) . '</strong></div>
 ' . $manu_docs_card . '
 <div class="card mb-4">
     <div class="card-header">Case ' . rmi_h($case['case_code']) . '</div>

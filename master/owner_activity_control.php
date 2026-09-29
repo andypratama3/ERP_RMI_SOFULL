@@ -987,7 +987,7 @@ rmi_header('Owner Activity Control', [
 </div>
 
 <div class="small text-muted mb-2 oac-readonly-note">
-  <span aria-hidden="true">🔒</span>
+  <span aria-hidden="true"><?= rmi_icon('gear') ?></span>
   <span>Halaman ini hanya membaca <code>system_audit_logs</code> dan profil <code>master_system_login</code>. Tidak ada UPDATE/DELETE/POST transaksi bisnis.</span>
 </div>
 

@@ -23,7 +23,7 @@ rmi_header('Panduan SCM', [
         'Panduan SCM',
     ],
     'actions' => [
-        ['label' => '🚢 SCM Dashboard', 'url' => scm_u('/dashboards/scm/scm_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('box').' SCM Dashboard', 'url' => scm_u('/dashboards/scm/scm_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -51,7 +51,7 @@ rmi_header('Panduan SCM', [
 .pnd-badge.red{background:rgba(239,68,68,.2);color:#fca5a5}
 .pnd-flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0}
 .pnd-flow-item{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700}
-.pnd-flow-arrow{color:#475569;font-size:16px;font-weight:700}
+.pnd-flow-arrow{color:var(--rmi-muted);font-size:16px;font-weight:700}
 .pnd-tip{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:12px 16px;font-size:13px;color:#fbbf24;margin-top:12px}
 .pnd-warning{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:12px 16px;font-size:13px;color:#f87171;margin-top:12px}
 .scm-quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:14px}
@@ -60,7 +60,7 @@ rmi_header('Panduan SCM', [
 </style>
 
 <div class="pnd-hero">
-  <div style="font-size:28px;margin-bottom:8px">🚢</div>
+  <div style="font-size:28px;margin-bottom:8px"><?=rmi_icon('box')?></div>
   <div style="font-size:20px;font-weight:800;color:#e2e8f0;margin-bottom:6px">Panduan SCM — Supply Chain Management</div>
   <div style="color:#94a3b8;font-size:14px;line-height:1.7">
     SCM mengelola seluruh rantai pasok: dari Purchase Order, Import, Forwarding, hingga barang tiba di gudang.
@@ -73,7 +73,7 @@ rmi_header('Panduan SCM', [
   <!-- Alur Utama SCM -->
   <div class="col-12">
     <div class="pnd-section accent-blue">
-      <h5 style="color:#93c5fd;margin-bottom:16px">📋 Alur Utama SCM</h5>
+      <h5 style="color:#93c5fd;margin-bottom:16px"><?=rmi_icon('clipboard')?> Alur Utama SCM</h5>
       <div class="pnd-flow">
         <div class="pnd-flow-item" style="background:rgba(59,130,246,.2);color:#93c5fd">1. Purchase Request (WQS)</div>
         <span class="pnd-flow-arrow">→</span>
@@ -96,7 +96,7 @@ rmi_header('Panduan SCM', [
   <!-- Tugas Harian SCM Staff -->
   <div class="col-lg-6">
     <div class="pnd-section accent-purple">
-      <h5 style="color:#c4b5fd;margin-bottom:16px">👷 Tugas Harian — SCM Staff</h5>
+      <h5 style="color:#c4b5fd;margin-bottom:16px"><?=rmi_icon('gear')?> Tugas Harian — SCM Staff</h5>
 
       <div class="pnd-step">
         <div class="pnd-num" style="background:#3b82f6">1</div>
@@ -143,7 +143,7 @@ rmi_header('Panduan SCM', [
   <!-- Tugas Harian SCM Manager -->
   <div class="col-lg-6">
     <div class="pnd-section accent-amber">
-      <h5 style="color:#fcd34d;margin-bottom:16px">🎯 Tugas Harian — SCM Manager</h5>
+      <h5 style="color:#fcd34d;margin-bottom:16px"><?=rmi_icon('target')?> Tugas Harian — SCM Manager</h5>
 
       <div class="pnd-step">
         <div class="pnd-num" style="background:#f59e0b">1</div>
@@ -190,11 +190,11 @@ rmi_header('Panduan SCM', [
   <!-- Cara Pakai Import Control Tower -->
   <div class="col-12">
     <div class="pnd-section accent-teal">
-      <h5 style="color:#2dd4bf;margin-bottom:16px">🗼 Import Control Tower — Cara Pakai</h5>
+      <h5 style="color:#2dd4bf;margin-bottom:16px"><?=rmi_icon('tower')?> Import Control Tower — Cara Pakai</h5>
       <div class="row g-3">
         <div class="col-md-4">
           <div style="padding:14px;background:rgba(20,184,166,.06);border-radius:10px;border:1px solid rgba(20,184,246,.15)">
-            <div style="color:#2dd4bf;font-weight:700;margin-bottom:8px">📊 Kolom Status</div>
+            <div style="color:#2dd4bf;font-weight:700;margin-bottom:8px"><?=rmi_icon('chart')?> Kolom Status</div>
             <ul style="font-size:13px;color:#94a3b8;padding-left:16px;margin:0;line-height:2">
               <li><b style="color:#e2e8f0">Production</b> — barang sedang diproduksi</li>
               <li><b style="color:#e2e8f0">ETD</b> — perkiraan tanggal berangkat</li>
@@ -207,7 +207,7 @@ rmi_header('Panduan SCM', [
         </div>
         <div class="col-md-4">
           <div style="padding:14px;background:rgba(20,184,166,.06);border-radius:10px;border:1px solid rgba(20,184,246,.15)">
-            <div style="color:#2dd4bf;font-weight:700;margin-bottom:8px">✏️ Update Status PO</div>
+            <div style="color:#2dd4bf;font-weight:700;margin-bottom:8px"><?=rmi_icon('memo')?> Update Status PO</div>
             <ol style="font-size:13px;color:#94a3b8;padding-left:16px;margin:0;line-height:2">
               <li>Buka Import Control Tower</li>
               <li>Klik nomor PO yang mau diupdate</li>
@@ -219,7 +219,7 @@ rmi_header('Panduan SCM', [
         </div>
         <div class="col-md-4">
           <div style="padding:14px;background:rgba(20,184,166,.06);border-radius:10px;border:1px solid rgba(20,184,246,.15)">
-            <div style="color:#2dd4bf;font-weight:700;margin-bottom:8px">📋 Filter & Export</div>
+            <div style="color:#2dd4bf;font-weight:700;margin-bottom:8px"><?=rmi_icon('clipboard')?> Filter & Export</div>
             <ul style="font-size:13px;color:#94a3b8;padding-left:16px;margin:0;line-height:2">
               <li>Filter by <b style="color:#e2e8f0">Office</b> (cabang)</li>
               <li>Filter by <b style="color:#e2e8f0">Status</b> (Open/Closed)</li>
@@ -235,7 +235,7 @@ rmi_header('Panduan SCM', [
   <!-- Good Receipt -->
   <div class="col-lg-6">
     <div class="pnd-section accent-green">
-      <h5 style="color:#86efac;margin-bottom:16px">✅ Good Receipt (GR) — Langkah</h5>
+      <h5 style="color:#86efac;margin-bottom:16px"><?=rmi_icon('check')?> Good Receipt (GR) — Langkah</h5>
       <div class="pnd-step">
         <div class="pnd-num" style="background:#10b981">1</div>
         <div>
@@ -264,14 +264,14 @@ rmi_header('Panduan SCM', [
           <div class="pnd-desc">Klik <b>Simpan</b>. GR akan otomatis membuat WQS Incoming yang perlu diproses tim WQS.</div>
         </div>
       </div>
-      <div class="pnd-tip">💡 <b>GR Parsial:</b> Jika barang tiba sebagian, buat GR dengan qty parsial. Bisa buat GR lagi saat sisanya tiba.</div>
+      <div class="pnd-tip"><?=rmi_icon('zap')?> <b>GR Parsial:</b> Jika barang tiba sebagian, buat GR dengan qty parsial. Bisa buat GR lagi saat sisanya tiba.</div>
     </div>
   </div>
 
   <!-- Integrasi Lintas Dept -->
   <div class="col-lg-6">
     <div class="pnd-section accent-red">
-      <h5 style="color:#fca5a5;margin-bottom:16px">🔗 Integrasi SCM dengan Dept Lain</h5>
+      <h5 style="color:#fca5a5;margin-bottom:16px"><?=rmi_icon('doc')?> Integrasi SCM dengan Dept Lain</h5>
       <div style="display:flex;flex-direction:column;gap:12px">
         <div style="padding:12px 14px;background:rgba(239,68,68,.06);border-radius:10px;border:1px solid rgba(239,68,68,.15)">
           <div style="color:#f87171;font-weight:700;margin-bottom:4px">↔ SCM ↔ WQS</div>
@@ -296,20 +296,20 @@ rmi_header('Panduan SCM', [
   <!-- Quick Links -->
   <div class="col-12">
     <div class="pnd-section">
-      <h5 style="color:#e2e8f0;margin-bottom:14px">⚡ Akses Cepat SCM</h5>
+      <h5 style="color:#e2e8f0;margin-bottom:14px"><?=rmi_icon('zap')?> Akses Cepat SCM</h5>
       <div class="scm-quick">
-        <a href="<?= h(scm_u('/dashboards/scm/scm_dashboard.php')) ?>">🚢 SCM Dashboard</a>
-        <a href="<?= h(scm_u('/purchases/purchases_import_control_tower.php')) ?>">🗼 Import Control Tower</a>
-        <a href="<?= h(scm_u('/purchases/purchases_po.php')) ?>">📄 Purchase Order (PO)</a>
-        <a href="<?= h(scm_u('/purchases/purchases_gr.php')) ?>">✅ Good Receipt (GR)</a>
-        <a href="<?= h(scm_u('/purchases/purchases_forwarding_tasks.php')) ?>">🚢 Forwarding Tasks</a>
-        <a href="<?= h(scm_u('/purchases/purchases_ceisa_pib.php')) ?>">📋 PIB / CEISA</a>
-        <a href="<?= h(scm_u('/sales/scm_do_tasks.php')) ?>">📦 SCM Task DO</a>
-        <a href="<?= h(scm_u('/stock/wqs_pr.php')) ?>">📝 Purchase Request</a>
-        <a href="<?= h(scm_u('/stock/wqs_incoming.php')) ?>">📥 WQS Incoming</a>
-        <a href="<?= h(scm_u('/master/master_vendors.php')) ?>">🤝 Master Vendor</a>
-        <a href="<?= h(scm_u('/kpi/kpi_center.php')) ?>">📈 KPI Center</a>
-        <a href="<?= h(scm_u('/absensi/index.php')) ?>">📅 Absensi</a>
+        <a href="<?= h(scm_u('/dashboards/scm/scm_dashboard.php')) ?>"><?=rmi_icon('box')?> SCM Dashboard</a>
+        <a href="<?= h(scm_u('/purchases/purchases_import_control_tower.php')) ?>"><?=rmi_icon('tower')?> Import Control Tower</a>
+        <a href="<?= h(scm_u('/purchases/purchases_po.php')) ?>"><?=rmi_icon('doc')?> Purchase Order (PO)</a>
+        <a href="<?= h(scm_u('/purchases/purchases_gr.php')) ?>"><?=rmi_icon('check')?> Good Receipt (GR)</a>
+        <a href="<?= h(scm_u('/purchases/purchases_forwarding_tasks.php')) ?>"><?=rmi_icon('box')?> Forwarding Tasks</a>
+        <a href="<?= h(scm_u('/purchases/purchases_ceisa_pib.php')) ?>"><?=rmi_icon('clipboard')?> PIB / CEISA</a>
+        <a href="<?= h(scm_u('/sales/scm_do_tasks.php')) ?>"><?=rmi_icon('box')?> SCM Task DO</a>
+        <a href="<?= h(scm_u('/stock/wqs_pr.php')) ?>"><?=rmi_icon('memo')?> Purchase Request</a>
+        <a href="<?= h(scm_u('/stock/wqs_incoming.php')) ?>"><?=rmi_icon('inbox')?> WQS Incoming</a>
+        <a href="<?= h(scm_u('/master/master_vendors.php')) ?>"><?=rmi_icon('users')?> Master Vendor</a>
+        <a href="<?= h(scm_u('/kpi/kpi_center.php')) ?>"><?=rmi_icon('trend')?> KPI Center</a>
+        <a href="<?= h(scm_u('/absensi/index.php')) ?>"><?=rmi_icon('calendar')?> Absensi</a>
       </div>
     </div>
   </div>

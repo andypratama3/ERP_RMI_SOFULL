@@ -127,7 +127,7 @@ rmi_header('Import Products CSV', ['active' => 'master']);
     <a href="master_import_products.php?download_template=1" class="btn btn-sm btn-outline-light">Download Template CSV</a>
     <span class="small text-muted ms-2">— Jangan ubah nama kolom (sku, products_name, dll). Isi data, simpan CSV, lalu upload.</span>
   </div>
-  <div class="small text-warning mb-2">⚠️ Nama kolom harus persis seperti di template. category: <strong>BMHP</strong>, <strong>ALKES</strong>, atau <strong>AKSESORIS</strong>. unit: PCS, BOX, UNIT, dll.</div>
+  <div class="small text-warning mb-2"><?= rmi_icon('warn') ?> Nama kolom harus persis seperti di template. category: <strong>BMHP</strong>, <strong>ALKES</strong>, atau <strong>AKSESORIS</strong>. unit: PCS, BOX, UNIT, dll.</div>
   <form method="post" enctype="multipart/form-data" class="d-flex gap-2">
     <input type="hidden" name="csrf_token" value="<?= imp_h(csrf_token()) ?>">
     <input type="hidden" name="action" value="upload_preview">

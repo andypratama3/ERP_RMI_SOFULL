@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 // require_login(); // static scan marker (login enforced via _kpi_bootstrap.php)
 require_once __DIR__ . '/_kpi_bootstrap.php';
 $pdo = kpi_require_pdo();
@@ -57,13 +58,13 @@ $actionColors = [
 <!-- Filter -->
 <div class="card">
   <div class="kpi-header-row">
-    <h3 class="kpi-section-title">🔍 Filter Audit Log</h3>
+    <h3 class="kpi-section-title"><?=rmi_icon('search')?> Filter Audit Log</h3>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
       <a class="btn" href="kpi_audit.php?export=csv&m=<?= urlencode($module) ?>&a=<?= urlencode($action) ?>&u=<?= urlencode($actor) ?>">
-        ⬇ Export CSV
+        <?=rmi_icon('inbox')?> Export CSV
       </a>
       <?php if ($module || $action || $actor): ?>
-        <a class="btn secondary" href="kpi_audit.php">✕ Reset Filter</a>
+        <a class="btn secondary" href="kpi_audit.php"><?=rmi_icon('x')?> Reset Filter</a>
       <?php endif; ?>
     </div>
   </div>
@@ -108,9 +109,9 @@ $actionColors = [
 
 <!-- Table -->
 <div class="card">
-  <h3 class="kpi-section-title">📋 Audit Log <?= ($module||$action||$actor) ? '<span class="badge" style="font-size:10px;margin-left:6px">Filtered</span>' : '' ?></h3>
+  <h3 class="kpi-section-title"><?=rmi_icon('clipboard')?> Audit Log <?= ($module||$action||$actor) ? '<span class="badge" style="font-size:10px;margin-left:6px">Filtered</span>' : '' ?></h3>
   <?php if (empty($rows)): ?>
-    <div style="text-align:center;padding:28px;color:#475569;font-size:13px">
+    <div style="text-align:center;padding:28px;color:var(--rmi-muted);font-size:13px">
       Tidak ada log yang cocok dengan filter ini.
     </div>
   <?php else: ?>
@@ -133,7 +134,7 @@ $actionColors = [
           [$aColor, $aBg] = $actionColors[$act] ?? ['#e2e8f0','rgba(255,255,255,.06)'];
         ?>
         <tr>
-          <td style="color:#475569;font-size:11px"><?= h((string)($r['id'] ?? '')) ?></td>
+          <td style="color:var(--rmi-muted);font-size:11px"><?= h((string)($r['id'] ?? '')) ?></td>
           <td style="white-space:nowrap;font-size:11px;color:#64748b"><?= h((string)($r['created_at'] ?? '')) ?></td>
           <td>
             <code style="font-size:11px;color:#93c5fd;background:rgba(59,130,246,.12);padding:2px 7px;border-radius:5px">

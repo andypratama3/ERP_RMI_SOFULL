@@ -229,7 +229,7 @@ body{
 <body>
 
 <div class="print-controls">
-  <span style="font-weight:700;font-size:14px">🖨 Poster Kiosk Absensi</span>
+  <span style="font-weight:700;font-size:14px"><?=rmi_icon('print')?> Poster Kiosk Absensi</span>
 
   <form method="get" style="display:flex;gap:8px;align-items:center">
     <select name="office" onchange="this.form.submit()">
@@ -246,7 +246,7 @@ body{
     </select>
   </form>
 
-  <button onclick="window.print()">🖨 Print / Save PDF</button>
+  <button onclick="window.print()"><?=rmi_icon('print')?> Print / Save PDF</button>
   <a href="offices.php">← Kembali</a>
   <span class="hint">Ukuran cetak: A4 Portrait · Scale 100%</span>
 </div>
@@ -269,7 +269,7 @@ body{
       <div class="poster-brand-name">RMI SOFULL</div>
       <div class="poster-brand-sub">SISTEM INFORMASI MANAJEMEN</div>
     </div>
-    <div class="poster-badge">📋 ABSENSI<br>KARYAWAN</div>
+    <div class="poster-badge"><?=rmi_icon('clipboard')?> ABSENSI<br>KARYAWAN</div>
   </div>
 
   <!-- Body -->
@@ -283,26 +283,26 @@ body{
       <img src="<?= htmlspecialchars($qrUrl, ENT_QUOTES, 'UTF-8') ?>"
            class="poster-qr" width="200" height="200"
            alt="QR Absensi <?= htmlspecialchars($oc, ENT_QUOTES, 'UTF-8') ?>">
-      <div class="poster-qr-label">📷 SCAN QR CODE DI SINI</div>
+      <div class="poster-qr-label"><?=rmi_icon('doc')?> SCAN QR CODE DI SINI</div>
     </div>
 
     <!-- Steps -->
     <div class="poster-steps">
       <div class="poster-step">
         <div class="step-num">1</div>
-        <div class="step-icon">📷</div>
+        <div class="step-icon"><?=rmi_icon('doc')?></div>
         <div class="step-title">Scan QR Code</div>
         <div class="step-desc">Buka kamera HP dan arahkan ke QR code ini</div>
       </div>
       <div class="poster-step">
         <div class="step-num">2</div>
-        <div class="step-icon">🔐</div>
+        <div class="step-icon"><?=rmi_icon('gear')?></div>
         <div class="step-title">Login ERP</div>
         <div class="step-desc">Masukkan username dan password akun ERP Anda</div>
       </div>
       <div class="poster-step">
         <div class="step-num">3</div>
-        <div class="step-icon">🤳</div>
+        <div class="step-icon"><?=rmi_icon('user')?></div>
         <div class="step-title">Foto Selfie</div>
         <div class="step-desc">Ambil foto real-time lalu submit Check-in / Check-out</div>
       </div>

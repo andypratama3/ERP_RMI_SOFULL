@@ -638,7 +638,7 @@ require_once __DIR__ . '/_layout_top.php';
             <div class="sub">Fase 2 • Filter + Export. Fase 3 • Bulk Action + Audit Log</div>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
-            <a class="btn btn-outline-light btn-sm" href="<?=e(url_hrl('panduan.php'))?>">📖 Panduan</a>
+            <a class="btn btn-outline-light btn-sm" href="<?=e(url_hrl('panduan.php'))?>"><?=rmi_icon('books')?> Panduan</a>
             <?php if ($HRL_CAN_MANAGE): ?>
               <a class="btn btn-outline-light btn-sm" href="<?=e(url_hrl('hrl_docs.php?deleted=1'))?>">Show Deleted</a>
               <a class="btn btn-outline-light btn-sm" href="<?=e(url_hrl('hrl_docs.php'))?>">Reset</a>
@@ -733,7 +733,7 @@ require_once __DIR__ . '/_layout_top.php';
                     <td class="text-center">
                       <?php if ((int)$d['current_version'] > 0 && strtoupper((string)$d['status'])==='ACTIVE'): ?>
                         <?php if (!empty($d['my_ack_at'])): ?>
-                          <span class="badge bg-success">✓</span>
+                          <span class="badge bg-success"><?=rmi_icon('tick')?></span>
                         <?php else: ?>
                           <span class="badge bg-warning text-dark">-</span>
                         <?php endif; ?>

@@ -907,8 +907,8 @@ rmi_header('FIN - Task DO', [
     'FIN - Task DO',
   ],
   'actions' => [
-    ['label' => '📚 Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => '🗼 Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books') . ' Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('tower') . ' Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
   ],
   'extra_head' => '<style>
     :root{
@@ -1179,7 +1179,7 @@ rmi_header('FIN - Task DO', [
 
                   <?php if ($needs_tax_issued): ?>
                     <div class="alert bad" style="margin:8px 0; padding:8px 10px; font-size:11px">
-                      ⚠️ Tax Invoice status <b>ISSUED</b> belum tersedia untuk DO ini. Buat & set ISSUED di <a href="tax_invoices.php" target="_blank" rel="noopener">tax_invoices.php</a> sebelum Set PAID.
+                      <?= rmi_icon('warn') ?> Tax Invoice status <b>ISSUED</b> belum tersedia untuk DO ini. Buat & set ISSUED di <a href="tax_invoices.php" target="_blank" rel="noopener">tax_invoices.php</a> sebelum Set PAID.
                     </div>
                   <?php endif; ?>
                   <div class="actions">

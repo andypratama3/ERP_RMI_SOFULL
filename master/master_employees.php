@@ -1508,7 +1508,7 @@ rmi_header('Master Employees', [
                                   <?php if (!empty($e['linked_username'])): ?>
                                     <span style="color:#4ade80;font-weight:600"><?= htmlspecialchars((string)$e['linked_username']) ?></span>
                                   <?php else: ?>
-                                    <span class="badge bg-danger" style="font-size:11px">✗ Belum</span>
+                                    <span class="badge bg-danger" style="font-size:11px"><?= rmi_icon('x') ?> Belum</span>
                                   <?php endif; ?>
                                 </td>
                                 <td><?= htmlspecialchars((string)(me_get_dept_label($deptOptions, $e['dept_code'] ?? '') ?? '')) ?></td>

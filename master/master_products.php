@@ -1575,9 +1575,9 @@ rmi_header('Master Products', [
                     <select name="cat" class="form-select">
                         <option value="">All</option>
                         <?php foreach ([
-                            'BMHP'      => '🩺 BMHP',
-                            'ALKES'     => '⚕️ ALKES',
-                            'AKSESORIS' => '🔌 AKSESORIS',
+                            'BMHP'      => rmi_icon('box') . ' BMHP',
+                            'ALKES'     => rmi_icon('cross') . ' ALKES',
+                            'AKSESORIS' => rmi_icon('zap') . ' AKSESORIS',
                         ] as $cv => $cl): ?>
                             <option value="<?= h($cv) ?>" <?= ($filterCat===$cv?'selected':'') ?>><?= h($cl) ?></option>
                         <?php endforeach; ?>
@@ -1636,9 +1636,9 @@ rmi_header('Master Products', [
                     <label class="form-label">Category</label>
                     <?php $catVal = normalize_category((string)$form['category']); ?>
                     <select name="category" class="form-select" required>
-                        <option value="BMHP"      <?= $catVal==='BMHP'?'selected':''      ?>>🩺 BMHP — Bahan Medis Habis Pakai</option>
-                        <option value="ALKES"     <?= $catVal==='ALKES'?'selected':''     ?>>⚕️ ALKES — Alat Kesehatan Durable</option>
-                        <option value="AKSESORIS" <?= $catVal==='AKSESORIS'?'selected':'' ?>>🔌 AKSESORIS — Aksesori Alkes</option>
+                        <option value="BMHP"      <?= $catVal==='BMHP'?'selected':''      ?>><?= rmi_icon('box') ?> BMHP — Bahan Medis Habis Pakai</option>
+                        <option value="ALKES"     <?= $catVal==='ALKES'?'selected':''     ?>><?= rmi_icon('cross') ?> ALKES — Alat Kesehatan Durable</option>
+                        <option value="AKSESORIS" <?= $catVal==='AKSESORIS'?'selected':'' ?>><?= rmi_icon('zap') ?> AKSESORIS — Aksesori Alkes</option>
                     </select>
                 </div>
 

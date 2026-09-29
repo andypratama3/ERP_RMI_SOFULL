@@ -2604,9 +2604,9 @@ rmi_header('Executive Summary',[
     'breadcrumbs'=>[['label'=>'Dashboard Center','url'=>'../../dashboards/index.php'],'Executive Summary'],
     'extra_head'=>$extraHead,
     'actions'=>[
-        ['label'=>'📚 Panduan','url'=>'../../dashboards/owner/panduan.php'],
-        ['label'=>'📈 KPI Center','url'=>'../../kpi/kpi_center.php'],
-        ['label'=>'📋 Audit','url'=>'../../master/audit_logs.php'],
+        ['label'=>rmi_icon('books').' Panduan','url'=>'../../dashboards/owner/panduan.php'],
+        ['label'=>rmi_icon('trend').' KPI Center','url'=>'../../kpi/kpi_center.php'],
+        ['label'=>rmi_icon('clipboard').' Audit','url'=>'../../master/audit_logs.php'],
     ],
 ]);
 ?>
@@ -2629,7 +2629,7 @@ rmi_header('Executive Summary',[
  <span class="es-pill">Due default <?=$daysDue?> hari</span>
 </div>
 
-<div class="es-head">⚠️ Alert & Risiko</div>
+<div class="es-head"><?=rmi_icon('warn')?> Alert & Risiko</div>
 <div class="row g-3">
  <?php
  $alerts=[
@@ -2644,7 +2644,7 @@ rmi_header('Executive Summary',[
  <?php endforeach;?>
 </div>
 
-<div class="es-head">💰 Revenue & Profitabilitas</div>
+<div class="es-head"><?=rmi_icon('money')?> Revenue & Profitabilitas</div>
 <div class="row g-3">
  <div class="col-6 col-md-3"><div class="es-card"><div class="es-label">Consolidated Achievement MTD</div><div class="es-value"><?=es_money($achievement_mtd['net'])?></div><div class="es-sub">RMI <?=es_money($achievement_mtd['rmi_net'])?> + Unit ACC <?=es_money($achievement_mtd['unit_acc_net'])?><br><small><?=es_num($achievement_mtd['cnt'])?> transaksi effective · cutoff <?=h($mtd_end)?></small></div></div></div>
  <div class="col-6 col-md-3"><div class="es-card"><div class="es-label">Revenue YTD (Net)</div><div class="es-value"><?=es_money($rev_ytd['net'])?></div><div class="es-sub"><?=h($ytd_start)?> → <?=h($mtd_end)?></div></div></div>
@@ -2656,7 +2656,7 @@ rmi_header('Executive Summary',[
 </div>
 
 <?php if($reconMode):?>
-<div class="es-head">🔬 Exact Reconciliation Diagnostic V21</div>
+<div class="es-head"><?=rmi_icon('search')?> Exact Reconciliation Diagnostic V21</div>
 <div class="rmi-card p-4" style="border-color:#f59e0b">
   <form method="get" class="row g-2 align-items-end" style="margin-bottom:14px">
     <input type="hidden" name="as_of" value="<?=h($as_of)?>">
@@ -2757,7 +2757,7 @@ rmi_header('Executive Summary',[
 <?php endif;?>
 
 <?php if($officePerfRows):?>
-<div class="es-head">🎯 Target vs Pencapaian per Office</div>
+<div class="es-head"><?=rmi_icon('target')?> Target vs Pencapaian per Office</div>
 <div class="rmi-card p-0 overflow-hidden"><div style="overflow:auto"><table class="es-table"><thead><tr><th>Office</th><th class="text-end">Target</th><th class="text-end">Pencapaian</th><th class="text-end">%</th></tr></thead><tbody>
 <?php foreach($officePerfRows as $r):?>
 <tr><td><b><?=h($r['office_code'])?></b><br><small><?=h($r['office_name'])?></small></td><td class="text-end"><?=es_money($r['target'])?><?php if(!empty($r['target_proxy_period'])):?><br><small>proxy <?=h($r['target_proxy_period'])?></small><?php endif;?></td><td class="text-end"><?=es_money($r['pencapaian'])?></td><td class="text-end"><?=$r['persentase']===null?'—':es_pct($r['persentase'])?></td></tr>
@@ -2766,7 +2766,7 @@ rmi_header('Executive Summary',[
 <?php endif;?>
 
 <?php if(!empty($revRecon['enabled'])):?>
-<div class="es-head">🧩 Rekonsiliasi Penjualan Dinamis — As Of <?=h($revRecon['compare_date']??$mtd_end)?></div>
+<div class="es-head"><?=rmi_icon('gear')?> Rekonsiliasi Penjualan Dinamis — As Of <?=h($revRecon['compare_date']??$mtd_end)?></div>
 <div class="rmi-card p-4">
   <div class="row g-3">
     <div class="col-md-3"><div class="es-label">RMI Pencapaian Aktual</div><div class="es-value"><?=es_money($revRecon['rmi_achievement'])?></div><div class="es-sub"><?=es_num($revRecon['achievement_count'])?> DO BMHP aktif.</div></div>
@@ -2819,7 +2819,7 @@ rmi_header('Executive Summary',[
 
 
 <?php if(!empty($revRecon['revision_duplicate_rows'])):?>
-  <div class="es-head" style="margin-top:18px">🛠️ Koreksi Kesalahan Operator — Turunan Revisi Dikeluarkan dari Achievement</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('gear')?> Koreksi Kesalahan Operator — Turunan Revisi Dikeluarkan dari Achievement</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Office</th><th>Tanggal</th><th>DO Salah/Turunan</th><th>Parent DO ID</th><th>Customer</th><th class="text-end">Nilai Dikeluarkan</th><th>Keterangan</th></tr></thead>
     <tbody><?php foreach($revRecon['revision_duplicate_rows'] as $rd):?>
@@ -2837,7 +2837,7 @@ rmi_header('Executive Summary',[
 <?php endif;?>
 
 <?php if(!empty($revRecon['legacy_blank_status_rows'])):?>
-  <div class="es-head" style="margin-top:18px">🧾 Legacy Status Kosong — Tetap Dihitung</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('receipt')?> Legacy Status Kosong — Tetap Dihitung</div>
   <div class="es-sub" style="margin-bottom:8px">
     Status kosong pada data lama bukan status terminal. Baris di bawah tetap masuk achievement
     karena DO BMHP valid, nilai positif, office canonical, dan bukan internal/intercompany.
@@ -2858,7 +2858,7 @@ rmi_header('Executive Summary',[
 <?php endif;?>
 
 <?php if(!empty($returnAdj['unclassified_current_rows'])):?>
-  <div class="es-head" style="margin-top:18px">⚠️ DATA QUALITY BLOCKER — Retur FINAL MTD Belum Diklasifikasi</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('warn')?> DATA QUALITY BLOCKER — Retur FINAL MTD Belum Diklasifikasi</div>
   <div class="es-sub" style="margin-bottom:8px">
     Retur BMHP periode aktif berikut sudah selesai SCM tetapi belum memiliki <code>commercial_effect</code>.
     Baris ini tidak mengurangi KPI sampai diklasifikasi. Return baru tidak boleh masuk kondisi ini karena finalisasi SCM mewajibkan klasifikasi.
@@ -2923,7 +2923,7 @@ rmi_header('Executive Summary',[
 <?php endif;?>
 
 <?php if(!empty($revRecon['replacement_rows'])):?>
-  <div class="es-head" style="margin-top:18px">🔄 DO Pengganti Terhubung — Fulfillment Item Retur</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('refresh')?> DO Pengganti Terhubung — Fulfillment Item Retur</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Office</th><th>Tanggal DO</th><th>DO Pengganti</th><th>Customer</th><th>Status</th><th class="text-end">Fulfillment</th><th class="text-end">Child Net (Audit)</th><th>Keterangan</th></tr></thead>
     <tbody><?php foreach($revRecon['replacement_rows'] as $rp):?>
@@ -2942,7 +2942,7 @@ rmi_header('Executive Summary',[
   <?php endif;?>
 
   <?php if($revRecon['process_rows']):?>
-  <div class="es-head" style="margin-top:18px">🚚 DO Aktif yang Masih Berproses — Diagnostik</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('box')?> DO Aktif yang Masih Berproses — Diagnostik</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Office</th><th>Tanggal</th><th>DO</th><th>Customer</th><th>Status As-Of</th><th class="text-end">Nilai DO</th><th>Keterangan</th></tr></thead>
     <tbody><?php foreach($revRecon['process_rows'] as $pr):?>
@@ -2954,7 +2954,7 @@ rmi_header('Executive Summary',[
 
 
   <?php if(!empty($revRecon['gross_net_delta_rows'])):?>
-  <div class="es-head" style="margin-top:18px">🧾 Audit Gross vs Net DO — Komponen yang Tidak Masuk Pencapaian</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('receipt')?> Audit Gross vs Net DO — Komponen yang Tidak Masuk Pencapaian</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Office</th><th>Tanggal</th><th>DO</th><th>Customer</th><th>Status</th><th class="text-end">Header Gross</th><th class="text-end">Net Sales</th><th class="text-end">Selisih</th></tr></thead>
     <tbody><?php foreach($revRecon['gross_net_delta_rows'] as $gr):?>
@@ -2973,7 +2973,7 @@ rmi_header('Executive Summary',[
   <?php endif;?>
 
   <?php if(!empty($revRecon['daily_office_totals'])):?>
-  <div class="es-head" style="margin-top:18px">🧮 Audit Harian per Office — Sales DO Aktual</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('money')?> Audit Harian per Office — Sales DO Aktual</div>
   <div style="overflow:auto"><table class="es-table">
     <thead>
       <tr>
@@ -2998,7 +2998,7 @@ rmi_header('Executive Summary',[
   <?php endif;?>
 
   <?php if(!empty($revRecon['daily_totals'])):?>
-  <div class="es-head" style="margin-top:18px">📅 Mutasi Pencapaian Harian dari sales_do</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('calendar')?> Mutasi Pencapaian Harian dari sales_do</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Tanggal DO</th><th class="text-end">Jumlah DO</th><th class="text-end">Nilai Hari Itu</th><th class="text-end">MTD Kumulatif</th></tr></thead>
     <tbody>
@@ -3015,7 +3015,7 @@ rmi_header('Executive Summary',[
   <?php endif;?>
 
   <?php if(!empty($revRecon['small_included_rows'])):?>
-  <div class="es-head" style="margin-top:18px">🔎 Audit DO Kecil yang IKUT Pencapaian (≤ Rp500.000)</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('search')?> Audit DO Kecil yang IKUT Pencapaian (≤ Rp500.000)</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Office</th><th>Tanggal DO</th><th>Created At / Effective</th><th>DO</th><th>Customer</th><th>Nama</th><th>Status As-Of</th><th class="text-end">Nilai</th></tr></thead>
     <tbody><?php foreach($revRecon['small_included_rows'] as $sr):?>
@@ -3035,7 +3035,7 @@ rmi_header('Executive Summary',[
   <?php endif;?>
 
   <?php if(!empty($revRecon['unclassified_rows'])):?>
-  <div class="es-head" style="margin-top:18px">🧭 Customer Belum Terklasifikasi — Tetap Dihitung</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('search')?> Customer Belum Terklasifikasi — Tetap Dihitung</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Office</th><th>Tanggal</th><th>DO</th><th>Customer</th><th>Nama Customer</th><th>Status</th><th class="text-end">Nilai</th></tr></thead>
     <tbody><?php foreach($revRecon['unclassified_rows'] as $ur):?>
@@ -3053,7 +3053,7 @@ rmi_header('Executive Summary',[
   <?php endif;?>
 
   <?php if(!empty($revRecon['late_backdated_rows'])):?>
-  <div class="es-head" style="margin-top:18px">🕒 Backdated DO Aktif — Tetap Dihitung 1x</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('calendar')?> Backdated DO Aktif — Tetap Dihitung 1x</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Office</th><th>DO Date</th><th>Created At</th><th>DO</th><th>Customer</th><th>Status</th><th class="text-end">Nilai</th><th>Keterangan</th></tr></thead>
     <tbody><?php foreach($revRecon['late_backdated_rows'] as $fr):?>
@@ -3072,7 +3072,7 @@ rmi_header('Executive Summary',[
   <?php endif;?>
 
   <?php if(!empty($revRecon['internal_transfer_rows'])):?>
-  <div class="es-head" style="margin-top:18px">🔁 Internal Transfer — Dikeluarkan dari Pencapaian</div>
+  <div class="es-head" style="margin-top:18px"><?=rmi_icon('refresh')?> Internal Transfer — Dikeluarkan dari Pencapaian</div>
   <div style="overflow:auto"><table class="es-table">
     <thead><tr><th>Office</th><th>Tanggal</th><th>DO</th><th>Customer</th><th>Nama Customer</th><th>Status</th><th class="text-end">Nilai</th></tr></thead>
     <tbody><?php foreach($revRecon['internal_transfer_rows'] as $ir):?>
@@ -3096,7 +3096,7 @@ rmi_header('Executive Summary',[
 <?php endif;?>
 
 
-<div class="es-head">🏭 AR & Inventory</div>
+<div class="es-head"><?=rmi_icon('office')?> AR & Inventory</div>
 <div class="row g-3">
  <div class="col-6 col-md-3"><div class="es-card"><div class="es-label">AR Outstanding</div><div class="es-value"><?=es_money($ar['outstanding'])?></div><div class="es-sub">Status <?=h(implode(', ',$arStatuses))?> · posisi s.d. <?=h($mtd_end)?></div></div></div>
  <div class="col-6 col-md-3"><div class="es-card"><div class="es-label">AR Overdue</div><div class="es-value"><?=es_money($ar['overdue'])?></div><div class="es-sub">Due proxy +<?=$daysDue?> hari · aging per <?=h($mtd_end)?></div></div></div>
@@ -3104,13 +3104,13 @@ rmi_header('Executive Summary',[
  <div class="col-6 col-md-3"><div class="es-card"><div class="es-label">Days of Inventory</div><div class="es-value"><?=$inv['days']===null?'—':es_num($inv['days']).' hari'?></div><div class="es-sub">Proxy inventory / COGS 30d</div></div></div>
 </div>
 
-<div class="es-head">🚢 Import & PO Pipeline</div>
+<div class="es-head"><?=rmi_icon('box')?> Import & PO Pipeline</div>
 <div class="rmi-card p-4">
  <div class="row g-3"><div class="col-md-4"><div class="es-label">PO Pipeline Value</div><div class="es-value"><?=es_money($po['value'])?></div><div class="es-sub"><?=es_num($po['count'])?> PO aktif · dibuat s.d. <?=h($mtd_end)?></div></div>
  <div class="col-md-8"><table class="es-table"><thead><tr><th>PO</th><th>PIB</th><th>GR</th><th>AP</th></tr></thead><tbody><tr><td><?=es_num($po['count'])?></td><td><?=es_num($po['pib_cnt'])?></td><td><?=es_num($po['gr_cnt'])?></td><td><?=es_num($po['ap_cnt'])?></td></tr></tbody></table></div></div>
 </div>
 
-<div class="es-head">📊 P&L Cross-Module</div>
+<div class="es-head"><?=rmi_icon('chart')?> P&L Cross-Module</div>
 <div class="rmi-card p-4"><div class="row g-3">
  <div class="col-md-3"><div class="es-label">Revenue</div><div class="es-value"><?=es_money($rev_mtd['net'])?></div></div>
  <div class="col-md-3"><div class="es-label">COGS Proxy</div><div class="es-value"><?=$gm_is_reliable?es_money($gm['cogs']):'Belum valid'?></div><div class="es-sub">PO historical unit_price · coverage <?=$gm['coverage_pct']===null?'—':es_pct($gm['coverage_pct'])?></div></div>
@@ -3119,7 +3119,7 @@ rmi_header('Executive Summary',[
 </div></div>
 
 
-<div class="es-head">🧭 Status Sumber Data</div>
+<div class="es-head"><?=rmi_icon('search')?> Status Sumber Data</div>
 <div class="rmi-card p-4">
   <div class="row g-3" style="font-size:12px">
     <div class="col-md-3"><b>Revenue</b><br><?=is_array($detailData)?'Finance Dashboard Detail · cutoff '.h($mtd_end).' · status tidak dipaksa':'sales_do fallback · cutoff '.h($mtd_end)?></div>
@@ -3129,7 +3129,7 @@ rmi_header('Executive Summary',[
   </div>
 </div>
 
-<div class="es-head">📋 Audit Log — 24 Jam</div>
+<div class="es-head"><?=rmi_icon('clipboard')?> Audit Log — 24 Jam</div>
 <div style="display:flex;gap:8px;margin-bottom:8px"><span class="es-pill">Login berhasil <?=$login['success']?></span><span class="es-pill">Ditolak <?=$login['denied']?></span><span class="es-pill">Logout <?=$login['logout']?></span></div>
 <div class="rmi-card p-0 overflow-hidden">
 <?php if(!$audit):?><div style="padding:18px;color:#94a3b8">Belum ada aktivitas 24 jam terakhir.</div>

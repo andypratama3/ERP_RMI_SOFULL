@@ -2320,7 +2320,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                     Rekap Dashboard
                 </a>
                 <a href="<?= htmlspecialchars($baseProject . '/master/audit_logs.php?module=SALES_DO') ?>" class="btn btn-sm btn-outline-warning" target="_blank" rel="noopener" title="Lihat audit log semua aktivitas DO">
-                    📋 Audit Log
+                    <?= rmi_icon('clipboard') ?> Audit Log
                 </a>
                 <?php
                 // sales_errors.log adalah file yang dipakai centralized logger untuk modul sales/*
@@ -2328,7 +2328,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                 if (file_exists($errLogFile) && filesize($errLogFile) > 0):
                 ?>
                 <a href="<?= htmlspecialchars($baseProject . '/tools/view_error_log.php?file=sales_errors') ?>" class="btn btn-sm btn-outline-danger" target="_blank" rel="noopener" title="Ada error log Sales DO — klik untuk lihat">
-                    ⚠️ Error Log
+                    <?= rmi_icon('warn') ?> Error Log
                 </a>
                 <?php endif; ?>
             </div>

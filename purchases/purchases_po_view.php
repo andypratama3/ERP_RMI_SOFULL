@@ -637,7 +637,7 @@ rmi_header('PO View', 'purchases', [
             <form method="post" onsubmit="return confirm('Revisi kebutuhan: batalkan PO lama dan kembalikan PR ke WQS? PO lama tetap CANCELLED sebagai histori.');">
               <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
               <input type="hidden" name="cancel_return_wqs" value="1">
-              <label class="form-label">🟡 Revisi Kebutuhan WQS</label>
+              <label class="form-label"><?= rmi_icon('warn') ?> Revisi Kebutuhan WQS</label>
               <textarea class="form-control form-control-sm mb-2" name="revision_reason" rows="2" required placeholder="Produk/qty/unit/office/kebutuhan berubah"></textarea>
               <button class="btn btn-warning btn-sm w-100">↩ Cancel PO + Return PR to WQS</button>
               <div class="muted mt-1">Hasil: PO=CANCELLED, PR=REVISION_WQS. Jika PR salah total, WQS dapat menghapusnya lewat Hapus Terpilih; jika hanya perlu koreksi, revisi lalu SUBMIT ulang.</div>
@@ -647,9 +647,9 @@ rmi_header('PO View', 'purchases', [
             <form method="post" onsubmit="return confirm('Batalkan kebutuhan seluruhnya? PO dan PR akan menjadi CANCELLED dan tidak dikirim kembali untuk revisi.');">
               <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
               <input type="hidden" name="cancel_requirement" value="1">
-              <label class="form-label">🔴 Batalkan Kebutuhan</label>
+              <label class="form-label"><?= rmi_icon('cross') ?> Batalkan Kebutuhan</label>
               <textarea class="form-control form-control-sm mb-2" name="cancel_reason" rows="2" required placeholder="Alasan kebutuhan/order tidak dilanjutkan"></textarea>
-              <button class="btn btn-danger btn-sm w-100">✕ Cancel PO + Close PR</button>
+              <button class="btn btn-danger btn-sm w-100"><?= rmi_icon('x') ?> Cancel PO + Close PR</button>
               <div class="muted mt-1">Hasil: PO=CANCELLED, PR=CANCELLED. Gunakan hanya bila kebutuhan benar-benar tidak dilanjutkan.</div>
             </form>
           </div>
@@ -659,7 +659,7 @@ rmi_header('PO View', 'purchases', [
         <?php else: ?>
           <div class="alert alert-warning py-2 mb-0" style="font-size:12px">Direct cancel/revisi WQS tidak tersedia. PO sudah memiliki status/proses downstream atau dependency belum dapat diverifikasi. Gunakan operational cancellation/reversal pada Finance/SCM/ACT/WQS sesuai Impact Preview.</div>
         <?php endif; ?>
-        <div class="alert alert-info py-2 mt-2 mb-0" style="font-size:12px"><b>🔵 Koreksi komersial:</b> harga, diskon, PPN, currency, payment term tidak mengembalikan PR ke WQS dan hanya boleh diedit saat PO DRAFT/OPEN.</div>
+        <div class="alert alert-info py-2 mt-2 mb-0" style="font-size:12px"><b><?= rmi_icon('memo') ?> Koreksi komersial:</b> harga, diskon, PPN, currency, payment term tidak mengembalikan PR ke WQS dan hanya boleh diedit saat PO DRAFT/OPEN.</div>
         <?php endif; ?>
 
         <hr>

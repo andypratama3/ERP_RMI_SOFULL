@@ -307,9 +307,9 @@ rmi_header('Master Products - Paket', [
                             <label class="form-label">Kategori Paket <span class="text-danger">*</span></label>
                             <?php $pkgCatVal = strtoupper(trim((string)($form['category'] ?? 'BMHP'))); if (!in_array($pkgCatVal,['BMHP','ALKES','AKSESORIS'],true)) $pkgCatVal='BMHP'; ?>
                             <select name="pkg_category" class="form-select">
-                                <option value="BMHP"      <?= $pkgCatVal==='BMHP'?'selected':''      ?>>🩺 BMHP — Habis Pakai</option>
-                                <option value="ALKES"     <?= $pkgCatVal==='ALKES'?'selected':''     ?>>⚕️ ALKES — Alat Kesehatan</option>
-                                <option value="AKSESORIS" <?= $pkgCatVal==='AKSESORIS'?'selected':'' ?>>🔌 AKSESORIS</option>
+                                <option value="BMHP"      <?= $pkgCatVal==='BMHP'?'selected':''      ?>><?= rmi_icon('box') ?> BMHP — Habis Pakai</option>
+                                <option value="ALKES"     <?= $pkgCatVal==='ALKES'?'selected':''     ?>><?= rmi_icon('cross') ?> ALKES — Alat Kesehatan</option>
+                                <option value="AKSESORIS" <?= $pkgCatVal==='AKSESORIS'?'selected':'' ?>><?= rmi_icon('zap') ?> AKSESORIS</option>
                             </select>
                         </div>
 

@@ -405,7 +405,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         sales_do_audit_append($pdo, $id, $curStatus, 'on_delivery', 'SCM', $note);
     }
 
-    $success = "Status: ON DELIVERY (CRM bisa info customer) ✅";
+    $success = "Status: ON DELIVERY (CRM bisa info customer) " . rmi_icon('check');
 }
 
      if ($action === 'delivered') {
@@ -477,7 +477,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         sales_do_audit_append($pdo, $id, $curStatus, 'delivered', 'SCM', $note);
     }
 
-    $success = "Status: DELIVERED ✅ (Trigger ACT)";
+    $success = "Status: DELIVERED " . rmi_icon('check') . " (Trigger ACT)";
 }
 
     } catch (Throwable $e) {
@@ -620,8 +620,8 @@ rmi_header('SCM - Task DO', [
     'SCM - Task DO',
   ],
   'actions' => [
-    ['label' => '📚 Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => '🗼 Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books') . ' Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('tower') . ' Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
   ],
   'extra_head' => '<style>
     :root{
@@ -812,8 +812,8 @@ rmi_header('SCM - Task DO', [
     </div>
   </div>
 
-  <?php if ($success): ?><div class="alert ok">✓ <?php echo h($success); ?></div><?php endif; ?>
-  <?php if ($error): ?><div class="alert bad">⚠ <?php echo h($error); ?></div><?php endif; ?>
+  <?php if ($success): ?><div class="alert ok"><?= rmi_icon('tick') ?> <?php echo h($success); ?></div><?php endif; ?>
+  <?php if ($error): ?><div class="alert bad"><?= rmi_icon('warn') ?> <?php echo h($error); ?></div><?php endif; ?>
 
   <!-- Filter -->
   <div class="card" style="margin-bottom:12px">
@@ -910,7 +910,7 @@ rmi_header('SCM - Task DO', [
           <?php if ($mode === 'VENDOR'): ?>
             <span class="chip">🚚 <?= h($vname ?: 'Vendor #'.$vid) ?></span>
           <?php else: ?>
-            <span class="chip">🏠 Internal SCM</span>
+            <span class="chip"><?= rmi_icon('home') ?> Internal SCM</span>
           <?php endif; ?>
         </div>
       </div>
@@ -1057,13 +1057,13 @@ rmi_header('SCM - Task DO', [
           <div class="form-section-title" style="margin-top:8px">Tanda Tangan Digital Customer</div>
           <div class="sig-wrap">
             <div class="sig-label">
-              <?php if ($r['scm_signature_data']): ?><span class="badge green" style="font-size:10px">Ada ✓</span>
+              <?php if ($r['scm_signature_data']): ?><span class="badge green" style="font-size:10px">Ada <?= rmi_icon('tick') ?></span>
               <?php else: ?><span class="badge gray" style="font-size:10px">Belum ada — wajib untuk DELIVERED</span><?php endif; ?>
             </div>
             <canvas class="sig" width="900" height="200"></canvas>
             <div class="sig-bar">
               <button type="button" class="btn sm" data-sig-clear>Bersihkan</button>
-              <button type="button" class="btn sm primary" data-sig-save>Ambil TTD ✓</button>
+              <button type="button" class="btn sm primary" data-sig-save>Ambil TTD <?= rmi_icon('tick') ?></button>
             </div>
           </div>
         </div>
@@ -1083,7 +1083,7 @@ rmi_header('SCM - Task DO', [
   <?php endif; ?>
 
   <?php if (($r['status'] ?? '') === 'on_delivery'): ?>
-    <button class="btn success" name="action" value="delivered" type="submit">✅ Set DELIVERED</button>
+    <button class="btn success" name="action" value="delivered" type="submit"><?= rmi_icon('check') ?> Set DELIVERED</button>
   <?php endif; ?>
 
   <a class="btn" href="<?= h($waShareUrl) ?>" target="_blank" rel="noopener">💬 Share WA</a>
@@ -1287,7 +1287,7 @@ rmi_header('SCM - Task DO', [
 
     btnSave.addEventListener('click', function(){
       out.value = canvas.toDataURL('image/png');
-      btnSave.textContent = 'TTD tersimpan ✅';
+      btnSave.textContent = 'TTD tersimpan <?= rmi_icon('check') ?>';
       setTimeout(function(){ btnSave.textContent='Ambil TTD'; }, 1200);
     });
   }

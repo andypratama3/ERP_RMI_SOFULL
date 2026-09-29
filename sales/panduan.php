@@ -62,15 +62,15 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Pipeline DO -->
   <div class="pnd-section">
-    <h3>🔄 Alur Delivery Order (DO) — End to End</h3>
+    <h3><?= rmi_icon('refresh') ?> Alur Delivery Order (DO) — End to End</h3>
     <div class="pnd-pipe">
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#475569;color:#fff">📝</div>
+        <div class="pnd-pipe-dot" style="background:#475569;color:#fff"><?= rmi_icon('memo') ?></div>
         <div class="pnd-pipe-lbl">SO/Order<br><span style="color:#94a3b8">Sales Order</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff">📦</div>
+        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff"><?= rmi_icon('box') ?></div>
         <div class="pnd-pipe-lbl">DO Dibuat<br><span style="color:#60a5fa">Sales</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
@@ -85,12 +85,12 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#0d9488;color:#fff">🧾</div>
+        <div class="pnd-pipe-dot" style="background:#0d9488;color:#fff"><?= rmi_icon('receipt') ?></div>
         <div class="pnd-pipe-lbl">Invoice<br><span style="color:#2dd4bf">ACT/FIN</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#16a34a;color:#fff">✓</div>
+        <div class="pnd-pipe-dot" style="background:#16a34a;color:#fff"><?= rmi_icon('tick') ?></div>
         <div class="pnd-pipe-lbl">DONE<br><span style="color:#34d399">Selesai</span></div>
       </div>
     </div>
@@ -103,7 +103,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Cara Buat DO -->
   <div class="pnd-section">
-    <h3>📦 Cara Membuat Delivery Order (DO)</h3>
+    <h3><?= rmi_icon('box') ?> Cara Membuat Delivery Order (DO)</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -164,7 +164,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Control Tower -->
   <div class="pnd-section">
-    <h3>🗼 Sales Control Tower — Monitoring DO</h3>
+    <h3><?= rmi_icon('tower') ?> Sales Control Tower — Monitoring DO</h3>
 
     <div class="pnd-step">
       <div class="pnd-num green">1</div>
@@ -208,7 +208,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- CRM Leads -->
   <div class="pnd-section">
-    <h3>🎯 CRM Leads — Manajemen Prospek Customer</h3>
+    <h3><?= rmi_icon('target') ?> CRM Leads — Manajemen Prospek Customer</h3>
 
     <div class="pnd-step">
       <div class="pnd-num purple">1</div>
@@ -257,7 +257,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Sales Order -->
   <div class="pnd-section">
-    <h3>📋 Sales Order — Manajemen Pesanan</h3>
+    <h3><?= rmi_icon('clipboard') ?> Sales Order — Manajemen Pesanan</h3>
 
     <div class="pnd-step">
       <div class="pnd-num teal">1</div>
@@ -289,7 +289,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Tax Invoice -->
   <div class="pnd-section">
-    <h3>🧾 Faktur Pajak (Tax Invoice)</h3>
+    <h3><?= rmi_icon('receipt') ?> Faktur Pajak (Tax Invoice)</h3>
 
     <div class="pnd-step">
       <div class="pnd-num yellow">1</div>
@@ -321,7 +321,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Rekap & Laporan -->
   <div class="pnd-section">
-    <h3>📊 Rekap & Laporan Sales</h3>
+    <h3><?= rmi_icon('chart') ?> Rekap & Laporan Sales</h3>
     <div class="pnd-desc" style="line-height:1.8">
       Menu <b>Rekap DO</b> (<code>sales_do_rekap.php</code>) menyediakan:
       <ul style="margin-top:8px;padding-left:20px">
@@ -335,33 +335,33 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- FAQ -->
   <div class="pnd-section">
-    <h3>❓ Pertanyaan Umum (FAQ)</h3>
+    <h3><?= rmi_icon('question') ?> Pertanyaan Umum (FAQ)</h3>
 
-    <div class="pnd-faq-q">❓ DO sudah dibuat tapi tidak muncul di WQS untuk di-pick?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> DO sudah dibuat tapi tidak muncul di WQS untuk di-pick?</div>
     <div class="pnd-faq-a">
       Pastikan DO sudah melewati tahap <b>Alokasi</b> di WQS Allocation.
       Jika belum, tim WQS perlu mengalokasikan stok terlebih dahulu sebelum DO bisa di-pick.
     </div>
 
-    <div class="pnd-faq-q">❓ Customer baru belum ada di sistem — bisa langsung buat DO?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Customer baru belum ada di sistem — bisa langsung buat DO?</div>
     <div class="pnd-faq-a">
       Tidak. Customer baru harus didaftarkan terlebih dahulu di <b>Master Customer</b> oleh tim yang berwenang.
       Setelah terdaftar dan aktif, bisa langsung dipakai di DO.
     </div>
 
-    <div class="pnd-faq-q">❓ Bagaimana tracking pengiriman untuk customer?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Bagaimana tracking pengiriman untuk customer?</div>
     <div class="pnd-faq-a">
       Gunakan halaman <b>Public Tracking</b> (<code>tracking_public.php</code>) untuk link tracking yang bisa diberikan ke customer.
       Customer bisa memantau status DO tanpa login ke ERP.
     </div>
 
-    <div class="pnd-faq-q">❓ DO salah dibuat — bisa dibatalkan?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> DO salah dibuat — bisa dibatalkan?</div>
     <div class="pnd-faq-a">
       DO yang masih berstatus NEW bisa dibatalkan oleh Sales Manager atau Admin.
       DO yang sudah diproses (allocated/picked) perlu koordinasi dengan WQS dan Manager sebelum dibatalkan.
     </div>
 
-    <div class="pnd-faq-q">❓ Apa beda Sales Order (SO) dengan Delivery Order (DO)?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Apa beda Sales Order (SO) dengan Delivery Order (DO)?</div>
     <div class="pnd-faq-a">
       <b>SO</b> adalah konfirmasi pesanan dari customer (boleh ada, boleh tidak).
       <b>DO</b> adalah dokumen operasional yang menggerakkan stok dan pengiriman fisik. DO bisa dibuat langsung tanpa SO.

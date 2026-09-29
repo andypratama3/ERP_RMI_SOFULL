@@ -345,7 +345,7 @@ rmi_header('ITC • Reset Password User', [
       <div class="muted small mt-1">Login: <b><?= h($meUsername) ?></b> • Dept: <b><?= h($meDept) ?></b> • Role: <b><?= h($meRole ?: '-') ?></b> • Level: <b><?= h($meLevel ?: '-') ?></b></div>
     </div>
     <div class="d-flex gap-2">
-      <a class="btn btn-outline-light btn-sm" href="<?= h($BASE_PROJECT) ?>/">🏠 Home</a>
+      <a class="btn btn-outline-light btn-sm" href="<?= h($BASE_PROJECT) ?>/"><?= rmi_icon('home') ?> Home</a>
       <a class="btn btn-outline-danger btn-sm" href="<?= h($BASE_PROJECT) ?>/master/logout.php">Logout</a>
     </div>
   </div>
@@ -403,7 +403,7 @@ rmi_header('ITC • Reset Password User', [
       <div class="card p-3 mb-3">
         <form method="get" class="d-flex flex-wrap gap-2 align-items-end">
           <div style="flex:2;min-width:160px">
-            <label class="form-label small mb-1" style="color:#94a3b8">🔍 Cari</label>
+            <label class="form-label small mb-1" style="color:#94a3b8"><?= rmi_icon('search') ?> Cari</label>
             <input class="form-control form-control-sm" name="q" value="<?= h($filters['q']) ?>" placeholder="Username / Full Name">
           </div>
           <div style="flex:1;min-width:110px">
@@ -435,7 +435,7 @@ rmi_header('ITC • Reset Password User', [
           <div class="d-flex gap-2" style="padding-bottom:1px">
             <button type="submit" class="btn btn-sm btn-outline-light">Filter</button>
             <?php if (array_filter($filters)): ?>
-              <a class="btn btn-sm btn-outline-secondary" href="itc_reset_password.php">✕ Reset</a>
+              <a class="btn btn-sm btn-outline-secondary" href="itc_reset_password.php"><?= rmi_icon('x') ?> Reset</a>
             <?php endif; ?>
           </div>
         </form>
@@ -475,9 +475,9 @@ rmi_header('ITC • Reset Password User', [
                   <td>
                     <?= h($r['username']) ?>
                     <?php if ($isFinMgr): ?>
-                      <span style="font-size:10px;background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.4);border-radius:4px;padding:1px 5px;margin-left:3px">💰 FIN</span>
+                      <span style="font-size:10px;background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.4);border-radius:4px;padding:1px 5px;margin-left:3px"><?= rmi_icon('money') ?> FIN</span>
                     <?php elseif ($isSysLvl): ?>
-                      <span style="font-size:10px;background:rgba(139,92,246,.2);color:#c4b5fd;border:1px solid rgba(139,92,246,.4);border-radius:4px;padding:1px 5px;margin-left:3px">🔐 SYS</span>
+                      <span style="font-size:10px;background:rgba(139,92,246,.2);color:#c4b5fd;border:1px solid rgba(139,92,246,.4);border-radius:4px;padding:1px 5px;margin-left:3px"><?= rmi_icon('gear') ?> SYS</span>
                     <?php endif; ?>
                   </td>
                   <td><?= h($r['full_name']) ?></td>
@@ -491,19 +491,19 @@ rmi_header('ITC • Reset Password User', [
                       <span class="badge bg-secondary">INACTIVE</span>
                     <?php endif; ?>
                     <?php if ($prot): ?>
-                      <span class="badge bg-warning text-dark" title="<?= h($protWhy) ?>">🔒 Protected</span>
+                      <span class="badge bg-warning text-dark" title="<?= h($protWhy) ?>"><?= rmi_icon('gear') ?> Protected</span>
                     <?php endif; ?>
                   </td>
                   <td style="white-space:nowrap">
                     <?php if ($prot && $isITC): ?>
                       <span style="color:#334155;font-size:11px" title="Status MFA tidak ditampilkan untuk akun ini">—</span>
                     <?php elseif ((int)($r['mfa_enabled'] ?? 0) === 1): ?>
-                      <span style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3);border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700">✅ ON</span>
+                      <span style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3);border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700"><?= rmi_icon('check') ?> ON</span>
                       <?php if (!empty($r['mfa_confirmed_at'])): ?>
                         <div style="color:#475569;font-size:10px;margin-top:1px"><?= h(substr((string)$r['mfa_confirmed_at'], 0, 10)) ?></div>
                       <?php endif; ?>
                     <?php else: ?>
-                      <span style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25);border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700">✗ OFF</span>
+                      <span style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25);border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700"><?= rmi_icon('x') ?> OFF</span>
                     <?php endif; ?>
                   </td>
                   <td>
@@ -511,7 +511,7 @@ rmi_header('ITC • Reset Password User', [
                       <a class="btn btn-sm btn-outline-light" href="itc_reset_password.php?reset=<?= (int)$r['id'] ?>">Reset</a>
                     <?php else: ?>
                       <button class="btn btn-sm btn-outline-secondary" disabled
-                              title="<?= h($protWhy) ?> — tidak dapat direset oleh ITC">🔒 Locked</button>
+                              title="<?= h($protWhy) ?> — tidak dapat direset oleh ITC"><?= rmi_icon('gear') ?> Locked</button>
                     <?php endif; ?>
                   </td>
                 </tr>
@@ -561,9 +561,9 @@ rmi_header('ITC • Reset Password User', [
               <td class="text-muted"><?= h($r['office_code']) ?></td>
               <td class="text-center">
                 <?php if ($linked): ?>
-                  <span class="badge bg-success">✓ Terhubung</span>
+                  <span class="badge bg-success"><?= rmi_icon('tick') ?> Terhubung</span>
                 <?php else: ?>
-                  <span class="badge bg-danger">✗ Belum</span>
+                  <span class="badge bg-danger"><?= rmi_icon('x') ?> Belum</span>
                 <?php endif; ?>
               </td>
             </tr>
@@ -594,7 +594,7 @@ rmi_header('ITC • Reset Password User', [
     <details <?= empty($auditRows) ? '' : 'open' ?>>
       <summary style="cursor:pointer;list-style:none;padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
         <span class="fw-semibold" style="font-size:14px">
-          📋 Audit Log — Reset Password
+          <?= rmi_icon('clipboard') ?> Audit Log — Reset Password
           <span class="badge bg-secondary ms-2"><?= count($auditRows) ?> entri terakhir</span>
         </span>
         <span class="text-muted small">▼ klik untuk buka/tutup</span>

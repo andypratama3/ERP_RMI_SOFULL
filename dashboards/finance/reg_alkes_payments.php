@@ -227,7 +227,7 @@ body{background:#0b1220;color:#e5e7eb}.rmi-card{background:rgba(17,24,39,.84);bo
   <div class="rmi-card p-3 mb-3">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
       <div>
-        <h3 style="margin:0;font-size:20px;font-weight:800">🧾 Pembayaran Registrasi Alkes</h3>
+        <h3 style="margin:0;font-size:20px;font-weight:800"><?=rmi_icon('receipt')?> Pembayaran Registrasi Alkes</h3>
         <div class="muted">FIN memproses pembayaran registrasi yang dikirim dari REG Alkes Case.</div>
       </div>
       <form method="get" class="d-flex gap-2 flex-wrap">

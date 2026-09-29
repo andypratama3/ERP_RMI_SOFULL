@@ -21,11 +21,11 @@ rmi_header('Panduan Task DO', [
         'Panduan Task DO',
     ],
     'actions' => [
-        ['label' => '🗼 Control Tower', 'url' => $bp . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-rmi'],
-        ['label' => '📦 WQS Task',      'url' => $bp . '/stock/wqs_do_tasks.php',        'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('tower') . ' Control Tower', 'url' => $bp . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-rmi'],
+        ['label' => rmi_icon('box') . ' WQS Task',      'url' => $bp . '/stock/wqs_do_tasks.php',        'class' => 'btn btn-sm btn-outline-light'],
         ['label' => '🚚 SCM Task',      'url' => $bp . '/sales/scm_do_tasks.php',        'class' => 'btn btn-sm btn-outline-light'],
-        ['label' => '📝 ACT Task',      'url' => $bp . '/sales/act_do_tasks.php',        'class' => 'btn btn-sm btn-outline-light'],
-        ['label' => '💰 FIN Task',      'url' => $bp . '/sales/fin_do_tasks.php',        'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('memo') . ' ACT Task',      'url' => $bp . '/sales/act_do_tasks.php',        'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('money') . ' FIN Task',      'url' => $bp . '/sales/fin_do_tasks.php',        'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -79,7 +79,7 @@ rmi_header('Panduan Task DO', [
 
 <!-- Hero -->
 <div class="pd-hero">
-  <h4 class="mb-1">📋 Panduan Task DO — WQS → SCM → ACT → FIN</h4>
+  <h4 class="mb-1"><?= rmi_icon('clipboard') ?> Panduan Task DO — WQS → SCM → ACT → FIN</h4>
   <div style="font-size:13px;opacity:.8">Setiap Delivery Order melewati 4 departemen setelah CRM membuat DO. Panduan ini menjelaskan tugas, syarat, dan tombol yang dipakai oleh masing-masing dept.</div>
 </div>
 
@@ -91,7 +91,7 @@ rmi_header('Panduan Task DO', [
     <div class="ps-label">Buat DO</div>
   </div>
   <div class="pd-step wqs">
-    <div class="ps-icon">📦</div>
+    <div class="ps-icon"><?= rmi_icon('box') ?></div>
     <div class="ps-dept">WQS</div>
     <div class="ps-label">Siapkan Barang</div>
   </div>
@@ -101,17 +101,17 @@ rmi_header('Panduan Task DO', [
     <div class="ps-label">Kirim & POD</div>
   </div>
   <div class="pd-step act">
-    <div class="ps-icon">📝</div>
+    <div class="ps-icon"><?= rmi_icon('memo') ?></div>
     <div class="ps-dept">ACT</div>
     <div class="ps-label">Faktur Pajak</div>
   </div>
   <div class="pd-step fin">
-    <div class="ps-icon">💰</div>
+    <div class="ps-icon"><?= rmi_icon('money') ?></div>
     <div class="ps-dept">FIN</div>
     <div class="ps-label">Terima Bayar</div>
   </div>
   <div class="pd-step done">
-    <div class="ps-icon">✅</div>
+    <div class="ps-icon"><?= rmi_icon('check') ?></div>
     <div class="ps-dept">DONE</div>
     <div class="ps-label">PAID / Closed</div>
   </div>
@@ -120,7 +120,7 @@ rmi_header('Panduan Task DO', [
 <!-- WQS -->
 <div class="pd-card wqs">
   <div class="pd-card-head">
-    <div class="ph-icon">📦</div>
+    <div class="ph-icon"><?= rmi_icon('box') ?></div>
     <div>
       <div class="ph-title">WQS — Task DO dari CRM</div>
       <div class="ph-sub">Status: <span class="pd-status st-wqs">crm_to_wqs → wqs_processing → ready_scm</span></div>
@@ -158,7 +158,7 @@ rmi_header('Panduan Task DO', [
         </div>
       </div>
     </div>
-    <div class="pd-warn">⚠️ Tidak bisa Set READY SCM sebelum klik Mulai Proses. Urutan wajib: <b>Mulai Proses → Ready SCM</b>.</div>
+    <div class="pd-warn"><?= rmi_icon('warn') ?> Tidak bisa Set READY SCM sebelum klik Mulai Proses. Urutan wajib: <b>Mulai Proses → Ready SCM</b>.</div>
   </div>
 </div>
 
@@ -217,15 +217,15 @@ rmi_header('Panduan Task DO', [
         </div>
       </div>
     </div>
-    <div class="pd-ok">✅ Fitur GPS otomatis (Start/Stop Auto GPS) tersedia untuk melacak posisi kurir secara live. Tidak wajib, tapi membantu transparansi pengiriman.</div>
-    <div class="pd-warn">⚠️ Tanpa foto terima dari WQS → tidak bisa ON DELIVERY. Tanpa foto + TTD → tidak bisa DELIVERED.</div>
+    <div class="pd-ok"><?= rmi_icon('check') ?> Fitur GPS otomatis (Start/Stop Auto GPS) tersedia untuk melacak posisi kurir secara live. Tidak wajib, tapi membantu transparansi pengiriman.</div>
+    <div class="pd-warn"><?= rmi_icon('warn') ?> Tanpa foto terima dari WQS → tidak bisa ON DELIVERY. Tanpa foto + TTD → tidak bisa DELIVERED.</div>
   </div>
 </div>
 
 <!-- ACT -->
 <div class="pd-card act">
   <div class="pd-card-head">
-    <div class="ph-icon">📝</div>
+    <div class="ph-icon"><?= rmi_icon('memo') ?></div>
     <div>
       <div class="ph-title">ACT — Task DO (Penagihan & Faktur Pajak)</div>
       <div class="ph-sub">Status: <span class="pd-status st-act">delivered → wait_payment</span></div>
@@ -270,14 +270,14 @@ rmi_header('Panduan Task DO', [
         </div>
       </div>
     </div>
-    <div class="pd-warn">⚠️ Jika konfigurasi sistem mengharuskan faktur pajak sebelum PAID, upload Faktur Pajak wajib dilakukan di tahap ini. Cek konfigurasi di <code>system_config</code> → <code>TAX_INVOICE.REQUIRE_ISSUED_BEFORE_FIN_PAID</code>.</div>
+    <div class="pd-warn"><?= rmi_icon('warn') ?> Jika konfigurasi sistem mengharuskan faktur pajak sebelum PAID, upload Faktur Pajak wajib dilakukan di tahap ini. Cek konfigurasi di <code>system_config</code> → <code>TAX_INVOICE.REQUIRE_ISSUED_BEFORE_FIN_PAID</code>.</div>
   </div>
 </div>
 
 <!-- FIN -->
 <div class="pd-card fin">
   <div class="pd-card-head">
-    <div class="ph-icon">💰</div>
+    <div class="ph-icon"><?= rmi_icon('money') ?></div>
     <div>
       <div class="ph-title">FIN — Task DO (Penerimaan Pembayaran)</div>
       <div class="ph-sub">Status: <span class="pd-status st-fin">wait_payment → paid</span></div>
@@ -315,15 +315,15 @@ rmi_header('Panduan Task DO', [
         </div>
       </div>
     </div>
-    <div class="pd-ok">✅ Setelah PAID, DO muncul di Control Tower dengan milestone semua hijau. Data bisa diexport untuk laporan keuangan.</div>
-    <div class="pd-warn">⚠️ Tidak bisa set PAID jika status bukan <code>wait_payment</code>. Pastikan ACT sudah kirim ke FIN sebelumnya.</div>
+    <div class="pd-ok"><?= rmi_icon('check') ?> Setelah PAID, DO muncul di Control Tower dengan milestone semua hijau. Data bisa diexport untuk laporan keuangan.</div>
+    <div class="pd-warn"><?= rmi_icon('warn') ?> Tidak bisa set PAID jika status bukan <code>wait_payment</code>. Pastikan ACT sudah kirim ke FIN sebelumnya.</div>
   </div>
 </div>
 
 <!-- Status Transition Reference -->
 <div class="pd-card" style="margin-bottom:18px">
   <div class="pd-card-head">
-    <div class="ph-icon">🔄</div>
+    <div class="ph-icon"><?= rmi_icon('refresh') ?></div>
     <div>
       <div class="ph-title">Referensi Status Alur DO</div>
       <div class="ph-sub">Urutan wajib — tidak bisa dilewati</div>
@@ -347,7 +347,7 @@ rmi_header('Panduan Task DO', [
           ['ready_scm',             'SCM', 'Set ON DELIVERY', 'on_delivery'],
           ['on_delivery',           'SCM', 'Set DELIVERED (upload POD + TTD)', 'delivered'],
           ['delivered',             'ACT', 'Kirim ke FIN', 'wait_payment'],
-          ['wait_payment',          'FIN', 'Set PAID (upload bukti bayar)', 'paid ✅'],
+          ['wait_payment',          'FIN', 'Set PAID (upload bukti bayar)', 'paid ' . rmi_icon('check')],
         ] as [$st, $dept, $aksi, $next]): ?>
         <tr style="border-bottom:1px solid rgba(255,255,255,.04)">
           <td style="padding:8px 12px"><code style="font-size:11px;color:#c7d2fe"><?= $st ?></code></td>
@@ -365,7 +365,7 @@ rmi_header('Panduan Task DO', [
 <!-- FAQ -->
 <div class="pd-card" style="margin-bottom:24px">
   <div class="pd-card-head">
-    <div class="ph-icon">❓</div>
+    <div class="ph-icon"><?= rmi_icon('question') ?></div>
     <div>
       <div class="ph-title">FAQ — Pertanyaan Umum</div>
     </div>
@@ -393,7 +393,7 @@ rmi_header('Panduan Task DO', [
         <div class="pd-faq-a">ACT belum kirim DO ke FIN. Hubungi ACT untuk membuka ACT Task dan klik "Kirim ke FIN".</div>
       </div>
       <div class="pd-faq-item">
-        <div class="pd-faq-q">DO muncul dengan badge ⚠️ "X hari" di Control Tower?</div>
+        <div class="pd-faq-q">DO muncul dengan badge <?= rmi_icon('warn') ?> "X hari" di Control Tower?</div>
         <div class="pd-faq-a">DO belum diupdate lebih dari 3 hari. Cek dept PIC yang bertanggung jawab dan tindak lanjuti segera.</div>
       </div>
       <div class="pd-faq-item">

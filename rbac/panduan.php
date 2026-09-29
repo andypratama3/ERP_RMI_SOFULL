@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 require_once __DIR__ . '/../master/auth.php';
 require_once __DIR__ . '/../_shared/rbac.php';
 if (function_exists('auth_require_login')) auth_require_login(); else require_login();
@@ -13,7 +14,7 @@ rmi_header('Panduan RBAC Center', [
     'active'      => 'rbac',
     'breadcrumbs' => [['label'=>'RBAC Center','url'=>$base.'/rbac/index.php'], 'Panduan'],
     'actions'     => [
-        ['label'=>'🔐 Buka RBAC Center','url'=>$base.'/rbac/index.php','class'=>'btn btn-sm btn-rmi'],
+        ['label'=>rmi_icon('gear') . ' Buka RBAC Center','url'=>$base.'/rbac/index.php','class'=>'btn btn-sm btn-rmi'],
     ],
 ]);
 ?>
@@ -61,7 +62,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 
 <!-- Hero -->
 <div class="pd-hero">
-  <h4 style="margin:0 0 6px;font-size:18px">🔐 Panduan RBAC Center</h4>
+  <h4 style="margin:0 0 6px;font-size:18px"><?= rmi_icon('gear') ?> Panduan RBAC Center</h4>
   <div style="font-size:13px;opacity:.8;line-height:1.6">
     Panduan lengkap untuk Admin SYS mengatur akses user di ERP RMI.<br>
     RBAC Center mengelola <b>226 halaman</b> × <b>9 aksi</b> × semua Dept/Role.
@@ -70,7 +71,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 
 <!-- 1. Konsep Dasar -->
 <div class="pd-section">
-  <h3>📌 1. Konsep Dasar RBAC ERP</h3>
+  <h3><?= rmi_icon('target') ?> 1. Konsep Dasar RBAC ERP</h3>
   <div class="flow">
     <div class="flow-step">RBAC Center<br><small style="opacity:.5">assign permission</small></div>
     <div class="flow-arrow">→</div>
@@ -80,7 +81,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
     <div class="flow-arrow">+</div>
     <div class="flow-step">Halaman terbuka<br><small style="opacity:.5">guard pass</small></div>
   </div>
-  <div class="pd-ok">✅ <b>Prinsip utama:</b> Assign permission di RBAC Center → menu sidebar langsung muncul untuk user yang bersangkutan — tanpa perlu atur Nav Manager terpisah.</div>
+  <div class="pd-ok"><?= rmi_icon('check') ?> <b>Prinsip utama:</b> Assign permission di RBAC Center → menu sidebar langsung muncul untuk user yang bersangkutan — tanpa perlu atur Nav Manager terpisah.</div>
 
   <table class="pd-tbl" style="margin-top:16px">
     <thead><tr><th>Siapa</th><th>Behavior</th><th>Keterangan</th></tr></thead>
@@ -94,31 +95,31 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 
 <!-- 2. Dua Tab Utama -->
 <div class="pd-section">
-  <h3>🖥️ 2. Dua Tab Utama RBAC Center</h3>
+  <h3><?= rmi_icon('gear') ?> 2. Dua Tab Utama RBAC Center</h3>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
     <div style="background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:14px">
-      <div style="font-size:13px;font-weight:700;color:#6ee7b7;margin-bottom:8px">📋 Per Halaman</div>
+      <div style="font-size:13px;font-weight:700;color:#6ee7b7;margin-bottom:8px"><?= rmi_icon('clipboard') ?> Per Halaman</div>
       <div style="font-size:12px;line-height:1.6;color:var(--rmi-muted,#9ca3af)">
         Tampilkan 226 halaman nyata × 9 aksi.<br>
-        Pilih dept → klik ✓/✗ per aksi per halaman.<br>
+        Pilih dept → klik <?= rmi_icon('tick') ?>/<?= rmi_icon('x') ?> per aksi per halaman.<br>
         <b>Kolom STAFF & MANAGER side by side.</b><br>
         Klik toggle → langsung simpan ke DB.
       </div>
     </div>
     <div style="background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.2);border-radius:12px;padding:14px">
-      <div style="font-size:13px;font-weight:700;color:#c084fc;margin-bottom:8px">👤 Per User Active</div>
+      <div style="font-size:13px;font-weight:700;color:#c084fc;margin-bottom:8px"><?= rmi_icon('user') ?> Per User Active</div>
       <div style="font-size:12px;line-height:1.6;color:var(--rmi-muted,#9ca3af)">
         Pilih satu user dari dropdown.<br>
         Lihat permission efektif (matrix + override).<br>
         <b>Bisa toggle override per-user individual.</b><br>
-        ✓ hijau = dari matrix · ✓ teal = override grant · ✗ oranye = override deny
+        <?= rmi_icon('tick') ?> hijau = dari matrix · <?= rmi_icon('tick') ?> teal = override grant · <?= rmi_icon('x') ?> oranye = override deny
       </div>
     </div>
   </div>
 
   <div class="pd-info" style="margin-top:12px">
-    💡 <b>Perbedaan kritis:</b>
+    <?= rmi_icon('question') ?> <b>Perbedaan kritis:</b>
     <b>Per Halaman</b> mengedit matrix <code>Dept+Role</code> (berlaku untuk SEMUA user dept itu).
     <b>Per User Active</b> mengedit override <code>per-user individual</code> via <code>rbac_user_permissions</code>.
   </div>
@@ -126,7 +127,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 
 <!-- 3. 9 Kolom Aksi -->
 <div class="pd-section">
-  <h3>⚡ 3. Arti 9 Kolom Aksi</h3>
+  <h3><?= rmi_icon('zap') ?> 3. Arti 9 Kolom Aksi</h3>
   <div class="action-grid">
     <div class="action-chip ac-access"><div>ACCESS</div><div style="font-weight:400;margin-top:2px;opacity:.7">Buka halaman</div></div>
     <div class="action-chip ac-create"><div>CREATE</div><div style="font-weight:400;margin-top:2px;opacity:.7">Buat data baru</div></div>
@@ -139,19 +140,19 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
     <div class="action-chip ac-print"><div>PRINT</div><div style="font-weight:400;margin-top:2px;opacity:.7">Print/PDF</div></div>
   </div>
   <div class="pd-warn" style="margin-top:14px">
-    ⭐ <b>APPROVE khusus</b> (AP Payment, GL Reversal, Payroll Lock) tampil sebagai baris tersendiri bertanda ⭐ dan hanya bisa di-assign SYS ke user tertentu (MgrFIN_BGR / MgrHRL). Toggle via <b>Per User Active</b>.
+    <?= rmi_icon('target') ?> <b>APPROVE khusus</b> (AP Payment, GL Reversal, Payroll Lock) tampil sebagai baris tersendiri bertanda <?= rmi_icon('target') ?> dan hanya bisa di-assign SYS ke user tertentu (MgrFIN_BGR / MgrHRL). Toggle via <b>Per User Active</b>.
   </div>
 </div>
 
 <!-- 4. Cara Atur Akses -->
 <div class="pd-section">
-  <h3>🚀 4. Cara Atur Akses — Langkah per Langkah</h3>
+  <h3><?= rmi_icon('zap') ?> 4. Cara Atur Akses — Langkah per Langkah</h3>
 
   <div style="font-size:13px;font-weight:700;margin-bottom:10px">Skenario: Beri CRM/Staff akses Sales</div>
   <div class="pd-steps">
     <div class="pd-step">
       <div class="pd-num">1</div>
-      <div class="pd-content">Buka <a href="<?= $base ?>/rbac/index.php" style="color:#93c5fd">RBAC Center</a> → tab <b>📋 Per Halaman</b></div>
+      <div class="pd-content">Buka <a href="<?= $base ?>/rbac/index.php" style="color:#93c5fd">RBAC Center</a> → tab <b><?= rmi_icon('clipboard') ?> Per Halaman</b></div>
     </div>
     <div class="pd-step">
       <div class="pd-num">2</div>
@@ -163,11 +164,11 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
     </div>
     <div class="pd-step">
       <div class="pd-num">4</div>
-      <div class="pd-content">Scroll ke seksi <b>CRM / SALES</b> → klik ✗ untuk jadi ✓ di kolom yang diinginkan (misal: ACCESS, CREATE, EDIT, VIEW)</div>
+      <div class="pd-content">Scroll ke seksi <b>CRM / SALES</b> → klik <?= rmi_icon('x') ?> untuk jadi <?= rmi_icon('tick') ?> di kolom yang diinginkan (misal: ACCESS, CREATE, EDIT, VIEW)</div>
     </div>
     <div class="pd-step">
       <div class="pd-num">5</div>
-      <div class="pd-content">Perubahan <b>langsung tersimpan</b> (tanpa klik Save) — icon berubah + animasi kecil konfirmasi ✅</div>
+      <div class="pd-content">Perubahan <b>langsung tersimpan</b> (tanpa klik Save) — icon berubah + animasi kecil konfirmasi <?= rmi_icon('check') ?></div>
     </div>
     <div class="pd-step">
       <div class="pd-num">6</div>
@@ -179,7 +180,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
   <div class="pd-steps">
     <div class="pd-step">
       <div class="pd-num">1</div>
-      <div class="pd-content">Buka tab <b>👤 Per User Active</b></div>
+      <div class="pd-content">Buka tab <b><?= rmi_icon('user') ?> Per User Active</b></div>
     </div>
     <div class="pd-step">
       <div class="pd-num">2</div>
@@ -188,88 +189,88 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
     <div class="pd-step">
       <div class="pd-num">3</div>
       <div class="pd-content">Lihat tabel 226 halaman × 9 aksi untuk user tersebut:<br>
-        <span style="color:#6ee7b7;font-weight:700">✓ hijau</span> = dari matrix dept/role &nbsp;
-        <span style="color:#34d399;font-weight:700">✓ teal</span> = override grant (ditambah manual) &nbsp;
-        <span style="color:#f59e0b;font-weight:700">✗ oranye</span> = override deny (dicabut manual)
+        <span style="color:#6ee7b7;font-weight:700"><?= rmi_icon('tick') ?> hijau</span> = dari matrix dept/role &nbsp;
+        <span style="color:#34d399;font-weight:700"><?= rmi_icon('tick') ?> teal</span> = override grant (ditambah manual) &nbsp;
+        <span style="color:#f59e0b;font-weight:700"><?= rmi_icon('x') ?> oranye</span> = override deny (dicabut manual)
       </div>
     </div>
     <div class="pd-step">
       <div class="pd-num">4</div>
-      <div class="pd-content">Klik ✓/✗ untuk tambah/cabut override <b>khusus user ini saja</b> (tidak mempengaruhi user lain di dept yang sama)</div>
+      <div class="pd-content">Klik <?= rmi_icon('tick') ?>/<?= rmi_icon('x') ?> untuk tambah/cabut override <b>khusus user ini saja</b> (tidak mempengaruhi user lain di dept yang sama)</div>
     </div>
   </div>
 </div>
 
 <!-- 5. Tools Sidebar -->
 <div class="pd-section">
-  <h3>⚙️ 5. Tools di Sidebar RBAC Center</h3>
+  <h3><?= rmi_icon('gear') ?> 5. Tools di Sidebar RBAC Center</h3>
   <table class="pd-tbl">
     <thead><tr><th>Tool</th><th>Fungsi</th><th>Kapan Dipakai</th></tr></thead>
     <tbody>
       <tr>
-        <td><b>🔄 Sync Full Permissions</b></td>
+        <td><b><?= rmi_icon('refresh') ?> Sync Full Permissions</b></td>
         <td>Update DB dari <code>config/rbac_permissions.php</code></td>
         <td>Setelah developer tambah permission baru ke config</td>
       </tr>
       <tr>
-        <td><b>🧹 Hapus Orphan Registry</b></td>
+        <td><b><?= rmi_icon('cross') ?> Hapus Orphan Registry</b></td>
         <td>Hapus permission di DB yang sudah tidak ada di config</td>
         <td>Setelah permission lama dihapus dari config (cleanup)</td>
       </tr>
       <tr>
-        <td><b>⬇ Export JSON</b></td>
+        <td><b><?= rmi_icon('inbox') ?> Export JSON</b></td>
         <td>Backup konfigurasi permission dept/role aktif</td>
         <td>Sebelum perubahan besar / untuk dokumentasi</td>
       </tr>
       <tr>
-        <td><b>📋 Salin</b></td>
+        <td><b><?= rmi_icon('clipboard') ?> Salin</b></td>
         <td>Salin semua permission dari satu dept/role ke dept/role lain</td>
         <td>Onboarding dept baru dengan pola mirip dept lain</td>
       </tr>
       <tr>
-        <td><b>📦 Paket</b></td>
+        <td><b><?= rmi_icon('box') ?> Paket</b></td>
         <td>Terapkan preset cepat (VIEW Saja, Ops Standar, dll.)</td>
         <td>Setup awal user baru / reset cepat</td>
       </tr>
       <tr>
-        <td><b>🛡 Default</b></td>
+        <td><b><?= rmi_icon('warn') ?> Default</b></td>
         <td>Reset ke RBAC baseline aman</td>
         <td>Hanya untuk setup awal sistem</td>
       </tr>
       <tr>
-        <td><b>📥 Import JSON</b></td>
+        <td><b><?= rmi_icon('inbox') ?> Import JSON</b></td>
         <td>Restore backup JSON permission</td>
         <td>Restore setelah backup Export JSON</td>
       </tr>
     </tbody>
   </table>
   <div class="pd-warn">
-    ⚠️ <b>Urutan wajib setelah tambah permission baru:</b><br>
+    <?= rmi_icon('warn') ?> <b>Urutan wajib setelah tambah permission baru:</b><br>
     1. Sync Full Permissions → 2. Hapus Orphan Registry → 3. Set permission di Per Halaman
   </div>
 </div>
 
 <!-- 6. Warna & Indikator -->
 <div class="pd-section">
-  <h3>🎨 6. Arti Warna & Indikator</h3>
+  <h3><?= rmi_icon('memo') ?> 6. Arti Warna & Indikator</h3>
   <table class="pd-tbl">
     <thead><tr><th>Simbol</th><th>Warna</th><th>Arti (Per Halaman)</th><th>Arti (Per User)</th></tr></thead>
     <tbody>
-      <tr><td style="font-size:18px;font-weight:700;color:#4ade80">✓</td><td>Hijau</td><td>Permission aktif untuk STAFF</td><td>Dari matrix dept/role</td></tr>
-      <tr><td style="font-size:18px;font-weight:700;color:#a78bfa">✓</td><td>Ungu</td><td>Permission aktif untuk MANAGER</td><td>—</td></tr>
-      <tr><td style="font-size:18px;font-weight:700;color:#34d399">✓</td><td>Teal</td><td>—</td><td>Override grant (ditambah manual untuk user ini)</td></tr>
-      <tr><td style="font-size:18px;font-weight:700;color:#ef444466">✗</td><td>Merah pudar</td><td>Belum di-assign</td><td>Tidak punya permission ini</td></tr>
-      <tr><td style="font-size:18px;font-weight:700;color:#f59e0b">✗</td><td>Oranye</td><td>—</td><td>Override deny (dicabut dari matrix)</td></tr>
-      <tr><td style="font-size:18px;font-weight:700;color:#fcd34d">✓</td><td>Emas</td><td>SYS = Allow All</td><td>User Privileged = Allow All</td></tr>
-      <tr><td style="font-size:16px;color:#374151">—</td><td>Abu gelap</td><td>Aksi tidak relevan untuk halaman ini</td><td>Sama</td></tr>
-      <tr><td style="font-size:14px;color:#fcd34d">⭐</td><td>Emas bintang</td><td>Permission Central Approver — SYS assign manual</td><td>Sama</td></tr>
+      <tr><td style="font-size:18px;font-weight:700;color:#4ade80"><?= rmi_icon('tick') ?></td><td>Hijau</td><td>Permission aktif untuk STAFF</td><td>Dari matrix dept/role</td></tr>
+      <tr><td style="font-size:18px;font-weight:700;color:#a78bfa"><?= rmi_icon('tick') ?></td><td>Ungu</td><td>Permission aktif untuk MANAGER</td><td>—</td></tr>
+      <tr><td style="font-size:18px;font-weight:700;color:#34d399"><?= rmi_icon('tick') ?></td><td>Teal</td><td>—</td><td>Override grant (ditambah manual untuk user ini)</td></tr>
+      <tr><td style="font-size:18px;font-weight:700;color:#ef444466"><?= rmi_icon('x') ?></td><td>Merah pudar</td><td>Belum di-assign</td><td>Tidak punya permission ini</td></tr>
+      <tr><td style="font-size:18px;font-weight:700;color:#f59e0b"><?= rmi_icon('x') ?></td><td>Oranye</td><td>—</td><td>Override deny (dicabut dari matrix)</td></tr>
+      <tr><td style="font-size:18px;font-weight:700;color:#fcd34d"><?= rmi_icon('tick') ?></td><td>Emas</td><td>SYS = Allow All</td><td>User Privileged = Allow All</td></tr>
+      <tr><td style="font-size:16px;color:var(--rmi-muted)">—</td><td>Abu gelap</td><td>Aksi tidak relevan untuk halaman ini</td><td>Sama</td></tr>
+      <tr><td style="font-size:14px;color:#fcd34d"><?= rmi_icon('target') ?></td><td>Emas bintang</td><td>Permission Central Approver — SYS assign manual</td><td>Sama</td></tr>
     </tbody>
   </table>
 </div>
 
 <!-- 7. ⭐ Special Permissions -->
 <div class="pd-section">
-  <h3>⭐ 7. Permission Special (Central Approver)</h3>
+  <h3><?= rmi_icon('target') ?> 7. Permission Special (Central Approver)</h3>
   <div style="font-size:13px;line-height:1.6;margin-bottom:12px">
     Tiga permission ini <b>tidak bisa di-toggle via Per Halaman</b> karena risikonya sangat tinggi (uang keluar dari perusahaan). Hanya SYS yang bisa assign via <b>Per User Active</b>.
   </div>
@@ -297,7 +298,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
     <div style="font-size:13px;font-weight:700;margin-bottom:8px">Cara assign:</div>
     <div class="pd-step">
       <div class="pd-num">1</div>
-      <div class="pd-content">Buka tab <b>👤 Per User Active</b></div>
+      <div class="pd-content">Buka tab <b><?= rmi_icon('user') ?> Per User Active</b></div>
     </div>
     <div class="pd-step">
       <div class="pd-num">2</div>
@@ -305,17 +306,17 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
     </div>
     <div class="pd-step">
       <div class="pd-num">3</div>
-      <div class="pd-content">Scroll ke seksi <b>FIN</b> → baris <b>⭐ AP Approve/Post</b> → klik ✗ di kolom APPROVE → jadi ✓</div>
+      <div class="pd-content">Scroll ke seksi <b>FIN</b> → baris <b><?= rmi_icon('target') ?> AP Approve/Post</b> → klik <?= rmi_icon('x') ?> di kolom APPROVE → jadi <?= rmi_icon('tick') ?></div>
     </div>
   </div>
 </div>
 
 <!-- 8. Skenario Umum -->
 <div class="pd-section">
-  <h3>📋 8. Skenario Umum Admin</h3>
+  <h3><?= rmi_icon('clipboard') ?> 8. Skenario Umum Admin</h3>
 
   <div class="scenario">
-    <div class="s-title">🆕 Onboarding User Baru (misal: StaffCRM_BGR)</div>
+    <div class="s-title"><?= rmi_icon('zap') ?> Onboarding User Baru (misal: StaffCRM_BGR)</div>
     <ol style="margin:6px 0 0 16px;font-size:12px;line-height:1.8">
       <li>Pastikan dept/role CRM/STAFF sudah punya permission di <b>Per Halaman</b></li>
       <li>Jika belum: set ACCESS + VIEW untuk halaman yang diperlukan (DO, Dashboard, Control Tower)</li>
@@ -325,30 +326,30 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
   </div>
 
   <div class="scenario" style="margin-top:10px">
-    <div class="s-title">🔄 Ubah Akses Satu Halaman untuk Semua Staff HRL</div>
+    <div class="s-title"><?= rmi_icon('refresh') ?> Ubah Akses Satu Halaman untuk Semua Staff HRL</div>
     <ol style="margin:6px 0 0 16px;font-size:12px;line-height:1.8">
       <li>Buka <b>Per Halaman</b> → pilih dept <code>HRL</code></li>
       <li>Cari baris halaman yang ingin diubah (misal: Rekap Absensi)</li>
-      <li>Klik ✗ di kolom STAFF → ACCESS, VIEW, EXPORT jadi ✓</li>
+      <li>Klik <?= rmi_icon('x') ?> di kolom STAFF → ACCESS, VIEW, EXPORT jadi <?= rmi_icon('tick') ?></li>
       <li>Semua user HRL/Staff otomatis bisa akses</li>
     </ol>
   </div>
 
   <div class="scenario" style="margin-top:10px">
-    <div class="s-title">🔍 Investigasi: Kenapa user X tidak bisa akses halaman Y?</div>
+    <div class="s-title"><?= rmi_icon('search') ?> Investigasi: Kenapa user X tidak bisa akses halaman Y?</div>
     <ol style="margin:6px 0 0 16px;font-size:12px;line-height:1.8">
       <li>Buka <b>Per User Active</b> → pilih user X</li>
-      <li>Cari halaman Y → lihat apakah ACCESS = ✗ (merah) atau ✗ oranye (override deny)</li>
-      <li>Jika ✗ merah: tambah permission di <b>Per Halaman</b> untuk dept user tersebut</li>
-      <li>Jika ✗ oranye: ada override deny di user ini → klik untuk hapus override</li>
+      <li>Cari halaman Y → lihat apakah ACCESS = <?= rmi_icon('x') ?> (merah) atau <?= rmi_icon('x') ?> oranye (override deny)</li>
+      <li>Jika <?= rmi_icon('x') ?> merah: tambah permission di <b>Per Halaman</b> untuk dept user tersebut</li>
+      <li>Jika <?= rmi_icon('x') ?> oranye: ada override deny di user ini → klik untuk hapus override</li>
     </ol>
   </div>
 
   <div class="scenario" style="margin-top:10px">
-    <div class="s-title">🚫 Cabut akses user tertentu tanpa mempengaruhi user lain</div>
+    <div class="s-title"><?= rmi_icon('cross') ?> Cabut akses user tertentu tanpa mempengaruhi user lain</div>
     <ol style="margin:6px 0 0 16px;font-size:12px;line-height:1.8">
       <li>Buka <b>Per User Active</b> → pilih user yang ingin dicabut aksesnya</li>
-      <li>Klik ✓ pada permission yang ingin dicabut → jadi ✗ oranye (override deny)</li>
+      <li>Klik <?= rmi_icon('tick') ?> pada permission yang ingin dicabut → jadi <?= rmi_icon('x') ?> oranye (override deny)</li>
       <li>User ini tidak bisa akses, user lain di dept sama tidak terpengaruh</li>
     </ol>
   </div>
@@ -356,7 +357,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 
 <!-- 9. FAQ -->
 <div class="pd-section">
-  <h3>❓ 9. FAQ</h3>
+  <h3><?= rmi_icon('question') ?> 9. FAQ</h3>
   <table class="pd-tbl">
     <thead><tr><th style="width:45%">Pertanyaan</th><th>Jawaban</th></tr></thead>
     <tbody>
@@ -390,7 +391,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
 
 <!-- 10. Referensi Cepat -->
 <div class="pd-section">
-  <h3>⚡ 10. Referensi Cepat</h3>
+  <h3><?= rmi_icon('zap') ?> 10. Referensi Cepat</h3>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
     <div>
       <div style="font-size:11px;font-weight:700;color:var(--rmi-muted,#9ca3af);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">File Konfigurasi</div>
@@ -413,7 +414,7 @@ table.pd-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
     </div>
   </div>
   <div class="pd-info" style="margin-top:14px">
-    📊 <b>Audit Log:</b> Semua perubahan permission (siapa, kapan, permission apa) tercatat di bagian bawah RBAC Center (📋 Audit Log RBAC). Bisa digunakan untuk investigasi.
+    <?= rmi_icon('chart') ?> <b>Audit Log:</b> Semua perubahan permission (siapa, kapan, permission apa) tercatat di bagian bawah RBAC Center (<?= rmi_icon('clipboard') ?> Audit Log RBAC). Bisa digunakan untuk investigasi.
   </div>
 </div>
 

@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 // --- Auth guard ---
 $__rmi_guard_dir = __DIR__;
 for ($__rmi_guard_i = 0; $__rmi_guard_i < 5; $__rmi_guard_i++) {
@@ -337,7 +338,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
 <?php if (!empty($data['alerts'])): ?>
 <div class="alert-row">
   <?php foreach ($data['alerts'] as $al): ?>
-    <div class="mprd-alert <?= e($al['level']) ?>"><?= $al['level']==='danger'?'🔴':'⚠️' ?> <?= e($al['msg']) ?></div>
+    <div class="mprd-alert <?= e($al['level']) ?>"><?= $al['level']==='danger'?rmi_icon('cross'):rmi_icon('warn') ?> <?= e($al['msg']) ?></div>
   <?php endforeach; ?>
 </div>
 <?php endif; ?>
@@ -357,52 +358,52 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
   </select>
   <button class="btn btn-sm btn-outline-light">Tampilkan</button>
   <a class="btn btn-sm btn-outline-light" href="<?= e(url_mpr('mpr_dashboard.php')) ?>">Reset</a>
-  <span style="color:#475569;margin-left:auto;font-size:10px">Scope: <?= e($scope_office?:'Semua Cabang') ?></span>
+  <span style="color:var(--rmi-muted);margin-left:auto;font-size:10px">Scope: <?= e($scope_office?:'Semua Cabang') ?></span>
 </form>
 
 <?php // ---- KPI Cards ---- ?>
 <div class="kpi-grid">
   <div class="kpi-card" style="--kc:#14b8a6">
-    <div class="kpi-icon">📍</div>
+    <div class="kpi-icon">rmi_icon('target')</div>
     <div class="kpi-val"><?= $data['visits_total'] ?></div>
     <div class="kpi-lbl">Total Kunjungan <?= $months[$f_month] ?></div>
     <div class="kpi-sub" style="color:#64748b">Hari ini: <?= $data['visits_today'] ?></div>
   </div>
   <div class="kpi-card" style="--kc:#6366f1">
-    <div class="kpi-icon">🆕</div>
+    <div class="kpi-icon"><?=rmi_icon('zap')?></div>
     <div class="kpi-val" style="color:#818cf8"><?= $data['visits_new'] ?></div>
     <div class="kpi-lbl">Kunjungan Prospek Baru</div>
     <?php $newPct=$data['visits_total']>0?round($data['visits_new']/$data['visits_total']*100):0; ?>
     <div class="kpi-sub" style="color:#818cf8"><?= $newPct ?>% dari total</div>
   </div>
   <div class="kpi-card" style="--kc:#22c55e">
-    <div class="kpi-icon">🏆</div>
+    <div class="kpi-icon"><?=rmi_icon('target')?></div>
     <div class="kpi-val" style="color:#4ade80"><?= $data['deals_won'] ?></div>
     <div class="kpi-lbl">Deal Won <?= $months[$f_month] ?></div>
     <div class="kpi-sub" style="color:#4ade80">Konversi: <?= $data['conversion'] ?>%</div>
   </div>
   <div class="kpi-card" style="--kc:#f59e0b">
-    <div class="kpi-icon">⚠️</div>
+    <div class="kpi-icon"><?=rmi_icon('warn')?></div>
     <div class="kpi-val" style="color:<?= $data['followup_total']>0?'#f87171':'#fbbf24' ?>"><?= $data['followup_total'] ?></div>
     <div class="kpi-lbl">Follow-Up Overdue</div>
     <div class="kpi-sub" style="color:#fbbf24">Segera tindak lanjut</div>
   </div>
   <div class="kpi-card" style="--kc:#8b5cf6">
-    <div class="kpi-icon">🎯</div>
+    <div class="kpi-icon"><?=rmi_icon('target')?></div>
     <div class="kpi-val"><?= $data['pipeline_active'] ?></div>
     <div class="kpi-lbl">Pipeline Aktif</div>
     <div class="kpi-sub" style="color:#94a3b8"><?= $data['pipeline_value']>0?'Rp '.number_format($data['pipeline_value']/1e6,1).'jt':'-' ?></div>
   </div>
   <div class="kpi-card" style="--kc:#3b82f6">
-    <div class="kpi-icon">👥</div>
+    <div class="kpi-icon"><?=rmi_icon('users')?></div>
     <div class="kpi-val"><?= $data['customers_active'] ?></div>
     <div class="kpi-lbl">Customer Aktif</div>
     <?php $cHit=$data['customers_new_m']>=3; ?>
-    <div class="kpi-sub" style="color:<?= $cHit?'#4ade80':'#fbbf24' ?>"><?= $cHit?'✅':'' ?> +<?= $data['customers_new_m'] ?> bln ini</div>
+    <div class="kpi-sub" style="color:<?= $cHit?'#4ade80':'#fbbf24' ?>"><?= $cHit?rmi_icon('check'):'' ?> +<?= $data['customers_new_m'] ?> bln ini</div>
   </div>
   <?php if ($MPR_IS_ADMIN||($MPR_IS_FIN&&in_array($MPR_USER['level'],['MANAGER'],true))): ?>
   <div class="kpi-card" style="--kc:#ef4444">
-    <div class="kpi-icon">💰</div>
+    <div class="kpi-icon"><?=rmi_icon('money')?></div>
     <div class="kpi-val" style="color:<?= $data['budget_pending']>0?'#f87171':'#94a3b8' ?>"><?= $data['budget_pending'] ?></div>
     <div class="kpi-lbl">Budget Pending FIN</div>
   </div>
@@ -415,7 +416,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
   <?php // ---- FUNNEL ---- ?>
   <div class="col-lg-4">
     <div class="mprd-panel">
-      <div class="mprd-panel-title">🔽 Funnel Pipeline Akuisisi</div>
+      <div class="mprd-panel-title">rmi_icon('trend') Funnel Pipeline Akuisisi</div>
       <?php
       $fMax = max(1, max($funnelCounts));
       foreach ($funnelStages as $i => $sk):
@@ -438,7 +439,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
           <div class="funnel-count" style="color:#ef4444"><?= $lost ?></div>
         </div>
       <?php endif; ?>
-      <div style="margin-top:10px;font-size:10px;color:#475569">
+      <div style="margin-top:10px;font-size:10px;color:var(--rmi-muted)">
         <a href="<?= e(url_mpr('mpr_pipeline.php')) ?>" style="color:#3b82f6">→ Kelola Pipeline</a>
       </div>
     </div>
@@ -447,17 +448,17 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
   <?php // ---- LEADERBOARD ---- ?>
   <div class="col-lg-8">
     <div class="mprd-panel">
-      <div class="mprd-panel-title">🏆 Leaderboard <?= $months[$f_month] ?> <?= $f_year ?> — Staff &amp; Manager (semua wajib kunjungan)</div>
+      <div class="mprd-panel-title">rmi_icon('target') Leaderboard <?= $months[$f_month] ?> <?= $f_year ?> — Staff &amp; Manager (semua wajib kunjungan)</div>
       <?php if (empty($data['leaderboard'])): ?>
-        <div style="color:#475569;font-size:12px;text-align:center;padding:20px">Belum ada data kunjungan periode ini.</div>
+        <div style="color:var(--rmi-muted);font-size:12px;text-align:center;padding:20px">Belum ada data kunjungan periode ini.</div>
       <?php else: ?>
         <div style="display:grid;grid-template-columns:auto 1fr auto auto auto auto;gap:0;align-items:center;margin-bottom:4px;padding:0 0 4px;border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="font-size:9px;color:#475569;width:28px">#</div>
-          <div style="font-size:9px;color:#475569">Nama</div>
-          <div style="font-size:9px;color:#475569;width:50px;text-align:center">Kunjungan</div>
-          <div style="font-size:9px;color:#475569;width:50px;text-align:center">Prospek Baru</div>
-          <div style="font-size:9px;color:#475569;width:50px;text-align:center">Deal Won</div>
-          <div style="font-size:9px;color:#475569;width:50px;text-align:center">Hari Ini</div>
+          <div style="font-size:9px;color:var(--rmi-muted);width:28px">#</div>
+          <div style="font-size:9px;color:var(--rmi-muted)">Nama</div>
+          <div style="font-size:9px;color:var(--rmi-muted);width:50px;text-align:center">Kunjungan</div>
+          <div style="font-size:9px;color:var(--rmi-muted);width:50px;text-align:center">Prospek Baru</div>
+          <div style="font-size:9px;color:var(--rmi-muted);width:50px;text-align:center">Deal Won</div>
+          <div style="font-size:9px;color:var(--rmi-muted);width:50px;text-align:center">Hari Ini</div>
         </div>
         <?php
         $maxVisits = max(1, max(array_column($data['leaderboard'],'total_visits')));
@@ -475,7 +476,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
         ?>
         <div class="lb-row">
           <div class="lb-rank" style="background:<?= $rankBg ?>;color:<?= $rankColor ?>">
-            <?= $rank<=3 ? ['🥇','🥈','🥉'][$rank-1] : $rank ?>
+            <?= $rank<=3 ? [rmi_icon('target'),rmi_icon('target'),rmi_icon('target')][$rank-1] : $rank ?>
           </div>
           <div class="lb-name" style="flex:1">
             <div style="display:flex;align-items:center;gap:5px">
@@ -492,7 +493,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
               </div>
             </div>
             <?php if ($tVis>0||$tNew>0): ?>
-            <div style="font-size:9px;color:#475569;margin-top:2px">
+            <div style="font-size:9px;color:var(--rmi-muted);margin-top:2px">
               Target: <?= $tVis ?>kunjungan/<?= $tNew ?>prospek/<?= $tClo ?>deal
               <?php if ($visPct>=0): ?>
                 <span style="color:<?= $visPct>=100?'#4ade80':'#f59e0b' ?>">(<?= $visPct ?>%)</span>
@@ -518,7 +519,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
           </div>
         </div>
         <?php endforeach; ?>
-        <div style="font-size:10px;color:#334155;margin-top:8px">Manager dan Staff wajib kunjungan &amp; update pipeline setiap hari.</div>
+        <div style="font-size:10px;color:var(--rmi-muted);margin-top:8px">Manager dan Staff wajib kunjungan &amp; update pipeline setiap hari.</div>
       <?php endif; ?>
     </div>
   </div>
@@ -526,7 +527,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
   <?php // ---- TREN CHART ---- ?>
   <div class="col-lg-8">
     <div class="mprd-panel">
-      <div class="mprd-panel-title">📈 Tren 6 Bulan s/d <?= $months[$f_month] ?> <?= $f_year ?> — Total vs Prospek Baru vs Deal Won</div>
+      <div class="mprd-panel-title">rmi_icon('trend') Tren 6 Bulan s/d <?= $months[$f_month] ?> <?= $f_year ?> — Total vs Prospek Baru vs Deal Won</div>
       <canvas id="chartTren" height="110"></canvas>
     </div>
   </div>
@@ -535,10 +536,10 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
   <div class="col-lg-4">
     <div class="mprd-panel" style="border:<?= !empty($data['followup_today'])?'1px solid rgba(239,68,68,.3)':'' ?>">
       <div class="mprd-panel-title" style="color:<?= !empty($data['followup_today'])?'#f87171':'#64748b' ?>">
-        🔴 Follow-Up Jatuh Tempo (<?= $data['followup_total'] ?>)
+        rmi_icon('cross') Follow-Up Jatuh Tempo (<?= $data['followup_total'] ?>)
       </div>
       <?php if (empty($data['followup_today'])): ?>
-        <div style="color:#475569;font-size:12px">✅ Tidak ada follow-up overdue. Tim MPR on track!</div>
+        <div style="color:var(--rmi-muted);font-size:12px"><?=rmi_icon('check')?> Tidak ada follow-up overdue. Tim MPR on track!</div>
       <?php else: ?>
         <?php foreach ($data['followup_today'] as $fu):
           $isOverdue = (string)$fu['next_followup_date'] < $today;
@@ -549,7 +550,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
           <div style="flex:1">
             <div style="font-weight:700;color:#e2e8f0;font-size:12px"><?= e($fu['customer_name']) ?></div>
             <div style="font-size:11px;color:#64748b">
-              Jadwal: <?= e($fu['next_followup_date']) ?><?= $isOverdue?' <span style="color:#f87171">⚠ Overdue!</span>':'' ?>
+              Jadwal: <?= e($fu['next_followup_date']) ?><?= $isOverdue?' <span style="color:#f87171">'.rmi_icon('warn').' Overdue!</span>':'' ?>
             </div>
             <div style="font-size:11px;color:#94a3b8">
               PIC: <?= e($fu['visitor_username']) ?>
@@ -559,7 +560,7 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
           <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_visits.php?edit='.(int)$fu['id'])) ?>">Update</a>
         </div>
         <?php endforeach; ?>
-        <div style="font-size:10px;color:#475569;margin-top:8px">
+        <div style="font-size:10px;color:var(--rmi-muted);margin-top:8px">
           <a href="<?= e(url_mpr('mpr_visits.php')) ?>" style="color:#3b82f6">→ Semua Kunjungan</a>
         </div>
       <?php endif; ?>
@@ -569,38 +570,38 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
   <?php // ---- QUICK LINKS ---- ?>
   <div class="col-lg-4">
     <div class="mprd-panel">
-      <div class="mprd-panel-title">⚡ Aksi Cepat</div>
+      <div class="mprd-panel-title">rmi_icon('zap') Aksi Cepat</div>
       <?php if ($MPR_DEPO_RESTRICTED): ?>
-        <a class="ql-link" href="<?= e(url_mpr('mpr_visits.php')) ?>"><span>📍</span> Catat / Lihat Kunjungan Office</a>
-        <a class="ql-link" href="<?= e(url_mpr('mpr_pipeline.php')) ?>"><span>🎯</span> Pipeline Office</a>
-        <a class="ql-link" href="<?= e(url_mpr('mpr_plans.php')) ?>"><span>📋</span> MPR Plans</a>
-        <a class="ql-link" href="<?= e($mprBase . '/sales/sales_do.php') ?>"><span>📦</span> Delivery Order Office</a>
-        <a class="ql-link" href="<?= e($mprBase . '/dashboards/finance/dashboard_detail.php') ?>"><span>🎯</span> Pencapaian Office</a>
+        <a class="ql-link" href="<?= e(url_mpr('mpr_visits.php')) ?>"><span><?=rmi_icon('target')?></span> Catat / Lihat Kunjungan Office</a>
+        <a class="ql-link" href="<?= e(url_mpr('mpr_pipeline.php')) ?>"><span><?=rmi_icon('target')?></span> Pipeline Office</a>
+        <a class="ql-link" href="<?= e(url_mpr('mpr_plans.php')) ?>"><span><?=rmi_icon('clipboard')?></span> MPR Plans</a>
+        <a class="ql-link" href="<?= e($mprBase . '/sales/sales_do.php') ?>"><span><?=rmi_icon('box')?></span> Delivery Order Office</a>
+        <a class="ql-link" href="<?= e($mprBase . '/dashboards/finance/dashboard_detail.php') ?>"><span><?=rmi_icon('target')?></span> Pencapaian Office</a>
       <?php else: ?>
       <a class="ql-link" href="<?= e(url_mpr('mpr_visits.php')) ?>">
-        <span>📍</span> Catat Kunjungan Hari Ini
+        <span><?=rmi_icon('target')?></span> Catat Kunjungan Hari Ini
         <?php if ($data['visits_today']>0): ?><span class="ql-badge g"><?= $data['visits_today'] ?> hari ini</span><?php endif; ?>
       </a>
       <a class="ql-link" href="<?= e(url_mpr('mpr_pipeline.php')) ?>">
-        <span>🎯</span> Kelola Pipeline Prospek
+        <span><?=rmi_icon('target')?></span> Kelola Pipeline Prospek
         <?php if ($data['pipeline_active']>0): ?><span class="ql-badge y"><?= $data['pipeline_active'] ?> aktif</span><?php endif; ?>
       </a>
       <a class="ql-link" href="<?= e(url_mpr('mpr_plans.php')) ?>">
-        <span>📋</span> Plans
+        <span><?=rmi_icon('clipboard')?></span> Plans
       </a>
       <a class="ql-link" href="<?= e(url_mpr('mpr_visits.php?export=1&month='.urlencode($ym))) ?>">
-        <span>📤</span> Export Kunjungan Bulan Ini
+        <span><?=rmi_icon('outbox')?></span> Export Kunjungan Bulan Ini
       </a>
       <a class="ql-link" href="<?= e(url_mpr('mpr_pipeline.php?export=1')) ?>">
-        <span>📤</span> Export Pipeline
+        <span><?=rmi_icon('outbox')?></span> Export Pipeline
       </a>
       <hr style="border-color:rgba(255,255,255,.06);margin:6px 0">
-      <a class="ql-link" href="<?= e($mprBase . '/absensi/index.php') ?>"><span>📅</span> Absensi</a>
-      <a class="ql-link" href="<?= e($mprBase . '/master/master_pricelist_sell.php') ?>"><span>💰</span> Pricelist Jual</a>
-      <a class="ql-link" href="<?= e($mprBase . '/sales/sales_control_tower.php') ?>"><span>🗼</span> Sales Control Tower</a>
+      <a class="ql-link" href="<?= e($mprBase . '/absensi/index.php') ?>"><span><?=rmi_icon('calendar')?></span> Absensi</a>
+      <a class="ql-link" href="<?= e($mprBase . '/master/master_pricelist_sell.php') ?>"><span><?=rmi_icon('money')?></span> Pricelist Jual</a>
+      <a class="ql-link" href="<?= e($mprBase . '/sales/sales_control_tower.php') ?>"><span><?=rmi_icon('tower')?></span> Sales Control Tower</a>
       <?php if ($MPR_IS_ADMIN||$MPR_IS_FIN): ?>
       <a class="ql-link" href="<?= e(url_mpr('mpr_budget_fin.php')) ?>">
-        <span>💰</span> FIN Approval
+        <span><?=rmi_icon('money')?></span> FIN Approval
         <?php if ($data['budget_pending']>0): ?><span class="ql-badge"><?= $data['budget_pending'] ?></span><?php endif; ?>
       </a>
       <?php endif; ?>
@@ -611,19 +612,19 @@ $funnelLabels = ['Prospek','Kunjungan','Follow-Up','Presentasi','Negosiasi','Dea
   <?php // ---- Customer Baru Highlight ---- ?>
   <div class="col-lg-4">
     <div class="mprd-panel" style="border-top:3px solid #22c55e">
-      <div class="mprd-panel-title">🤝 Customer Baru <?= $months[$f_month] ?> <?= $f_year ?></div>
+      <div class="mprd-panel-title">rmi_icon('users') Customer Baru <?= $months[$f_month] ?> <?= $f_year ?></div>
       <?php $cHit=$data['customers_new_m']>=3; ?>
       <div style="font-size:36px;font-weight:900;color:<?= $cHit?'#4ade80':'#fbbf24' ?>">
         <?= $data['customers_new_m'] ?>
         <span style="font-size:14px;color:#64748b">/ target min. 3</span>
       </div>
       <div style="font-size:12px;color:<?= $cHit?'#4ade80':'#fbbf24' ?>;font-weight:700;margin-top:4px">
-        <?= $cHit ? '✅ Target tercapai! Pertahankan.' : '⚠️ Belum tercapai. Tingkatkan prospek baru!' ?>
+        <?= $cHit ? rmi_icon('check').' Target tercapai! Pertahankan.' : rmi_icon('warn').' Belum tercapai. Tingkatkan prospek baru!' ?>
       </div>
       <div style="margin-top:10px;font-size:11px;color:#64748b">
         Total Customer Aktif: <strong style="color:#e2e8f0"><?= $data['customers_active'] ?></strong>
       </div>
-      <div style="font-size:11px;color:#475569;margin-top:6px">
+      <div style="font-size:11px;color:var(--rmi-muted);margin-top:6px">
         Setiap deal won harus dikonversi ke master_customers segera.
       </div>
     </div>

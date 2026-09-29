@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = json_encode($newCfg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $tmp = $JSON_FILE . '.tmp';
         if (file_put_contents($tmp, $json) !== false && rename($tmp, $JSON_FILE)) {
-            $flash = '✓ Penomoran direset ke default.'; $flashOk = true;
+            $flash = rmi_icon('tick') . ' Penomoran direset ke default.'; $flashOk = true;
             $current = $DEFAULTS;
             if ($pdo) master_audit($pdo, 'doc_numbering', 'config', 'RESET', null, 'doc_numbering.json', 'Reset ke default oleh ' . ($_SESSION['username'] ?? '-'), []);
         } else {
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $json = json_encode($newCfg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             $tmp  = $JSON_FILE . '.tmp';
             if (file_put_contents($tmp, $json) !== false && rename($tmp, $JSON_FILE)) {
-                $flash = '✓ Format penomoran berhasil disimpan.'; $flashOk = true;
+                $flash = rmi_icon('tick') . ' Format penomoran berhasil disimpan.'; $flashOk = true;
                 $current = $newCfg;
                 if ($pdo) master_audit($pdo, 'doc_numbering', 'config', 'SAVE', null, 'doc_numbering.json', 'Format penomoran diubah oleh ' . ($_SESSION['username'] ?? '-'), $newCfg);
             } else {
@@ -131,7 +131,7 @@ rmi_header('Format Penomoran Dokumen', [
 ?>
 
 <div class="mb-3">
-  <h4 class="mb-1">🔢 Format Penomoran Dokumen</h4>
+  <h4 class="mb-1"><?= rmi_icon('clipboard') ?> Format Penomoran Dokumen</h4>
   <div style="font-size:12px;color:#6b7280">Atur prefix nomor untuk setiap jenis dokumen ERP. Berlaku untuk dokumen <b>baru</b> — dokumen lama di database tidak berubah.</div>
 </div>
 
@@ -175,9 +175,9 @@ rmi_header('Format Penomoran Dokumen', [
   <?php endforeach; ?>
 
   <div style="display:flex;gap:10px;margin-top:4px">
-    <button type="submit" class="btn btn-primary">💾 Simpan Format</button>
+    <button type="submit" class="btn btn-primary"><?= rmi_icon('doc') ?> Simpan Format</button>
     <button type="submit" name="reset_defaults" value="1" class="btn btn-outline-secondary"
-      onclick="return confirm('Reset semua format ke default (RMI-...)?')">↺ Reset Default</button>
+      onclick="return confirm('Reset semua format ke default (RMI-...)?')"><?= rmi_icon('refresh') ?> Reset Default</button>
   </div>
 </form>
 

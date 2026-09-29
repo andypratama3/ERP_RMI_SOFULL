@@ -680,9 +680,9 @@ table{color:#e5e7eb}
 .fin-k-val{font-size:16px;font-weight:800;color:#fff;line-height:1.2;font-variant-numeric:tabular-nums}
 .fin-k-val.lg{font-size:24px}
 .fin-k-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
-.fin-k-sub{font-size:10px;color:#374151;margin-top:2px}
+.fin-k-sub{font-size:10px;color:var(--rmi-muted);margin-top:2px}
 /* Section heading */
-.fin-sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#475569;margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+.fin-sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--rmi-muted);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
 .fin-sh::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.08)}
 /* Aging bar */
 .aging-row{margin-bottom:10px}
@@ -690,7 +690,7 @@ table{color:#e5e7eb}
 .aging-fill{height:8px;border-radius:4px;transition:.3s}
 /* Mini table */
 .fin-tbl{width:100%;border-collapse:collapse;font-size:12px}
-.fin-tbl th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#475569;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;white-space:nowrap}
+.fin-tbl th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--rmi-muted);padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;white-space:nowrap}
 .fin-tbl td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
 .fin-tbl tr:hover td{background:rgba(255,255,255,.02)}
 .fin-tbl tr:last-child td{border-bottom:none}
@@ -704,7 +704,7 @@ table{color:#e5e7eb}
 .fin-pb:hover,.fin-pb.act{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.4);color:#34d399}
 </style>',
     'actions' => [
-        ['label'=>'📚 Panduan',    'url'=>fin_u('/dashboards/finance/panduan.php'),   'class'=>'btn btn-sm btn-outline-light'],
+        ['label'=>rmi_icon('books').' Panduan',    'url'=>fin_u('/dashboards/finance/panduan.php'),   'class'=>'btn btn-sm btn-outline-light'],
         ['label'=>'FIN Tasks',      'url'=>fin_u('/sales/fin_do_tasks.php'),          'class'=>'btn btn-sm btn-rmi'],
         ['label'=>'AP Invoice',     'url'=>fin_u('/purchases/purchases_invoice_ap.php'),'class'=>'btn btn-sm btn-outline-light'],
         ['label'=>'AP Payment',     'url'=>fin_u('/purchases/purchases_payment_ap.php'),'class'=>'btn btn-sm btn-outline-light'],
@@ -739,7 +739,7 @@ table{color:#e5e7eb}
   <!-- Header -->
   <div class="fin-hdr">
     <div>
-      <h2>💰 Finance Dashboard</h2>
+      <h2><?=rmi_icon('money')?> Finance Dashboard</h2>
       <p>AR · AP · Cash · Payroll — <?= h($period) ?><?= $scopeOfficeFilter ? ' · Office: '.h($scopeOffice) : ' · All Office' ?><?= $finManagerFullDashboard ? ' · FIN Manager Full Scope' : '' ?></p>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
@@ -753,14 +753,14 @@ table{color:#e5e7eb}
       <?php endforeach; ?>
       <input type="month" class="form-control form-control-sm" style="max-width:130px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);color:#e2e8f0"
              value="<?= h($period) ?>" onchange="location.href='?m='+this.value">
-      <a href="<?= h(fin_u('/dashboards/index.php')) ?>" class="fin-link" style="font-size:12px">🏠 Home</a>
+      <a href="<?= h(fin_u('/dashboards/index.php')) ?>" class="fin-link" style="font-size:12px"><?=rmi_icon('home')?> Home</a>
     </div>
   </div>
 
   <!-- Alerts -->
   <?php if ($finDoTasks > 0): ?>
   <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px">
-    <span style="font-size:18px">💰</span>
+    <span style="font-size:18px"><?=rmi_icon('money')?></span>
     <span><strong style="color:#34d399"><?= $finDoTasks ?> DO menunggu payment</strong>
     <span style="color:#94a3b8"> — Total <?= fin_money_short($finDoAmount) ?></span></span>
     <a href="<?= h(fin_u('/sales/fin_do_tasks.php')) ?>" style="margin-left:auto;color:#34d399;font-size:11px;text-decoration:none">Collect sekarang →</a>
@@ -768,7 +768,7 @@ table{color:#e5e7eb}
   <?php endif; ?>
   <?php if ($arCountOverdue > 0): ?>
   <div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px">
-    <span style="font-size:18px">⚠️</span>
+    <span style="font-size:18px"><?=rmi_icon('warn')?></span>
     <span><strong style="color:#f87171"><?= $arCountOverdue ?> AR Overdue</strong>
     <span style="color:#94a3b8"> — <?= fin_money_short($arOverdue) ?> piutang melewati jatuh tempo</span></span>
     <a href="<?= h(fin_u('/sales/fin_do_tasks.php')) ?>" style="margin-left:auto;color:#f87171;font-size:11px;text-decoration:none">Lihat →</a>
@@ -776,7 +776,7 @@ table{color:#e5e7eb}
   <?php endif; ?>
   <?php if ($apOverdueCount > 0): ?>
   <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px">
-    <span style="font-size:18px">💳</span>
+    <span style="font-size:18px"><?=rmi_icon('money')?></span>
     <span><strong style="color:#fb923c"><?= $apOverdueCount ?> AP Overdue</strong>
     <span style="color:#94a3b8"> — <?= fin_money_short($apOverdue) ?> hutang melewati due date</span></span>
     <a href="<?= h(fin_u('/purchases/purchases_invoice_ap.php')) ?>" style="margin-left:auto;color:#fb923c;font-size:11px;text-decoration:none">Bayar →</a>
@@ -786,9 +786,9 @@ table{color:#e5e7eb}
 
   <?php if ($regPayPendingCount > 0): ?>
   <div style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px">
-    <span style="font-size:18px">🧾</span>
+    <span style="font-size:18px"><?=rmi_icon('receipt')?></span>
     <span><strong style="color:#93c5fd"><?= $regPayPendingCount ?> pembayaran registrasi alkes menunggu FIN</strong>
-    <span style="color:#94a3b8"> — Total <?= fin_money_short($regPayPendingAmount) ?><?= $regPayOverdueCount>0 ? ' · ⚠ '.$regPayOverdueCount.' overdue' : '' ?></span></span>
+    <span style="color:#94a3b8"> — Total <?= fin_money_short($regPayPendingAmount) ?><?= $regPayOverdueCount>0 ? ' · '.rmi_icon('warn').' '.$regPayOverdueCount.' overdue' : '' ?></span></span>
     <a href="<?= h(fin_u('/dashboards/finance/reg_alkes_payments.php')) ?>" style="margin-left:auto;color:#93c5fd;font-size:11px;text-decoration:none">Review →</a>
   </div>
   <?php endif; ?>
@@ -798,16 +798,16 @@ table{color:#e5e7eb}
 
     <!-- FIN DO Tasks — NEW CRITICAL -->
     <a class="fin-k" href="<?= h(fin_u('/sales/fin_do_tasks.php')) ?>" style="--kc:<?= $finDoTasks>0?'#10b981':'#64748b' ?>">
-      <div class="fin-k-icon">💰</div>
+      <div class="fin-k-icon"><?=rmi_icon('money')?></div>
       <div class="fin-k-val lg" style="color:<?= $finDoTasks>0?'#34d399':'#fff' ?>"><?= number_format($finDoTasks) ?></div>
       <div class="fin-k-lbl">FIN DO Tasks</div>
-      <div class="fin-k-sub"><?= $finDoTasks>0 ? fin_money_short($finDoAmount) : '✓ Clear' ?></div>
+      <div class="fin-k-sub"><?= $finDoTasks>0 ? fin_money_short($finDoAmount) : rmi_icon('tick').' Clear' ?></div>
     </a>
 
 
     <!-- Avg Durasi SLA FIN -->
     <div class="fin-k" style="--kc:#8b5cf6">
-      <div class="fin-k-icon">⏱️</div>
+      <div class="fin-k-icon"><?=rmi_icon('calendar')?></div>
       <div class="fin-k-val" style="color:#c4b5fd"><?= h(fin_duration($finAvgDurationSec)) ?></div>
       <div class="fin-k-lbl">Avg Durasi FIN</div>
       <div class="fin-k-sub">ACT handoff → FIN selesai · <?= number_format($finDurationMeasured) ?> DO terukur</div>
@@ -815,15 +815,15 @@ table{color:#e5e7eb}
 
     <!-- REG Alkes Registration Payments -->
     <a class="fin-k" href="<?= h(fin_u('/dashboards/finance/reg_alkes_payments.php')) ?>" style="--kc:<?= $regPayPendingCount>0?'#60a5fa':'#64748b' ?>">
-      <div class="fin-k-icon">🧾</div>
+      <div class="fin-k-icon"><?=rmi_icon('receipt')?></div>
       <div class="fin-k-val lg" style="color:<?= $regPayPendingCount>0?'#93c5fd':'#fff' ?>"><?= number_format($regPayPendingCount) ?></div>
       <div class="fin-k-lbl">Reg Alkes Pay</div>
-      <div class="fin-k-sub"><?= $regPayPendingCount>0 ? fin_money_short($regPayPendingAmount) . ($regPayOverdueCount>0 ? ' · '.$regPayOverdueCount.' OD' : '') : '✓ Clear' ?></div>
+      <div class="fin-k-sub"><?= $regPayPendingCount>0 ? fin_money_short($regPayPendingAmount) . ($regPayOverdueCount>0 ? ' · '.$regPayOverdueCount.' OD' : '') : rmi_icon('tick').' Clear' ?></div>
     </a>
 
     <!-- Collected MTD — NEW -->
     <div class="fin-k" style="--kc:#22c55e">
-      <div class="fin-k-icon">✅</div>
+      <div class="fin-k-icon"><?=rmi_icon('check')?></div>
       <div class="fin-k-val"><?= fin_money_short($arCollectedMTD) ?></div>
       <div class="fin-k-lbl">Collected MTD</div>
       <div class="fin-k-sub"><?= number_format($arCollectedCount) ?> DO paid <?= date('M Y', strtotime($mStart)) ?></div>
@@ -831,7 +831,7 @@ table{color:#e5e7eb}
 
     <!-- AR Outstanding -->
     <div class="fin-k" style="--kc:#3b82f6">
-      <div class="fin-k-icon">📬</div>
+      <div class="fin-k-icon"><?=rmi_icon('doc')?></div>
       <div class="fin-k-val"><?= fin_money_short($arOutstanding) ?></div>
       <div class="fin-k-lbl">AR Outstanding</div>
       <div class="fin-k-sub"><?= number_format($arCountTotal) ?> DO belum lunas</div>
@@ -839,7 +839,7 @@ table{color:#e5e7eb}
 
     <!-- AR Overdue -->
     <div class="fin-k" style="--kc:<?= $arOverdue>0?'#ef4444':'#64748b' ?>">
-      <div class="fin-k-icon">⚠️</div>
+      <div class="fin-k-icon"><?=rmi_icon('warn')?></div>
       <div class="fin-k-val" style="color:<?= $arOverdue>0?'#f87171':'#fff' ?>"><?= fin_money_short($arOverdue) ?></div>
       <div class="fin-k-lbl">AR Overdue</div>
       <div class="fin-k-sub"><?= $arCountOverdue ?> DO jatuh tempo</div>
@@ -847,7 +847,7 @@ table{color:#e5e7eb}
 
     <!-- Net Position — NEW -->
     <div class="fin-k" style="--kc:<?= $netPosition>=0?'#22c55e':'#ef4444' ?>">
-      <div class="fin-k-icon"><?= $netPosition>=0?'📈':'📉' ?></div>
+      <div class="fin-k-icon"><?= $netPosition>=0?rmi_icon('trend'):rmi_icon('trend') ?></div>
       <div class="fin-k-val" style="color:<?= $netPosition>=0?'#4ade80':'#f87171' ?>"><?= fin_money_short(abs($netPosition)) ?></div>
       <div class="fin-k-lbl">Net AR - AP</div>
       <div class="fin-k-sub"><?= $netPosition>=0?'Positif (piutang > hutang)':'Negatif (hutang > piutang)' ?></div>
@@ -855,15 +855,15 @@ table{color:#e5e7eb}
 
     <!-- AP Outstanding -->
     <div class="fin-k" style="--kc:<?= $apOverdue>0?'#f97316':'#f59e0b' ?>">
-      <div class="fin-k-icon">💳</div>
+      <div class="fin-k-icon"><?=rmi_icon('money')?></div>
       <div class="fin-k-val"><?= fin_money_short($apOutstanding) ?></div>
       <div class="fin-k-lbl">AP Outstanding</div>
-      <div class="fin-k-sub"><?= number_format($apCount) ?> invoice · <?= $apOverdueCount>0?'⚠ '.$apOverdueCount.' OD':'✓ Tidak ada OD' ?></div>
+      <div class="fin-k-sub"><?= number_format($apCount) ?> invoice · <?= $apOverdueCount>0?rmi_icon('warn').' '.$apOverdueCount.' OD':rmi_icon('tick').' Tidak ada OD' ?></div>
     </div>
 
     <!-- Cash Balance -->
     <div class="fin-k" style="--kc:#10b981">
-      <div class="fin-k-icon">💵</div>
+      <div class="fin-k-icon"><?=rmi_icon('money')?></div>
       <div class="fin-k-val"><?= $cashSourceAvailable ? fin_money_short($cash) : 'N/A' ?></div>
       <div class="fin-k-lbl">Cash Balance</div>
       <div class="fin-k-sub"><?= h($cashSourceLabel) ?><?= $runwayWeeks>0 ? ' · Runway '.number_format($runwayWeeks,1,',','.').'w' : '' ?></div>
@@ -872,14 +872,14 @@ table{color:#e5e7eb}
     <!-- OPEX / Payroll -->
     <?php if ($payrollRun): ?>
     <a class="fin-k" href="<?= h(fin_u('/payroll/index.php')) ?>" style="--kc:<?= strtoupper($payrollRun['status']??'')==='PAID'?'#22c55e':(strtoupper($payrollRun['status']??'')==='POSTED'?'#3b82f6':'#f59e0b') ?>">
-      <div class="fin-k-icon">👥</div>
+      <div class="fin-k-icon"><?=rmi_icon('users')?></div>
       <div class="fin-k-val"><?= fin_money_short((float)($payrollRun['total_net']??0)) ?></div>
       <div class="fin-k-lbl">Payroll <?= h($period) ?></div>
       <div class="fin-k-sub"><?= h($payrollRun['emp_count']??0) ?> karyawan · <span style="font-weight:700;color:<?= strtoupper($payrollRun['status']??'')==='PAID'?'#4ade80':(strtoupper($payrollRun['status']??'')==='POSTED'?'#60a5fa':'#fbbf24') ?>"><?= h($payrollRun['status']??'DRAFT') ?></span></div>
     </a>
     <?php else: ?>
     <a class="fin-k" href="<?= h(fin_u('/payroll/index.php')) ?>" style="--kc:#94a3b8;opacity:.7">
-      <div class="fin-k-icon">👥</div>
+      <div class="fin-k-icon"><?=rmi_icon('users')?></div>
       <div class="fin-k-val" style="font-size:13px;color:#64748b">Belum ada run</div>
       <div class="fin-k-lbl">Payroll <?= h($period) ?></div>
       <div class="fin-k-sub"><span style="color:#f97316">Buat run →</span></div>
@@ -894,7 +894,7 @@ table{color:#e5e7eb}
     <!-- AR Aging — visual bars -->
     <div class="col-lg-4">
       <div class="rmi-card p-3">
-        <div class="fin-sh" style="margin-top:0">📬 AR Aging (Overdue)</div>
+        <div class="fin-sh" style="margin-top:0"><?=rmi_icon('doc')?> AR Aging (Overdue)</div>
         <?php
         $agingTotal = array_sum($arAging);
         if ($agingTotal > 0):
@@ -918,14 +918,14 @@ table{color:#e5e7eb}
               <div class="aging-bar">
                 <div class="aging-fill" style="width:<?= $pct ?>%;background:<?= $meta['color'] ?>"></div>
               </div>
-              <div style="font-size:10px;color:#374151;margin-top:1px"><?= $pct ?>% dari total overdue</div>
+              <div style="font-size:10px;color:var(--rmi-muted);margin-top:1px"><?= $pct ?>% dari total overdue</div>
             </div>
           <?php endforeach; ?>
           <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:8px;margin-top:6px;font-size:12px;color:#64748b">
             Total Overdue AR: <span style="color:#f87171;font-weight:700"><?= fin_money_short($agingTotal) ?></span>
           </div>
         <?php else: ?>
-          <div style="color:#4b5563;padding:16px 0;text-align:center;font-size:13px">✅ Tidak ada AR overdue.</div>
+          <div style="color:var(--rmi-muted);padding:16px 0;text-align:center;font-size:13px"><?=rmi_icon('check')?> Tidak ada AR overdue.</div>
         <?php endif; ?>
       </div>
     </div>
@@ -933,7 +933,7 @@ table{color:#e5e7eb}
     <!-- AP Aging — visual bars -->
     <div class="col-lg-4">
       <div class="rmi-card p-3">
-        <div class="fin-sh" style="margin-top:0">💳 AP Aging (Outstanding)</div>
+        <div class="fin-sh" style="margin-top:0"><?=rmi_icon('money')?> AP Aging (Outstanding)</div>
         <?php
         $apAgingTotal = array_sum($apAgingBuckets);
         if ($apAgingTotal > 0):
@@ -957,14 +957,14 @@ table{color:#e5e7eb}
               <div class="aging-bar">
                 <div class="aging-fill" style="width:<?= $pct ?>%;background:<?= $meta['color'] ?>"></div>
               </div>
-              <div style="font-size:10px;color:#374151;margin-top:1px"><?= $pct ?>% dari total AP</div>
+              <div style="font-size:10px;color:var(--rmi-muted);margin-top:1px"><?= $pct ?>% dari total AP</div>
             </div>
           <?php endforeach; ?>
           <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:8px;margin-top:6px;font-size:12px;color:#64748b">
             Total AP Outstanding: <span style="color:#fb923c;font-weight:700"><?= fin_money_short($apAgingTotal) ?></span>
           </div>
         <?php else: ?>
-          <div style="color:#4b5563;padding:16px 0;text-align:center;font-size:13px">✅ Tidak ada AP outstanding.</div>
+          <div style="color:var(--rmi-muted);padding:16px 0;text-align:center;font-size:13px"><?=rmi_icon('check')?> Tidak ada AP outstanding.</div>
         <?php endif; ?>
       </div>
     </div>
@@ -973,11 +973,11 @@ table{color:#e5e7eb}
     <div class="col-lg-4">
       <div class="rmi-card p-3">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <div class="fin-sh" style="margin:0">👥 Top AR Overdue</div>
+          <div class="fin-sh" style="margin:0"><?=rmi_icon('users')?> Top AR Overdue</div>
           <a href="<?= h(fin_u('/sales/fin_do_tasks.php')) ?>" style="font-size:11px;color:#34d399;text-decoration:none">Collect →</a>
         </div>
         <?php if (empty($topOverdue)): ?>
-          <div style="color:#4b5563;padding:16px 0;text-align:center;font-size:13px"><?= $arCountOverdue>0 ? '⚠️ AR overdue terdeteksi, tetapi customer belum dapat dipetakan.' : '✅ Tidak ada customer overdue.' ?></div>
+          <div style="color:var(--rmi-muted);padding:16px 0;text-align:center;font-size:13px"><?= $arCountOverdue>0 ? rmi_icon('warn').' AR overdue terdeteksi, tetapi customer belum dapat dipetakan.' : rmi_icon('check').' Tidak ada customer overdue.' ?></div>
         <?php else: ?>
           <div class="table-responsive">
           <table class="fin-tbl">
@@ -1019,7 +1019,7 @@ table{color:#e5e7eb}
     <div class="col-12">
       <div class="rmi-card p-3">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <div class="fin-sh" style="margin:0">🧾 Pembayaran Registrasi Alkes</div>
+          <div class="fin-sh" style="margin:0"><?=rmi_icon('receipt')?> Pembayaran Registrasi Alkes</div>
           <div style="display:flex;gap:8px"><a href="<?= h(fin_u('/dashboards/finance/reg_alkes_payments.php')) ?>" style="font-size:11px;color:#93c5fd;text-decoration:none">Buka Halaman FIN →</a><a href="<?= h(fin_u('/hrl_reg_alkes/reg_alkes_control_tower.php')) ?>" style="font-size:11px;color:#93c5fd;text-decoration:none">Control Tower →</a></div>
         </div>
         <?php if (!$pdo || !fin_t($pdo, 'hrl_reg_alkes_payments')): ?>
@@ -1027,7 +1027,7 @@ table{color:#e5e7eb}
             Belum ada tabel pembayaran registrasi. Tabel akan dibuat dari halaman REG Alkes Case setelah file pembayaran dipasang.
           </div>
         <?php elseif (empty($regPayPending)): ?>
-          <div style="color:#4b5563;font-size:13px;padding:12px 0;text-align:center">✅ Tidak ada pembayaran registrasi alkes yang menunggu FIN.</div>
+          <div style="color:var(--rmi-muted);font-size:13px;padding:12px 0;text-align:center"><?=rmi_icon('check')?> Tidak ada pembayaran registrasi alkes yang menunggu FIN.</div>
         <?php else: ?>
           <div class="table-responsive">
           <table class="fin-tbl">
@@ -1068,7 +1068,7 @@ table{color:#e5e7eb}
                 <td style="white-space:nowrap">
                   <span style="font-weight:700;color:<?= $dueColor ?>"><?= h($due !== '' ? $due : '-') ?></span>
                   <?php if ($daysLeft !== null): ?>
-                    <span style="font-size:10px;color:#475569">(<?= $daysLeft < 0 ? 'OD '.abs($daysLeft).'h' : $daysLeft.'h lagi' ?>)</span>
+                    <span style="font-size:10px;color:var(--rmi-muted)">(<?= $daysLeft < 0 ? 'OD '.abs($daysLeft).'h' : $daysLeft.'h lagi' ?>)</span>
                   <?php endif; ?>
                 </td>
                 <td style="text-align:right;font-weight:800;color:#93c5fd"><?= fin_money_short((float)($r['amount'] ?? 0)) ?></td>
@@ -1093,11 +1093,11 @@ table{color:#e5e7eb}
     <div class="col-12">
       <div class="rmi-card p-3">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <div class="fin-sh" style="margin:0">💳 AP Jatuh Tempo 14 Hari ke Depan</div>
+          <div class="fin-sh" style="margin:0"><?=rmi_icon('money')?> AP Jatuh Tempo 14 Hari ke Depan</div>
           <a href="<?= h(fin_u('/purchases/purchases_payment_ap.php')) ?>" style="font-size:11px;color:#fb923c;text-decoration:none">Bayar →</a>
         </div>
         <?php if (empty($apDueWeek)): ?>
-          <div style="color:#4b5563;font-size:13px;padding:12px 0;text-align:center">✅ Tidak ada AP jatuh tempo 14 hari ke depan.</div>
+          <div style="color:var(--rmi-muted);font-size:13px;padding:12px 0;text-align:center"><?=rmi_icon('check')?> Tidak ada AP jatuh tempo 14 hari ke depan.</div>
         <?php else: ?>
           <div class="table-responsive">
           <table class="fin-tbl">
@@ -1113,7 +1113,7 @@ table{color:#e5e7eb}
                 <td style="font-size:11px;color:#64748b"><?= h($r['invoice_number']??'—') ?></td>
                 <td style="white-space:nowrap">
                   <span style="font-weight:700;color:<?= $dueColor ?>"><?= h($r['due_date']??'') ?></span>
-                  <span style="font-size:10px;color:#374151"> (<?= $daysLeft ?>h)</span>
+                  <span style="font-size:10px;color:var(--rmi-muted)"> (<?= $daysLeft ?>h)</span>
                 </td>
                 <td><span style="font-size:10px;font-weight:700;background:rgba(255,255,255,.06);padding:2px 7px;border-radius:6px;color:#94a3b8"><?= h($r['status']??'') ?></span></td>
                 <td style="text-align:right;font-weight:700;color:#fb923c;font-size:11px"><?= fin_money_short((float)($r['total_amount']??0)) ?></td>
@@ -1129,34 +1129,34 @@ table{color:#e5e7eb}
 
   <!-- Quick Links -->
   <div class="rmi-card p-3">
-    <div class="fin-sh" style="margin-top:0">⚡ Quick Links</div>
+    <div class="fin-sh" style="margin-top:0"><?=rmi_icon('zap')?> Quick Links</div>
     <div class="fin-links">
-      <a class="fin-link primary" href="<?= h(fin_u('/sales/fin_do_tasks.php')) ?>">💰 FIN Task DO</a>
-      <a class="fin-link primary" href="<?= h(fin_u('/purchases/purchases_invoice_ap.php')) ?>">💳 AP Invoice</a>
-      <a class="fin-link primary" href="<?= h(fin_u('/purchases/purchases_payment_ap.php')) ?>">💸 AP Payment</a>
-      <a class="fin-link" href="<?= h(fin_u('/dashboards/finance/ap_rekap.php')) ?>">📋 Rekap Hutang</a>
-      <a class="fin-link" href="<?= h(fin_u('/purchases/purchases_ap_import.php')) ?>">⬆ Import Hutang Lama</a>
-      <a class="fin-link primary" href="<?= h(fin_u('/dashboards/finance/reg_alkes_payments.php')) ?>">🧾 Reg Alkes Payment</a>
-      <a class="fin-link" href="<?= h(fin_u('/sales/tax_invoices.php')) ?>">🧾 Tax Invoice</a>
-      <a class="fin-link" href="<?= h(fin_u('/purchases/bank_recon.php')) ?>">🏦 Bank Rekon</a>
-      <a class="fin-link" href="<?= h(fin_u('/purchases/gl_reversal_approvals.php')) ?>">🔄 GL Reversal</a>
-      <a class="fin-link" href="<?= h(fin_u('/master/company_bank_accounts.php')) ?>">🏧 Rekening Perusahaan</a>
-      <a class="fin-link" href="<?= h(fin_u('/payroll/index.php')) ?>">👥 Payroll</a>
-      <a class="fin-link primary" href="<?= h(fin_u('/purchases/purchases_control_tower.php')) ?>">🗼 Local Purchase Control Tower</a>
-      <a class="fin-link" href="<?= h(fin_u('/purchases/purchases_import_control_tower.php')) ?>">🚢 Import Control Tower</a>
-      <a class="fin-link" href="<?= h(fin_u('/sales/sales_control_tower.php')) ?>">🗼 Sales Control Tower</a>
-      <a class="fin-link" href="<?= h(fin_u('/Fixed_Asset/index.php')) ?>">🏗️ Fixed Asset</a>
-      <a class="fin-link" href="<?= h(fin_u('/dashboards/finance/dashboard_detail.php')) ?>">📊 Finance Detail</a>
-      <a class="fin-link" href="<?= h(fin_u('/dashboards/finance/target_rekap.php')) ?>">🎯 Target Finance</a>
-      <a class="fin-link" href="<?= h(fin_u('/dashboards/finance/adjustment_manage.php')) ?>">🧮 Adjustment</a>
-      <a class="fin-link" href="<?= h(fin_u('/kpi/kpi_center.php')) ?>">📈 KPI Center</a>
-      <a class="fin-link" href="<?= h(fin_u('/absensi/index.php')) ?>">📅 Absensi</a>
+      <a class="fin-link primary" href="<?= h(fin_u('/sales/fin_do_tasks.php')) ?>"><?=rmi_icon('money')?> FIN Task DO</a>
+      <a class="fin-link primary" href="<?= h(fin_u('/purchases/purchases_invoice_ap.php')) ?>"><?=rmi_icon('money')?> AP Invoice</a>
+      <a class="fin-link primary" href="<?= h(fin_u('/purchases/purchases_payment_ap.php')) ?>"><?=rmi_icon('money')?> AP Payment</a>
+      <a class="fin-link" href="<?= h(fin_u('/dashboards/finance/ap_rekap.php')) ?>"><?=rmi_icon('clipboard')?> Rekap Hutang</a>
+      <a class="fin-link" href="<?= h(fin_u('/purchases/purchases_ap_import.php')) ?>"><?=rmi_icon('outbox')?> Import Hutang Lama</a>
+      <a class="fin-link primary" href="<?= h(fin_u('/dashboards/finance/reg_alkes_payments.php')) ?>"><?=rmi_icon('receipt')?> Reg Alkes Payment</a>
+      <a class="fin-link" href="<?= h(fin_u('/sales/tax_invoices.php')) ?>"><?=rmi_icon('receipt')?> Tax Invoice</a>
+      <a class="fin-link" href="<?= h(fin_u('/purchases/bank_recon.php')) ?>"><?=rmi_icon('money')?> Bank Rekon</a>
+      <a class="fin-link" href="<?= h(fin_u('/purchases/gl_reversal_approvals.php')) ?>"><?=rmi_icon('refresh')?> GL Reversal</a>
+      <a class="fin-link" href="<?= h(fin_u('/master/company_bank_accounts.php')) ?>"><?=rmi_icon('money')?> Rekening Perusahaan</a>
+      <a class="fin-link" href="<?= h(fin_u('/payroll/index.php')) ?>"><?=rmi_icon('users')?> Payroll</a>
+      <a class="fin-link primary" href="<?= h(fin_u('/purchases/purchases_control_tower.php')) ?>"><?=rmi_icon('tower')?> Local Purchase Control Tower</a>
+      <a class="fin-link" href="<?= h(fin_u('/purchases/purchases_import_control_tower.php')) ?>"><?=rmi_icon('box')?> Import Control Tower</a>
+      <a class="fin-link" href="<?= h(fin_u('/sales/sales_control_tower.php')) ?>"><?=rmi_icon('tower')?> Sales Control Tower</a>
+      <a class="fin-link" href="<?= h(fin_u('/Fixed_Asset/index.php')) ?>"><?=rmi_icon('office')?> Fixed Asset</a>
+      <a class="fin-link" href="<?= h(fin_u('/dashboards/finance/dashboard_detail.php')) ?>"><?=rmi_icon('chart')?> Finance Detail</a>
+      <a class="fin-link" href="<?= h(fin_u('/dashboards/finance/target_rekap.php')) ?>"><?=rmi_icon('target')?> Target Finance</a>
+      <a class="fin-link" href="<?= h(fin_u('/dashboards/finance/adjustment_manage.php')) ?>"><?=rmi_icon('money')?> Adjustment</a>
+      <a class="fin-link" href="<?= h(fin_u('/kpi/kpi_center.php')) ?>"><?=rmi_icon('trend')?> KPI Center</a>
+      <a class="fin-link" href="<?= h(fin_u('/absensi/index.php')) ?>"><?=rmi_icon('calendar')?> Absensi</a>
       <a class="fin-link" href="<?= h(fin_u('/mpr/mpr_budget_fin.php')) ?>">
-  💼 MPR Budget Approval
+  <?=rmi_icon('money')?> MPR Budget Approval
 </a>
 
 <a class="fin-link" href="<?= h(fin_u('/mpr/mpr_ops_daily_fin.php')) ?>">
-  📆 MPR Ops Payment
+  <?=rmi_icon('calendar')?> MPR Ops Payment
 </a>
     </div>
   </div>

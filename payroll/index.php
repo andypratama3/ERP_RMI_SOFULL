@@ -531,7 +531,7 @@ $runs = $st->fetchAll(PDO::FETCH_ASSOC);
 rmi_header('Payroll Dashboard', 'payroll', [
     'base_project' => $BASE_PROJECT,
     'actions'      => [
-        ['label' => '📖 Panduan', 'url' => $BASE_PAYROLL . '/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => '' . rmi_icon("books") . ' Panduan', 'url' => $BASE_PAYROLL . '/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -576,7 +576,7 @@ rmi_header('Payroll Dashboard', 'payroll', [
           <a class="btn btn-outline-light" href="<?= payroll_h($BASE_PAYROLL) ?>/salary_matrix.php">Master Golongan Gaji</a>
           <a class="btn btn-outline-light" href="<?= payroll_h($BASE_PAYROLL) ?>/loans.php">Pengajuan Pinjaman / Kasbon</a>
           <a class="btn btn-outline-secondary" href="<?= payroll_h($BASE_PAYROLL) ?>/audit.php">Audit Log</a>
-          <a class="btn btn-outline-light" href="<?= payroll_h($BASE_PAYROLL) ?>/panduan.php">📖 Panduan Payroll</a>
+          <a class="btn btn-outline-light" href="<?= payroll_h($BASE_PAYROLL) ?>/panduan.php"><?=rmi_icon('books')?> Panduan Payroll</a>
         </div>
       </div>
     </div>

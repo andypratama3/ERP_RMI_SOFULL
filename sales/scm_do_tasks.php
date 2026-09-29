@@ -940,7 +940,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     error_log('[SCM_AUDIT_GAP] sales_do_audit_append() missing on SCM_ON_DELIVERY do_id=' . $id . ' do_code=' . $code);
                 }
                 if ($pdo->inTransaction()) { $pdo->commit(); }
-                $success = "Status: ON DELIVERY. Bukti WQS terverifikasi. Membuka Live Tracker… ✅";
+                $success = "Status: ON DELIVERY. Bukti WQS terverifikasi. Membuka Live Tracker… " . rmi_icon('check');
 
                 // FINAL UX: setelah READY SCM -> ON DELIVERY, langsung masuk ke tracker
                 // untuk DO yang sama. Di APK URL ini menjadi trigger native foreground GPS;
@@ -1061,7 +1061,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 scm_assert_pod_proof($finalProof);
 
                 if ($pdo->inTransaction()) { $pdo->commit(); }
-                $success = "Status: DELIVERED ✅ — POD + TTD terverifikasi (Trigger ACT)";
+                $success = "Status: DELIVERED " . rmi_icon('check') . " — POD + TTD terverifikasi (Trigger ACT)";
             }
         }
 
@@ -1338,12 +1338,12 @@ $baseProject = rmi_layout_base_project();
 
 $__scm_header_actions = [
   ['label' => '↩ Antrean Retur DO', 'url' => $baseProject . '/sales/sales_do_return.php?queue=scm', 'class' => 'btn btn-sm btn-outline-warning'],
-  ['label' => '📚 Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
+  ['label' => rmi_icon('books') . ' Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
 ];
 if ($__is_admin || $__is_scm_manager) {
-  $__scm_header_actions[] = ['label' => '🗼 Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'];
+  $__scm_header_actions[] = ['label' => rmi_icon('tower') . ' Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'];
 }
-$__scm_header_actions[] = ['label' => '📊 Rekap Delivery', 'url' => $baseProject . '/sales/scm_delivery_recap.php', 'class' => 'btn btn-sm btn-outline-light'];
+$__scm_header_actions[] = ['label' => rmi_icon('chart') . ' Rekap Delivery', 'url' => $baseProject . '/sales/scm_delivery_recap.php', 'class' => 'btn btn-sm btn-outline-light'];
 $__scm_header_actions[] = ['label' => '📍 History Tracking', 'url' => $baseProject . '/sales/scm_tracking_history.php', 'class' => 'btn btn-sm btn-outline-light'];
 
 rmi_header('SCM - Task DO', [
@@ -1558,8 +1558,8 @@ rmi_header('SCM - Task DO', [
     </div>
   </div>
 
-  <?php if ($success): ?><div class="alert ok">✓ <?php echo h($success); ?></div><?php endif; ?>
-  <?php if ($error): ?><div class="alert bad">⚠ <?php echo h($error); ?></div><?php endif; ?>
+  <?php if ($success): ?><div class="alert ok"><?= rmi_icon('tick') ?> <?php echo h($success); ?></div><?php endif; ?>
+  <?php if ($error): ?><div class="alert bad"><?= rmi_icon('warn') ?> <?php echo h($error); ?></div><?php endif; ?>
   <?php if ($__is_staffscm_bdg): ?>
     <div class="alert ok">ℹ StaffSCM_BDG: pengiriman office BDG + khusus UNIT ACC office BGR yang sudah READY SCM/ON DELIVERY. BMHP-BGR tetap tertutup; tidak memiliki akses persiapan WQS.</div>
   <?php elseif ($__is_branch || $__is_scm_staff): ?>
@@ -1664,7 +1664,7 @@ rmi_header('SCM - Task DO', [
           <?php if ($mode === 'VENDOR'): ?>
             <span class="chip">🚚 <?= h($vname ?: 'Vendor #'.$vid) ?></span>
           <?php else: ?>
-            <span class="chip">🏠 Internal SCM</span>
+            <span class="chip"><?= rmi_icon('home') ?> Internal SCM</span>
           <?php endif; ?>
         </div>
       </div>
@@ -1825,13 +1825,13 @@ rmi_header('SCM - Task DO', [
           <div class="form-section-title" style="margin-top:8px">Tanda Tangan Digital Customer</div>
           <div class="sig-wrap">
             <div class="sig-label">
-              <?php if ($r['scm_signature_data']): ?><span class="badge green" style="font-size:10px">Ada ✓</span>
+              <?php if ($r['scm_signature_data']): ?><span class="badge green" style="font-size:10px">Ada <?= rmi_icon('tick') ?></span>
               <?php else: ?><span class="badge gray" style="font-size:10px">Belum ada — wajib untuk DELIVERED</span><?php endif; ?>
             </div>
             <canvas class="sig" width="900" height="200"></canvas>
             <div class="sig-bar">
               <button type="button" class="btn sm" data-sig-clear>Bersihkan</button>
-              <button type="button" class="btn sm primary" data-sig-save>Ambil TTD ✓</button>
+              <button type="button" class="btn sm primary" data-sig-save>Ambil TTD <?= rmi_icon('tick') ?></button>
             </div>
           </div>
         </div>
@@ -1874,7 +1874,7 @@ rmi_header('SCM - Task DO', [
           <button class="btn warn" name="action" value="on_delivery" type="submit">🚚 Simpan Bukti WQS + Set ON DELIVERY + Mulai Tracker</button>
         <?php endif; ?>
         <?php if (($r['status'] ?? '') === 'on_delivery'): ?>
-          <button class="btn success" name="action" value="delivered" type="submit">✅ Simpan POD + TTD + Set DELIVERED</button>
+          <button class="btn success" name="action" value="delivered" type="submit"><?= rmi_icon('check') ?> Simpan POD + TTD + Set DELIVERED</button>
         <?php endif; ?>
         <?php if (in_array((string)($r['status'] ?? ''), ['on_delivery','delivered','wait_payment','paid'], true)): ?>
         <a class="btn" href="sales_do_return.php?do_id=<?= (int)$r['id'] ?>" target="_blank" rel="noopener">↩ Ajukan Retur</a>
@@ -1963,7 +1963,7 @@ rmi_header('SCM - Task DO', [
                   <?= $r['scm_delivery_photo'] ? '<a class="proof-link" href="'.h($r['scm_delivery_photo']).'" target="_blank">📷 Foto ↗</a>' : '<span style="color:var(--muted)">📷 -</span>' ?>
                   <?= $r['scm_delivery_video'] ? ' <a class="proof-link" href="'.h($r['scm_delivery_video']).'" target="_blank">🎥 Video ↗</a>' : ' <span style="color:var(--muted)">🎥 -</span>' ?>
                 </span>
-                <span><b>TTD:</b> <?= $r['scm_signature_data'] ? '<span class="badge green" style="font-size:10px">Ada ✓</span>' : '<span style="color:var(--muted)">-</span>' ?></span>
+                <span><b>TTD:</b> <?= $r['scm_signature_data'] ? '<span class="badge green" style="font-size:10px">Ada ' . rmi_icon('tick') . '</span>' : '<span style="color:var(--muted)">-</span>' ?></span>
               </div>
             </td>
             <td>
@@ -2136,8 +2136,8 @@ rmi_header('SCM - Task DO', [
 
     btnSave.addEventListener('click', function(){
       out.value = canvas.toDataURL('image/png');
-      btnSave.textContent = 'TTD tersimpan ✅';
-      setTimeout(function(){ btnSave.textContent='Ambil TTD ✓'; }, 1200);
+      btnSave.textContent = 'TTD tersimpan <?= rmi_icon('check') ?>';
+      setTimeout(function(){ btnSave.textContent='Ambil TTD <?= rmi_icon('tick') ?>'; }, 1200);
     });
   }
 

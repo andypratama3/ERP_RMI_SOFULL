@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 // --- Auth guard ---
 $__rmi_guard_dir = __DIR__;
 for ($__rmi_guard_i = 0; $__rmi_guard_i < 5; $__rmi_guard_i++) {
@@ -20,24 +21,24 @@ try { mpr_access_schema_ensure($pdo); } catch (Throwable $e) {}
 $MPR_ALLOWED_OFFICES = mpr_allowed_offices($pdo, $MPR_USER, $MPR_IS_ADMIN);
 
 // Konstanta
-const MPR_VISIT_TYPES = [
-    'NEW_PROSPECT'      => ['label' => '🆕 Prospek Baru',        'color' => '#14b8a6'],
-    'FOLLOW_UP'         => ['label' => '🔄 Follow-Up',           'color' => '#f59e0b'],
-    'PRESENTATION'      => ['label' => '📊 Presentasi/Demo',     'color' => '#3b82f6'],
-    'NEGOTIATION'       => ['label' => '🤝 Negosiasi',           'color' => '#8b5cf6'],
-    'EXISTING_CUSTOMER' => ['label' => '✅ Customer Aktif',      'color' => '#22c55e'],
-    'CLOSING'           => ['label' => '🏆 Closing/Deal',        'color' => '#ef4444'],
-];
-const MPR_OUTCOMES = [
-    'PENDING'         => ['label' => '⏳ Belum ada hasil', 'color' => '#64748b'],
-    'INTERESTED'      => ['label' => '👍 Tertarik',        'color' => '#14b8a6'],
-    'NEED_FOLLOWUP'   => ['label' => '🔄 Perlu Follow-Up', 'color' => '#f59e0b'],
-    'PRESENTATION_OK' => ['label' => '📊 Minta Presentasi','color' => '#3b82f6'],
-    'NEGOTIATING'     => ['label' => '🤝 Negosiasi Harga', 'color' => '#8b5cf6'],
-    'DEAL_WON'        => ['label' => '🏆 DEAL – Berhasil', 'color' => '#22c55e'],
-    'DEAL_LOST'       => ['label' => '❌ Tidak Jadi',      'color' => '#ef4444'],
-    'NOT_INTERESTED'  => ['label' => '🚫 Tidak Berminat',  'color' => '#94a3b8'],
-];
+define('MPR_VISIT_TYPES', [
+    'NEW_PROSPECT'      => ['label' => rmi_icon('zap').' Prospek Baru',        'color' => '#14b8a6'],
+    'FOLLOW_UP'         => ['label' => rmi_icon('refresh').' Follow-Up',           'color' => '#f59e0b'],
+    'PRESENTATION'      => ['label' => rmi_icon('chart').' Presentasi/Demo',     'color' => '#3b82f6'],
+    'NEGOTIATION'       => ['label' => rmi_icon('users').' Negosiasi',           'color' => '#8b5cf6'],
+    'EXISTING_CUSTOMER' => ['label' => rmi_icon('check').' Customer Aktif',      'color' => '#22c55e'],
+    'CLOSING'           => ['label' => rmi_icon('target').' Closing/Deal',        'color' => '#ef4444'],
+]);
+define('MPR_OUTCOMES', [
+    'PENDING'         => ['label' => rmi_icon('refresh').' Belum ada hasil', 'color' => '#64748b'],
+    'INTERESTED'      => ['label' => rmi_icon('check').' Tertarik',        'color' => '#14b8a6'],
+    'NEED_FOLLOWUP'   => ['label' => rmi_icon('refresh').' Perlu Follow-Up', 'color' => '#f59e0b'],
+    'PRESENTATION_OK' => ['label' => rmi_icon('chart').' Minta Presentasi','color' => '#3b82f6'],
+    'NEGOTIATING'     => ['label' => rmi_icon('users').' Negosiasi Harga', 'color' => '#8b5cf6'],
+    'DEAL_WON'        => ['label' => rmi_icon('target').' DEAL – Berhasil', 'color' => '#22c55e'],
+    'DEAL_LOST'       => ['label' => rmi_icon('cross').' Tidak Jadi',      'color' => '#ef4444'],
+    'NOT_INTERESTED'  => ['label' => rmi_icon('cross').' Tidak Berminat',  'color' => '#94a3b8'],
+]);
 
 
 function mpr_visits_has_column(PDO $pdo, string $column): bool {
@@ -657,11 +658,11 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
 <div class="rmi-card">
   <div class="rmi-card-header d-flex flex-wrap gap-2 justify-content-between align-items-start">
     <div>
-      <h5>📍 Kunjungan Customer</h5>
+      <h5><?=rmi_icon('target')?> Kunjungan Customer</h5>
       <div class="sub">Catat setiap kunjungan — Staff &amp; Manager wajib mengisi</div>
     </div>
     <div class="d-flex gap-2 flex-wrap">
-      <a class="btn btn-sm btn-outline-light" href="<?= e(url_mpr('mpr_visits.php?export=1&type='.urlencode($f_type).'&month='.urlencode($f_month).'&who='.urlencode($f_who))) ?>">📤 Export CSV</a>
+      <a class="btn btn-sm btn-outline-light" href="<?= e(url_mpr('mpr_visits.php?export=1&type='.urlencode($f_type).'&month='.urlencode($f_month).'&who='.urlencode($f_who))) ?>"><?=rmi_icon('outbox')?> Export CSV</a>
     </div>
   </div>
   <div class="rmi-card-body">
@@ -711,7 +712,7 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
       <!-- Form Catat Kunjungan -->
       <div class="col-lg-4">
         <div class="p-3 rounded-3" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)">
-          <div class="mini mb-1 fw-semibold"><?= $edit ? '✏️ Edit Kunjungan' : '📝 Catat Kunjungan Baru' ?></div>
+          <div class="mini mb-1 fw-semibold"><?= $edit ? rmi_icon('memo').' Edit Kunjungan' : rmi_icon('memo').' Catat Kunjungan Baru' ?></div>
           <div class="mini mb-3" style="color:#64748b">Wajib diisi oleh Staff dan Manager.</div>
 
           <?php if ($can_create): ?>
@@ -804,7 +805,7 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
               <label class="mini">Foto Kunjungan <span style="color:#ef4444">*</span></label>
               <?php if ($edit && !empty($edit['photo_path'])): ?>
                 <div class="mb-1">
-                  <a href="<?= e(mpr_visits_photo_url((string)$edit['photo_path'])) ?>" target="_blank" style="color:#38bdf8">📷 Lihat foto tersimpan</a>
+                  <a href="<?= e(mpr_visits_photo_url((string)$edit['photo_path'])) ?>" target="_blank" style="color:#38bdf8"><?=rmi_icon('doc')?> Lihat foto tersimpan</a>
                 </div>
               <?php endif; ?>
               <input class="form-control form-control-sm" type="file" name="visit_photo" id="visitPhoto" accept="image/*" <?= $edit && !empty($edit['photo_path']) ? '' : 'required' ?>>
@@ -859,7 +860,7 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
             </div>
 
             <div class="d-flex gap-2 mt-2">
-              <button class="btn btn-primary btn-sm flex-fill">💾 Simpan</button>
+              <button class="btn btn-primary btn-sm flex-fill"><?=rmi_icon('doc')?> Simpan</button>
               <?php if ($edit): ?>
                 <a class="btn btn-outline-light btn-sm" href="<?= e(url_mpr('mpr_visits.php')) ?>">Cancel</a>
               <?php endif; ?>
@@ -874,8 +875,8 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
       <!-- Daftar Kunjungan -->
       <div class="col-lg-8">
         <?php if (empty($visits)): ?>
-          <div style="text-align:center;padding:40px;color:#475569">
-            <div style="font-size:40px">📍</div>
+          <div style="text-align:center;padding:40px;color:var(--rmi-muted)">
+            <div style="font-size:40px"><?=rmi_icon('target')?></div>
             <div class="mini mt-2">Belum ada kunjungan tercatat untuk periode ini.</div>
             <div class="mini">Isi form di sebelah kiri untuk mencatat kunjungan pertama.</div>
           </div>
@@ -896,7 +897,7 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
                   <span class="vt-badge" style="background:<?= e($vt['color']) ?>22;color:<?= e($vt['color']) ?>;border:1px solid <?= e($vt['color']) ?>44"><?= e($vt['label']) ?></span>
                   <span class="vt-badge" style="background:<?= e($oc['color']) ?>22;color:<?= e($oc['color']) ?>;border:1px solid <?= e($oc['color']) ?>44"><?= e($oc['label']) ?></span>
                   <?php if ($isToday): ?><span class="vt-badge" style="background:#6366f122;color:#818cf8">HARI INI</span><?php endif; ?>
-                  <?php if ($fuOverdue): ?><span class="vt-badge" style="background:#ef444422;color:#f87171">⚠ FOLLOW-UP OVERDUE</span><?php endif; ?>
+                  <?php if ($fuOverdue): ?><span class="vt-badge" style="background:#ef444422;color:#f87171"><?=rmi_icon('warn')?> FOLLOW-UP OVERDUE</span><?php endif; ?>
                 </div>
                 <div style="font-weight:700;color:#fff;margin-top:5px;font-size:14px">
                   <?= e($v['customer_name']) ?>
@@ -906,15 +907,15 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
                   <div class="visit-card-meta">Kontak: <?= e($v['contact_name']) ?><?= $v['contact_role_title'] ? ' (' . e($v['contact_role_title']) . ')' : '' ?></div>
                 <?php endif; ?>
                 <div class="visit-card-meta">
-                  📅 <?= e($v['visit_date']) ?>
-                  • 👤 <strong><?= e($v['visitor_username'] ?: $v['created_by']) ?></strong>
+                  <?=rmi_icon('calendar')?> <?= e($v['visit_date']) ?>
+                  • <?=rmi_icon('user')?> <strong><?= e($v['visitor_username'] ?: $v['created_by']) ?></strong>
                   <?php if (!empty($v['visitor_level'])): ?>
                     <span style="text-transform:uppercase;font-size:10px;color:#f59e0b">(<?= e($v['visitor_level']) ?>)</span>
                   <?php endif; ?>
-                  • 📋 <?= e($v['plan_code']) ?>
+                  • <?=rmi_icon('clipboard')?> <?= e($v['plan_code']) ?>
                 </div>
                 <?php if (!empty($v['result'])): ?>
-                  <div class="mini mt-1" style="color:#94a3b8">📝 <?= e(mb_strimwidth((string)$v['result'],0,120,'…')) ?></div>
+                  <div class="mini mt-1" style="color:#94a3b8"><?=rmi_icon('memo')?> <?= e(mb_strimwidth((string)$v['result'],0,120,'…')) ?></div>
                 <?php endif; ?>
                 <?php if (!empty($v['photo_path'])): ?>
                   <div class="visit-photo-thumb">
@@ -923,15 +924,15 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
                     </a>
                   </div>
                 <?php else: ?>
-                  <div class="mini mt-1" style="color:#f59e0b">📷 Foto kunjungan belum ada.</div>
+                  <div class="mini mt-1" style="color:#f59e0b"><?=rmi_icon('doc')?> Foto kunjungan belum ada.</div>
                 <?php endif; ?>
                 <?php if ($hasFollowup): ?>
                   <div class="mini mt-1" style="color:<?= $fuOverdue ? '#f87171' : '#fbbf24' ?>">
-                    🔄 Follow-up: <?= e($v['next_followup_date']) ?><?= $fuOverdue ? ' ⚠ Overdue!' : '' ?>
+                    <?=rmi_icon('refresh')?> Follow-up: <?= e($v['next_followup_date']) ?><?= $fuOverdue ? ' '.rmi_icon('warn').' Overdue!' : '' ?>
                   </div>
                 <?php endif; ?>
                 <?php if (!empty($v['est_deal_value'])): ?>
-                  <div class="mini mt-1" style="color:#22c55e">💰 Est. Deal: Rp <?= number_format((float)$v['est_deal_value'],0,',','.') ?></div>
+                  <div class="mini mt-1" style="color:#22c55e"><?=rmi_icon('money')?> Est. Deal: Rp <?= number_format((float)$v['est_deal_value'],0,',','.') ?></div>
                 <?php endif; ?>
                 <?php if (!empty($v['gps_lat']) && !empty($v['gps_lng'])): ?>
                   <div class="mini mt-1">
@@ -947,19 +948,19 @@ $rate  = $total > 0 ? round($cnt_deal / $total * 100) : 0;
                     $mapQueryParts[] = trim((string)$v['gps_lat']) . ',' . trim((string)$v['gps_lng']);
                     $mapQuery = implode(' ', array_filter($mapQueryParts));
                   ?>
-                    <a href="https://www.google.com/maps/search/?api=1&amp;query=<?= e(rawurlencode($mapQuery)) ?>" target="_blank" style="color:#3b82f6">📍 Lihat di Maps — <?= e($mapText) ?></a>
+                    <a href="https://www.google.com/maps/search/?api=1&amp;query=<?= e(rawurlencode($mapQuery)) ?>" target="_blank" style="color:#3b82f6"><?=rmi_icon('target')?> Lihat di Maps — <?= e($mapText) ?></a>
                   </div>
                 <?php endif; ?>
               </div>
               <div class="d-flex flex-column gap-1">
                 <?php if ($MPR_IS_ADMIN || (string)$v['visitor_username'] === $MPR_USER['username']): ?>
-                  <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_visits.php?edit='.(int)$v['id'])) ?>">✏️</a>
+                  <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_visits.php?edit='.(int)$v['id'])) ?>"><?=rmi_icon('memo')?></a>
                   <?php if ($can_delete): ?>
                   <form method="post" class="d-inline" onsubmit="return confirm('Hapus kunjungan ini?')">
                     <input type="hidden" name="csrf_token" value="<?= e($CSRF_TOKEN) ?>">
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="id" value="<?= (int)$v['id'] ?>">
-                    <button class="btn btn-xs btn-outline-danger">🗑</button>
+                    <button class="btn btn-xs btn-outline-danger"><?=rmi_icon('x')?></button>
                   </form>
                   <?php endif; ?>
                 <?php endif; ?>

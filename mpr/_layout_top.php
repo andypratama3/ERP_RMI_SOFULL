@@ -61,20 +61,20 @@ rmi_header($pageTitle, [
   <div class="card-body">
     <div class="d-flex flex-wrap gap-2 align-items-center">
       <?php if(!$is_fin_only): ?>
-        <a href="<?= e(url_mpr('mpr_dashboard.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='mpr_dashboard.php'?'active':'' ?>">📊 Dashboard</a>
+        <a href="<?= e(url_mpr('mpr_dashboard.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='mpr_dashboard.php'?'active':'' ?>"><?=rmi_icon('chart')?> Dashboard</a>
         <a href="<?= e(url_mpr('mpr_visits.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='mpr_visits.php'?'active':'' ?>" title="Catat kunjungan customer — wajib diisi Staff & Manager">
-          📍 Kunjungan
+          <?=rmi_icon('target')?> Kunjungan
         </a>
         <a href="<?= e(url_mpr('mpr_pipeline.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='mpr_pipeline.php'?'active':'' ?>" title="Pipeline prospek customer baru">
-          🎯 Pipeline
+          <?=rmi_icon('target')?> Pipeline
         </a>
-        <a href="<?= e(url_mpr('mpr_plans.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='mpr_plans.php'?'active':'' ?>">📋 Plans</a>
+        <a href="<?= e(url_mpr('mpr_plans.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='mpr_plans.php'?'active':'' ?>"><?=rmi_icon('clipboard')?> Plans</a>
       <?php endif; ?>
 
       <?php if($MPR_IS_ADMIN || $MPR_IS_FIN): ?>
-        <a href="<?= e(url_mpr('mpr_budget_fin.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='mpr_budget_fin.php'?'active':'' ?>">💰 FIN Approval</a>
+        <a href="<?= e(url_mpr('mpr_budget_fin.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='mpr_budget_fin.php'?'active':'' ?>"><?=rmi_icon('money')?> FIN Approval</a>
       <?php endif; ?>
-      <a href="<?= e(url_mpr('panduan.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='panduan.php'?'active':'' ?>" title="Panduan lengkap modul MPR">📖 Panduan</a>
+      <a href="<?= e(url_mpr('panduan.php')) ?>" class="btn btn-sm btn-outline-light <?= $page==='panduan.php'?'active':'' ?>" title="Panduan lengkap modul MPR"><?=rmi_icon('books')?> Panduan</a>
     </div>
   </div>
 </div>

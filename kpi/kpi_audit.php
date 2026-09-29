@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 // Login/session is enforced by _kpi_bootstrap.php.
 require_once __DIR__ . '/_kpi_bootstrap.php';
 $pdo = kpi_require_pdo();
@@ -131,15 +132,15 @@ kpi_nav('audit');
 <div class="card">
   <div class="kpi-header-row">
     <div>
-      <h3 class="kpi-section-title">🔍 Filter Audit Log</h3>
+      <h3 class="kpi-section-title"><?=rmi_icon('search')?> Filter Audit Log</h3>
       <div class="muted" style="font-size:12px;margin-top:4px">
         Audit bersifat read-only. Sumber berasal dari aksi create/update/delete/import/sync/final/lock di seluruh modul KPI.
       </div>
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <a class="btn" href="kpi_audit.php?export=csv&m=<?= urlencode($module) ?>&a=<?= urlencode($action) ?>&u=<?= urlencode($actor) ?>&from=<?= urlencode($dateFrom) ?>&to=<?= urlencode($dateTo) ?>">⬇ Export CSV</a>
+      <a class="btn" href="kpi_audit.php?export=csv&m=<?= urlencode($module) ?>&a=<?= urlencode($action) ?>&u=<?= urlencode($actor) ?>&from=<?= urlencode($dateFrom) ?>&to=<?= urlencode($dateTo) ?>"><?=rmi_icon('inbox')?> Export CSV</a>
       <?php if ($module !== '' || $action !== '' || $actor !== '' || $dateFrom !== '' || $dateTo !== ''): ?>
-        <a class="btn secondary" href="kpi_audit.php">✕ Reset Filter</a>
+        <a class="btn secondary" href="kpi_audit.php"><?=rmi_icon('x')?> Reset Filter</a>
       <?php endif; ?>
     </div>
   </div>
@@ -186,7 +187,7 @@ kpi_nav('audit');
 </div>
 
 <div class="card">
-  <h3 class="kpi-section-title">📋 Audit Log<?= ($module !== '' || $action !== '' || $actor !== '' || $dateFrom !== '' || $dateTo !== '') ? ' <span class="badge" style="font-size:10px;margin-left:6px">Filtered</span>' : '' ?></h3>
+  <h3 class="kpi-section-title"><?=rmi_icon('clipboard')?> Audit Log<?= ($module !== '' || $action !== '' || $actor !== '' || $dateFrom !== '' || $dateTo !== '') ? ' <span class="badge" style="font-size:10px;margin-left:6px">Filtered</span>' : '' ?></h3>
 
   <?php if (!$rows): ?>
     <div style="text-align:center;padding:28px;color:#64748b;font-size:13px">Tidak ada log yang cocok dengan filter.</div>

@@ -285,15 +285,15 @@ rmi_header('MFA Policy', [
 <div class="rmi-card p-3 mb-3">
   <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
     <div>
-      <h6 class="mb-0">📋 Status MFA per User</h6>
+      <h6 class="mb-0"><?= rmi_icon('clipboard') ?> Status MFA per User</h6>
       <div class="text-muted small">Siapa yang sudah & belum aktifkan MFA</div>
     </div>
     <div class="d-flex gap-2 flex-wrap">
       <span style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:700">
-        ✅ ON: <?= $mfaOn ?>
+        <?= rmi_icon('check') ?> ON: <?= $mfaOn ?>
       </span>
       <span style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:4px 12px;font-size:12px;font-weight:700">
-        ✗ OFF: <?= $mfaOff ?>
+        <?= rmi_icon('x') ?> OFF: <?= $mfaOff ?>
       </span>
       <span style="background:rgba(255,255,255,.06);color:#94a3b8;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 12px;font-size:12px">
         Total: <?= $mfaTotal ?>
@@ -328,9 +328,9 @@ rmi_header('MFA Policy', [
           <td style="padding:8px 12px;font-size:12px;font-weight:600;color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,.05)">
             <?= mp_h((string)($u['username'] ?? '')) ?>
             <?php if ($isFinMgr): ?>
-              <span style="margin-left:4px;font-size:10px;background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.4);border-radius:4px;padding:1px 5px">💰 FIN</span>
+              <span style="margin-left:4px;font-size:10px;background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.4);border-radius:4px;padding:1px 5px"><?= rmi_icon('money') ?> FIN</span>
             <?php elseif ($isSys): ?>
-              <span style="margin-left:4px;font-size:10px;background:rgba(139,92,246,.2);color:#c4b5fd;border:1px solid rgba(139,92,246,.4);border-radius:4px;padding:1px 5px">🔐 SYS</span>
+              <span style="margin-left:4px;font-size:10px;background:rgba(139,92,246,.2);color:#c4b5fd;border:1px solid rgba(139,92,246,.4);border-radius:4px;padding:1px 5px"><?= rmi_icon('gear') ?> SYS</span>
             <?php endif; ?>
           </td>
           <td style="padding:8px 12px;font-size:12px;color:#94a3b8;border-bottom:1px solid rgba(255,255,255,.05)"><?= mp_h((string)($u['full_name'] ?? '—')) ?></td>
@@ -342,9 +342,9 @@ rmi_header('MFA Policy', [
           <td style="padding:8px 12px;font-size:11px;color:#64748b;border-bottom:1px solid rgba(255,255,255,.05)"><?= mp_h(strtoupper((string)($u['office_code'] ?? '—'))) ?></td>
           <td style="padding:8px 12px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05)">
             <?php if ($on): ?>
-              <span style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:2px 10px;font-size:11px;font-weight:700">✅ ON</span>
+              <span style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:2px 10px;font-size:11px;font-weight:700"><?= rmi_icon('check') ?> ON</span>
             <?php else: ?>
-              <span style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:2px 10px;font-size:11px;font-weight:700">✗ OFF</span>
+              <span style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:2px 10px;font-size:11px;font-weight:700"><?= rmi_icon('x') ?> OFF</span>
             <?php endif; ?>
           </td>
           <td style="padding:8px 12px;font-size:11px;color:#64748b;border-bottom:1px solid rgba(255,255,255,.05)">

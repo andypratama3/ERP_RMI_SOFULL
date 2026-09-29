@@ -373,7 +373,7 @@ rmi_header('Payroll Settings', 'payroll', ['base_project'=>$BASE_PROJECT]);
                   <td class="text-end"><?= number_format((float)$r['salary_total'], 2) ?></td>
                   <td class="text-center">
                     <?php if ((int)$r['login_user_id'] > 0): ?>
-                      <span class="badge rmi-badge success">✓</span>
+                      <span class="badge rmi-badge success"><?=rmi_icon('tick')?></span>
                     <?php else: ?>
                       <span class="badge rmi-badge warning">—</span>
                     <?php endif; ?>

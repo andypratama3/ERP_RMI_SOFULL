@@ -214,7 +214,7 @@ rmi_header('SCM - Rekap Delivery', [
     'breadcrumbs'=>[['label'=>'Sales (CRM)','url'=>$baseProject.'/sales/sales_dashboard.php'],['label'=>'SCM Task','url'=>$baseProject.'/sales/scm_do_tasks.php'],'Rekap Delivery'],
     'actions'=>[
         ['label'=>'← SCM Task','url'=>$baseProject.'/sales/scm_do_tasks.php','class'=>'btn btn-sm btn-outline-light'],
-        ['label'=>'🗼 Control Tower','url'=>$baseProject.'/sales/sales_control_tower.php','class'=>'btn btn-sm btn-outline-light'],
+        ['label'=>rmi_icon('tower') . ' Control Tower','url'=>$baseProject.'/sales/sales_control_tower.php','class'=>'btn btn-sm btn-outline-light'],
     ],
     'extra_head'=>'<style>
       body{background:#080e1a;color:#e2e8f0}.wrap{max-width:1320px;margin:24px auto;padding:0 16px}.card{background:#0f1724;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:12px}.filters{display:grid;grid-template-columns:2fr repeat(5,1fr) auto;gap:8px;align-items:end}.field{width:100%;background:#141d2e;color:#e2e8f0;border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:8px 10px}.lbl{font-size:11px;color:#94a3b8;margin-bottom:4px}.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.metric{background:#141d2e;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:13px}.metric small{color:#94a3b8}.metric strong{display:block;font-size:18px;margin-top:5px}.tblwrap{overflow:auto}.tbl{width:100%;border-collapse:collapse;min-width:1250px}.tbl th,.tbl td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;font-size:12px;vertical-align:top}.tbl th{font-size:10px;color:#94a3b8;text-transform:uppercase}.badge{display:inline-block;border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:2px 8px;font-size:10px}.badge.green{color:#bbf7d0;background:rgba(34,197,94,.12)}.badge.blue{color:#bfdbfe;background:rgba(59,130,246,.14)}.badge.yellow{color:#fde68a;background:rgba(245,158,11,.12)}.badge.gray{color:#cbd5e1;background:rgba(255,255,255,.05)}@media(max-width:900px){.filters,.cards{grid-template-columns:1fr 1fr}.wrap{padding:0 10px}} </style>'
@@ -262,7 +262,7 @@ rmi_header('SCM - Rekap Delivery', [
         <?php if(!empty($r['scm_delivery_photo'])):?><a href="<?=h($r['scm_delivery_photo'])?>" target="_blank">📷 Foto ↗</a><?php endif;?>
         <?php if(!empty($r['scm_delivery_video'])):?><br><a href="<?=h($r['scm_delivery_video'])?>" target="_blank">🎥 Video ↗</a><?php endif;?>
       </td>
-      <td><span class="badge <?=$sig?'green':'yellow'?>"><?=$sig?'ADA ✓':'BELUM'?></span></td>
+      <td><span class="badge <?=$sig?'green':'yellow'?>"><?=$sig?'ADA ' . rmi_icon('tick'):'BELUM'?></span></td>
     </tr><?php endforeach;?>
     </tbody></table></div>
   </div>

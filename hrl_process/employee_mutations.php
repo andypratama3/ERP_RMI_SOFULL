@@ -140,7 +140,7 @@ function hrlm_h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES|ENT
 .mut-pill{display:inline-flex;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.12);font-size:10px;font-weight:700}
 </style>
 
-<h2>🔄 Mutasi Karyawan</h2>
+<h2><?=rmi_icon('refresh')?> Mutasi Karyawan</h2>
 <p class="text-muted">Employee code dan user ID tetap. Perubahan master baru dilakukan saat status EFFECTIVE.</p>
 
 <?php if ($err): ?><div class="alert alert-danger"><?= hrlm_h($err) ?></div><?php endif; ?>
@@ -196,8 +196,8 @@ function hrlm_h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES|ENT
       <textarea name="reason" class="form-control" rows="3" required></textarea>
 
       <div class="d-grid gap-2 mt-3">
-        <button class="btn btn-ghost" name="submit_mode" value="draft">💾 Simpan Draft</button>
-        <button class="btn btn-rmi" name="submit_mode" value="submit">🚀 Submit Mutasi</button>
+        <button class="btn btn-ghost" name="submit_mode" value="draft"><?=rmi_icon('doc')?> Simpan Draft</button>
+        <button class="btn btn-rmi" name="submit_mode" value="submit"><?=rmi_icon('zap')?> Submit Mutasi</button>
       </div>
     </form>
     <?php endif; ?>

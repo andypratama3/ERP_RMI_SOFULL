@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 /**
  * config/page_registry.php — Satu registry halaman ERP × 9 kolom aksi (ACCESS, CREATE, APPROVE, EDIT, VIEW,
  * DELETE, IMPORT, EXPORT, PRINT). Kode per kolom = permission di RBAC Center (seed dari config/rbac_permissions.php).
@@ -261,7 +262,7 @@ $__rmi_registry = [
          'perms'=>_p(['access'=>'PURCHASES.AP_INVOICE_EDIT','edit'=>'PURCHASES.AP_INVOICE_EDIT','view'=>'PURCHASES.AP_INVOICE_VIEW'])],
         ['label'=>'AP Payment',                  'url'=>'purchases/purchases_payment_ap.php',
          'perms'=>_p(['access'=>'PURCHASES.AP_PAYMENT_VIEW','create'=>'PURCHASES.AP_PAYMENT_CREATE','edit'=>'PURCHASES.AP_PAYMENT_EDIT','view'=>'PURCHASES.AP_PAYMENT_VIEW','delete'=>'PURCHASES.AP_PAYMENT_DELETE','export'=>'PURCHASES.EXPORT'])],
-        ['label'=>'⭐ GL Reversal Approve',      'url'=>'purchases/gl_reversal_approvals.php',
+        ['label'=>rmi_icon('target') . ' GL Reversal Approve',      'url'=>'purchases/gl_reversal_approvals.php',
          'note'=>'SYS assign ke MgrFIN_BGR saja','special'=>true,
          'perms'=>_p(['access'=>'PURCHASES.GL_REVERSAL_APPROVE','approve'=>'PURCHASES.GL_REVERSAL_APPROVE','view'=>'PURCHASES.GL_REVERSAL_APPROVE'])],
         ['label'=>'GL Auto (Admin)',             'url'=>'purchases/fin_gl_auto.php',

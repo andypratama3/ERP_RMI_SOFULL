@@ -29,7 +29,7 @@
       }
       if (opts.camLabelTextId) {
         var t = document.getElementById(opts.camLabelTextId);
-        if (t) t.textContent = '✓ Foto siap — tap untuk ambil ulang';
+        if (t) t.textContent = 'Foto siap — tap untuk ambil ulang';
       }
       if (input && input.hasAttribute('required')) input.removeAttribute('required');
     }

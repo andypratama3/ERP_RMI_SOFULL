@@ -186,65 +186,65 @@ rmi_header('ITC Dashboard', [
 
   <div class="d-header">
     <div>
-      <h2>💻 ITC Dashboard</h2>
+      <h2><?=rmi_icon('gear')?> ITC Dashboard</h2>
       <p>IT & Communication — User Access, MFA, Health Check, Security</p>
     </div>
     <div class="d-actions">
-      <a class="d-btn" href="<?= h(u('/dashboards/itc/panduan.php')) ?>">📚 Panduan</a>
-      <a class="d-btn" href="<?= h(u('/dashboards/index.php')) ?>">🏠 Dashboard Center</a>
-      <a class="d-btn" href="<?= h(u('/tools/health.php')) ?>">🟢 Health Check</a>
+      <a class="d-btn" href="<?= h(u('/dashboards/itc/panduan.php')) ?>"><?=rmi_icon('books')?> Panduan</a>
+      <a class="d-btn" href="<?= h(u('/dashboards/index.php')) ?>"><?=rmi_icon('home')?> Dashboard Center</a>
+      <a class="d-btn" href="<?= h(u('/tools/health.php')) ?>"><?=rmi_icon('check')?> Health Check</a>
     </div>
   </div>
 
   <div class="d-kpi">
     <a class="d-kpi-card" href="<?= h($_kpiBase) ?>" style="--kc:#3b82f6;text-decoration:none">
-      <div class="d-kpi-icon">👤</div><div class="d-kpi-val"><?= $kpi_itc['total_users'] ?></div><div class="d-kpi-lbl">Total User</div><div class="d-kpi-sub">Seluruh akun belum dihapus</div>
+      <div class="d-kpi-icon"><?=rmi_icon('user')?></div><div class="d-kpi-val"><?= $kpi_itc['total_users'] ?></div><div class="d-kpi-lbl">Total User</div><div class="d-kpi-sub">Seluruh akun belum dihapus</div>
     </a>
     <a class="d-kpi-card" href="<?= h($_isITCOnly ? $_kpiBase : u('/master/master_system_login.php?status=active')) ?>" style="--kc:#22c55e;text-decoration:none">
-      <div class="d-kpi-icon">✅</div><div class="d-kpi-val"><?= $kpi_itc['active_users'] ?></div><div class="d-kpi-lbl">User Aktif</div><div class="d-kpi-sub">Akun yang masih digunakan</div>
+      <div class="d-kpi-icon"><?=rmi_icon('check')?></div><div class="d-kpi-val"><?= $kpi_itc['active_users'] ?></div><div class="d-kpi-lbl">User Aktif</div><div class="d-kpi-sub">Akun yang masih digunakan</div>
     </a>
     <a class="d-kpi-card" href="<?= h(u('/master/mfa_policy.php')) ?>" style="--kc:#8b5cf6;text-decoration:none">
-      <div class="d-kpi-icon">🔐</div><div class="d-kpi-val"><?= $kpi_itc['mfa_active_users'] ?></div><div class="d-kpi-lbl">MFA Aktif (User Aktif)</div><div class="d-kpi-sub">Tidak menghitung akun inactive</div>
+      <div class="d-kpi-icon"><?=rmi_icon('gear')?></div><div class="d-kpi-val"><?= $kpi_itc['mfa_active_users'] ?></div><div class="d-kpi-lbl">MFA Aktif (User Aktif)</div><div class="d-kpi-sub">Tidak menghitung akun inactive</div>
     </a>
     <a class="d-kpi-card" href="<?= h(u('/master/mfa_policy.php')) ?>" style="--kc:#ef4444;text-decoration:none">
-      <div class="d-kpi-icon">⚠️</div><div class="d-kpi-val"><?= $kpi_itc['active_without_mfa'] ?></div><div class="d-kpi-lbl">User Aktif Belum MFA</div><div class="d-kpi-sub">Backlog security yang perlu tindakan</div>
+      <div class="d-kpi-icon"><?=rmi_icon('warn')?></div><div class="d-kpi-val"><?= $kpi_itc['active_without_mfa'] ?></div><div class="d-kpi-lbl">User Aktif Belum MFA</div><div class="d-kpi-sub">Backlog security yang perlu tindakan</div>
     </a>
     <a class="d-kpi-card" href="<?= h($_isITCOnly ? $_kpiBase : u('/master/master_system_login.php?status=inactive')) ?>" style="--kc:#64748b;text-decoration:none">
-      <div class="d-kpi-icon">🔒</div><div class="d-kpi-val"><?= $kpi_itc['inactive_users'] ?></div><div class="d-kpi-lbl">User Inactive</div><div class="d-kpi-sub">Tidak dimasukkan ke backlog MFA</div>
+      <div class="d-kpi-icon"><?=rmi_icon('gear')?></div><div class="d-kpi-val"><?= $kpi_itc['inactive_users'] ?></div><div class="d-kpi-lbl">User Inactive</div><div class="d-kpi-sub">Tidak dimasukkan ke backlog MFA</div>
     </a>
     <a class="d-kpi-card" href="<?= h(u('/tools/health.php')) ?>" style="--kc:#06b6d4;text-decoration:none">
-      <div class="d-kpi-icon">🟢</div><div class="d-kpi-val">N/A</div><div class="d-kpi-lbl">System Health</div><div class="d-kpi-sub">Buka Health Check untuk status real-time</div>
+      <div class="d-kpi-icon"><?=rmi_icon('check')?></div><div class="d-kpi-val">N/A</div><div class="d-kpi-lbl">System Health</div><div class="d-kpi-sub">Buka Health Check untuk status real-time</div>
     </a>
     <a class="d-kpi-card" href="<?= h(u('/tools/backup_now.php')) ?>" style="--kc:#f59e0b;text-decoration:none">
-      <div class="d-kpi-icon">💾</div><div class="d-kpi-val">N/A</div><div class="d-kpi-lbl">Backup Status</div><div class="d-kpi-sub">Belum ada source log dashboard</div>
+      <div class="d-kpi-icon"><?=rmi_icon('doc')?></div><div class="d-kpi-val">N/A</div><div class="d-kpi-lbl">Backup Status</div><div class="d-kpi-sub">Belum ada source log dashboard</div>
     </a>
   </div>
 
   <div class="d-grid">
-    <div class="d-group"><div class="d-group-title">👤 User Management</div>
-      <a class="d-link" href="<?= h(u('/master/itc_reset_password.php')) ?>"><span class="li">👥</span> Manajemen User (ITC)</a>
-      <a class="d-link" href="<?= h(u('/master/mfa_settings.php')) ?>"><span class="li">🔐</span> MFA Settings (Akun Saya)</a>
-      <?php if ($_isSuperAdmin): ?><a class="d-link" href="<?= h(u('/master/mfa_policy.php')) ?>"><span class="li">📋</span> MFA Policy</a><a class="d-link" href="<?= h(u('/master/master_system_login.php')) ?>"><span class="li">⚙️</span> Master System Login</a><?php endif; ?>
+    <div class="d-group"><div class="d-group-title"><?=rmi_icon('user')?> User Management</div>
+      <a class="d-link" href="<?= h(u('/master/itc_reset_password.php')) ?>"><span class="li"><?=rmi_icon('users')?></span> Manajemen User (ITC)</a>
+      <a class="d-link" href="<?= h(u('/master/mfa_settings.php')) ?>"><span class="li"><?=rmi_icon('gear')?></span> MFA Settings (Akun Saya)</a>
+      <?php if ($_isSuperAdmin): ?><a class="d-link" href="<?= h(u('/master/mfa_policy.php')) ?>"><span class="li"><?=rmi_icon('clipboard')?></span> MFA Policy</a><a class="d-link" href="<?= h(u('/master/master_system_login.php')) ?>"><span class="li"><?=rmi_icon('gear')?></span> Master System Login</a><?php endif; ?>
     </div>
-    <div class="d-group"><div class="d-group-title">🔐 Security</div>
-      <a class="d-link" href="<?= h(u('/tools/security_audit.php')) ?>"><span class="li">🔒</span> Security Audit</a>
-      <a class="d-link" href="<?= h(u('/docs/link/sop_mfa.php')) ?>"><span class="li">📄</span> SOP MFA</a>
+    <div class="d-group"><div class="d-group-title"><?=rmi_icon('gear')?> Security</div>
+      <a class="d-link" href="<?= h(u('/tools/security_audit.php')) ?>"><span class="li"><?=rmi_icon('gear')?></span> Security Audit</a>
+      <a class="d-link" href="<?= h(u('/docs/link/sop_mfa.php')) ?>"><span class="li"><?=rmi_icon('doc')?></span> SOP MFA</a>
     </div>
-    <div class="d-group"><div class="d-group-title">🛠️ Tools & System</div>
-      <a class="d-link" href="<?= h(u('/tools/index.php')) ?>"><span class="li">🔧</span> Tools Center</a>
-      <a class="d-link" href="<?= h(u('/tools/health.php')) ?>"><span class="li">🟢</span> Health Check</a>
-      <a class="d-link" href="<?= h(u('/tools/enterprise_audit.php')) ?>"><span class="li">📊</span> Enterprise Audit</a>
-      <a class="d-link" href="<?= h(u('/tools/backup_now.php')) ?>"><span class="li">💾</span> Backup Now</a>
+    <div class="d-group"><div class="d-group-title"><?=rmi_icon('gear')?> Tools & System</div>
+      <a class="d-link" href="<?= h(u('/tools/index.php')) ?>"><span class="li"><?=rmi_icon('gear')?></span> Tools Center</a>
+      <a class="d-link" href="<?= h(u('/tools/health.php')) ?>"><span class="li"><?=rmi_icon('check')?></span> Health Check</a>
+      <a class="d-link" href="<?= h(u('/tools/enterprise_audit.php')) ?>"><span class="li"><?=rmi_icon('chart')?></span> Enterprise Audit</a>
+      <a class="d-link" href="<?= h(u('/tools/backup_now.php')) ?>"><span class="li"><?=rmi_icon('doc')?></span> Backup Now</a>
     </div>
-    <div class="d-group"><div class="d-group-title">⚙️ Master & Config</div>
-      <a class="d-link" href="<?= h(u('/master/master_office.php')) ?>"><span class="li">🏢</span> Master Office</a>
-      <a class="d-link" href="<?= h(u('/master/master_system_config.php')) ?>"><span class="li">⚙️</span> System Config</a>
-      <?php if ($_isSuperAdmin): ?><a class="d-link" href="<?= h(u('/absensi/admin/offices.php')) ?>"><span class="li">📍</span> Absensi Office Settings</a><?php endif; ?>
-      <a class="d-link" href="<?= h(u('/hrl_process/index.php')) ?>"><span class="li">📋</span> HRL Process</a>
+    <div class="d-group"><div class="d-group-title"><?=rmi_icon('gear')?> Master & Config</div>
+      <a class="d-link" href="<?= h(u('/master/master_office.php')) ?>"><span class="li"><?=rmi_icon('office')?></span> Master Office</a>
+      <a class="d-link" href="<?= h(u('/master/master_system_config.php')) ?>"><span class="li"><?=rmi_icon('gear')?></span> System Config</a>
+      <?php if ($_isSuperAdmin): ?><a class="d-link" href="<?= h(u('/absensi/admin/offices.php')) ?>"><span class="li"><?=rmi_icon('target')?></span> Absensi Office Settings</a><?php endif; ?>
+      <a class="d-link" href="<?= h(u('/hrl_process/index.php')) ?>"><span class="li"><?=rmi_icon('clipboard')?></span> HRL Process</a>
     </div>
-    <div class="d-group"><div class="d-group-title">💻 ITC Asset Request</div>
-      <a class="d-link" href="<?= h(u('/Fixed_Asset/assets.php#asset-purchase-flow')) ?>"><span class="li">🖥️</span> Pengajuan Pembelian Aset ITC</a>
-      <a class="d-link" href="<?= h(u('/Fixed_Asset/index.php')) ?>"><span class="li">📊</span> Dashboard Fixed Asset</a>
+    <div class="d-group"><div class="d-group-title"><?=rmi_icon('gear')?> ITC Asset Request</div>
+      <a class="d-link" href="<?= h(u('/Fixed_Asset/assets.php#asset-purchase-flow')) ?>"><span class="li"><?=rmi_icon('gear')?></span> Pengajuan Pembelian Aset ITC</a>
+      <a class="d-link" href="<?= h(u('/Fixed_Asset/index.php')) ?>"><span class="li"><?=rmi_icon('chart')?></span> Dashboard Fixed Asset</a>
     </div>
   </div>
 

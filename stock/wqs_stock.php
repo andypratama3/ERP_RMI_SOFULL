@@ -454,7 +454,7 @@ rmi_header('WQS Stock (Enterprise)', [
     'WQS Stock (Enterprise)',
   ],
   'actions' => [
-    ['label' => '📖 Panduan WQS', 'url' => $baseProject . '/stock/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books').' Panduan WQS', 'url' => $baseProject . '/stock/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
   ],
   'extra_head' => '<link href="' . rmi_assets_base() . '/public/assets/vendor/datatables/1.13.8/css/dataTables.bootstrap5.min.css?v=20260209" rel="stylesheet">'
     . '<link href="' . rmi_assets_base() . '/public/assets/vendor/datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css?v=20260209" rel="stylesheet">'

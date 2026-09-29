@@ -44,7 +44,7 @@ rmi_header('Funnel Overview', [
     'active'=>'dashboard',
     'breadcrumbs'=>[['label'=>'Dashboard','url'=>$bp.'/dashboards/index.php'],'Funnel Overview'],
     'actions'=>[
-        ['label'=>'📚 Panduan','url'=>$bp.'/dashboards/panduan_funnels.php','class'=>'btn btn-sm btn-outline-light'],
+        ['label'=>rmi_icon('books').' Panduan','url'=>$bp.'/dashboards/panduan_funnels.php','class'=>'btn btn-sm btn-outline-light'],
         ['label'=>'API Funnels JSON','url'=>$bp.'/api/v1/internal/funnels_summary.php?date_from='.urlencode($date_from).'&date_to='.urlencode($date_to),'class'=>'btn btn-sm btn-outline-light'],
         ['label'=>'MPR Pipeline','url'=>$bp.'/mpr/mpr_pipeline.php','class'=>'btn btn-sm btn-outline-light'],
         ['label'=>'Sales Dashboard','url'=>$bp.'/sales/sales_dashboard.php','class'=>'btn btn-sm btn-outline-light'],

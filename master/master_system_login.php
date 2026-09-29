@@ -1574,14 +1574,14 @@ rmi_header('Master System Login', [
         <!-- ── Sidebar Tabs ── -->
         <ul class="nav nav-pills nav-fill mb-3" id="mslSideTab" style="font-size:12px">
           <li class="nav-item">
-            <button class="nav-link active" data-tab="tab-user" onclick="mslTab(this,'tab-user')">👤 <?= $editRow ? 'Edit' : 'Tambah' ?></button>
+            <button class="nav-link active" data-tab="tab-user" onclick="mslTab(this,'tab-user')"><?= rmi_icon('user') ?> <?= $editRow ? 'Edit' : 'Tambah' ?></button>
           </li>
           <li class="nav-item">
-            <button class="nav-link" data-tab="tab-import" onclick="mslTab(this,'tab-import')">📥 Import</button>
+            <button class="nav-link" data-tab="tab-import" onclick="mslTab(this,'tab-import')"><?= rmi_icon('inbox') ?> Import</button>
           </li>
           <?php if ($isAdmin): ?>
           <li class="nav-item">
-            <button class="nav-link" data-tab="tab-seed" onclick="mslTab(this,'tab-seed')">⚙️ Seed</button>
+            <button class="nav-link" data-tab="tab-seed" onclick="mslTab(this,'tab-seed')"><?= rmi_icon('gear') ?> Seed</button>
           </li>
           <?php endif; ?>
         </ul>
@@ -1758,7 +1758,7 @@ rmi_header('Master System Login', [
 
         <!-- ── TAB: Import ── -->
         <div id="tab-import" style="display:none">
-          <h5 class="mb-3">📥 Import Data</h5>
+          <h5 class="mb-3"><?= rmi_icon('inbox') ?> Import Data</h5>
 
           <h6 class="mb-1">Import Users CSV</h6>
           <div class="muted small mb-2">
@@ -1766,7 +1766,7 @@ rmi_header('Master System Login', [
             Jika password kosong → default "1234".
           </div>
           <div class="d-flex gap-2 mb-2">
-            <a href="master_system_login.php?template_csv=1" class="btn btn-outline-secondary btn-sm w-100">⬇ Template CSV</a>
+            <a href="master_system_login.php?template_csv=1" class="btn btn-outline-secondary btn-sm w-100"><?= rmi_icon('inbox') ?> Template CSV</a>
           </div>
           <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
@@ -1783,7 +1783,7 @@ rmi_header('Master System Login', [
             Kosongkan <code>holder_employee_code</code> untuk clear holder.
           </div>
           <div class="d-flex gap-2 mb-2">
-            <a href="master_system_login.php?template_holder_csv=1" class="btn btn-outline-secondary btn-sm w-100">⬇ Template Holder CSV</a>
+            <a href="master_system_login.php?template_holder_csv=1" class="btn btn-outline-secondary btn-sm w-100"><?= rmi_icon('inbox') ?> Template Holder CSV</a>
           </div>
           <form method="post" enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
@@ -1796,9 +1796,9 @@ rmi_header('Master System Login', [
         <!-- ── TAB: Seed (Admin only) ── -->
         <?php if ($isAdmin): ?>
         <div id="tab-seed" style="display:none">
-          <h5 class="mb-3">⚙️ Operasi Seed</h5>
+          <h5 class="mb-3"><?= rmi_icon('gear') ?> Operasi Seed</h5>
           <div class="alert alert-warning py-2 px-3 mb-3" style="font-size:12px">
-            ⚠️ Operasi ini bersifat massal dan tidak bisa di-undo. Jalankan hanya saat setup awal atau deployment baru.
+            <?= rmi_icon('warn') ?> Operasi ini bersifat massal dan tidak bisa di-undo. Jalankan hanya saat setup awal atau deployment baru.
           </div>
 
           <h6 class="mb-1">Seed Master Departements</h6>
@@ -1840,12 +1840,12 @@ rmi_header('Master System Login', [
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:14px">
         <?php
         $statCards = [
-          ['val'=>$stats['total'],     'lbl'=>'Total User',     'color'=>'#64748b', 'filter'=>'',                         'icon'=>'👥'],
-          ['val'=>$stats['active'],    'lbl'=>'Active',         'color'=>'#22c55e', 'filter'=>'?status=active',           'icon'=>'✅'],
-          ['val'=>$stats['inactive'],  'lbl'=>'Inactive',       'color'=>'#ef4444', 'filter'=>'?status=inactive',         'icon'=>'⛔'],
-          ['val'=>$stats['mfa'],       'lbl'=>'MFA Aktif',      'color'=>'#6366f1', 'filter'=>'?mfa=1',                  'icon'=>'🔑'],
-          ['val'=>$stats['never'],     'lbl'=>'Belum Login',    'color'=>'#f59e0b', 'filter'=>'?last_login=never&status=active', 'icon'=>'🚫'],
-          ['val'=>$stats['dormant90'], 'lbl'=>'Dormant 90d',   'color'=>'#f87171', 'filter'=>'?last_login=90d_ago&status=active','icon'=>'💤'],
+          ['val'=>$stats['total'],     'lbl'=>'Total User',     'color'=>'#64748b', 'filter'=>'',                         'icon'=>rmi_icon('users')],
+          ['val'=>$stats['active'],    'lbl'=>'Active',         'color'=>'#22c55e', 'filter'=>'?status=active',           'icon'=>rmi_icon('check')],
+          ['val'=>$stats['inactive'],  'lbl'=>'Inactive',       'color'=>'#ef4444', 'filter'=>'?status=inactive',         'icon'=>rmi_icon('cross')],
+          ['val'=>$stats['mfa'],       'lbl'=>'MFA Aktif',      'color'=>'#6366f1', 'filter'=>'?mfa=1',                  'icon'=>rmi_icon('gear')],
+          ['val'=>$stats['never'],     'lbl'=>'Belum Login',    'color'=>'#f59e0b', 'filter'=>'?last_login=never&status=active', 'icon'=>rmi_icon('cross')],
+          ['val'=>$stats['dormant90'], 'lbl'=>'Dormant 90d',   'color'=>'#f87171', 'filter'=>'?last_login=90d_ago&status=active','icon'=>rmi_icon('moon')],
         ];
         foreach ($statCards as $sc):
           $isActive = false; // highlight stat card jika filter cocok — skip for simplicity
@@ -1853,7 +1853,7 @@ rmi_header('Master System Login', [
           <a href="master_system_login.php<?= h($sc['filter']) ?>" style="text-decoration:none">
             <div style="background:var(--rmi-card,#1a2235);border:1px solid rgba(255,255,255,.08);border-top:3px solid <?= $sc['color'] ?>;border-radius:12px;padding:12px 14px;text-align:center;transition:.15s;cursor:pointer" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
               <div style="font-size:16px;margin-bottom:4px"><?= $sc['icon'] ?></div>
-              <div style="font-size:22px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums"><?= number_format((int)$sc['val']) ?></div>
+              <div style="font-size:22px;font-weight:800;color:var(--rmi-text);font-variant-numeric:tabular-nums"><?= number_format((int)$sc['val']) ?></div>
               <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#64748b;margin-top:3px"><?= h($sc['lbl']) ?></div>
             </div>
           </a>
@@ -1866,7 +1866,7 @@ rmi_header('Master System Login', [
           <div class="d-flex gap-2">
             <a class="btn btn-sm btn-outline-success"
                href="master_system_login.php?export_csv=1<?= isset($_GET['status']) ? '&status='.urlencode($_GET['status']) : '' ?><?= isset($_GET['role']) ? '&role='.urlencode($_GET['role']) : '' ?><?= isset($_GET['department']) ? '&department='.urlencode($_GET['department']) : '' ?><?= isset($_GET['office_code']) ? '&office_code='.urlencode($_GET['office_code']) : '' ?><?= isset($_GET['q']) ? '&q='.urlencode($_GET['q']) : '' ?><?= isset($_GET['mfa']) ? '&mfa='.urlencode($_GET['mfa']) : '' ?><?= isset($_GET['last_login']) ? '&last_login='.urlencode($_GET['last_login']) : '' ?>">
-              ⬇ Export CSV
+              <?= rmi_icon('inbox') ?> Export CSV
             </a>
           </div>
         </div>
@@ -1913,7 +1913,7 @@ rmi_header('Master System Login', [
               <label class="form-label small mb-0">MFA</label>
               <select class="form-select form-select-sm" name="mfa">
                 <option value=""  <?= ($filters['mfa']==='') ? 'selected' : '' ?>>Semua</option>
-                <option value="1" <?= ($filters['mfa']==='1') ? 'selected' : '' ?>>🔑 Aktif</option>
+                <option value="1" <?= ($filters['mfa']==='1') ? 'selected' : '' ?>><?= rmi_icon('gear') ?> Aktif</option>
                 <option value="0" <?= ($filters['mfa']==='0') ? 'selected' : '' ?>>— Belum</option>
               </select>
             </div>
@@ -1922,16 +1922,16 @@ rmi_header('Master System Login', [
               <select class="form-select form-select-sm" name="last_login">
                 <option value=""      <?= ($filters['last_login']==='')       ? 'selected' : '' ?>>Semua</option>
                 <option value="30d"   <?= ($filters['last_login']==='30d')    ? 'selected' : '' ?>>≤ 30 hari lalu</option>
-                <option value="never" <?= ($filters['last_login']==='never')  ? 'selected' : '' ?>>🚫 Belum pernah</option>
-                <option value="90d_ago" <?= ($filters['last_login']==='90d_ago') ? 'selected' : '' ?>>💤 Dormant 90d+</option>
+                <option value="never" <?= ($filters['last_login']==='never')  ? 'selected' : '' ?>><?= rmi_icon('cross') ?> Belum pernah</option>
+                <option value="90d_ago" <?= ($filters['last_login']==='90d_ago') ? 'selected' : '' ?>><?= rmi_icon('moon') ?> Dormant 90d+</option>
               </select>
             </div>
             <div class="col-md-2">
               <label class="form-label small mb-0">Setup Holder</label>
               <select class="form-select form-select-sm" name="holder_setup">
                 <option value="">Semua</option>
-                <option value="sudah" <?= $filters['holder_setup']==='sudah' ? 'selected' : '' ?>>✓ Sudah</option>
-                <option value="belum" <?= $filters['holder_setup']==='belum' ? 'selected' : '' ?>>✗ Belum</option>
+                <option value="sudah" <?= $filters['holder_setup']==='sudah' ? 'selected' : '' ?>><?= rmi_icon('tick') ?> Sudah</option>
+                <option value="belum" <?= $filters['holder_setup']==='belum' ? 'selected' : '' ?>><?= rmi_icon('x') ?> Belum</option>
               </select>
             </div>
             <div class="col-md-2">
@@ -1948,19 +1948,19 @@ rmi_header('Master System Login', [
         <!-- Summary badges holder setup -->
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
           <a href="?holder_setup=sudah" style="text-decoration:none">
-            <span class="badge bg-success" style="font-size:12px;padding:4px 10px;cursor:pointer">✓ Holder: <?= $holder_sudah ?></span>
+            <span class="badge bg-success" style="font-size:12px;padding:4px 10px;cursor:pointer"><?= rmi_icon('tick') ?> Holder: <?= $holder_sudah ?></span>
           </a>
           <a href="?holder_setup=belum" style="text-decoration:none">
-            <span class="badge bg-danger" style="font-size:12px;padding:4px 10px;cursor:pointer">✗ Belum: <?= $holder_belum ?></span>
+            <span class="badge bg-danger" style="font-size:12px;padding:4px 10px;cursor:pointer"><?= rmi_icon('x') ?> Belum: <?= $holder_belum ?></span>
           </a>
           <a href="?last_login=never&status=active" style="text-decoration:none">
-            <span class="badge bg-warning text-dark" style="font-size:12px;padding:4px 10px;cursor:pointer">🚫 Belum login: <?= $stats['never'] ?></span>
+            <span class="badge bg-warning text-dark" style="font-size:12px;padding:4px 10px;cursor:pointer"><?= rmi_icon('cross') ?> Belum login: <?= $stats['never'] ?></span>
           </a>
           <a href="?last_login=90d_ago&status=active" style="text-decoration:none">
-            <span class="badge" style="font-size:12px;padding:4px 10px;cursor:pointer;background:#7f1d1d;color:#fca5a5">💤 Dormant 90d: <?= $stats['dormant90'] ?></span>
+            <span class="badge" style="font-size:12px;padding:4px 10px;cursor:pointer;background:#7f1d1d;color:#fca5a5"><?= rmi_icon('moon') ?> Dormant 90d: <?= $stats['dormant90'] ?></span>
           </a>
           <a href="?mfa=1" style="text-decoration:none">
-            <span class="badge" style="font-size:12px;padding:4px 10px;cursor:pointer;background:rgba(99,102,241,.3);color:#c7d2fe">🔑 MFA: <?= $stats['mfa'] ?></span>
+            <span class="badge" style="font-size:12px;padding:4px 10px;cursor:pointer;background:rgba(99,102,241,.3);color:#c7d2fe"><?= rmi_icon('gear') ?> MFA: <?= $stats['mfa'] ?></span>
           </a>
         </div>
 
@@ -2011,9 +2011,9 @@ rmi_header('Master System Login', [
                   <td style="font-weight:600">
                     <?= h($r['username']) ?>
                     <?php if ($isFinMgr): ?>
-                      <span title="Manager FIN — kontrol keuangan, langsung bawah Owner" style="margin-left:4px;font-size:10px;background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.4);border-radius:5px;padding:1px 6px;font-weight:700">💰 FIN</span>
+                      <span title="Manager FIN — kontrol keuangan, langsung bawah Owner" style="margin-left:4px;font-size:10px;background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.4);border-radius:5px;padding:1px 6px;font-weight:700"><?= rmi_icon('money') ?> FIN</span>
                     <?php elseif ($isSysLevel): ?>
-                      <span title="Akun sistem — proteksi penuh" style="margin-left:4px;font-size:10px;background:rgba(139,92,246,.2);color:#c4b5fd;border:1px solid rgba(139,92,246,.4);border-radius:5px;padding:1px 6px;font-weight:700">🔐 SYS</span>
+                      <span title="Akun sistem — proteksi penuh" style="margin-left:4px;font-size:10px;background:rgba(139,92,246,.2);color:#c4b5fd;border:1px solid rgba(139,92,246,.4);border-radius:5px;padding:1px 6px;font-weight:700"><?= rmi_icon('gear') ?> SYS</span>
                     <?php endif; ?>
                   </td>
                   <td class="text-muted" style="font-size:12px"><?= h($r['full_name']) ?></td>
@@ -2022,7 +2022,7 @@ rmi_header('Master System Login', [
                       <div style="font-weight:500;color:#4ade80"><?= h($r['employee_name'] ?: $r['holder_employee_code']) ?></div>
                       <code style="font-size:11px;color:#60a5fa"><?= h($r['holder_employee_code']) ?></code>
                     <?php else: ?>
-                      <span class="badge bg-danger" style="font-size:11px">✗ Belum di-set</span>
+                      <span class="badge bg-danger" style="font-size:11px"><?= rmi_icon('x') ?> Belum di-set</span>
                     <?php endif; ?>
                   </td>
                   <td><span class="badge bg-transparent border"><?= strtoupper(h($r['role'])) ?></span></td>
@@ -2030,7 +2030,7 @@ rmi_header('Master System Login', [
                   <td style="font-size:12px"><?= h(strtoupper((string)$r['office_code'])) ?></td>
                   <td style="text-align:center;font-size:12px">
                     <?php if (!empty($r['mfa_enabled']) && !empty($r['mfa_confirmed_at'])): ?>
-                      <span title="MFA aktif sejak <?= h(substr((string)$r['mfa_confirmed_at'],0,10)) ?>" style="color:#818cf8;font-size:14px;cursor:help">🔑</span>
+                      <span title="MFA aktif sejak <?= h(substr((string)$r['mfa_confirmed_at'],0,10)) ?>" style="color:#818cf8;font-size:14px;cursor:help"><?= rmi_icon('gear') ?></span>
                     <?php else: ?>
                       <span style="color:#374151;font-size:12px">—</span>
                     <?php endif; ?>
@@ -2046,7 +2046,7 @@ rmi_header('Master System Login', [
                     <?php
                     $ll = (string)($r['last_login_at'] ?? '');
                     if ($ll === '' || $ll === '0000-00-00 00:00:00'): ?>
-                      <span style="color:#ef4444;font-weight:600;font-size:10px">🚫 Belum pernah</span>
+                      <span style="color:#ef4444;font-weight:600;font-size:10px"><?= rmi_icon('cross') ?> Belum pernah</span>
                     <?php else:
                       $daysAgo = (int)round((time() - strtotime($ll)) / 86400);
                       $llColor = $daysAgo > 90 ? '#f87171' : ($daysAgo > 30 ? '#fbbf24' : '#4ade80');
@@ -2090,7 +2090,7 @@ rmi_header('Master System Login', [
   <?php else: ?>
     <span title="Akun <?= $rowIsProtected ? 'ADMIN/SUPERADMIN/SYS — hanya SUPERADMIN yang bisa ubah' : 'protected (FIN Manager)' ?>"
           style="font-size:10px;color:#64748b;display:inline-flex;align-items:center;gap:4px">
-      🔒 Protected
+      <?= rmi_icon('gear') ?> Protected
     </span>
   <?php endif; ?>
   <?php if ($msl_rbac_row_href !== null): ?>
@@ -2172,9 +2172,9 @@ rmi_header('Master System Login', [
                   <td class="text-muted"><?= rmi_h($r['office_code']) ?></td>
                   <td class="text-center">
                     <?php if ($linked): ?>
-                      <span class="badge bg-success">✓ Terhubung</span>
+                      <span class="badge bg-success"><?= rmi_icon('tick') ?> Terhubung</span>
                     <?php else: ?>
-                      <span class="badge bg-danger">✗ Belum</span>
+                      <span class="badge bg-danger"><?= rmi_icon('x') ?> Belum</span>
                     <?php endif; ?>
                   </td>
                 </tr>

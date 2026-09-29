@@ -27,7 +27,7 @@ rmi_header('Panduan BRANCH', [
         'Panduan BRANCH',
     ],
     'actions' => [
-        ['label' => '🏢 Branch Dashboard', 'url' => br_u('/dashboards/branch/branch_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('office').' Branch Dashboard', 'url' => br_u('/dashboards/branch/branch_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -64,11 +64,11 @@ rmi_header('Panduan BRANCH', [
 
 <!-- Hero -->
 <div class="pnd-hero">
-  <div style="font-size:28px;margin-bottom:8px">🏢</div>
+  <div style="font-size:28px;margin-bottom:8px"><?=rmi_icon('office')?></div>
   <div style="font-size:20px;font-weight:800;color:#e2e8f0;margin-bottom:6px">
     Panduan BRANCH — Kantor Cabang
     <?php if ($office): ?>
-      <span class="scope-badge" style="margin-left:10px;font-size:14px">🏢 <?= h($office) ?></span>
+      <span class="scope-badge" style="margin-left:10px;font-size:14px"><?=rmi_icon('office')?> <?= h($office) ?></span>
     <?php endif; ?>
   </div>
   <div style="color:#94a3b8;font-size:14px;line-height:1.7">
@@ -82,11 +82,11 @@ rmi_header('Panduan BRANCH', [
   <!-- Aturan Penting BRANCH -->
   <div class="col-12">
     <div class="pnd-section accent-amber">
-      <h5 style="color:#fbbf24;margin-bottom:14px">⚠️ Aturan Penting Kantor Cabang</h5>
+      <h5 style="color:#fbbf24;margin-bottom:14px"><?=rmi_icon('warn')?> Aturan Penting Kantor Cabang</h5>
       <div class="row g-3">
         <div class="col-md-4">
           <div style="padding:14px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:10px;height:100%">
-            <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:8px">🔒 Office Scope</div>
+            <div style="color:#f87171;font-weight:700;font-size:14px;margin-bottom:8px"><?=rmi_icon('gear')?> Office Scope</div>
             <div style="font-size:13px;color:#94a3b8;line-height:1.8">
               Kamu <b style="color:#fca5a5">hanya bisa melihat dan mengelola data kantormu sendiri</b>.<br><br>
               Contoh: Staff BGR hanya lihat DO BGR, stok BGR, PR BGR.<br>
@@ -96,7 +96,7 @@ rmi_header('Panduan BRANCH', [
         </div>
         <div class="col-md-4">
           <div style="padding:14px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:10px;height:100%">
-            <div style="color:#fbbf24;font-weight:700;font-size:14px;margin-bottom:8px">📋 Tugas Utama Cabang</div>
+            <div style="color:#fbbf24;font-weight:700;font-size:14px;margin-bottom:8px"><?=rmi_icon('clipboard')?> Tugas Utama Cabang</div>
             <ul style="font-size:13px;color:#94a3b8;margin:0;padding-left:16px;line-height:2">
               <li>Buat & proses <b style="color:#e2e8f0">Delivery Order (DO)</b></li>
               <li>Proses <b style="color:#e2e8f0">Picking & Incoming</b> barang</li>
@@ -108,7 +108,7 @@ rmi_header('Panduan BRANCH', [
         </div>
         <div class="col-md-4">
           <div style="padding:14px;background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:10px;height:100%">
-            <div style="color:#93c5fd;font-weight:700;font-size:14px;margin-bottom:8px">📞 Hubungi Pusat Jika</div>
+            <div style="color:#93c5fd;font-weight:700;font-size:14px;margin-bottom:8px"><?=rmi_icon('user')?> Hubungi Pusat Jika</div>
             <ul style="font-size:13px;color:#94a3b8;margin:0;padding-left:16px;line-height:2">
               <li>Stok kosong, perlu restock</li>
               <li>DO tidak bisa diproses</li>
@@ -125,7 +125,7 @@ rmi_header('Panduan BRANCH', [
   <!-- Rutinitas Harian -->
   <div class="col-lg-6">
     <div class="pnd-section accent-green">
-      <h5 style="color:#86efac;margin-bottom:16px">📅 Rutinitas Harian BRANCH Staff</h5>
+      <h5 style="color:#86efac;margin-bottom:16px"><?=rmi_icon('calendar')?> Rutinitas Harian BRANCH Staff</h5>
 
       <div class="pnd-step">
         <div class="pnd-num" style="background:#10b981">1</div>
@@ -180,7 +180,7 @@ rmi_header('Panduan BRANCH', [
   <!-- Rutinitas Manager -->
   <div class="col-lg-6">
     <div class="pnd-section accent-teal">
-      <h5 style="color:#2dd4bf;margin-bottom:16px">🎯 Rutinitas Harian BRANCH Manager</h5>
+      <h5 style="color:#2dd4bf;margin-bottom:16px"><?=rmi_icon('target')?> Rutinitas Harian BRANCH Manager</h5>
 
       <div class="pnd-step">
         <div class="pnd-num" style="background:#14b8a6">1</div>
@@ -235,102 +235,102 @@ rmi_header('Panduan BRANCH', [
   <!-- Modul yang bisa diakses BRANCH -->
   <div class="col-12">
     <div class="pnd-section accent-blue">
-      <h5 style="color:#93c5fd;margin-bottom:16px">🖥️ Modul yang Bisa Diakses Kantor Cabang</h5>
+      <h5 style="color:#93c5fd;margin-bottom:16px"><?=rmi_icon('gear')?> Modul yang Bisa Diakses Kantor Cabang</h5>
       <div class="br-modul">
         <a href="<?= h(br_u('/sales/sales_do.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">📋</div>
+            <div class="br-icon"><?=rmi_icon('clipboard')?></div>
             <div class="br-label">Delivery Order</div>
             <div class="br-desc">Buat & kelola DO</div>
           </div>
         </a>
         <a href="<?= h(br_u('/sales/sales_control_tower.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">🗼</div>
+            <div class="br-icon"><?=rmi_icon('tower')?></div>
             <div class="br-label">Sales Control Tower</div>
             <div class="br-desc">Monitor status semua DO</div>
           </div>
         </a>
         <a href="<?= h(br_u('/stock/wqs_do_tasks.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">⚡</div>
+            <div class="br-icon"><?=rmi_icon('zap')?></div>
             <div class="br-label">WQS Task DO</div>
             <div class="br-desc">DO masuk dari CRM</div>
           </div>
         </a>
         <a href="<?= h(br_u('/sales/scm_do_tasks.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">🚚</div>
+            <div class="br-icon"><?=rmi_icon('box')?></div>
             <div class="br-label">SCM Task DO</div>
             <div class="br-desc">Atur pengiriman DO</div>
           </div>
         </a>
         <a href="<?= h(br_u('/stock/wqs_picking.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">🔄</div>
+            <div class="br-icon"><?=rmi_icon('refresh')?></div>
             <div class="br-label">Picking DO</div>
             <div class="br-desc">Ambil & siapkan barang</div>
           </div>
         </a>
         <a href="<?= h(br_u('/stock/wqs_incoming.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">📥</div>
+            <div class="br-icon"><?=rmi_icon('inbox')?></div>
             <div class="br-label">Incoming Barang</div>
             <div class="br-desc">Terima barang dari PO</div>
           </div>
         </a>
         <a href="<?= h(br_u('/stock/wqs_stock.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">📊</div>
+            <div class="br-icon"><?=rmi_icon('chart')?></div>
             <div class="br-label">Lihat Stok</div>
             <div class="br-desc">Stok kantor kamu</div>
           </div>
         </a>
         <a href="<?= h(br_u('/stock/wqs_pr.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">📝</div>
+            <div class="br-icon"><?=rmi_icon('memo')?></div>
             <div class="br-label">Purchase Request</div>
             <div class="br-desc">Minta restock ke pusat</div>
           </div>
         </a>
         <a href="<?= h(br_u('/purchases/purchases_po.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">📄</div>
+            <div class="br-icon"><?=rmi_icon('doc')?></div>
             <div class="br-label">Purchase Order</div>
             <div class="br-desc">Lihat PO kantor</div>
           </div>
         </a>
         <a href="<?= h(br_u('/purchases/purchases_gr.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">✅</div>
+            <div class="br-icon"><?=rmi_icon('check')?></div>
             <div class="br-label">Good Receipt</div>
             <div class="br-desc">Konfirmasi barang tiba</div>
           </div>
         </a>
         <a href="<?= h(br_u('/absensi/index.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">📅</div>
+            <div class="br-icon"><?=rmi_icon('calendar')?></div>
             <div class="br-label">Absensi</div>
             <div class="br-desc">Clock in/out harian</div>
           </div>
         </a>
         <a href="<?= h(br_u('/hrl_process/index.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">🔁</div>
+            <div class="br-icon"><?=rmi_icon('refresh')?></div>
             <div class="br-label">HRL Process</div>
             <div class="br-desc">Dokumen & proses HR</div>
           </div>
         </a>
         <a href="<?= h(br_u('/kpi/kpi_center.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">📈</div>
+            <div class="br-icon"><?=rmi_icon('trend')?></div>
             <div class="br-label">KPI Center</div>
             <div class="br-desc">Performa tim</div>
           </div>
         </a>
         <a href="<?= h(br_u('/chat/index.php')) ?>" style="text-decoration:none">
           <div class="br-modul-item">
-            <div class="br-icon">💬</div>
+            <div class="br-icon"><?=rmi_icon('memo')?></div>
             <div class="br-label">Chat Internal</div>
             <div class="br-desc">Komunikasi dengan pusat</div>
           </div>
@@ -342,7 +342,7 @@ rmi_header('Panduan BRANCH', [
   <!-- Cara Buat DO -->
   <div class="col-lg-6">
     <div class="pnd-section accent-green">
-      <h5 style="color:#86efac;margin-bottom:16px">📋 Cara Buat Delivery Order (DO)</h5>
+      <h5 style="color:#86efac;margin-bottom:16px"><?=rmi_icon('clipboard')?> Cara Buat Delivery Order (DO)</h5>
       <div class="pnd-step">
         <div class="pnd-num" style="background:#10b981">1</div>
         <div>
@@ -378,14 +378,14 @@ rmi_header('Panduan BRANCH', [
           <div class="pnd-desc">Klik <b>Simpan & Kirim ke WQS</b>. DO otomatis masuk ke antrian WQS untuk diproses picking.</div>
         </div>
       </div>
-      <div class="pnd-tip">💡 <b>Stok tidak cukup?</b> Buat PR (Purchase Request) ke pusat terlebih dahulu. Jangan buat DO jika stok tidak tersedia — sistem akan menolak picking.</div>
+      <div class="pnd-tip"><?=rmi_icon('zap')?> <b>Stok tidak cukup?</b> Buat PR (Purchase Request) ke pusat terlebih dahulu. Jangan buat DO jika stok tidak tersedia — sistem akan menolak picking.</div>
     </div>
   </div>
 
   <!-- Cara Buat PR -->
   <div class="col-lg-6">
     <div class="pnd-section accent-purple">
-      <h5 style="color:#c4b5fd;margin-bottom:16px">📝 Cara Buat Purchase Request (PR)</h5>
+      <h5 style="color:#c4b5fd;margin-bottom:16px"><?=rmi_icon('memo')?> Cara Buat Purchase Request (PR)</h5>
       <div class="pnd-step">
         <div class="pnd-num" style="background:#8b5cf6">1</div>
         <div>
@@ -421,14 +421,14 @@ rmi_header('Panduan BRANCH', [
           <div class="pnd-desc">Pusat akan buat PO → barang dikirim → kamu terima via <b>GR (Good Receipt)</b> → lalu proses di <b>WQS Incoming</b> → stok bertambah.</div>
         </div>
       </div>
-      <div class="pnd-tip">💡 <b>PR urgent?</b> Hubungi PQP pusat via Chat Internal dan beri tahu PR-nya urgent agar diprioritaskan.</div>
+      <div class="pnd-tip"><?=rmi_icon('zap')?> <b>PR urgent?</b> Hubungi PQP pusat via Chat Internal dan beri tahu PR-nya urgent agar diprioritaskan.</div>
     </div>
   </div>
 
   <!-- FAQ -->
   <div class="col-12">
     <div class="pnd-section accent-red">
-      <h5 style="color:#fca5a5;margin-bottom:14px">❓ FAQ Kantor Cabang</h5>
+      <h5 style="color:#fca5a5;margin-bottom:14px"><?=rmi_icon('question')?> FAQ Kantor Cabang</h5>
       <div class="row g-3" style="font-size:13px">
         <div class="col-md-6">
           <div style="display:flex;flex-direction:column;gap:14px">
@@ -477,24 +477,24 @@ rmi_header('Panduan BRANCH', [
   <!-- Quick Links -->
   <div class="col-12">
     <div class="pnd-section">
-      <h5 style="color:#e2e8f0;margin-bottom:14px">⚡ Akses Cepat BRANCH</h5>
+      <h5 style="color:#e2e8f0;margin-bottom:14px"><?=rmi_icon('zap')?> Akses Cepat BRANCH</h5>
       <div class="pnd-links">
-        <a href="<?= h(br_u('/dashboards/branch/branch_dashboard.php')) ?>">🏢 Branch Dashboard</a>
-        <a href="<?= h(br_u('/sales/sales_do.php')) ?>">📋 Delivery Order</a>
-        <a href="<?= h(br_u('/sales/sales_control_tower.php')) ?>">🗼 Sales Control Tower</a>
-        <a href="<?= h(br_u('/stock/wqs_do_tasks.php')) ?>">⚡ WQS Task DO</a>
-        <a href="<?= h(br_u('/sales/scm_do_tasks.php')) ?>">🚚 SCM Task DO</a>
-        <a href="<?= h(br_u('/stock/wqs_picking.php')) ?>">🔄 Picking DO</a>
-        <a href="<?= h(br_u('/stock/wqs_incoming.php')) ?>">📥 Incoming Barang</a>
-        <a href="<?= h(br_u('/stock/wqs_stock.php')) ?>">📊 Lihat Stok</a>
-        <a href="<?= h(br_u('/stock/wqs_pr.php')) ?>">📝 Purchase Request</a>
-        <a href="<?= h(br_u('/purchases/purchases_po.php')) ?>">📄 Purchase Order</a>
-        <a href="<?= h(br_u('/purchases/purchases_gr.php')) ?>">✅ Good Receipt</a>
-        <a href="<?= h(br_u('/absensi/index.php')) ?>">📅 Absensi</a>
-        <a href="<?= h(br_u('/hrl_process/index.php')) ?>">🔁 HRL Process</a>
-        <a href="<?= h(br_u('/kpi/kpi_center.php')) ?>">📈 KPI Center</a>
-        <a href="<?= h(br_u('/chat/index.php')) ?>">💬 Chat Internal</a>
-        <a href="<?= h(br_u('/sales/panduan_control_tower.php')) ?>">📚 Panduan Sales Tower</a>
+        <a href="<?= h(br_u('/dashboards/branch/branch_dashboard.php')) ?>"><?=rmi_icon('office')?> Branch Dashboard</a>
+        <a href="<?= h(br_u('/sales/sales_do.php')) ?>"><?=rmi_icon('clipboard')?> Delivery Order</a>
+        <a href="<?= h(br_u('/sales/sales_control_tower.php')) ?>"><?=rmi_icon('tower')?> Sales Control Tower</a>
+        <a href="<?= h(br_u('/stock/wqs_do_tasks.php')) ?>"><?=rmi_icon('zap')?> WQS Task DO</a>
+        <a href="<?= h(br_u('/sales/scm_do_tasks.php')) ?>"><?=rmi_icon('box')?> SCM Task DO</a>
+        <a href="<?= h(br_u('/stock/wqs_picking.php')) ?>"><?=rmi_icon('refresh')?> Picking DO</a>
+        <a href="<?= h(br_u('/stock/wqs_incoming.php')) ?>"><?=rmi_icon('inbox')?> Incoming Barang</a>
+        <a href="<?= h(br_u('/stock/wqs_stock.php')) ?>"><?=rmi_icon('chart')?> Lihat Stok</a>
+        <a href="<?= h(br_u('/stock/wqs_pr.php')) ?>"><?=rmi_icon('memo')?> Purchase Request</a>
+        <a href="<?= h(br_u('/purchases/purchases_po.php')) ?>"><?=rmi_icon('doc')?> Purchase Order</a>
+        <a href="<?= h(br_u('/purchases/purchases_gr.php')) ?>"><?=rmi_icon('check')?> Good Receipt</a>
+        <a href="<?= h(br_u('/absensi/index.php')) ?>"><?=rmi_icon('calendar')?> Absensi</a>
+        <a href="<?= h(br_u('/hrl_process/index.php')) ?>"><?=rmi_icon('refresh')?> HRL Process</a>
+        <a href="<?= h(br_u('/kpi/kpi_center.php')) ?>"><?=rmi_icon('trend')?> KPI Center</a>
+        <a href="<?= h(br_u('/chat/index.php')) ?>"><?=rmi_icon('memo')?> Chat Internal</a>
+        <a href="<?= h(br_u('/sales/panduan_control_tower.php')) ?>"><?=rmi_icon('books')?> Panduan Sales Tower</a>
       </div>
     </div>
   </div>

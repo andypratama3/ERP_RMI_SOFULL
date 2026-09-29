@@ -1147,7 +1147,7 @@ $action = trim((string)($_POST['action'] ?? ''));
                 master_audit($pdo, 'sales_do', 'sales_do', 'ACT_SEND_FIN', $id, $code, "DO ACT send FIN: {$code}", ['to_status' => 'wait_payment']);
             }
             sales_do_audit_append($pdo, $id, $curStatus, 'wait_payment', 'ACT', $note);
-            $success = "Status: WAIT PAYMENT ✅ (Trigger FIN)";
+            $success = "Status: WAIT PAYMENT " . rmi_icon('check') . " (Trigger FIN)";
         }
 
     } catch (Throwable $e) {
@@ -1390,8 +1390,8 @@ rmi_header('ACT - Task DO', [
     'ACT - Task DO',
   ],
   'actions' => [
-    ['label' => '📚 Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => '🗼 Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books') . ' Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('tower') . ' Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
   ],
   'extra_head' => '<style>
     :root{
@@ -1680,7 +1680,7 @@ rmi_header('ACT - Task DO', [
                       <?php elseif ($taxLegacyHandoffStop): ?>
                         <span class="sla-legacy">⏹ <?= h(act_duration_text($taxSec)) ?> <small>(stop Handoff FIN legacy; evidence belum termapping)</small></span>
                       <?php elseif ($taxFinishedAt !== ''): ?>
-                        <span class="sla-done">✓ <?= h(act_duration_text($taxSec)) ?></span>
+                        <span class="sla-done"><?= rmi_icon('tick') ?> <?= h(act_duration_text($taxSec)) ?></span>
                         <div class="mini muted"><?= h($taxFinishedAt) ?></div>
                       <?php elseif ($actStartAt): ?>
                         <span class="sla-running act-sla-live"
@@ -1699,9 +1699,9 @@ rmi_header('ACT - Task DO', [
                     </div>
                     <div class="sla-time">
                       <?php if ($exgDone && $exgLegacyUnknown): ?>
-                        <span class="sla-done">✓ Selesai — timestamp historis tidak tersedia</span>
+                        <span class="sla-done"><?= rmi_icon('tick') ?> Selesai — timestamp historis tidak tersedia</span>
                       <?php elseif ($exgDone && $exgFinishedAt !== ''): ?>
-                        <span class="sla-done">✓ <?= h(act_exchange_duration_text($exgSec)) ?></span>
+                        <span class="sla-done"><?= rmi_icon('tick') ?> <?= h(act_exchange_duration_text($exgSec)) ?></span>
                         <div class="mini muted"><?= h($exgFinishedAt) ?></div>
                       <?php elseif ($exgLegacyHandoffStop): ?>
                         <span class="sla-legacy">⏹ <?= h(act_exchange_duration_text($exgSec)) ?> <small>(stop Handoff FIN legacy; evidence belum termapping)</small></span>

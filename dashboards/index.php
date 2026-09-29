@@ -239,29 +239,29 @@ $fullname_dash = (string)($_SESSION['full_name'] ?? ($_SESSION['user']['full_nam
 
 // Icon per card key
 $card_meta = [
-    'funnels'        => ['icon'=>'🔍','color'=>'#8b5cf6','group'=>'Manajemen'],
-    'owner_exec'     => ['icon'=>'👑','color'=>'#f59e0b','group'=>'Manajemen'],
-    'owner_activity' => ['icon'=>'👁️','color'=>'#22d3ee','group'=>'Manajemen'],
-    'branch'         => ['icon'=>'🏢','color'=>'#06b6d4','group'=>'Operasional'],
-    'crm'            => ['icon'=>'💼','color'=>'#3b82f6','group'=>'Operasional'],
-    'mpr'            => ['icon'=>'📣','color'=>'#14b8a6','group'=>'Operasional'],
-    'warehouse'      => ['icon'=>'📦','color'=>'#f97316','group'=>'Operasional'],
-    'procurement'    => ['icon'=>'🛒','color'=>'#eab308','group'=>'Operasional'],
-    'finance'        => ['icon'=>'💰','color'=>'#22c55e','group'=>'Keuangan'],
-    'finance_detail' => ['icon'=>'📊','color'=>'#10b981','group'=>'Keuangan'],
-    'regulatory'     => ['icon'=>'🏥','color'=>'#ef4444','group'=>'Compliance'],
-    'quality'        => ['icon'=>'✅','color'=>'#84cc16','group'=>'Compliance'],
-    'scm'            => ['icon'=>'🚢','color'=>'#a78bfa','group'=>'Operasional'],
-    'hrl'            => ['icon'=>'👥','color'=>'#ec4899','group'=>'SDM'],
-    'employee_mutation'=> ['icon'=>'🔄','color'=>'#38bdf8','group'=>'SDM'],
-    'itc'            => ['icon'=>'💻','color'=>'#64748b','group'=>'Sistem'],
-    'act'            => ['icon'=>'📝','color'=>'#fb923c','group'=>'Keuangan'],
+    'funnels'        => ['icon'=>rmi_icon('search'),'color'=>'#8b5cf6','group'=>'Manajemen'],
+    'owner_exec'     => ['icon'=>rmi_icon('target'),'color'=>'#f59e0b','group'=>'Manajemen'],
+    'owner_activity' => ['icon'=>rmi_icon('search'),'color'=>'#22d3ee','group'=>'Manajemen'],
+    'branch'         => ['icon'=>rmi_icon('office'),'color'=>'#06b6d4','group'=>'Operasional'],
+    'crm'            => ['icon'=>rmi_icon('money'),'color'=>'#3b82f6','group'=>'Operasional'],
+    'mpr'            => ['icon'=>rmi_icon('memo'),'color'=>'#14b8a6','group'=>'Operasional'],
+    'warehouse'      => ['icon'=>rmi_icon('box'),'color'=>'#f97316','group'=>'Operasional'],
+    'procurement'    => ['icon'=>rmi_icon('cart'),'color'=>'#eab308','group'=>'Operasional'],
+    'finance'        => ['icon'=>rmi_icon('money'),'color'=>'#22c55e','group'=>'Keuangan'],
+    'finance_detail' => ['icon'=>rmi_icon('chart'),'color'=>'#10b981','group'=>'Keuangan'],
+    'regulatory'     => ['icon'=>rmi_icon('office'),'color'=>'#ef4444','group'=>'Compliance'],
+    'quality'        => ['icon'=>rmi_icon('check'),'color'=>'#84cc16','group'=>'Compliance'],
+    'scm'            => ['icon'=>rmi_icon('box'),'color'=>'#a78bfa','group'=>'Operasional'],
+    'hrl'            => ['icon'=>rmi_icon('users'),'color'=>'#ec4899','group'=>'SDM'],
+    'employee_mutation'=> ['icon'=>rmi_icon('refresh'),'color'=>'#38bdf8','group'=>'SDM'],
+    'itc'            => ['icon'=>rmi_icon('gear'),'color'=>'#64748b','group'=>'Sistem'],
+    'act'            => ['icon'=>rmi_icon('memo'),'color'=>'#fb923c','group'=>'Keuangan'],
 ];
 
 // Group cards
 $grouped = [];
 foreach ($visible_cards as $c) {
-    $m = $card_meta[$c['key']] ?? ['icon'=>'📋','color'=>'#94a3b8','group'=>'Lainnya'];
+    $m = $card_meta[$c['key']] ?? ['icon'=>rmi_icon('clipboard'),'color'=>'#94a3b8','group'=>'Lainnya'];
     $c['icon']  = $m['icon'];
     $c['color'] = $m['color'];
     $c['group'] = $m['group'];
@@ -394,7 +394,7 @@ rmi_header('Dashboard Center', [
   'subtitle'   => 'Pusat navigasi dashboard ERP.',
   'extra_head' => $extraHead,
   'actions'    => [
-    ['label' => '📚 Panduan', 'url' => dash_center_url('dashboards/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books').' Panduan', 'url' => dash_center_url('dashboards/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
   ],
 ]);
 ?>
@@ -404,7 +404,7 @@ rmi_header('Dashboard Center', [
   <!-- Greeting -->
   <div class="dc-greeting">
     <div class="g-left">
-      <h1>👋 Halo, <?= htmlspecialchars($fullname_dash ?: $username_dash ?: 'User') ?>!</h1>
+      <h1><?=rmi_icon('users')?> Halo, <?= htmlspecialchars($fullname_dash ?: $username_dash ?: 'User') ?>!</h1>
       <p>
         <span style="color:#67e8f9;font-weight:600"><?= htmlspecialchars($role ?: '-') ?></span>
         &nbsp;·&nbsp; Dept: <span style="color:#a78bfa;font-weight:600"><?= htmlspecialchars($dept ?: '-') ?></span>
@@ -420,35 +420,35 @@ rmi_header('Dashboard Center', [
   <!-- Quick Stats -->
   <div class="dc-stats">
     <div class="dc-stat">
-      <span class="s-icon">✅</span>
+      <span class="s-icon"><?=rmi_icon('check')?></span>
       <div>
         <div class="s-val"><?= $stat_hadir ?></div>
         <div class="s-lbl">Hadir Hari Ini</div>
       </div>
     </div>
     <div class="dc-stat">
-      <span class="s-icon">📋</span>
+      <span class="s-icon"><?=rmi_icon('clipboard')?></span>
       <div>
         <div class="s-val"><?= $stat_order ?></div>
         <div class="s-lbl">Order Hari Ini</div>
       </div>
     </div>
     <div class="dc-stat">
-      <span class="s-icon">💳</span>
+      <span class="s-icon"><?=rmi_icon('money')?></span>
       <div>
         <div class="s-val"><?= $stat_pending_ap ?></div>
         <div class="s-lbl">AP Outstanding</div>
       </div>
     </div>
     <div class="dc-stat" style="cursor:pointer" onclick="location.href='<?= dash_center_url('absensi/admin/rekap.php') ?>'">
-      <span class="s-icon">📅</span>
+      <span class="s-icon"><?=rmi_icon('calendar')?></span>
       <div>
         <div class="s-val" style="font-size:14px;margin-top:2px">Rekap</div>
         <div class="s-lbl">Absensi HR</div>
       </div>
     </div>
     <div class="dc-stat" style="cursor:pointer" onclick="location.href='<?= dash_center_url('dashboards/finance/dashboard_detail.php?tab=exec') ?>'">
-      <span class="s-icon">⭐</span>
+      <span class="s-icon"><?=rmi_icon('target')?></span>
       <div>
         <div class="s-val" style="font-size:14px;margin-top:2px">Exec</div>
         <div class="s-lbl">Summary</div>
@@ -458,21 +458,21 @@ rmi_header('Dashboard Center', [
 
   <!-- Action Bar -->
   <div class="dc-actions">
-    <a class="dc-btn" href="<?= dash_center_url('dashboards/panduan.php') ?>">📚 Panduan</a>
+    <a class="dc-btn" href="<?= dash_center_url('dashboards/panduan.php') ?>"><?=rmi_icon('books')?> Panduan</a>
     <?php if ($is_admin): ?>
-      <a class="dc-btn primary" href="<?= erp_kpi_center_url() ?>">📊 KPI Center</a>
-      <a class="dc-btn" href="<?= dash_center_url('dashboards/finance/dashboard_detail.php?tab=exec&refresh=60&kiosk=1') ?>">📺 Monitor Mode</a>
-      <a class="dc-btn" href="<?= dash_center_url('master/master_system_login.php') ?>">👤 Users</a>
-      <a class="dc-btn" href="<?= dash_center_url('tools/rbac_center.php') ?>">🔐 RBAC</a>
-      <a class="dc-btn" href="<?= dash_center_url('master/master_system_config.php') ?>">⚙️ Config</a>
-      <a class="dc-btn" href="<?= dash_center_url('tools/view_error_log.php') ?>">📜 Error Log</a>
-      <a class="dc-btn" href="<?= dash_center_url('docs/link/officepack_portal.php') ?>">📁 Dokumen</a>
+      <a class="dc-btn primary" href="<?= erp_kpi_center_url() ?>"><?=rmi_icon('chart')?> KPI Center</a>
+      <a class="dc-btn" href="<?= dash_center_url('dashboards/finance/dashboard_detail.php?tab=exec&refresh=60&kiosk=1') ?>"><?=rmi_icon('chart')?> Monitor Mode</a>
+      <a class="dc-btn" href="<?= dash_center_url('master/master_system_login.php') ?>"><?=rmi_icon('user')?> Users</a>
+      <a class="dc-btn" href="<?= dash_center_url('tools/rbac_center.php') ?>"><?=rmi_icon('gear')?> RBAC</a>
+      <a class="dc-btn" href="<?= dash_center_url('master/master_system_config.php') ?>"><?=rmi_icon('gear')?> Config</a>
+      <a class="dc-btn" href="<?= dash_center_url('tools/view_error_log.php') ?>"><?=rmi_icon('doc')?> Error Log</a>
+      <a class="dc-btn" href="<?= dash_center_url('docs/link/officepack_portal.php') ?>"><?=rmi_icon('doc')?> Dokumen</a>
     <?php endif; ?>
     <?php if ($canOwnerActivity): ?>
-      <a class="dc-btn" href="<?= dash_center_url('master/owner_activity_control.php') ?>">👁️ Activity Control</a>
+      <a class="dc-btn" href="<?= dash_center_url('master/owner_activity_control.php') ?>"><?=rmi_icon('search')?> Activity Control</a>
     <?php endif; ?>
     <?php if ($canFinanceQuickLink): ?>
-      <a class="dc-btn" href="<?= dash_center_url('dashboards/finance/dashboard_detail.php') ?>">💰 Finance Detail</a>
+      <a class="dc-btn" href="<?= dash_center_url('dashboards/finance/dashboard_detail.php') ?>"><?=rmi_icon('money')?> Finance Detail</a>
     <?php endif; ?>
   </div>
 
@@ -480,7 +480,7 @@ rmi_header('Dashboard Center', [
     <?php if (empty($visible_cards)): ?>
     <div class="dc-grid">
       <div class="dc-empty">
-        <div style="font-size:40px;margin-bottom:8px">🔒</div>
+        <div style="font-size:40px;margin-bottom:8px"><?=rmi_icon('gear')?></div>
         <h3 style="margin:0 0 6px;color:#f1f5f9">Belum ada akses dashboard</h3>
         <p style="margin:0">Dept <strong><?= htmlspecialchars($dept ?: '-') ?></strong> belum dipetakan. Hubungi Admin.</p>
       </div>
@@ -505,7 +505,7 @@ rmi_header('Dashboard Center', [
     <?php endif; ?>
 
   <div class="dc-note">
-    💡 Akses tiap dashboard tetap di-enforce oleh RBAC. Menu ini hanya navigasi.
+    <?=rmi_icon('zap')?> Akses tiap dashboard tetap di-enforce oleh RBAC. Menu ini hanya navigasi.
   </div>
 
 </div>

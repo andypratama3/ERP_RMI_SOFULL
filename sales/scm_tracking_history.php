@@ -470,7 +470,7 @@ rmi_header('SCM - History Tracking', [
     'actions' => [
         ['label'=>'← SCM Task','url'=>$baseProject.'/sales/scm_do_tasks.php','class'=>'btn btn-sm btn-outline-light'],
         ['label'=>'📍 Tracker','url'=>$baseProject.'/sales/scm_tracker_mobile.php','class'=>'btn btn-sm btn-outline-light'],
-        ['label'=>'🗼 Control Tower','url'=>$baseProject.'/sales/sales_control_tower.php','class'=>'btn btn-sm btn-outline-light'],
+        ['label'=>rmi_icon('tower') . ' Control Tower','url'=>$baseProject.'/sales/sales_control_tower.php','class'=>'btn btn-sm btn-outline-light'],
     ],
     'extra_head' => $extraHead,
 ]);
@@ -508,10 +508,10 @@ rmi_header('SCM - History Tracking', [
       <div class="muted"><?=hh(date('d M Y', strtotime($date)))?> · <?=hh($office !== '' ? $office : 'Semua Office')?></div>
       <div class="muted" style="margin-top:5px">Jejak aktual GPS, bukan rute perkiraan Google Directions.</div>
     </div>
-    <div class="head-box"><div class="muted">Tanggal</div><div class="head-value">📅 <?=hh(date('d M Y', strtotime($date)))?></div></div>
-    <div class="head-box"><div class="muted">Driver / PIC</div><div class="head-value">👤 <?=hh($routePicName)?></div><div class="muted"><?=$routePicUid>0?'User ID '.$routePicUid:'-'?></div></div>
+    <div class="head-box"><div class="muted">Tanggal</div><div class="head-value"><?= rmi_icon('calendar') ?> <?=hh(date('d M Y', strtotime($date)))?></div></div>
+    <div class="head-box"><div class="muted">Driver / PIC</div><div class="head-value"><?= rmi_icon('user') ?> <?=hh($routePicName)?></div><div class="muted"><?=$routePicUid>0?'User ID '.$routePicUid:'-'?></div></div>
     <div class="head-box"><div class="muted">Kendaraan</div><div class="head-value">🚚 Belum direkam</div><div class="muted">Tracker saat ini belum menyimpan vehicle</div></div>
-    <div class="head-box"><div class="muted">Status</div><div class="head-value"><?=$routeStatus==='Selesai'?'✅':($routeStatus==='Berjalan'?'🟢':'📍')?> <?=hh($routeStatus)?></div><div class="muted"><?=count($visits)?> DO / kunjungan</div></div>
+    <div class="head-box"><div class="muted">Status</div><div class="head-value"><?=$routeStatus==='Selesai'?rmi_icon('check'):($routeStatus==='Berjalan'?'🟢':'📍')?> <?=hh($routeStatus)?></div><div class="muted"><?=count($visits)?> DO / kunjungan</div></div>
   </div>
 
   <?php if(count($picOptions) > 1 && $picUid <= 0): ?>

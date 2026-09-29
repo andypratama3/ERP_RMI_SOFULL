@@ -7,6 +7,13 @@ if (defined('APP_DEBUG') && APP_DEBUG) { ini_set('display_errors', '1'); } else 
 
 require_once dirname(__DIR__, 2) . '/master/auth.php';
 
+// Icon pusat (rmi_icon) — pastikan tersedia untuk modul Payroll
+if (!function_exists('rmi_icon')) {
+  $__rmi_icons = dirname(__DIR__, 2) . '/_shared/rmi_icons.php';
+  if (is_file($__rmi_icons)) require_once $__rmi_icons;
+  unset($__rmi_icons);
+}
+
 /*
  * PAYROLL LOGIN SAFE FIX
  * Jangan panggil require_login() di bootstrap payroll.

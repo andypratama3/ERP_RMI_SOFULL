@@ -1198,7 +1198,7 @@ rmi_header('Print DO - ' . htmlspecialchars($do_code), 'sales', [
             &laquo; Tutup
         </button>
         <button class="btn-print" type="button" onclick="window.print();">
-            🖨 Cetak DO
+            <?= rmi_icon('print') ?> Cetak DO
         </button>
     </div>
 
@@ -1397,7 +1397,7 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
                                 </a>
                                 <div style="margin-top:4px;font-size:10px;color:#6b7280;">Klik gambar untuk melihat ukuran penuh.</div>
                             <?php elseif ($crmOrderProofExt === 'pdf'): ?>
-                                <a href="<?= htmlspecialchars($crmOrderProofUrl) ?>" target="_blank" rel="noopener noreferrer">📄 Lihat PDF Bukti Order</a>
+                                <a href="<?= htmlspecialchars($crmOrderProofUrl) ?>" target="_blank" rel="noopener noreferrer"><?= rmi_icon('doc') ?> Lihat PDF Bukti Order</a>
                             <?php else: ?>
                                 <a href="<?= htmlspecialchars($crmOrderProofUrl) ?>" target="_blank" rel="noopener noreferrer">Lihat Bukti Order</a>
                             <?php endif; ?>
@@ -1480,7 +1480,7 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
                 <b>Tanda Tangan Digital Customer</b>
                 <?php if ($scm_signature_src !== ''): ?>
                     <img class="scm-signature-img" src="<?= htmlspecialchars($scm_signature_src, ENT_QUOTES, 'UTF-8') ?>" alt="Tanda Tangan Digital Customer">
-                    <span style="color:#15803d;font-weight:700">Tersimpan ✓</span>
+                    <span style="color:#15803d;font-weight:700">Tersimpan <?= rmi_icon('tick') ?></span>
                 <?php else: ?>
                     <span style="color:#6b7280">-</span>
                 <?php endif; ?>

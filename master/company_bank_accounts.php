@@ -306,7 +306,7 @@ rmi_header('Rekening Perusahaan', 'company_bank');
                 <td><?= h((string)($r['office_code'] ?? '')) ?></td>
                 <td><?= h((string)($r['account_number'] ?? '')) ?></td>
                 <td><?= h((string)$r['account_name']) ?></td>
-                <td><?= (int)($r['is_active'] ?? 1) === 1 ? '✅' : '—' ?></td>
+                <td><?= (int)($r['is_active'] ?? 1) === 1 ? rmi_icon('check') : '—' ?></td>
                 <td>
                   <a class="btn btn-sm btn-outline-light" href="company_bank_accounts.php?id=<?= (int)$r['id'] ?>">Edit</a>
                   <form method="post" class="d-inline">

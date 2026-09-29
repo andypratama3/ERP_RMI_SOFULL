@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 
 if (!function_exists('ds_scope_ctx')) {
     function ds_scope_ctx(): array
@@ -284,11 +285,11 @@ if (!function_exists('ds_render_manager_cards')) {
         $links = (array)($opts['metric_links'] ?? []);
         $esc = static fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
         $cards = [
-            ['key'=>'scope','label'=>'Scope','value'=>$w['scope_label'] ?? '', 'icon'=>'🎯','color'=>'#06b6d4'],
-            ['key'=>'team_staff','label'=>'Team Staff','value'=>(int)($w['team_staff'] ?? 0), 'icon'=>'👥','color'=>'#3b82f6'],
-            ['key'=>'attendance_today','label'=>'Attendance Today','value'=>(int)($w['attendance_today'] ?? 0), 'icon'=>'✅','color'=>'#22c55e'],
-            ['key'=>'backlog_open','label'=>'Backlog Open','value'=>(int)($w['backlog_open'] ?? 0), 'icon'=>'📥','color'=>'#f59e0b'],
-            ['key'=>'exceptions','label'=>'Exceptions','value'=>(int)($w['exceptions'] ?? 0), 'icon'=>'⚠️','color'=>'#ef4444'],
+            ['key'=>'scope','label'=>'Scope','value'=>$w['scope_label'] ?? '', 'icon'=>rmi_icon('target'),'color'=>'#06b6d4'],
+            ['key'=>'team_staff','label'=>'Team Staff','value'=>(int)($w['team_staff'] ?? 0), 'icon'=>rmi_icon('users'),'color'=>'#3b82f6'],
+            ['key'=>'attendance_today','label'=>'Attendance Today','value'=>(int)($w['attendance_today'] ?? 0), 'icon'=>rmi_icon('check'),'color'=>'#22c55e'],
+            ['key'=>'backlog_open','label'=>'Backlog Open','value'=>(int)($w['backlog_open'] ?? 0), 'icon'=>rmi_icon('inbox'),'color'=>'#f59e0b'],
+            ['key'=>'exceptions','label'=>'Exceptions','value'=>(int)($w['exceptions'] ?? 0), 'icon'=>rmi_icon('warn'),'color'=>'#ef4444'],
         ];
         static $cssDone = false;
         if (!$cssDone) {
@@ -304,12 +305,12 @@ if (!function_exists('ds_render_manager_cards')) {
             echo '<div class="col-md-2 col-6">'.($url!==''?'<a class="ds-manager-link" href="'.$esc($url).'">'.$inner.'</a>':$inner).'</div>';
         };
         echo '<div class="card mb-3 ds-manager-section"><div class="card-body">';
-        echo '<div class="ds-manager-title mb-2">📊 Manager Controlling Staff</div><div class="row g-2 ds-manager-grid">';
+        echo '<div class="ds-manager-title mb-2">'.rmi_icon('chart').' Manager Controlling Staff</div><div class="row g-2 ds-manager-grid">';
         foreach ($cards as $c) $render($c);
         $palette=['#8b5cf6','#06b6d4','#f97316','#eab308','#ec4899','#14b8a6'];
         foreach ($extra as $i=>$m) {
             $val = isset($m['value']) ? (is_numeric($m['value']) ? number_format((float)$m['value'],0,',','.') : (string)$m['value']) : '-';
-            $render(['key'=>'extra_'.$i,'label'=>$m['label'] ?? '','value'=>$val,'icon'=>$m['icon'] ?? '📌','color'=>$m['color'] ?? $palette[$i%count($palette)],'url'=>$m['url'] ?? '']);
+            $render(['key'=>'extra_'.$i,'label'=>$m['label'] ?? '','value'=>$val,'icon'=>$m['icon'] ?? rmi_icon('target'),'color'=>$m['color'] ?? $palette[$i%count($palette)],'url'=>$m['url'] ?? '']);
         }
         echo '</div></div></div>';
     }

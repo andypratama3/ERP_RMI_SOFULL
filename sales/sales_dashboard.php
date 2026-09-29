@@ -535,10 +535,10 @@ function sd_duration(?float $sec): string {
 // ── Stage config ──────────────────────────────────────────────────────────
 $stageConfig = [
     'CRM' => ['icon'=>'💼','color'=>'#3b82f6','label'=>'CRM',   'desc'=>'Input & approval DO',         'url'=>'sales_do.php',            'tasks_url'=>null],
-    'WQS' => ['icon'=>'📦','color'=>'#f97316','label'=>'WQS',   'desc'=>'Picking & packing',            'url'=>'../stock/wqs_picking.php', 'tasks_url'=>'../stock/wqs_do_tasks.php'],
+    'WQS' => ['icon'=>rmi_icon('box'),'color'=>'#f97316','label'=>'WQS',   'desc'=>'Picking & packing',            'url'=>'../stock/wqs_picking.php', 'tasks_url'=>'../stock/wqs_do_tasks.php'],
     'SCM' => ['icon'=>'🚢','color'=>'#06b6d4','label'=>'SCM',   'desc'=>'Logistik & forwarding',        'url'=>'scm_do_tasks.php',         'tasks_url'=>'scm_do_tasks.php'],
-    'ACT' => ['icon'=>'📝','color'=>'#f59e0b','label'=>'ACT',   'desc'=>'Accounting & verifikasi',      'url'=>'act_do_tasks.php',         'tasks_url'=>'act_do_tasks.php'],
-    'FIN' => ['icon'=>'💰','color'=>'#22c55e','label'=>'FIN',   'desc'=>'Invoice & payment',            'url'=>'fin_do_tasks.php',         'tasks_url'=>'fin_do_tasks.php'],
+    'ACT' => ['icon'=>rmi_icon('memo'),'color'=>'#f59e0b','label'=>'ACT',   'desc'=>'Accounting & verifikasi',      'url'=>'act_do_tasks.php',         'tasks_url'=>'act_do_tasks.php'],
+    'FIN' => ['icon'=>rmi_icon('money'),'color'=>'#22c55e','label'=>'FIN',   'desc'=>'Invoice & payment',            'url'=>'fin_do_tasks.php',         'tasks_url'=>'fin_do_tasks.php'],
 ];
 
 // ── View ──────────────────────────────────────────────────────────────────
@@ -547,11 +547,11 @@ $bp  = rtrim((string)(rmi_layout_base_project() ?? ''), '/');
 $pfx = $bp !== '' ? $bp . '/' : '../';
 
 $actions = [
-    ['label' => '📚 Panduan',          'url' => 'panduan.php',                 'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => '🗼 Control Tower',    'url' => 'sales_control_tower.php',    'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => '🎯 MPR Pipeline',     'url' => '../mpr/mpr_pipeline.php',    'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => '🧾 Tax Invoice',      'url' => 'tax_invoices.php',           'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => '📊 KPI / SLA',        'url' => '../kpi/kpi_do_sla.php',      'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books') . ' Panduan',          'url' => 'panduan.php',                 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('tower') . ' Control Tower',    'url' => 'sales_control_tower.php',    'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('target') . ' MPR Pipeline',     'url' => '../mpr/mpr_pipeline.php',    'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('receipt') . ' Tax Invoice',      'url' => 'tax_invoices.php',           'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('chart') . ' KPI / SLA',        'url' => '../kpi/kpi_do_sla.php',      'class' => 'btn btn-sm btn-outline-light'],
     ['label' => '⬇ Export CSV',        'url' => $export_url,                  'class' => 'btn btn-sm btn-outline-light'],
 ];
 
@@ -570,7 +570,7 @@ rmi_header('Sales Dashboard', [
 .sd-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
 .sd-kpi{background:var(--rmi-card,#1a2235);border:1px solid var(--rmi-border,rgba(255,255,255,.1));border-radius:14px;border-top:3px solid var(--kc,#3b82f6);padding:14px 16px;text-decoration:none;display:block;transition:transform .15s,box-shadow .15s}
 .sd-kpi:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
-.sd-kpi-icon{font-size:18px;margin-bottom:6px}.sd-kpi-val{font-size:22px;font-weight:800;color:#fff;line-height:1}
+.sd-kpi-icon{font-size:18px;margin-bottom:6px}.sd-kpi-val{font-size:22px;font-weight:800;color:var(--rmi-text);line-height:1}
 .sd-kpi-lbl{font-size:10px;color:var(--rmi-muted,#9ca3af);text-transform:uppercase;letter-spacing:.4px;margin-top:4px}
 .sd-kpi-sub{font-size:10px;color:var(--rmi-muted,#9ca3af);margin-top:2px}
 .sd-kpi-rev{font-size:11px;font-weight:700;margin-top:3px}
@@ -609,7 +609,7 @@ rmi_header('Sales Dashboard', [
 /* ── Conversion row ── */
 .sd-conv{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .sd-conv-item{flex:1;min-width:80px;background:rgba(255,255,255,.04);border:1px solid var(--rmi-border,rgba(255,255,255,.1));border-radius:10px;padding:8px 10px;text-align:center}
-.sd-conv-val{font-size:16px;font-weight:800;color:#fff}.sd-conv-lbl{font-size:9px;color:var(--rmi-muted,#9ca3af);text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+.sd-conv-val{font-size:16px;font-weight:800;color:var(--rmi-text)}.sd-conv-lbl{font-size:9px;color:var(--rmi-muted,#9ca3af);text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
 /* ── Quick links ── */
 .sd-links{display:flex;flex-wrap:wrap;gap:8px}
 .sd-link{padding:7px 14px;border-radius:10px;text-decoration:none;font-size:12px;font-weight:600;border:1px solid var(--rmi-border,rgba(255,255,255,.12));color:#e2e8f0;background:rgba(255,255,255,.05);transition:all .15s;display:inline-flex;align-items:center;gap:5px}
@@ -619,7 +619,7 @@ rmi_header('Sales Dashboard', [
 /* ── Chart ── */
 .sd-chart-wrap{position:relative;height:200px}
 /* ── DO stat ── */
-.sd-do-stat{text-align:center;flex:1}.sd-do-stat-val{font-size:22px;font-weight:900;color:#fff}.sd-do-stat-lbl{font-size:10px;color:var(--rmi-muted,#9ca3af);text-transform:uppercase;letter-spacing:.4px}
+.sd-do-stat{text-align:center;flex:1}.sd-do-stat-val{font-size:22px;font-weight:900;color:var(--rmi-text)}.sd-do-stat-lbl{font-size:10px;color:var(--rmi-muted,#9ca3af);text-transform:uppercase;letter-spacing:.4px}
 /* ── Top customer / office table ── */
 .sd-mini-table{width:100%;border-collapse:collapse;font-size:12px}
 .sd-mini-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--rmi-muted,#9ca3af);padding:6px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left}
@@ -637,13 +637,13 @@ rmi_header('Sales Dashboard', [
 
 <?php if ($db_error !== ''): ?>
 <div class="alert alert-danger mb-3">
-  <strong>⚠ Database Error</strong><br><small><?= rmi_h($db_error) ?></small>
+  <strong><?= rmi_icon('warn') ?> Database Error</strong><br><small><?= rmi_h($db_error) ?></small>
 </div>
 <?php endif; ?>
 
 <!-- ══ Filter ══ -->
 <div class="sd-filter">
-  <div class="sd-filter-title">🔍 Filter</div>
+  <div class="sd-filter-title"><?= rmi_icon('search') ?> Filter</div>
   <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end">
 
     <!-- Quick period buttons -->
@@ -696,7 +696,7 @@ rmi_header('Sales Dashboard', [
 <!-- ══ KPI Summary ══ -->
 <div class="sd-kpi-grid">
   <a class="sd-kpi" href="sales_do.php" style="--kc:#3b82f6">
-    <div class="sd-kpi-icon">📋</div>
+    <div class="sd-kpi-icon"><?= rmi_icon('clipboard') ?></div>
     <div class="sd-kpi-val"><?= number_format($totalActive) ?></div>
     <div class="sd-kpi-lbl">DO Aktif</div>
     <?php if ($totalRevActive > 0): ?><div class="sd-kpi-rev" style="color:#67e8f9"><?= sd_money($totalRevActive) ?></div><?php endif; ?>
@@ -708,7 +708,7 @@ rmi_header('Sales Dashboard', [
     <?php if ($salesDoRevenue > 0): ?><div class="sd-kpi-rev" style="color:#a5b4fc"><?= sd_money($salesDoRevenue) ?></div><?php endif; ?>
   </a>
   <a class="sd-kpi" href="sales_do.php?status=paid" style="--kc:#22c55e">
-    <div class="sd-kpi-icon">✅</div>
+    <div class="sd-kpi-icon"><?= rmi_icon('check') ?></div>
     <div class="sd-kpi-val"><?= number_format($salesDoPaid) ?></div>
     <div class="sd-kpi-lbl">DO Paid</div>
     <?php if ($salesDoPaidRev > 0): ?><div class="sd-kpi-rev" style="color:#4ade80"><?= sd_money($salesDoPaidRev) ?></div><?php endif; ?>
@@ -727,7 +727,7 @@ rmi_header('Sales Dashboard', [
     <div class="sd-kpi-sub"><?= number_format($crmMeasuredPct,1) ?>% dari Total DO periode</div>
   </a>
   <a class="sd-kpi" href="sales_do.php" style="--kc:<?= $totalOverdue>0?'#ef4444':'#22c55e' ?>">
-    <div class="sd-kpi-icon"><?= $totalOverdue>0?'⚠':'✓' ?></div>
+    <div class="sd-kpi-icon"><?= $totalOverdue>0?rmi_icon('warn'):rmi_icon('tick') ?></div>
     <div class="sd-kpi-val"><?= number_format($totalOverdue) ?></div>
     <div class="sd-kpi-lbl">Overdue</div>
     <?php if ($salesDoBottleneckStage!=='' && $totalOverdue>0): ?>
@@ -755,7 +755,7 @@ rmi_header('Sales Dashboard', [
       </a>
       <div class="sd-pipe-count"><?= number_format($cnt) ?> DO</div>
       <?php if ($rev > 0): ?><div class="sd-pipe-rev"><?= sd_money($rev) ?></div><?php endif; ?>
-      <?php if ($od > 0): ?><div class="sd-pipe-od">⚠ <?= number_format($od) ?> OD</div><?php endif; ?>
+      <?php if ($od > 0): ?><div class="sd-pipe-od"><?= rmi_icon('warn') ?> <?= number_format($od) ?> OD</div><?php endif; ?>
     </div>
     <?php if ($stg !== 'FIN'): ?><div class="sd-pipe-arrow">›</div><?php endif; ?>
   <?php endforeach; ?>
@@ -779,9 +779,9 @@ rmi_header('Sales Dashboard', [
           <div class="sd-stage-desc"><?= rmi_h($cfg['desc']) ?></div>
           </div>
         <?php if ($od > 0): ?>
-          <span class="sd-badge-od">⚠ <?= $od ?><?= $isBottleneck?' · BN':'' ?></span>
+          <span class="sd-badge-od"><?= rmi_icon('warn') ?> <?= $od ?><?= $isBottleneck?' · BN':'' ?></span>
             <?php else: ?>
-          <span class="sd-badge-ok">✓ OK</span>
+          <span class="sd-badge-ok"><?= rmi_icon('tick') ?> OK</span>
             <?php endif; ?>
           </div>
       <div class="sd-stage-count" style="color:<?= $cfg['color'] ?>"><?= number_format($cnt) ?></div>
@@ -800,7 +800,7 @@ rmi_header('Sales Dashboard', [
     <div class="rmi-card p-3">
       <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <div>
-          <div class="fw-semibold">📈 Tren 6 Bulan</div>
+          <div class="fw-semibold"><?= rmi_icon('trend') ?> Tren 6 Bulan</div>
           <div class="rmi-muted small">DO count & Revenue (Juta Rp)</div>
         </div>
         <div style="display:flex;gap:8px;font-size:11px">
@@ -817,7 +817,7 @@ rmi_header('Sales Dashboard', [
   <!-- Sales DO Summary + Top Customers -->
   <div class="col-md-6 col-xl-4">
     <div class="rmi-card p-3 h-100 d-flex flex-column">
-      <div class="fw-semibold mb-1">📋 Sales DO Summary</div>
+      <div class="fw-semibold mb-1"><?= rmi_icon('clipboard') ?> Sales DO Summary</div>
       <div class="rmi-muted small mb-3"><?= rmi_h($date_from) ?> s/d <?= rmi_h($date_to) ?></div>
       <div class="d-flex gap-3 mb-3">
         <div class="sd-do-stat">
@@ -850,11 +850,11 @@ rmi_header('Sales Dashboard', [
       </div>
       <?php endif; ?>
       <?php if ($salesDoBottleneckStage!=='' && $totalOverdue>0): ?>
-        <div class="sd-badge-od mb-2" style="display:inline-block;font-size:11px">⚠ Bottleneck: <?= rmi_h($salesDoBottleneckStage) ?> (<?= $stage_overdue[$salesDoBottleneckStage] ?> OD)</div>
+        <div class="sd-badge-od mb-2" style="display:inline-block;font-size:11px"><?= rmi_icon('warn') ?> Bottleneck: <?= rmi_h($salesDoBottleneckStage) ?> (<?= $stage_overdue[$salesDoBottleneckStage] ?> OD)</div>
       <?php endif; ?>
       <div class="mt-auto d-flex gap-2 flex-wrap">
-        <a class="btn btn-rmi btn-sm" href="sales_do.php">📋 Buat DO</a>
-        <a class="btn btn-ghost btn-sm" href="sales_control_tower.php">🗼 Tower</a>
+        <a class="btn btn-rmi btn-sm" href="sales_do.php"><?= rmi_icon('clipboard') ?> Buat DO</a>
+        <a class="btn btn-ghost btn-sm" href="sales_control_tower.php"><?= rmi_icon('tower') ?> Tower</a>
         <a class="btn btn-ghost btn-sm" href="<?= rmi_h($export_url) ?>">⬇ Export</a>
       </div>
     </div>
@@ -890,7 +890,7 @@ rmi_header('Sales Dashboard', [
   <?php if (!empty($officeBreakdown) && count($officeBreakdown) > 1): ?>
   <div class="col-md-6 col-xl-4">
     <div class="rmi-card p-3">
-      <div class="fw-semibold mb-1">🏢 Per Office</div>
+      <div class="fw-semibold mb-1"><?= rmi_icon('office') ?> Per Office</div>
       <div class="rmi-muted small mb-3">Perbandingan DO BMHP & revenue BMHP per kantor</div>
       <?php
       $maxOffRev = max(1.0, ...array_map(fn($o)=>(float)$o['revenue'], $officeBreakdown));
@@ -924,7 +924,7 @@ rmi_header('Sales Dashboard', [
           <div class="fw-semibold">⏱ Kinerja Waktu CRM</div>
           <div class="rmi-muted small">Sumber: sales_do.crm_duration_sec; legacy fallback dari Jam Order Customer/RS ke timestamp penyelesaian DO.</div>
         </div>
-        <a class="btn btn-ghost btn-sm" href="../mpr/mpr_pipeline.php">🎯 Leads ada di MPR Pipeline</a>
+        <a class="btn btn-ghost btn-sm" href="../mpr/mpr_pipeline.php"><?= rmi_icon('target') ?> Leads ada di MPR Pipeline</a>
       </div>
       <div class="row g-2">
         <div class="col-sm-4">
@@ -956,19 +956,19 @@ rmi_header('Sales Dashboard', [
   <!-- Quick Links -->
   <div class="col-12">
     <div class="rmi-card p-3">
-      <div class="fw-semibold mb-3">⚡ Akses Cepat</div>
+      <div class="fw-semibold mb-3"><?= rmi_icon('zap') ?> Akses Cepat</div>
       <div class="sd-links">
-        <a class="sd-link primary" href="sales_do.php">📋 Buat DO</a>
-        <a class="sd-link primary" href="../mpr/mpr_pipeline.php">🎯 MPR Pipeline</a>
-        <a class="sd-link primary" href="sales_control_tower.php">🗼 Sales Control Tower</a>
-        <a class="sd-link" href="<?= rmi_h($pfx) ?>master/master_customers.php">👥 Master Customer</a>
+        <a class="sd-link primary" href="sales_do.php"><?= rmi_icon('clipboard') ?> Buat DO</a>
+        <a class="sd-link primary" href="../mpr/mpr_pipeline.php"><?= rmi_icon('target') ?> MPR Pipeline</a>
+        <a class="sd-link primary" href="sales_control_tower.php"><?= rmi_icon('tower') ?> Sales Control Tower</a>
+        <a class="sd-link" href="<?= rmi_h($pfx) ?>master/master_customers.php"><?= rmi_icon('users') ?> Master Customer</a>
         <a class="sd-link" href="<?= rmi_h($pfx) ?>master/master_user.php">🤝 Master User / PIC Customers</a>
         <a class="sd-link" href="<?= rmi_h($pfx) ?>master/master_pricelist_sell.php">💲 Pricelist Jual</a>
         <a class="sd-link" href="<?= rmi_h($pfx) ?>customer_portal/login.php" target="_blank">🌐 Customer Portal</a>
-        <a class="sd-link" href="<?= rmi_h($pfx) ?>kpi/kpi_do_sla.php">📊 KPI SLA</a>
-        <a class="sd-link" href="<?= rmi_h($pfx) ?>kpi/kpi_do_audit.php">🔍 KPI Audit</a>
+        <a class="sd-link" href="<?= rmi_h($pfx) ?>kpi/kpi_do_sla.php"><?= rmi_icon('chart') ?> KPI SLA</a>
+        <a class="sd-link" href="<?= rmi_h($pfx) ?>kpi/kpi_do_audit.php"><?= rmi_icon('search') ?> KPI Audit</a>
         <a class="sd-link" href="<?= rmi_h($pfx) ?>dashboards/funnels.php">🌊 Funnel Overview</a>
-        <a class="sd-link" href="tax_invoices.php">🧾 Tax Invoice</a>
+        <a class="sd-link" href="tax_invoices.php"><?= rmi_icon('receipt') ?> Tax Invoice</a>
         <a class="sd-link" href="<?= rmi_h($export_url) ?>">⬇ Export CSV</a>
       </div>
     </div>

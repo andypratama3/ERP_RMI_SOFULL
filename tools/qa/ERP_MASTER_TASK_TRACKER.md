@@ -136,3 +136,8 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - rmi.css: topbar/field adaptif light; print global.
 - Helper _shared/rmi_icons.php (28 icon) + bootstrap wire.
 - PO print: Prepared/Approved terisi dari audit.
+
+## Sapuan 6 agen G1-G6 terverifikasi
+- 173 file, php -l bersih semua, tanpa overlap antar agen.
+- Smoke 7 halaman 200 + nol fatal; helper render benar, tanpa leak literal.
+- Mojibake wqs + const→define + JS ✓ ditangani agen.

@@ -4,6 +4,7 @@
  * Submit order → create sales_do.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_once __DIR__ . '/../master/_audit_master.php';
@@ -254,7 +255,7 @@ ob_start();
   <a href="<?= rmi_h($base) ?>/customer_portal/cart.php" style="color:#16a34a;text-decoration:none;font-size:14px">← Kembali ke Keranjang</a>
 </div>
 
-<h4 class="fw-bold mb-4">✅ Konfirmasi & Checkout</h4>
+<h4 class="fw-bold mb-4"><?= rmi_icon('check') ?> Konfirmasi & Checkout</h4>
 
 <?php if (!empty($flash)): ?>
   <div class="alert cp-alert alert-<?= rmi_h($flash['type']??'danger') ?> mb-4"><?= $flash['msg']??'' ?></div>
@@ -270,7 +271,7 @@ ob_start();
       <!-- Office -->
       <?php if (count($officeList) > 1): ?>
       <div class="cp-card mb-3">
-        <div class="cp-card-header">🏢 Kantor RMI Tujuan</div>
+        <div class="cp-card-header"><?= rmi_icon('office') ?> Kantor RMI Tujuan</div>
         <div class="p-3">
           <select name="office_code" class="form-select">
             <?php foreach ($officeList as $o):
@@ -290,7 +291,7 @@ ob_start();
 
       <!-- Pengiriman -->
       <div class="cp-card mb-3">
-        <div class="cp-card-header">📍 Info Pengiriman</div>
+        <div class="cp-card-header"><?= rmi_icon('target') ?> Info Pengiriman</div>
         <div class="p-3">
           <div class="mb-3">
             <label class="form-label fw-semibold" style="font-size:13px">Alamat Pengiriman <span class="text-danger">*</span></label>
@@ -319,7 +320,7 @@ ob_start();
 
       <!-- Catatan -->
       <div class="cp-card mb-3">
-        <div class="cp-card-header">📝 Catatan (Opsional)</div>
+        <div class="cp-card-header"><?= rmi_icon('memo') ?> Catatan (Opsional)</div>
         <div class="p-3">
           <textarea name="note" class="form-control" rows="2"
                     style="border-radius:10px;border:2px solid #e2e8f0;font-size:14px"
@@ -329,7 +330,7 @@ ob_start();
 
       <!-- Submit -->
       <button type="submit" class="btn btn-rmi w-100 py-3 fw-bold" style="font-size:16px">
-        🛒 Buat Order Sekarang
+        <?= rmi_icon('cart') ?> Buat Order Sekarang
       </button>
       <div class="text-center text-muted mt-2" style="font-size:12px">
         Dengan menekan tombol di atas, order akan dikirim ke tim CRM RMI untuk diproses
@@ -340,13 +341,13 @@ ob_start();
   <!-- Order Summary -->
   <div class="col-lg-5">
     <div class="cp-card" style="position:sticky;top:20px">
-      <div class="cp-card-header">📋 Ringkasan Order</div>
+      <div class="cp-card-header"><?= rmi_icon('clipboard') ?> Ringkasan Order</div>
       <div class="p-3">
         <!-- Items -->
         <div class="mb-3" style="max-height:280px;overflow-y:auto">
           <?php foreach ($cart as $it): $sub = ($it['qty']??0)*($it['unit_price']??0); ?>
           <div class="d-flex gap-2 mb-2 pb-2" style="border-bottom:1px solid #f1f5f9">
-            <div style="font-size:16px;flex-shrink:0">📦</div>
+            <div style="font-size:16px;flex-shrink:0"><?= rmi_icon('box') ?></div>
             <div class="flex-grow-1 min-width-0">
               <div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><?= rmi_h($it['name']??'') ?></div>
               <div style="font-size:11px;color:#94a3b8"><?= (int)($it['qty']??0) ?> <?= rmi_h($it['unit']??'unit') ?> × Rp <?= number_format((float)($it['unit_price']??0),0,',','.') ?></div>
@@ -375,7 +376,7 @@ ob_start();
 
         <!-- Info -->
         <div class="mt-3 p-3" style="background:#eff6ff;border-radius:10px;font-size:12px;color:#1e40af">
-          ℹ️ <strong>Proses Selanjutnya:</strong><br>
+          <?= rmi_icon('question') ?> <strong>Proses Selanjutnya:</strong><br>
           Tim CRM RMI akan menghubungi Anda untuk konfirmasi order dan informasi pengiriman.
         </div>
       </div>

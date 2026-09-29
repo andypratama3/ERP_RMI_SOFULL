@@ -444,11 +444,11 @@ body{background:#0b1220;color:#e8ecf4}
 .scm-k-icon{font-size:18px;margin-bottom:5px}
 .scm-k-val{font-size:22px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
 .scm-k-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
-.scm-k-sub{font-size:10px;color:#374151;margin-top:2px}
-.scm-sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#475569;margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+.scm-k-sub{font-size:10px;color:var(--rmi-muted);margin-top:2px}
+.scm-sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--rmi-muted);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
 .scm-sh::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.08)}
 .scm-tbl{width:100%;border-collapse:collapse;font-size:12px}
-.scm-tbl th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#475569;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;white-space:nowrap}
+.scm-tbl th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--rmi-muted);padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;white-space:nowrap}
 .scm-tbl td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
 .scm-tbl tr:hover td{background:rgba(255,255,255,.02)}
 .scm-tbl tr:last-child td{border-bottom:none}
@@ -463,7 +463,7 @@ body{background:#0b1220;color:#e8ecf4}
 .scm-wrap,.scm-hdr,.scm-k,.rmi-card{position:relative;z-index:1}
 </style>',
     'actions' => [
-        ['label' => '📚 Panduan', 'url' => scm_u('/dashboards/scm/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('books').' Panduan', 'url' => scm_u('/dashboards/scm/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -472,19 +472,19 @@ body{background:#0b1220;color:#e8ecf4}
   <!-- Header -->
   <div class="scm-hdr">
     <div>
-      <h2>🚢 <?= $isDeliveryOnlySCM ? 'SCM Delivery Dashboard' : 'SCM Dashboard' ?></h2>
+      <h2><?=rmi_icon('box')?> <?= $isDeliveryOnlySCM ? 'SCM Delivery Dashboard' : 'SCM Dashboard' ?></h2>
       <p><?= $isDeliveryOnlySCM ? 'Pengiriman Bandung — BMHP + Unit ACC — Delivery Only' : 'Supply Chain — Delivery, Import, Forwarding, Procurement' ?></p>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <a class="scm-link" href="<?= h(scm_u('/dashboards/index.php')) ?>">🏠 Home</a>
-      <?php if (!$isDeliveryOnlySCM): ?><a class="scm-link primary" href="<?= h(scm_u('/purchases/purchases_import_control_tower.php')) ?>">🗼 Import Tower</a><?php endif; ?>
+      <a class="scm-link" href="<?= h(scm_u('/dashboards/index.php')) ?>"><?=rmi_icon('home')?> Home</a>
+      <?php if (!$isDeliveryOnlySCM): ?><a class="scm-link primary" href="<?= h(scm_u('/purchases/purchases_import_control_tower.php')) ?>"><?=rmi_icon('tower')?> Import Tower</a><?php endif; ?>
     </div>
   </div>
 
   <!-- Alerts -->
   <?php if ($kpi['do_waiting_scm'] > 0): ?>
   <div style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px">
-    <span style="font-size:18px">📦</span>
+    <span style="font-size:18px"><?=rmi_icon('box')?></span>
     <span><strong style="color:#67e8f9"><?= $kpi['do_waiting_scm'] ?> DO menunggu tindakan SCM</strong>
     <?php if ($kpi['do_on_delivery'] > 0): ?>
       <span style="color:#94a3b8"> — <?= $kpi['do_on_delivery'] ?> sedang on-delivery</span>
@@ -499,15 +499,15 @@ body{background:#0b1220;color:#e8ecf4}
 
     <!-- KRITIS: DO Waiting SCM -->
     <a class="scm-k" href="<?= h(scm_u('/sales/scm_do_tasks.php')) ?>" style="--kc:<?= $kpi['do_waiting_scm']>0?'#06b6d4':'#64748b' ?>">
-      <div class="scm-k-icon">📦</div>
+      <div class="scm-k-icon"><?=rmi_icon('box')?></div>
       <div class="scm-k-val" style="color:<?= $kpi['do_waiting_scm']>0?'#67e8f9':'#fff' ?>"><?= scm_num($kpi['do_waiting_scm']) ?></div>
       <div class="scm-k-lbl">DO Waiting SCM</div>
-      <div class="scm-k-sub"><?= $kpi['do_waiting_scm']>0?'⚡ Perlu tindakan':'✓ Clear' ?></div>
+      <div class="scm-k-sub"><?= $kpi['do_waiting_scm']>0?rmi_icon('zap').' Perlu tindakan':rmi_icon('tick').' Clear' ?></div>
     </a>
 
     <!-- On Delivery -->
     <a class="scm-k" href="<?= h(scm_u('/sales/scm_do_tasks.php')) ?>" style="--kc:#22c55e">
-      <div class="scm-k-icon">🚛</div>
+      <div class="scm-k-icon"><?=rmi_icon('box')?></div>
       <div class="scm-k-val" style="color:<?= $kpi['do_on_delivery']>0?'#4ade80':'#fff' ?>"><?= scm_num($kpi['do_on_delivery']) ?></div>
       <div class="scm-k-lbl">On Delivery</div>
       <div class="scm-k-sub">Sedang dalam pengiriman</div>
@@ -516,7 +516,7 @@ body{background:#0b1220;color:#e8ecf4}
     <?php if (!$isDeliveryOnlySCM): ?>
 <!-- Forwarding -->
     <a class="scm-k" href="<?= h(scm_u('/purchases/purchases_forwarding_tasks.php')) ?>" style="--kc:<?= $kpi['forwarding_open']>0?'#f97316':'#64748b' ?>">
-      <div class="scm-k-icon">🚢</div>
+      <div class="scm-k-icon"><?=rmi_icon('box')?></div>
       <div class="scm-k-val" style="color:<?= $kpi['forwarding_open']>0?'#fb923c':'#fff' ?>"><?= scm_num($kpi['forwarding_open']) ?></div>
       <div class="scm-k-lbl">Forwarding Aktif</div>
       <div class="scm-k-sub"><?= $kpi['forwarding_open']>0?'Dalam proses':'—' ?></div>
@@ -525,7 +525,7 @@ body{background:#0b1220;color:#e8ecf4}
 
     <!-- Avg SLA SCM -->
     <div class="scm-k" style="--kc:#a855f7">
-      <div class="scm-k-icon">⏱️</div>
+      <div class="scm-k-icon"><?=rmi_icon('calendar')?></div>
       <div class="scm-k-val" style="color:#c084fc"><?= number_format((float)$kpi['avg_sla_hours'],1,',','.') ?> jam</div>
       <div class="scm-k-lbl">Avg Durasi SLA SCM</div>
       <div class="scm-k-sub"><?= scm_num((int)$kpi['avg_sla_count']) ?> DO selesai SCM</div>
@@ -534,7 +534,7 @@ body{background:#0b1220;color:#e8ecf4}
     <?php if (!$isDeliveryOnlySCM): ?>
     <!-- Vendors -->
     <a class="scm-k" href="<?= h(scm_u('/master/master_vendors.php')) ?>" style="--kc:#06b6d4">
-      <div class="scm-k-icon">🤝</div>
+      <div class="scm-k-icon"><?=rmi_icon('users')?></div>
       <div class="scm-k-val"><?= scm_num($kpi['vendors_total']) ?></div>
       <div class="scm-k-lbl">Total Vendor</div>
       <div class="scm-k-sub">Fwd: <?= $kpi['vendors_forward'] ?> · Log: <?= $kpi['vendors_logistic'] ?></div>
@@ -549,13 +549,13 @@ body{background:#0b1220;color:#e8ecf4}
     <?php if (!$isDeliveryOnlySCM): ?>
     <div class="col-lg-5">
       <div class="rmi-card p-3">
-        <div class="scm-sh" style="margin-top:0">🚢 Procurement / Import Snapshot</div>
+        <div class="scm-sh" style="margin-top:0"><?=rmi_icon('box')?> Procurement / Import Snapshot</div>
         <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
           <?php
           $funnelItems = [
-              ['icon'=>'🛒','label'=>'PO','count'=>$funnel['po'],'color'=>'#3b82f6'],
-              ['icon'=>'📋','label'=>'PIB','count'=>$funnel['pib'],'color'=>'#8b5cf6'],
-              ['icon'=>'💳','label'=>'AP','count'=>$funnel['ap'],'color'=>'#f59e0b'],
+              ['icon'=>rmi_icon('cart'),'label'=>'PO','count'=>$funnel['po'],'color'=>'#3b82f6'],
+              ['icon'=>rmi_icon('clipboard'),'label'=>'PIB','count'=>$funnel['pib'],'color'=>'#8b5cf6'],
+              ['icon'=>rmi_icon('money'),'label'=>'AP','count'=>$funnel['ap'],'color'=>'#f59e0b'],
           ];
           $maxFunnel = max(1, ...array_column($funnelItems, 'count'));
           foreach ($funnelItems as $i => $fi):
@@ -568,7 +568,7 @@ body{background:#0b1220;color:#e8ecf4}
             </div>
           <?php endforeach; ?>
         </div>
-        <div style="font-size:11px;color:#374151;line-height:1.6">
+        <div style="font-size:11px;color:var(--rmi-muted);line-height:1.6">
           Alur: PO → PIB (jika impor) → GR → AP. Angka di atas adalah snapshot tiap tahap yang tersedia dan tidak dikurangkan satu sama lain kecuali relasi PO sudah tervalidasi.
 
         </div>
@@ -576,7 +576,7 @@ body{background:#0b1220;color:#e8ecf4}
         <!-- Vendor breakdown -->
         <?php if ($kpi['vendors_total'] > 0): ?>
         <div style="margin-top:12px;border-top:1px solid rgba(255,255,255,.08);padding-top:10px">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#475569;margin-bottom:8px">Tipe Vendor</div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--rmi-muted);margin-bottom:8px">Tipe Vendor</div>
           <?php
           $vendorData = [
               ['label'=>'Forwarding', 'cnt'=>$kpi['vendors_forward'],  'color'=>'#06b6d4'],
@@ -608,8 +608,8 @@ body{background:#0b1220;color:#e8ecf4}
     <div class="<?= $isDeliveryOnlySCM ? 'col-12' : 'col-lg-7' ?>">
       <div class="rmi-card p-3">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <div class="scm-sh" style="margin:0">📈 SCM Delivery Trend (30 Hari)</div>
-          <span style="font-size:11px;color:#475569"><?= h(date('Y-m-d', strtotime('-29 days'))) ?> → <?= h(date('Y-m-d')) ?></span>
+          <div class="scm-sh" style="margin:0"><?=rmi_icon('trend')?> SCM Delivery Trend (30 Hari)</div>
+          <span style="font-size:11px;color:var(--rmi-muted)"><?= h(date('Y-m-d', strtotime('-29 days'))) ?> → <?= h(date('Y-m-d')) ?></span>
         </div>
         <div style="height:220px;overflow:hidden"><?= scm_delivery_svg($deliveryTrend) ?></div>
       </div>
@@ -621,11 +621,11 @@ body{background:#0b1220;color:#e8ecf4}
     <div class="col-12">
       <div class="rmi-card p-3">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <div class="scm-sh" style="margin:0">📦 Task DO SCM Aktif</div>
+          <div class="scm-sh" style="margin:0"><?=rmi_icon('box')?> Task DO SCM Aktif</div>
           <a href="<?= h(scm_u('/sales/scm_do_tasks.php')) ?>" style="font-size:11px;color:#67e8f9;text-decoration:none">Buka semua →</a>
         </div>
         <?php if (empty($recentSCMTasks)): ?>
-          <div style="color:#4b5563;font-size:13px;padding:16px 0;text-align:center">✅ Tidak ada DO menunggu tindakan SCM.</div>
+          <div style="color:var(--rmi-muted);font-size:13px;padding:16px 0;text-align:center"><?=rmi_icon('check')?> Tidak ada DO menunggu tindakan SCM.</div>
         <?php else: ?>
           <div class="table-responsive">
           <table class="scm-tbl">
@@ -661,24 +661,24 @@ body{background:#0b1220;color:#e8ecf4}
 
   <!-- Quick Links -->
   <div class="rmi-card p-3">
-    <div class="scm-sh" style="margin-top:0">⚡ Quick Links</div>
+    <div class="scm-sh" style="margin-top:0"><?=rmi_icon('zap')?> Quick Links</div>
     <div class="scm-links">
-      <a class="scm-link primary" href="<?= h(scm_u('/sales/scm_do_tasks.php')) ?>">📦 SCM Task DO</a>
+      <a class="scm-link primary" href="<?= h(scm_u('/sales/scm_do_tasks.php')) ?>"><?=rmi_icon('box')?> SCM Task DO</a>
       <?php if (!$isDeliveryOnlySCM): ?>
-      <a class="scm-link primary" href="<?= h(scm_u('/purchases/purchases_import_control_tower.php')) ?>">🗼 Import Tower</a>
-      <a class="scm-link primary" href="<?= h(scm_u('/purchases/purchases_forwarding_tasks.php')) ?>">🚢 Forwarding Tasks</a>
-      <a class="scm-link" href="<?= h(scm_u('/purchases/purchases_po.php')) ?>">🛒 Purchase Order</a>
-      <a class="scm-link" href="<?= h(scm_u('/purchases/purchases_ceisa_pib.php')) ?>">📋 PIB / CEISA</a>
-      <a class="scm-link" href="<?= h(scm_u('/purchases/purchases_gr.php')) ?>">✅ Good Receipt</a>
-      <a class="scm-link" href="<?= h(scm_u('/stock/wqs_pr.php')) ?>">📝 Purchase Request</a>
-      <a class="scm-link" href="<?= h(scm_u('/stock/wqs_incoming.php')) ?>">📥 WQS Incoming</a>
-      <?php if ($canOpenManagerSCM): ?><a class="scm-link" href="<?= h(scm_u('/sales/sales_control_tower.php')) ?>">🗼 Sales Control Tower</a><?php endif; ?>
-      <a class="scm-link" href="<?= h(scm_u('/master/master_vendors.php')) ?>">🤝 Master Vendor</a>
-      <a class="scm-link" href="<?= h(scm_u('/master/master_manufactures.php')) ?>">🏭 Master Manufacturer</a>
-      <?php if ($canOpenManagerSCM): ?><a class="scm-link" href="<?= h(scm_u('/kpi/kpi_center.php')) ?>">📈 KPI Center</a><?php endif; ?>
+      <a class="scm-link primary" href="<?= h(scm_u('/purchases/purchases_import_control_tower.php')) ?>"><?=rmi_icon('tower')?> Import Tower</a>
+      <a class="scm-link primary" href="<?= h(scm_u('/purchases/purchases_forwarding_tasks.php')) ?>"><?=rmi_icon('box')?> Forwarding Tasks</a>
+      <a class="scm-link" href="<?= h(scm_u('/purchases/purchases_po.php')) ?>"><?=rmi_icon('cart')?> Purchase Order</a>
+      <a class="scm-link" href="<?= h(scm_u('/purchases/purchases_ceisa_pib.php')) ?>"><?=rmi_icon('clipboard')?> PIB / CEISA</a>
+      <a class="scm-link" href="<?= h(scm_u('/purchases/purchases_gr.php')) ?>"><?=rmi_icon('check')?> Good Receipt</a>
+      <a class="scm-link" href="<?= h(scm_u('/stock/wqs_pr.php')) ?>"><?=rmi_icon('memo')?> Purchase Request</a>
+      <a class="scm-link" href="<?= h(scm_u('/stock/wqs_incoming.php')) ?>"><?=rmi_icon('inbox')?> WQS Incoming</a>
+      <?php if ($canOpenManagerSCM): ?><a class="scm-link" href="<?= h(scm_u('/sales/sales_control_tower.php')) ?>"><?=rmi_icon('tower')?> Sales Control Tower</a><?php endif; ?>
+      <a class="scm-link" href="<?= h(scm_u('/master/master_vendors.php')) ?>"><?=rmi_icon('users')?> Master Vendor</a>
+      <a class="scm-link" href="<?= h(scm_u('/master/master_manufactures.php')) ?>"><?=rmi_icon('office')?> Master Manufacturer</a>
+      <?php if ($canOpenManagerSCM): ?><a class="scm-link" href="<?= h(scm_u('/kpi/kpi_center.php')) ?>"><?=rmi_icon('trend')?> KPI Center</a><?php endif; ?>
       <?php endif; ?>
-      <a class="scm-link" href="<?= h(scm_u('/absensi/index.php')) ?>">📅 Absensi</a>
-      <a class="scm-link primary" href="<?= h(scm_u('/dashboards/scm/panduan.php')) ?>" style="border-color:rgba(139,92,246,.5);color:#c4b5fd">📚 Panduan SCM</a>
+      <a class="scm-link" href="<?= h(scm_u('/absensi/index.php')) ?>"><?=rmi_icon('calendar')?> Absensi</a>
+      <a class="scm-link primary" href="<?= h(scm_u('/dashboards/scm/panduan.php')) ?>" style="border-color:rgba(139,92,246,.5);color:#c4b5fd"><?=rmi_icon('books')?> Panduan SCM</a>
     </div>
   </div>
 
@@ -740,7 +740,7 @@ body{background:#0b1220;color:#e8ecf4}
   <section class="rmi-card p-3 mb-3" style="margin-top:14px">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
       <div class="fw-semibold">
-        📋 Audit Log Terbaru
+        <?=rmi_icon('clipboard')?> Audit Log Terbaru
         <span style="font-size:12px;font-weight:400;opacity:.55;margin-left:8px">
           <?= $isDeliveryOnlySCM ? 'SCM' : 'SCM, PURCHASES, PO, PR, FORWARDING, IMPORT, CEISA, GR, AP' ?>
         </span>

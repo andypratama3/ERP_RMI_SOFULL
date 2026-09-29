@@ -4,6 +4,7 @@
  * Dashboard Manufacturer Portal.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_mportal_login();
@@ -102,8 +103,8 @@ $content = '
 <!-- Welcome Banner -->
 <div class="mp-welcome-banner">
   <div>
-    <div class="mp-welcome-name">👋 ' . rmi_h(mportal_t('welcome')) . ', ' . rmi_h($user['full_name'] ?: $user['username']) . '</div>
-    <div class="mp-welcome-sub">🏭 ' . rmi_h($manuName) . ' &nbsp;·&nbsp; <code style="color:rgba(255,255,255,.8);font-size:11px">' . rmi_h($mc) . '</code></div>
+    <div class="mp-welcome-name">' . rmi_icon('user') . ' ' . rmi_h(mportal_t('welcome')) . ', ' . rmi_h($user['full_name'] ?: $user['username']) . '</div>
+    <div class="mp-welcome-sub">' . rmi_icon('office') . ' ' . rmi_h($manuName) . ' &nbsp;·&nbsp; <code style="color:rgba(255,255,255,.8);font-size:11px">' . rmi_h($mc) . '</code></div>
   </div>
   <div style="text-align:right;font-size:12px;color:rgba(255,255,255,.85)">' . date('d M Y') . '</div>
 </div>
@@ -111,45 +112,45 @@ $content = '
 <!-- KPI -->
 <div class="mp-kpi-grid">
   <div class="mp-kpi-c" style="--mc:#3b82f6">
-    <div class="mp-kpi-icon">📋</div>
+    <div class="mp-kpi-icon">' . rmi_icon('clipboard') . '</div>
     <div class="mp-kpi-val">' . $caseCount . '</div>
     <div class="mp-kpi-lbl">' . rmi_h(mportal_t('active_cases')) . '</div>
   </div>
   <div class="mp-kpi-c" style="--mc:' . ($pendingCount > 0 ? '#f59e0b' : '#22c55e') . '">
-    <div class="mp-kpi-icon">' . ($pendingCount > 0 ? '⏳' : '✅') . '</div>
+    <div class="mp-kpi-icon">' . ($pendingCount > 0 ? rmi_icon('calendar') : rmi_icon('check')) . '</div>
     <div class="mp-kpi-val">' . $pendingCount . '</div>
     <div class="mp-kpi-lbl">' . rmi_h(mportal_t('pending_upload')) . '</div>
   </div>
 </div>
 
 <!-- Quick Actions -->
-<div class="mp-section-title">⚡ Quick Actions</div>
+<div class="mp-section-title">' . rmi_icon('zap') . ' Quick Actions</div>
 <div class="mp-actions">
-  <a class="mp-action-btn primary" href="' . rmi_h($base) . '/manufacturer_portal/cases.php">📋 ' . rmi_h(mportal_t('btn_view_cases')) . '</a>
-  <a class="mp-action-btn outline" href="' . rmi_h($base) . '/manufacturer_portal/rfq.php">📩 ' . rmi_h(mportal_t('rfq')) . '</a>
-  <a class="mp-action-btn outline" href="' . rmi_h($base) . '/manufacturer_portal/manufacture_docs.php">📤 ' . rmi_h(mportal_t('btn_partnership')) . '</a>
+  <a class="mp-action-btn primary" href="' . rmi_h($base) . '/manufacturer_portal/cases.php">' . rmi_icon('clipboard') . ' ' . rmi_h(mportal_t('btn_view_cases')) . '</a>
+  <a class="mp-action-btn outline" href="' . rmi_h($base) . '/manufacturer_portal/rfq.php">' . rmi_icon('inbox') . ' ' . rmi_h(mportal_t('rfq')) . '</a>
+  <a class="mp-action-btn outline" href="' . rmi_h($base) . '/manufacturer_portal/manufacture_docs.php">' . rmi_icon('outbox') . ' ' . rmi_h(mportal_t('btn_partnership')) . '</a>
 </div>
 
 <div class="row g-3">
   <div class="col-md-8">
     ' . ($casesForUpload ? '
-    <div class="mp-section-title">📤 ' . rmi_h(mportal_t('upload_per_case')) . '</div>
+    <div class="mp-section-title">' . rmi_icon('outbox') . ' ' . rmi_h(mportal_t('upload_per_case')) . '</div>
     <div class="mp-case-list">
       ' . implode('', array_map(function($c) use ($base) {
           $stageLabel = (int)$c['stage_no'] >= 11 ? 'Revisi' : 'Stage ' . (int)$c['stage_no'];
           return '<a href="' . rmi_h($base) . '/manufacturer_portal/case_detail.php?id=' . (int)$c['id'] . '" class="mp-case-item">'
             . '<div><span class="mp-case-code">' . rmi_h($c['case_code']) . '</span> &nbsp;'
             . '<span style="color:#64748b">' . rmi_h($c['product_name']) . '</span></div>'
-            . '<span class="mp-case-badge">📤 Upload · ' . rmi_h($stageLabel) . '</span>'
+            . '<span class="mp-case-badge">' . rmi_icon('outbox') . ' Upload · ' . rmi_h($stageLabel) . '</span>'
             . '</a>';
       }, $casesForUpload)) . '
     </div>' : '
     <div class="mp-no-case">
-      ✅ ' . rmi_h(mportal_t('no_case_msg')) . '
+      ' . rmi_icon('check') . ' ' . rmi_h(mportal_t('no_case_msg')) . '
     </div>') . '
   </div>
   <div class="col-md-4">
-    <div class="mp-section-title">📖 ' . rmi_h(mportal_t('info_flow')) . '</div>
+    <div class="mp-section-title">' . rmi_icon('books') . ' ' . rmi_h(mportal_t('info_flow')) . '</div>
     <div class="mp-flow-card">
       <div class="mp-flow-step"><div class="mp-flow-num">1</div><div>' . rmi_h(mportal_t('flow_step1')) . '</div></div>
       <div class="mp-flow-step"><div class="mp-flow-num">2</div><div>' . rmi_h(mportal_t('flow_step2')) . '</div></div>

@@ -52,35 +52,35 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Jenis Dokumen -->
   <div class="pnd-section">
-    <h3>📁 Jenis Dokumen HR yang Tersedia</h3>
+    <h3><?=rmi_icon('box')?> Jenis Dokumen HR yang Tersedia</h3>
     <div class="pnd-doc-grid">
       <div class="pnd-doc-item">
-        <div class="pnd-doc-ico">📝</div>
+        <div class="pnd-doc-ico"><?=rmi_icon('memo')?></div>
         <div class="pnd-doc-name">Kontrak Kerja</div>
         <div class="pnd-doc-desc">PKWT, PKWTT, dan kontrak periode tertentu</div>
       </div>
       <div class="pnd-doc-item">
-        <div class="pnd-doc-ico">📄</div>
+        <div class="pnd-doc-ico"><?=rmi_icon('doc')?></div>
         <div class="pnd-doc-name">Surat Tugas</div>
         <div class="pnd-doc-desc">Penugasan dinas luar, proyek khusus</div>
       </div>
       <div class="pnd-doc-item">
-        <div class="pnd-doc-ico">📋</div>
+        <div class="pnd-doc-ico"><?=rmi_icon('clipboard')?></div>
         <div class="pnd-doc-name">Surat Keterangan</div>
         <div class="pnd-doc-desc">Keterangan kerja, penghasilan, dll.</div>
       </div>
       <div class="pnd-doc-item">
-        <div class="pnd-doc-ico">⚠️</div>
+        <div class="pnd-doc-ico"><?=rmi_icon('warn')?></div>
         <div class="pnd-doc-name">SP (Surat Peringatan)</div>
         <div class="pnd-doc-desc">SP1, SP2, SP3 — perlu TTD karyawan</div>
       </div>
       <div class="pnd-doc-item">
-        <div class="pnd-doc-ico">🎓</div>
+        <div class="pnd-doc-ico"><?=rmi_icon('books')?></div>
         <div class="pnd-doc-name">Sertifikat</div>
         <div class="pnd-doc-desc">Pelatihan, kompetensi, penghargaan</div>
       </div>
       <div class="pnd-doc-item">
-        <div class="pnd-doc-ico">🗒️</div>
+        <div class="pnd-doc-ico"><?=rmi_icon('memo')?></div>
         <div class="pnd-doc-name">Lainnya</div>
         <div class="pnd-doc-desc">Memo internal, formulir HR, dsb.</div>
       </div>
@@ -93,7 +93,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Cara Akses Dokumen (Karyawan) -->
   <div class="pnd-section">
-    <h3>📖 Cara Mengakses Dokumen Kamu</h3>
+    <h3><?=rmi_icon('books')?> Cara Mengakses Dokumen Kamu</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -138,7 +138,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Acknowledgement -->
   <div class="pnd-section">
-    <h3>✍️ Acknowledgement (Tanda Terima Digital)</h3>
+    <h3><?=rmi_icon('memo')?> Acknowledgement (Tanda Terima Digital)</h3>
 
     <div class="pnd-step">
       <div class="pnd-num green">1</div>
@@ -181,7 +181,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Untuk Tim HRL -->
   <div class="pnd-section">
-    <h3>🏢 Untuk Tim HRL — Upload & Kelola Dokumen</h3>
+    <h3><?=rmi_icon('office')?> Untuk Tim HRL — Upload & Kelola Dokumen</h3>
 
     <div class="pnd-step">
       <div class="pnd-num purple">1</div>
@@ -228,37 +228,37 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- FAQ -->
   <div class="pnd-section">
-    <h3>❓ Pertanyaan Umum (FAQ)</h3>
+    <h3><?=rmi_icon('question')?> Pertanyaan Umum (FAQ)</h3>
 
-    <div class="pnd-faq-q">❓ Dokumen saya tidak muncul di daftar?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Dokumen saya tidak muncul di daftar?</div>
     <div class="pnd-faq-a">
       Hubungi Tim HRL — mungkin dokumen belum diterbitkan atau ditujukan ke akun yang berbeda.
       Pastikan kamu login dengan akun ERP yang benar (sesuai NIP/employee code kamu).
     </div>
 
-    <div class="pnd-faq-q">❓ Tidak bisa download dokumen?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Tidak bisa download dokumen?</div>
     <div class="pnd-faq-a">
       Pastikan koneksi internet stabil. Jika masih gagal, hubungi Tim HRL — mungkin file belum diupload atau terdapat kendala server.
     </div>
 
-    <div class="pnd-faq-q">❓ Sudah klik "Saya Sudah Membaca" tapi status masih Pending?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Sudah klik "Saya Sudah Membaca" tapi status masih Pending?</div>
     <div class="pnd-faq-a">
       Refresh halaman dan cek kembali. Jika masih Pending, hubungi Tim HRL dengan menyertakan
       nama dokumen dan waktu saat kamu menekan tombol.
     </div>
 
-    <div class="pnd-faq-q">❓ Bisa membatalkan acknowledgement yang sudah dilakukan?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Bisa membatalkan acknowledgement yang sudah dilakukan?</div>
     <div class="pnd-faq-a">
       Tidak bisa dibatalkan sendiri — acknowledgement bersifat final. Hubungi Admin/SYS jika ada kekeliruan.
     </div>
 
-    <div class="pnd-faq-q">❓ Siapa yang bisa melihat dokumen saya?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Siapa yang bisa melihat dokumen saya?</div>
     <div class="pnd-faq-a">
       Hanya kamu sendiri dan Tim HRL yang bisa melihat dokumen yang ditujukan padamu.
       Rekan kerja di divisi lain tidak bisa mengakses dokumen pribadimu.
     </div>
 
-    <div class="pnd-faq-q">❓ Bagaimana cara mengajukan permintaan dokumen (misal: Surat Keterangan Kerja)?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Bagaimana cara mengajukan permintaan dokumen (misal: Surat Keterangan Kerja)?</div>
     <div class="pnd-faq-a">
       Hubungi langsung Tim HRL via WhatsApp Group atau datang ke divisi HRL.
       Tim HRL yang akan membuat dan mengupload dokumen ke sistemmu.
@@ -267,7 +267,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Kontak -->
   <div class="pnd-section accent">
-    <h3>🆘 Butuh Bantuan?</h3>
+    <h3><?=rmi_icon('warn')?> Butuh Bantuan?</h3>
     <div class="pnd-desc" style="line-height:1.9">
       Jika mengalami kendala yang tidak tercantum di panduan ini, hubungi <b>Tim HRL</b> melalui:
       <ul style="margin-top:10px;padding-left:22px">

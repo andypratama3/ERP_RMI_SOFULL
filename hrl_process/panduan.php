@@ -81,40 +81,40 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Tipe Pengajuan -->
   <div class="pnd-section">
-    <h3>📋 Tipe Pengajuan yang Tersedia</h3>
+    <h3><?=rmi_icon('clipboard')?> Tipe Pengajuan yang Tersedia</h3>
     <div class="pnd-type-grid">
       <div class="pnd-type-item">
-        <div class="pnd-type-ico">🌴</div>
+        <div class="pnd-type-ico"><?=rmi_icon('calendar')?></div>
         <div class="pnd-type-name">Cuti</div>
         <div class="pnd-type-desc">Cuti tahunan, besar, atau sakit. GPS + foto wajib.</div>
       </div>
       <div class="pnd-type-item">
-        <div class="pnd-type-ico">📋</div>
+        <div class="pnd-type-ico"><?=rmi_icon('clipboard')?></div>
         <div class="pnd-type-name">Izin</div>
         <div class="pnd-type-desc">Izin tidak masuk atau keluar lebih awal. GPS + foto wajib.</div>
       </div>
       <div class="pnd-type-item">
-        <div class="pnd-type-ico">⏰</div>
+        <div class="pnd-type-ico"><?=rmi_icon('calendar')?></div>
         <div class="pnd-type-name">Lembur</div>
         <div class="pnd-type-desc">Lembur kerja — nominal otomatis ke FIN. GPS + foto wajib.</div>
       </div>
       <div class="pnd-type-item">
-        <div class="pnd-type-ico">✈️</div>
+        <div class="pnd-type-ico"><?=rmi_icon('outbox')?></div>
         <div class="pnd-type-name">Perjadin</div>
         <div class="pnd-type-desc">Form perjalanan dinas saja. Foto & GPS <b>tidak wajib</b>, cukup attachment.</div>
       </div>
       <div class="pnd-type-item">
-        <div class="pnd-type-ico">📦</div>
+        <div class="pnd-type-ico"><?=rmi_icon('box')?></div>
         <div class="pnd-type-name">Permintaan Karyawan</div>
         <div class="pnd-type-desc">Kebutuhan operasional (ATK, peralatan). Otomatis ke FIN.</div>
       </div>
       <div class="pnd-type-item">
-        <div class="pnd-type-ico">💰</div>
+        <div class="pnd-type-ico"><?=rmi_icon('money')?></div>
         <div class="pnd-type-name">Kenaikan Gaji</div>
         <div class="pnd-type-desc">Pengajuan kenaikan gaji. Review HRL + FIN.</div>
       </div>
       <div class="pnd-type-item">
-        <div class="pnd-type-ico">👥</div>
+        <div class="pnd-type-ico"><?=rmi_icon('users')?></div>
         <div class="pnd-type-name">Rekrutmen</div>
         <div class="pnd-type-desc">Permintaan rekrutmen karyawan baru. Otomatis ke FIN.</div>
       </div>
@@ -128,35 +128,35 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Alur Persetujuan -->
   <div class="pnd-section">
-    <h3>🔄 Alur Persetujuan (Pipeline)</h3>
+    <h3><?=rmi_icon('refresh')?> Alur Persetujuan (Pipeline)</h3>
     <div class="pnd-pipe">
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#475569;color:#fff">📝</div>
+        <div class="pnd-pipe-dot" style="background:#475569;color:#fff"><?=rmi_icon('memo')?></div>
         <div class="pnd-pipe-lbl">Draft<br><span style="color:#94a3b8">Dibuat</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#d97706;color:#fff">🚀</div>
+        <div class="pnd-pipe-dot" style="background:#d97706;color:#fff"><?=rmi_icon('zap')?></div>
         <div class="pnd-pipe-lbl">Submitted<br><span style="color:#fbbf24">Pemohon</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff">👔</div>
-        <div class="pnd-pipe-lbl">Mgr ✓<br><span style="color:#60a5fa">Manager Dept</span></div>
+        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff"><?=rmi_icon('user')?></div>
+        <div class="pnd-pipe-lbl">Mgr <?=rmi_icon('tick')?><br><span style="color:#60a5fa">Manager Dept</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#7c3aed;color:#fff">🏢</div>
-        <div class="pnd-pipe-lbl">HRL ✓<br><span style="color:#a78bfa">Tim HRL</span></div>
+        <div class="pnd-pipe-dot" style="background:#7c3aed;color:#fff"><?=rmi_icon('office')?></div>
+        <div class="pnd-pipe-lbl">HRL <?=rmi_icon('tick')?><br><span style="color:#a78bfa">Tim HRL</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#0d9488;color:#fff">💳</div>
-        <div class="pnd-pipe-lbl">FIN ✓<br><span style="color:#2dd4bf">Jika perlu</span></div>
+        <div class="pnd-pipe-dot" style="background:#0d9488;color:#fff"><?=rmi_icon('money')?></div>
+        <div class="pnd-pipe-lbl">FIN <?=rmi_icon('tick')?><br><span style="color:#2dd4bf">Jika perlu</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#059669;color:#fff">✓</div>
+        <div class="pnd-pipe-dot" style="background:#059669;color:#fff"><?=rmi_icon('tick')?></div>
         <div class="pnd-pipe-lbl">Selesai<br><span style="color:#34d399">PAID/Done</span></div>
       </div>
     </div>
@@ -168,7 +168,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Cara Buat Pengajuan -->
   <div class="pnd-section">
-    <h3>📝 Cara Membuat Pengajuan</h3>
+    <h3><?=rmi_icon('memo')?> Cara Membuat Pengajuan</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -188,7 +188,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
       <div>
         <div class="pnd-title">Pilih Tipe Pengajuan</div>
         <div class="pnd-desc">
-          Klik salah satu ikon tipe: 🌴 Cuti / 📋 Izin / ⏰ Lembur / ✈️ Perjadin, dst.
+          Klik salah satu ikon tipe: <?=rmi_icon('calendar')?> Cuti / <?=rmi_icon('clipboard')?> Izin / <?=rmi_icon('calendar')?> Lembur / <?=rmi_icon('outbox')?> Perjadin, dst.
           Tipe yang dipilih menentukan kewajiban GPS, foto, dan alur approval.
         </div>
       </div>
@@ -221,10 +221,10 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
       <div>
         <div class="pnd-title">Ambil GPS (Lokasi)</div>
         <div class="pnd-desc">
-          Klik <b>"📍 Ambil GPS"</b> dan izinkan akses lokasi di browser. Koordinat akan terisi otomatis.<br>
+          Klik <b>"<?=rmi_icon('target')?> Ambil GPS"</b> dan izinkan akses lokasi di browser. Koordinat akan terisi otomatis.<br>
           Pastikan GPS HP aktif dan sinyal kuat untuk akurasi terbaik.
           <span style="color:#f87171;font-size:12px;display:block;margin-top:4px">
-            ⚠ GPS tidak wajib untuk tipe <b>Perjadin</b>.
+            <?=rmi_icon('warn')?> GPS tidak wajib untuk tipe <b>Perjadin</b>.
           </span>
         </div>
       </div>
@@ -249,7 +249,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Cara Approve (Manager/HRL/FIN) -->
   <div class="pnd-section">
-    <h3>✅ Cara Menyetujui Pengajuan (Manager / HRL / FIN)</h3>
+    <h3><?=rmi_icon('check')?> Cara Menyetujui Pengajuan (Manager / HRL / FIN)</h3>
 
     <div class="pnd-step">
       <div class="pnd-num yellow">1</div>
@@ -302,13 +302,13 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Status & Pemantauan -->
   <div class="pnd-section">
-    <h3>📊 Status Pengajuan</h3>
+    <h3><?=rmi_icon('chart')?> Status Pengajuan</h3>
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">
       <span class="pnd-badge draft">● Draft</span>
       <span class="pnd-badge submit">● Submitted</span>
-      <span class="pnd-badge" style="background:rgba(59,130,246,.15);color:#60a5fa">● Mgr ✓</span>
-      <span class="pnd-badge" style="background:rgba(139,92,246,.15);color:#a78bfa">● HRL ✓</span>
-      <span class="pnd-badge" style="background:rgba(20,184,166,.15);color:#2dd4bf">● FIN ✓</span>
+      <span class="pnd-badge" style="background:rgba(59,130,246,.15);color:#60a5fa">● Mgr <?=rmi_icon('tick')?></span>
+      <span class="pnd-badge" style="background:rgba(139,92,246,.15);color:#a78bfa">● HRL <?=rmi_icon('tick')?></span>
+      <span class="pnd-badge" style="background:rgba(20,184,166,.15);color:#2dd4bf">● FIN <?=rmi_icon('tick')?></span>
       <span class="pnd-badge paid">● Selesai</span>
       <span class="pnd-badge rejected">● Ditolak</span>
     </div>
@@ -320,49 +320,49 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- FAQ -->
   <div class="pnd-section">
-    <h3>❓ Pertanyaan Umum (FAQ)</h3>
+    <h3><?=rmi_icon('question')?> Pertanyaan Umum (FAQ)</h3>
 
-    <div class="pnd-faq-q">❓ Tombol Submit tidak bisa diklik atau selalu gagal?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Tombol Submit tidak bisa diklik atau selalu gagal?</div>
     <div class="pnd-faq-a">
       Pastikan: (1) Judul sudah diisi, (2) minimal 1 file attachment/foto sudah dipilih,
       (3) GPS sudah diambil. Untuk Perjadin, attachment form wajib meski foto/GPS tidak wajib.
     </div>
 
-    <div class="pnd-faq-q">❓ GPS tidak bisa diambil di browser?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> GPS tidak bisa diambil di browser?</div>
     <div class="pnd-faq-a">
       Pastikan browser diberi izin lokasi: <b>Pengaturan Browser → Privasi → Izin Lokasi → Izinkan</b> untuk domain ERP.
       Di HP Android: Pengaturan → Aplikasi → Chrome → Izin → Lokasi → Izinkan.
       Pastikan sinyal GPS kuat (buka area terbuka sebentar).
     </div>
 
-    <div class="pnd-faq-q">❓ Sudah submit tapi lupa lampirkan dokumen?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Sudah submit tapi lupa lampirkan dokumen?</div>
     <div class="pnd-faq-a">
       Jika pengajuan masih <span class="pnd-badge submit">● Submitted</span> (belum di-approve Manager),
       hubungi Tim HRL untuk membatalkan dan submit ulang.
       Jika sudah di-approve, hubungi HRL untuk prosedur koreksi.
     </div>
 
-    <div class="pnd-faq-q">❓ Pengajuan ditolak — apa yang harus dilakukan?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Pengajuan ditolak — apa yang harus dilakukan?</div>
     <div class="pnd-faq-a">
       Buka detail pengajuan → baca catatan penolakan → perbaiki isi/lampiran →
       klik <b>Submit Ulang</b> (atau buat pengajuan baru jika diperlukan).
     </div>
 
-    <div class="pnd-faq-q">❓ Apa itu PIN TTD dan kenapa harus diset?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Apa itu PIN TTD dan kenapa harus diset?</div>
     <div class="pnd-faq-a">
       PIN TTD adalah PIN 6 digit sebagai pengganti tanda tangan saat approval.
       Sangat disarankan untuk Manager, HRL, dan FIN agar proses approval lebih cepat.
       Set PIN melalui menu <b>PIN TTD</b> di halaman Tower.
     </div>
 
-    <div class="pnd-faq-q">❓ Pengajuan Lembur otomatis ke FIN — kenapa?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Pengajuan Lembur otomatis ke FIN — kenapa?</div>
     <div class="pnd-faq-a">
       Tipe Lembur, Permintaan Karyawan, Kenaikan Gaji, dan Rekrutmen selalu membutuhkan
       persetujuan FIN karena berkaitan dengan pengeluaran keuangan perusahaan.
       Selain itu, jika nominal di pengajuan apapun &gt; 0, otomatis juga ke FIN.
     </div>
 
-    <div class="pnd-faq-q">❓ Siapa yang bisa melihat pengajuan saya?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Siapa yang bisa melihat pengajuan saya?</div>
     <div class="pnd-faq-a">
       <b>Kamu sendiri</b> bisa melihat pengajuanmu.<br>
       <b>Manager Dept-mu</b> bisa melihat semua pengajuan di dept yang sama.<br>
@@ -373,7 +373,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Kontak -->
   <div class="pnd-section accent">
-    <h3>🆘 Butuh Bantuan?</h3>
+    <h3><?=rmi_icon('warn')?> Butuh Bantuan?</h3>
     <div class="pnd-desc" style="line-height:1.9">
       Jika menemui kendala yang tidak tercantum di panduan ini, hubungi <b>Tim HRL</b> melalui:
       <ul style="margin-top:10px;padding-left:22px">

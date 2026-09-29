@@ -10,6 +10,12 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 $auth = __DIR__ . '/../../master/auth.php';
 if (!file_exists($auth)) $auth = __DIR__ . '/../master/auth.php';
 require_once $auth;
+// Icon pusat (rmi_icon) — pastikan tersedia untuk modul Absensi
+if (!function_exists('rmi_icon')) {
+  $__rmi_icons = __DIR__ . '/../../_shared/rmi_icons.php';
+  if (is_file($__rmi_icons)) require_once $__rmi_icons;
+  unset($__rmi_icons);
+}
 require_once __DIR__ . '/../../master/_audit_master.php';
 require_once __DIR__ . '/../../_shared/helpers.php';
 require_once __DIR__ . '/../../_shared/rbac.php';

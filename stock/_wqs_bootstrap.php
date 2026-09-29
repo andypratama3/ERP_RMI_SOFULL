@@ -308,10 +308,10 @@ if (!function_exists('wqs_debug_badge')) {
 
         echo '<div style="position:fixed;top:12px;left:12px;z-index:99999;background:#111827;color:#f9fafb;border:1px solid #374151;padding:8px 10px;border-radius:10px;font-size:12px;opacity:.95">';
         echo '<b>' . htmlspecialchars($module, ENT_QUOTES, 'UTF-8') . '</b><br>';
-        if ($username !== '') echo '👤 ' . htmlspecialchars($username, ENT_QUOTES, 'UTF-8') . '<br>';
-        echo '🎭 ' . htmlspecialchars($role ?: '-', ENT_QUOTES, 'UTF-8');
-        echo ' • 📁 ' . htmlspecialchars($dept ?: '-', ENT_QUOTES, 'UTF-8');
-        echo ' • 🏢 ' . htmlspecialchars($office ?: '-', ENT_QUOTES, 'UTF-8');
+        if ($username !== '') echo rmi_icon('user').' ' . htmlspecialchars($username, ENT_QUOTES, 'UTF-8') . '<br>';
+        echo rmi_icon('user').' ' . htmlspecialchars($role ?: '-', ENT_QUOTES, 'UTF-8');
+        echo ' • '.rmi_icon('doc').' ' . htmlspecialchars($dept ?: '-', ENT_QUOTES, 'UTF-8');
+        echo ' • '.rmi_icon('office').' ' . htmlspecialchars($office ?: '-', ENT_QUOTES, 'UTF-8');
         echo '</div>';
     }
 }

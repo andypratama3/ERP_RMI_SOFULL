@@ -87,7 +87,7 @@ $csrf = function_exists('csrf_field') ? csrf_field() : '';
 .lp-table{width:100%;border-collapse:collapse}
 .lp-table th,.lp-table td{border-bottom:1px solid rgba(255,255,255,.08);padding:8px;text-align:left}
 .lp-table th{font-size:11px;color:#94a3b8;text-transform:uppercase}
-.lp-table input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:8px;color:#e8ecf4;padding:7px}
+.lp-table input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:8px;color:var(--rmi-text,#e8ecf4);padding:7px}
 .lp-alert{border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:13px}
 .ok{background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.25);color:#86efac}
 .err{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.25);color:#fca5a5}

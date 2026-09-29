@@ -5,6 +5,7 @@
  * Tersedia tanpa perlu case — manufacturer bisa submit penawaran kapan saja.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_once __DIR__ . '/../master/_audit_master.php';
@@ -151,7 +152,7 @@ if ($manufacture_id) {
 $content = '
 <a href="' . rmi_h($base) . '/manufacturer_portal/" class="btn btn-outline-secondary btn-sm mb-3">' . rmi_h(mportal_t('back_dashboard')) . '</a>
 <div class="card border-success mb-4">
-    <div class="card-header bg-success text-white"><strong>📤 ' . rmi_h(mportal_t('partnership_proposal_title')) . '</strong></div>
+    <div class="card-header bg-success text-white"><strong>' . rmi_icon('outbox') . ' ' . rmi_h(mportal_t('partnership_proposal_title')) . '</strong></div>
     <div class="card-body">
         <p class="mb-2">' . rmi_h(mportal_t('upload_catalog_desc')) . '</p>
         <p class="text-muted small mb-3">' . rmi_h($manuName) . ' (' . rmi_h($mc) . ')</p>

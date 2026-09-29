@@ -228,7 +228,7 @@ STYLE;
 
 $bp = $GLOBALS['BASE_PROJECT'] ?? (defined('BASE_PROJECT') ? rtrim(BASE_PROJECT, '/') : '');
 $actions = [
-  ['label' => '📚 Panduan', 'url' => $bp . '/dashboards/quality/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
+  ['label' => rmi_icon('books').' Panduan', 'url' => $bp . '/dashboards/quality/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
   ['label' => 'WQS Incoming', 'url' => $bp . '/stock/wqs_incoming.php', 'class' => 'btn btn-sm btn-outline-light'],
   ['label' => 'Stock Audit', 'url' => $bp . '/stock/wqs_stock_audit.php', 'class' => 'btn btn-sm btn-outline-light'],
   ['label' => 'Retur / Karantina', 'url' => $bp . '/stock/wqs_quarantine.php', 'class' => 'btn btn-sm btn-outline-light'],
@@ -263,12 +263,12 @@ rmi_header('Quality & Compliance', [
   <!-- Header -->
   <div class="qc-header">
     <div>
-      <h2>✅ Quality & Compliance Dashboard <span style="font-size:10px;font-weight:700;background:rgba(255,255,255,.12);padding:3px 7px;border-radius:8px;vertical-align:middle">FINAL-QC-V2-2026-09-01</span></h2>
+      <h2><?=rmi_icon('check')?> Quality & Compliance Dashboard <span style="font-size:10px;font-weight:700;background:rgba(255,255,255,.12);padding:3px 7px;border-radius:8px;vertical-align:middle">FINAL-QC-V2-2026-09-01</span></h2>
       <p>Monitoring quality data & traceability — WQS Incoming, stock status, dan master-product readiness</p>
     </div>
     <div class="d-flex gap-2">
-      <a class="qc-link" href="<?= h($bp) ?>/dashboards/index.php">🏠 Home</a>
-      <a class="qc-link" href="<?= h($bp) ?>/dashboards/regulatory/license_docs_dashboard.php">📋 Reg Alkes</a>
+      <a class="qc-link" href="<?= h($bp) ?>/dashboards/index.php"><?=rmi_icon('home')?> Home</a>
+      <a class="qc-link" href="<?= h($bp) ?>/dashboards/regulatory/license_docs_dashboard.php"><?=rmi_icon('clipboard')?> Reg Alkes</a>
     </div>
   </div>
 
@@ -308,7 +308,7 @@ rmi_header('Quality & Compliance', [
   <div class="row g-3 mb-3">
     <div class="col-md-3">
       <div class="qc-stat">
-        <div class="title">📥 Incoming (30 hari)</div>
+        <div class="title"><?=rmi_icon('inbox')?> Incoming (30 hari)</div>
         <div class="subtitle">Dokumen & item masuk</div>
         <div class="row-item"><span class="label">Dokumen</span><span class="val"><?= n($stats['incoming_30']) ?></span></div>
         <div class="row-item"><span class="label">Total Item</span><span class="val"><?= n($stats['incoming_items_30']) ?></span></div>
@@ -319,7 +319,7 @@ rmi_header('Quality & Compliance', [
     </div>
     <div class="col-md-3">
       <div class="qc-stat">
-        <div class="title">⚠️ Data Gap Incoming</div>
+        <div class="title"><?=rmi_icon('warn')?> Data Gap Incoming</div>
         <div class="subtitle">field kosong 30 hari terakhir; requirement per produk belum tersedia</div>
         <div class="row-item"><span class="label">Missing EXP</span><span class="val <?= ($stats['missing_exp_30']??0)>0?'warn':'' ?>"><?= n($stats['missing_exp_30']) ?></span></div>
         <div class="row-item"><span class="label">Missing LOT</span><span class="val <?= ($stats['missing_lot_30']??0)>0?'warn':'' ?>"><?= n($stats['missing_lot_30']) ?></span></div>
@@ -328,7 +328,7 @@ rmi_header('Quality & Compliance', [
     </div>
     <div class="col-md-3">
       <div class="qc-stat">
-        <div class="title">📦 Stock Status</div>
+        <div class="title"><?=rmi_icon('box')?> Stock Status</div>
         <div class="subtitle"><?= htmlspecialchars($stats['stock_source_label'] ?? 'stock_qty') ?></div>
         <div class="row-item"><span class="label">Total SKU</span><span class="val"><?= n($stats['stock_total']) ?></span></div>
         <div class="row-item"><span class="label">Zero Stock</span><span class="val"><?= n($stats['zero_stock']) ?></span></div>
@@ -343,7 +343,7 @@ rmi_header('Quality & Compliance', [
     </div>
     <div class="col-md-3">
       <div class="qc-stat">
-        <div class="title">📦 Master Products</div>
+        <div class="title"><?=rmi_icon('box')?> Master Products</div>
         <div class="subtitle">Kelengkapan data produk aktif</div>
         <div class="row-item"><span class="label">Total Produk</span><span class="val"><?= n($stats['products_total']) ?></span></div>
         <div class="row-item"><span class="label">No Barcode</span><span class="val <?= ($stats['products_missing_barcode']??0)>0?'warn':'' ?>"><?= n($stats['products_missing_barcode']) ?></span></div>
@@ -360,14 +360,14 @@ rmi_header('Quality & Compliance', [
   <div class="row g-3 mb-3">
     <div class="col-md-6">
       <div class="qc-stat">
-        <div class="title">🧭 Interpretasi Traceability</div>
+        <div class="title"><?=rmi_icon('search')?> Interpretasi Traceability</div>
         <div class="subtitle">Dashboard hanya menandai field EXP/LOT/SERIAL yang kosong.</div>
         <div style="font-size:12px;color:#cbd5e1;line-height:1.7">Belum ada master requirement per produk yang menyatakan apakah setiap SKU wajib EXP, LOT, SERIAL, atau kombinasi tertentu. Karena itu angka missing adalah <b>data gap</b>, bukan otomatis defect/QC failure.</div>
       </div>
     </div>
     <div class="col-md-6">
       <div class="qc-stat">
-        <div class="title">📋 Complaint / CAPA Source</div>
+        <div class="title"><?=rmi_icon('clipboard')?> Complaint / CAPA Source</div>
         <div class="row-item"><span class="label">Complaint Register</span><span class="val"><?= !empty($stats['complaint_source_ready']) ? 'AVAILABLE' : 'N/A' ?></span></div>
         <div class="row-item"><span class="label">CAPA Register</span><span class="val"><?= !empty($stats['capa_source_ready']) ? 'AVAILABLE' : 'N/A' ?></span></div>
         <div class="subtitle" style="margin-top:8px">N/A berarti source/schema belum tersedia; bukan berarti jumlah complaint/CAPA = 0.</div>
@@ -377,30 +377,30 @@ rmi_header('Quality & Compliance', [
 
   <!-- Quick Links -->
   <div style="background:rgba(17,24,39,.85);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-bottom:16px">
-    <div class="fw-semibold mb-3" style="font-size:14px">⚡ Quick Links</div>
+    <div class="fw-semibold mb-3" style="font-size:14px"><?=rmi_icon('zap')?> Quick Links</div>
     <div class="qc-links">
-      <a class="qc-link primary" href="<?= h($bp) ?>/stock/wqs_incoming.php">📥 WQS Incoming</a>
-      <a class="qc-link primary" href="<?= h($bp) ?>/stock/wqs_stock_audit.php">🔍 Stock Audit</a>
-      <a class="qc-link" href="<?= h($bp) ?>/stock/wqs_stock.php">📊 Stock WQS</a>
-      <a class="qc-link" href="<?= h($bp) ?>/master/master_products.php">📦 Master Products</a>
-      <a class="qc-link" href="<?= h($bp) ?>/dashboards/warehouse/wqs_dashboard.php">🏭 Warehouse Dashboard</a>
-      <a class="qc-link" href="<?= h($bp) ?>/dashboards/regulatory/license_docs_dashboard.php">📋 Reg Alkes</a>
-      <a class="qc-link" href="<?= h($bp) ?>/stock/wqs_quarantine.php">🚧 Retur / Karantina</a>
-      <a class="qc-link" href="<?= h($bp) ?>/stock/wqs_stock_audit.php">📑 Stock Opname / Audit</a>
+      <a class="qc-link primary" href="<?= h($bp) ?>/stock/wqs_incoming.php"><?=rmi_icon('inbox')?> WQS Incoming</a>
+      <a class="qc-link primary" href="<?= h($bp) ?>/stock/wqs_stock_audit.php"><?=rmi_icon('search')?> Stock Audit</a>
+      <a class="qc-link" href="<?= h($bp) ?>/stock/wqs_stock.php"><?=rmi_icon('chart')?> Stock WQS</a>
+      <a class="qc-link" href="<?= h($bp) ?>/master/master_products.php"><?=rmi_icon('box')?> Master Products</a>
+      <a class="qc-link" href="<?= h($bp) ?>/dashboards/warehouse/wqs_dashboard.php"><?=rmi_icon('office')?> Warehouse Dashboard</a>
+      <a class="qc-link" href="<?= h($bp) ?>/dashboards/regulatory/license_docs_dashboard.php"><?=rmi_icon('clipboard')?> Reg Alkes</a>
+      <a class="qc-link" href="<?= h($bp) ?>/stock/wqs_quarantine.php"><?=rmi_icon('warn')?> Retur / Karantina</a>
+      <a class="qc-link" href="<?= h($bp) ?>/stock/wqs_stock_audit.php"><?=rmi_icon('doc')?> Stock Opname / Audit</a>
     </div>
   </div>
 
   <div class="mt-4">
     <div style="background:rgba(17,24,39,.85);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px">
-      <div class="fw-semibold mb-1" style="font-size:14px;color:#f1f5f9">📋 Incoming QC – Daftar Issue <span style="font-size:11px;color:#64748b;font-weight:400">(30 hari terakhir)</span></div>
+      <div class="fw-semibold mb-1" style="font-size:14px;color:#f1f5f9"><?=rmi_icon('clipboard')?> Incoming QC – Daftar Issue <span style="font-size:11px;color:#64748b;font-weight:400">(30 hari terakhir)</span></div>
       <?php if (!$has_incoming): ?>
         <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#fde68a;margin-top:10px">
-          ⚠️ Tabel <code style="color:#fde68a">wqs_incoming</code> / <code style="color:#fde68a">wqs_incoming_items</code> belum terdeteksi.
+          <?=rmi_icon('warn')?> Tabel <code style="color:#fde68a">wqs_incoming</code> / <code style="color:#fde68a">wqs_incoming_items</code> belum terdeteksi.
           Biasanya tabel ini dibuat otomatis saat halaman <a href="<?= h($bp) ?>/stock/wqs_incoming.php" style="color:#fde68a">WQS Incoming</a> pertama kali dibuka.
         </div>
       <?php elseif (empty($incoming_issues)): ?>
         <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:8px;padding:10px 14px;font-size:12px;color:#86efac;margin-top:10px">
-          ✅ Tidak ada issue kelengkapan incoming (missing EXP/LOT/SERIAL) untuk 30 hari terakhir.
+          <?=rmi_icon('check')?> Tidak ada issue kelengkapan incoming (missing EXP/LOT/SERIAL) untuk 30 hari terakhir.
         </div>
       <?php else: ?>
         <div class="table-responsive mt-2" style="border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.08)">
@@ -451,20 +451,20 @@ rmi_header('Quality & Compliance', [
             </tbody>
           </table>
         </div>
-        <div style="font-size:11px;color:#475569;margin-top:8px">💡 Review field EXP/LOT/SERIAL yang kosong di Incoming. Perlakukan sebagai gap data sampai requirement traceability per SKU tersedia.</div>
+        <div style="font-size:11px;color:var(--rmi-muted);margin-top:8px"><?=rmi_icon('zap')?> Review field EXP/LOT/SERIAL yang kosong di Incoming. Perlakukan sebagai gap data sampai requirement traceability per SKU tersedia.</div>
       <?php endif; ?>
     </div>
   </div>
 
   <div class="mt-4">
-    <h4 class="mb-2" style="color:#f1f5f9">📌 Tujuan Halaman Ini</h4>
+    <h4 class="mb-2" style="color:#f1f5f9"><?=rmi_icon('target')?> Tujuan Halaman Ini</h4>
     <div class="qc-stat">
       <ol class="mb-0" style="padding-left:18px;color:#e2e8f0;font-size:13px;line-height:1.8">
         <li><b style="color:#4ade80">Quality (operasional)</b>: memastikan data Incoming cukup untuk traceability dan menandai field EXP/LOT/SERIAL yang masih kosong.</li>
         <li><b style="color:#60a5fa">Compliance (data)</b>: memisahkan zero stock dari negative stock per office serta memantau baseline lock agar perubahan stok terkontrol.</li>
         <li><b style="color:#fbbf24">Master data readiness</b>: cek kelengkapan barcode/unit, menghitung produk bermasalah secara unik, dan menampilkan coverage barcode.</li>
       </ol>
-      <div class="mt-2" style="font-size:11px;color:#475569">
+      <div class="mt-2" style="font-size:11px;color:var(--rmi-muted)">
         Dashboard ini hanya monitoring — tidak mengubah data. Detail proses tetap di menu masing-masing modul.
       </div>
     </div>

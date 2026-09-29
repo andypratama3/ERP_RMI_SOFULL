@@ -19,7 +19,7 @@ rmi_header('Panduan Sales Control Tower', [
         'Panduan',
     ],
     'actions' => [
-        ['label' => '🗼 Buka Sales Tower', 'url' => $bp . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-rmi'],
+        ['label' => rmi_icon('tower') . ' Buka Sales Tower', 'url' => $bp . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-rmi'],
     ],
 ]);
 ?>
@@ -70,7 +70,7 @@ rmi_header('Panduan Sales Control Tower', [
 
 <!-- Hero -->
 <div class="pnd-hero">
-  <div style="font-size:28px;margin-bottom:8px">🗼</div>
+  <div style="font-size:28px;margin-bottom:8px"><?= rmi_icon('tower') ?></div>
   <div style="font-size:20px;font-weight:800;color:#e2e8f0;margin-bottom:6px">Sales Control Tower</div>
   <div style="color:#94a3b8;font-size:14px;line-height:1.7">
     Pusat kendali penjualan — memantau semua Delivery Order (DO) dari pembuatan hingga pembayaran.
@@ -91,14 +91,14 @@ rmi_header('Panduan Sales Control Tower', [
   <!-- Alur DO -->
   <div class="col-12">
     <div class="pnd-section accent-blue">
-      <h5 style="color:#93c5fd;margin-bottom:16px">📋 Alur DO — CRM hingga Lunas</h5>
+      <h5 style="color:#93c5fd;margin-bottom:16px"><?= rmi_icon('clipboard') ?> Alur DO — CRM hingga Lunas</h5>
       <div class="do-flow">
         <div class="do-stage" style="background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.3);color:#93c5fd">
-          📋<br>DO Dibuat<br><small style="font-size:10px;opacity:.7">CRM</small>
+          <?= rmi_icon('clipboard') ?><br>DO Dibuat<br><small style="font-size:10px;opacity:.7">CRM</small>
         </div>
         <span class="do-arrow">→</span>
         <div class="do-stage" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:#fbbf24">
-          📦<br>WQS Proses<br><small style="font-size:10px;opacity:.7">WQS</small>
+          <?= rmi_icon('box') ?><br>WQS Proses<br><small style="font-size:10px;opacity:.7">WQS</small>
         </div>
         <span class="do-arrow">→</span>
         <div class="do-stage" style="background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.3);color:#c4b5fd">
@@ -106,7 +106,7 @@ rmi_header('Panduan Sales Control Tower', [
         </div>
         <span class="do-arrow">→</span>
         <div class="do-stage" style="background:rgba(251,146,60,.12);border-color:rgba(251,146,60,.3);color:#fed7aa">
-          🧾<br>ACT Invoice<br><small style="font-size:10px;opacity:.7">ACT</small>
+          <?= rmi_icon('receipt') ?><br>ACT Invoice<br><small style="font-size:10px;opacity:.7">ACT</small>
         </div>
         <span class="do-arrow">→</span>
         <div class="do-stage" style="background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3);color:#86efac">
@@ -114,7 +114,7 @@ rmi_header('Panduan Sales Control Tower', [
         </div>
         <span class="do-arrow">→</span>
         <div class="do-stage" style="background:rgba(100,116,139,.12);border-color:rgba(100,116,139,.3);color:#94a3b8">
-          ✅<br>PAID / Done<br><small style="font-size:10px;opacity:.7">Selesai</small>
+          <?= rmi_icon('check') ?><br>PAID / Done<br><small style="font-size:10px;opacity:.7">Selesai</small>
         </div>
       </div>
       <div class="pnd-info">
@@ -126,7 +126,7 @@ rmi_header('Panduan Sales Control Tower', [
   <!-- Status DO -->
   <div class="col-12">
     <div class="pnd-section accent-teal">
-      <h5 style="color:#2dd4bf;margin-bottom:14px">🔄 Status DO — Arti & Tanggung Jawab</h5>
+      <h5 style="color:#2dd4bf;margin-bottom:14px"><?= rmi_icon('refresh') ?> Status DO — Arti & Tanggung Jawab</h5>
       <table class="st-table">
         <thead>
           <tr><th>Status</th><th>Artinya</th><th>Dept Bertugas</th><th>Langkah Selanjutnya</th></tr>
@@ -188,7 +188,7 @@ rmi_header('Panduan Sales Control Tower', [
   <!-- Tugas per Dept -->
   <div class="col-lg-6">
     <div class="pnd-section accent-blue">
-      <h5 style="color:#93c5fd;margin-bottom:16px">👥 Tugas Harian per Dept di Sales Tower</h5>
+      <h5 style="color:#93c5fd;margin-bottom:16px"><?= rmi_icon('users') ?> Tugas Harian per Dept di Sales Tower</h5>
 
       <div style="padding:12px 14px;background:rgba(59,130,246,.06);border-radius:10px;border:1px solid rgba(59,130,246,.15);margin-bottom:10px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
@@ -394,7 +394,7 @@ rmi_header('Panduan Sales Control Tower', [
   <!-- FAQ -->
   <div class="col-lg-6">
     <div class="pnd-section">
-      <h5 style="color:#e2e8f0;margin-bottom:14px">❓ FAQ Sales Control Tower</h5>
+      <h5 style="color:#e2e8f0;margin-bottom:14px"><?= rmi_icon('question') ?> FAQ Sales Control Tower</h5>
       <div style="display:flex;flex-direction:column;gap:12px;font-size:13px">
         <div>
           <div style="color:#93c5fd;font-weight:600">Q: Status DO tidak berubah padahal sudah diproses?</div>
@@ -418,20 +418,20 @@ rmi_header('Panduan Sales Control Tower', [
 
   <div class="col-lg-6">
     <div class="pnd-section">
-      <h5 style="color:#e2e8f0;margin-bottom:14px">⚡ Akses Cepat Sales Tower</h5>
+      <h5 style="color:#e2e8f0;margin-bottom:14px"><?= rmi_icon('zap') ?> Akses Cepat Sales Tower</h5>
       <div class="pnd-links">
-        <a href="<?= h($bp) ?>/sales/sales_control_tower.php">🗼 Sales Control Tower</a>
-        <a href="<?= h($bp) ?>/sales/sales_do.php">📋 Buat DO Baru</a>
-        <a href="<?= h($bp) ?>/stock/wqs_do_tasks.php">⚡ WQS Task DO</a>
+        <a href="<?= h($bp) ?>/sales/sales_control_tower.php"><?= rmi_icon('tower') ?> Sales Control Tower</a>
+        <a href="<?= h($bp) ?>/sales/sales_do.php"><?= rmi_icon('clipboard') ?> Buat DO Baru</a>
+        <a href="<?= h($bp) ?>/stock/wqs_do_tasks.php"><?= rmi_icon('zap') ?> WQS Task DO</a>
         <a href="<?= h($bp) ?>/sales/scm_do_tasks.php">🚚 SCM Task DO</a>
-        <a href="<?= h($bp) ?>/sales/act_do_tasks.php">🧾 ACT Task DO</a>
+        <a href="<?= h($bp) ?>/sales/act_do_tasks.php"><?= rmi_icon('receipt') ?> ACT Task DO</a>
         <a href="<?= h($bp) ?>/sales/fin_do_tasks.php">💸 FIN Task DO</a>
-        <a href="<?= h($bp) ?>/sales/tax_invoices.php">🧾 Tax Invoice</a>
+        <a href="<?= h($bp) ?>/sales/tax_invoices.php"><?= rmi_icon('receipt') ?> Tax Invoice</a>
         <a href="<?= h($bp) ?>/sales/sales_dashboard.php">💼 Sales Dashboard</a>
-        <a href="<?= h($bp) ?>/stock/wqs_picking.php">🔄 WQS Picking</a>
-        <a href="<?= h($bp) ?>/stock/wqs_stock.php">📊 Lihat Stok</a>
-        <a href="<?= h($bp) ?>/purchases/purchases_import_control_tower.php">🗼 Import Tower</a>
-        <a href="<?= h($bp) ?>/kpi/kpi_do_sla.php">📈 KPI SLA DO</a>
+        <a href="<?= h($bp) ?>/stock/wqs_picking.php"><?= rmi_icon('refresh') ?> WQS Picking</a>
+        <a href="<?= h($bp) ?>/stock/wqs_stock.php"><?= rmi_icon('chart') ?> Lihat Stok</a>
+        <a href="<?= h($bp) ?>/purchases/purchases_import_control_tower.php"><?= rmi_icon('tower') ?> Import Tower</a>
+        <a href="<?= h($bp) ?>/kpi/kpi_do_sla.php"><?= rmi_icon('trend') ?> KPI SLA DO</a>
       </div>
     </div>
   </div>

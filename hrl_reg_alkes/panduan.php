@@ -20,7 +20,7 @@ rmi_header('Panduan REG Alkes', [
     ],
     'actions' => [
         ['label' => '← Dashboard', 'url' => $baseProject . '/hrl_reg_alkes/index.php', 'class' => 'btn-ghost'],
-        ['label' => '🗼 Control Tower', 'url' => $baseProject . '/hrl_reg_alkes/reg_alkes_control_tower.php', 'class' => 'btn-soft'],
+        ['label' => '' . rmi_icon("tower") . ' Control Tower', 'url' => $baseProject . '/hrl_reg_alkes/reg_alkes_control_tower.php', 'class' => 'btn-soft'],
     ],
 ]);
 ?>
@@ -101,7 +101,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 16px 0; display:flex; align-ite
 
   <!-- Apa itu REG Alkes -->
   <div class="pnd-section">
-    <h3>📋 Apa itu Registrasi Alkes (NIE)?</h3>
+    <h3><?=rmi_icon('clipboard')?> Apa itu Registrasi Alkes (NIE)?</h3>
     <div class="pnd-desc" style="margin-bottom:14px">
       <b>Registrasi Alat Kesehatan (Reg Alkes)</b> adalah proses memperoleh izin edar resmi dari Kemenkes RI
       agar suatu alat kesehatan (alkes) boleh dipasarkan dan digunakan di Indonesia.
@@ -125,7 +125,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 16px 0; display:flex; align-ite
 
   <!-- Siapa mengerjakan apa -->
   <div class="pnd-section">
-    <h3>👥 Peran & Tanggung Jawab</h3>
+    <h3><?=rmi_icon('users')?> Peran & Tanggung Jawab</h3>
     <table class="pnd-role-tbl">
       <thead>
         <tr>
@@ -162,7 +162,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 16px 0; display:flex; align-ite
 
   <!-- 15 Tahap Proses -->
   <div class="pnd-section">
-    <h3>🔄 15 Tahap Proses Registrasi NIE</h3>
+    <h3><?=rmi_icon('refresh')?> 15 Tahap Proses Registrasi NIE</h3>
     <div style="font-size:12px;color:var(--rmi-muted,#9ca3af);margin-bottom:18px">
       Setiap case di Control Tower mengikuti alur ini. Update stage dilakukan oleh PIC masing-masing tahap.
     </div>
@@ -244,7 +244,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 16px 0; display:flex; align-ite
 
   <!-- Cara Pakai Control Tower -->
   <div class="pnd-section">
-    <h3>🗼 Cara Pakai Control Tower</h3>
+    <h3><?=rmi_icon('tower')?> Cara Pakai Control Tower</h3>
 
     <div class="pnd-step">
       <div class="pnd-num" style="background:#3b82f6">1</div>
@@ -307,7 +307,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 16px 0; display:flex; align-ite
 
   <!-- Cara Import SKU -->
   <div class="pnd-section">
-    <h3>📦 Cara Import SKU ke Master Products</h3>
+    <h3><?=rmi_icon('box')?> Cara Import SKU ke Master Products</h3>
 
     <div class="pnd-step">
       <div class="pnd-num" style="background:#3b82f6">1</div>
@@ -361,47 +361,47 @@ h3 { font-size:15px; font-weight:700; margin:0 0 16px 0; display:flex; align-ite
 
   <!-- FAQ -->
   <div class="pnd-section">
-    <h3>❓ Pertanyaan Umum (FAQ)</h3>
+    <h3><?=rmi_icon('question')?> Pertanyaan Umum (FAQ)</h3>
 
-    <div class="pnd-faq-q">❓ Berapa lama proses NIE dari awal sampai terbit?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Berapa lama proses NIE dari awal sampai terbit?</div>
     <div class="pnd-faq-a">
       Rata-rata <b>2–6 bulan</b> untuk AKL (impor). AKD biasanya lebih cepat (<b>1–3 bulan</b>).
       Bergantung kelengkapan dokumen, antrian di Kemenkes, dan apakah ada revisi atau tidak.
     </div>
 
-    <div class="pnd-faq-q">❓ LOA itu apa dan kenapa harus dilegalisasi KBRI?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> LOA itu apa dan kenapa harus dilegalisasi KBRI?</div>
     <div class="pnd-faq-a">
       LOA (Letter of Authorization) adalah surat kuasa dari pabrikan yang menyatakan RMI sebagai distributor resmi di Indonesia.
       <b>KBRI (Kedutaan Besar RI)</b> di negara pabrikan wajib mengesahkan LOA agar dokumen ini sah secara hukum di Indonesia.
       Tanpa legalisasi KBRI, Kemenkes akan menolak permohonan.
     </div>
 
-    <div class="pnd-faq-q">❓ Apa yang terjadi kalau revisi tidak selesai dalam 10 hari?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Apa yang terjadi kalau revisi tidak selesai dalam 10 hari?</div>
     <div class="pnd-faq-a">
       Permohonan <b>otomatis ditolak</b> oleh sistem Regalkes Kemenkes. Tim harus mengulang proses dari awal (Tahap 1).
       Oleh karena itu, saat menerima notifikasi revisi, segera koordinasi dengan PQP dan pabrikan tanpa menunda.
     </div>
 
-    <div class="pnd-faq-q">❓ NIE yang sudah terbit berlaku berapa lama?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> NIE yang sudah terbit berlaku berapa lama?</div>
     <div class="pnd-faq-a">
       NIE berlaku <b>5 tahun</b> sejak tanggal terbit dan wajib diperpanjang sebelum kadaluarsa.
       Gunakan fitur <b>Expiry Check</b> di modul ini untuk memantau NIE yang akan habis dalam 30/90 hari.
     </div>
 
-    <div class="pnd-faq-q">❓ Kenapa SKU tidak bisa diimport meskipun NIE sudah terbit?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Kenapa SKU tidak bisa diimport meskipun NIE sudah terbit?</div>
     <div class="pnd-faq-a">
       Sistem mensyaratkan <b>file PDF NIE</b> (dengan nomor yang sesuai) sudah diupload ke folder dossier HRL case tersebut.
       Jika PDF belum ada, upload dulu via Control Tower → buka case → tab Dossier → Upload Output AKL/AKD.
     </div>
 
-    <div class="pnd-faq-q">❓ Siapa yang bisa buat dan update case di Control Tower?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Siapa yang bisa buat dan update case di Control Tower?</div>
     <div class="pnd-faq-a">
       Semua user dengan permission <b>HRL.REG_ALKES_VIEW</b> atau <b>HRL.VIEW</b> atau <b>PQP.VIEW</b> bisa melihat.
       Update stage dan upload dokumen bisa dilakukan oleh PQP dan HRL Legal.
       Import SKU ke master_products hanya untuk HRL Legal / Admin.
     </div>
 
-    <div class="pnd-faq-q">❓ Apakah data case bisa dihapus?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Apakah data case bisa dihapus?</div>
     <div class="pnd-faq-a">
       Case tidak dihapus — hanya bisa <b>ditutup (CLOSED)</b> atau dibuka kembali (OPEN).
       Ini memastikan audit trail dan history lengkap tersimpan selamanya.
@@ -410,7 +410,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 16px 0; display:flex; align-ite
 
   <!-- Kontak -->
   <div class="pnd-section accent">
-    <h3>🆘 Butuh Bantuan?</h3>
+    <h3><?=rmi_icon('warn')?> Butuh Bantuan?</h3>
     <div class="pnd-desc" style="line-height:1.9">
       Untuk pertanyaan terkait proses registrasi, hubungi <b>Tim HRL Legal</b>.<br>
       Untuk masalah teknis sistem (import gagal, akses, dll.), hubungi <b>ITC</b>.<br><br>

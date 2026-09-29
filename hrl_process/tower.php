@@ -126,14 +126,14 @@ $allTypesMeta = hrlp_request_types_meta();
 if (!isset($allTypesMeta['KASBON'])) {
     $allTypesMeta['KASBON'] = [
         'label' => 'Pinjaman / Kasbon',
-        'icon'  => '💰',
+        'icon'  => '' . rmi_icon("money") . '',
         'color' => '#f59e0b',
     ];
 }
 
 // SAKIT dipisahkan dari CUTI agar tidak mengurangi saldo cuti dan tidak melalui FIN.
 if (!isset($allTypesMeta['SAKIT'])) {
-    $allTypesMeta['SAKIT'] = ['label'=>'Sakit','icon'=>'🤒','color'=>'#ef4444'];
+    $allTypesMeta['SAKIT'] = ['label'=>'Sakit','icon'=>'' . rmi_icon("warn") . '','color'=>'#ef4444'];
 }
 
 // REKRUTMEN tidak dibuat sebagai pengajuan terpisah.
@@ -436,9 +436,9 @@ function hrl_status_meta(string $st): array {
     return match(strtoupper($st)) {
         'DRAFT'            => ['label'=>'Draft',           'cls'=>'hrl-st-draft',    'dot'=>'●'],
         'SUBMITTED'        => ['label'=>'Submitted',       'cls'=>'hrl-st-submitted','dot'=>'●'],
-        'MANAGER_APPROVED' => ['label'=>'Mgr ✓',          'cls'=>'hrl-st-mgr',      'dot'=>'●'],
-        'HRL_APPROVED'     => ['label'=>'HRL ✓',          'cls'=>'hrl-st-hrl',      'dot'=>'●'],
-        'FIN_APPROVED'     => ['label'=>'FIN ✓',          'cls'=>'hrl-st-fin',      'dot'=>'●'],
+        'MANAGER_APPROVED' => ['label'=>'Mgr ' . rmi_icon("tick") . '',          'cls'=>'hrl-st-mgr',      'dot'=>'●'],
+        'HRL_APPROVED'     => ['label'=>'HRL ' . rmi_icon("tick") . '',          'cls'=>'hrl-st-hrl',      'dot'=>'●'],
+        'FIN_APPROVED'     => ['label'=>'FIN ' . rmi_icon("tick") . '',          'cls'=>'hrl-st-fin',      'dot'=>'●'],
         'PAID'             => ['label'=>'Selesai',         'cls'=>'hrl-st-paid',     'dot'=>'●'],
         'NEED_DOCUMENT'    => ['label'=>'Perlu Dokumen',    'cls'=>'hrl-st-submitted','dot'=>'●'],
         'REJECTED'         => ['label'=>'Ditolak',         'cls'=>'hrl-st-rejected', 'dot'=>'●'],
@@ -613,7 +613,7 @@ function hrl_next_pic(array $r): string {
     <div class="hrl-pip-line <?= hrl_pipeline_line_class(4, $pipelineStage) ?>"></div>
 
     <div class="hrl-pip-step">
-      <div class="hrl-pip-dot <?= $pipelineStage >= 5 ? 'done' : '' ?>">✓</div>
+      <div class="hrl-pip-dot <?= $pipelineStage >= 5 ? 'done' : '' ?>"><?=rmi_icon('tick')?></div>
       <div class="hrl-pip-lbl">Selesai<br>/ PAID</div>
     </div>
   </div>
@@ -626,7 +626,7 @@ function hrl_next_pic(array $r): string {
   <div>
     <?php if ($formTypesMeta === []): ?>
     <div class="hrl-form-card">
-      <div class="hrl-form-head"><span>📝</span> Buat pengajuan</div>
+      <div class="hrl-form-head"><span><?=rmi_icon('memo')?></span> Buat pengajuan</div>
       <div class="hrl-form-body">
         <div class="alert alert-warning mb-0" style="font-size:13px">
           Anda tidak memiliki izin <b>CREATE</b> untuk tipe pengajuan manapun. Hubungi admin/SYS untuk mengatur permission
@@ -637,7 +637,7 @@ function hrl_next_pic(array $r): string {
     <?php else: ?>
     <div class="hrl-form-card">
       <div class="hrl-form-head">
-        <span>📝</span> Buat Pengajuan Baru
+        <span><?=rmi_icon('memo')?></span> Buat Pengajuan Baru
       </div>
       <div class="hrl-form-body">
         <form method="post" enctype="multipart/form-data" id="hrlForm">
@@ -821,7 +821,7 @@ function hrl_next_pic(array $r): string {
             </label>
             <div class="hrl-gps-row">
               <button type="button" class="btn btn-ghost btn-sm" id="btnGeo" style="white-space:nowrap">
-                📍 Ambil GPS
+                <?=rmi_icon('target')?> Ambil GPS
               </button>
               <input class="form-control form-control-sm" name="gps_lat" id="gps_lat"
                      placeholder="Lat" readonly style="flex:1">
@@ -834,10 +834,10 @@ function hrl_next_pic(array $r): string {
 
           <div class="d-grid gap-2 mt-4">
             <button class="btn btn-ghost" name="submit_mode" value="draft">
-              💾 Simpan Draft
+              <?=rmi_icon('doc')?> Simpan Draft
             </button>
             <button class="btn btn-rmi" name="submit_mode" value="submit">
-              🚀 Submit Pengajuan
+              <?=rmi_icon('zap')?> Submit Pengajuan
             </button>
           </div>
         </form>
@@ -847,7 +847,7 @@ function hrl_next_pic(array $r): string {
 
     <!-- Aturan -->
     <div class="hrl-rule-card">
-      <div style="font-size:12px;font-weight:600;color:var(--rmi-text,#e8ecf4);margin-bottom:8px">📌 Aturan Pengajuan</div>
+      <div style="font-size:12px;font-weight:600;color:var(--rmi-text,#e8ecf4);margin-bottom:8px"><?=rmi_icon('memo')?> Aturan Pengajuan</div>
       <ul style="margin:0;padding-left:18px">
         <li><b>Attachment opsional</b> untuk seluruh tipe pengajuan.</li>
         <li><b>GPS + Foto</b> wajib untuk tipe yang mengikuti alur lama; <b>Perjadin dan Sakit</b> bersifat opsional.</li>
@@ -857,7 +857,7 @@ function hrl_next_pic(array $r): string {
       </ul>
       <div style="margin-top:10px">
         <a href="<?= h(um('panduan.php')) ?>" class="btn btn-ghost btn-sm" style="font-size:12px">
-          📖 Baca Panduan Lengkap →
+          <?=rmi_icon('books')?> Baca Panduan Lengkap →
         </a>
       </div>
     </div>
@@ -895,7 +895,7 @@ function hrl_next_pic(array $r): string {
     <div class="hrl-right-body">
       <?php if (empty($rows)): ?>
         <div style="text-align:center;padding:48px 0;color:var(--rmi-muted,#9ca3af)">
-          <div style="font-size:36px;margin-bottom:12px">📋</div>
+          <div style="font-size:36px;margin-bottom:12px"><?=rmi_icon('clipboard')?></div>
           <div style="font-size:14px;margin-bottom:6px">Belum ada pengajuan</div>
           <div style="font-size:12px">Buat pengajuan baru menggunakan form di sebelah kiri.</div>
         </div>
@@ -920,7 +920,7 @@ function hrl_next_pic(array $r): string {
             <?php foreach ($rows as $r):
               $st  = strtoupper((string)($r['status']??''));
               $meta = hrl_status_meta($st);
-              $typeInfo = $allTypesMeta[$r['req_type']] ?? ['icon'=>'📄','label'=>$r['req_type'],'color'=>'#9ca3af'];
+              $typeInfo = $allTypesMeta[$r['req_type']] ?? ['icon'=>'' . rmi_icon("doc") . '','label'=>$r['req_type'],'color'=>'#9ca3af'];
               $amount = (float)($r['amount']??0);
             ?>
             <tr>
@@ -1100,16 +1100,16 @@ function updateGpsPhotoVisibility(key) {
     }
 
     btnGeo.disabled = true;
-    btnGeo.textContent = '⏳ Mengambil...';
+    btnGeo.textContent = '<?=rmi_icon('calendar')?> Mengambil...';
     setGeoHelp('Mengambil lokasi GPS realtime...', '');
 
     navigator.geolocation.getCurrentPosition(function(pos){
       gpsLat.value = pos.coords.latitude.toFixed(7);
       gpsLng.value = pos.coords.longitude.toFixed(7);
       gpsAcc.value = Math.round(pos.coords.accuracy || 0);
-      setGeoHelp('✓ GPS berhasil — Akurasi ~' + gpsAcc.value + 'm', 'ok');
+      setGeoHelp('<?=rmi_icon('tick')?> GPS berhasil — Akurasi ~' + gpsAcc.value + 'm', 'ok');
       btnGeo.disabled = false;
-      btnGeo.textContent = '✓ GPS OK';
+      btnGeo.textContent = '<?=rmi_icon('tick')?> GPS OK';
     }, function(err){
       var msg = err && err.message ? err.message : 'GPS gagal.';
       if (/permissions policy|disabled in this document/i.test(msg)) {
@@ -1117,7 +1117,7 @@ function updateGpsPhotoVisibility(key) {
       }
       setGeoHelp('Gagal: ' + msg, 'err');
       btnGeo.disabled = false;
-      btnGeo.textContent = '📍 Coba Lagi';
+      btnGeo.textContent = '<?=rmi_icon('target')?> Coba Lagi';
     }, { enableHighAccuracy:true, timeout:20000, maximumAge:0 });
   });
 

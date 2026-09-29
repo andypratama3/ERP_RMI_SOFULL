@@ -56,22 +56,22 @@ function generateMessage(array $u, string $abs_url): string {
     $office   = !empty($u['abs_office_override']) ? $u['abs_office_override'] : ($u['office_code'] ?? '');
     $link     = $abs_url . '/absensi/';
 
-    return "Halo *{$name}*! 👋\n\n"
+    return "Halo *{$name}*! " . rmi_icon('user') . "\n\n"
          . "Kami dari Tim HRL ingin menginformasikan bahwa sistem *Absensi Digital ERP RMI* kini telah aktif dan wajib digunakan mulai hari ini.\n\n"
-         . "📋 *Data Akun ERP Anda:*\n"
+         . "" . rmi_icon('clipboard') . " *Data Akun ERP Anda:*\n"
          . "• Username: *{$username}*\n"
          . "• Departemen: {$dept}\n"
          . "• Kantor Absensi: *{$office}*\n\n"
-         . "📱 *Cara Check-in:*\n"
+         . "" . rmi_icon('doc') . " *Cara Check-in:*\n"
          . "1. Buka link: {$link}\n"
          . "2. Login dengan username & password ERP\n"
-         . "3. Tap tombol 📷 *Ambil Foto / Check-in*\n"
+         . "3. Tap tombol " . rmi_icon('doc') . " *Ambil Foto / Check-in*\n"
          . "4. Izinkan akses kamera & lokasi GPS\n"
-         . "5. Foto selfie → Submit ✅\n\n"
-         . "🕐 *Lakukan setiap hari:*\n"
+         . "5. Foto selfie → Submit " . rmi_icon('check') . "\n\n"
+         . "" . rmi_icon('calendar') . " *Lakukan setiap hari:*\n"
          . "• Check-in saat tiba di kantor\n"
          . "• Check-out saat akan pulang\n\n"
-         . "❓ Ada kendala? Hubungi Tim HRL atau balas pesan ini.\n\n"
+         . "" . rmi_icon('question') . " Ada kendala? Hubungi Tim HRL atau balas pesan ini.\n\n"
          . "_Rizqullah Mediska Indonesia — Tim HRL_";
 }
 ?>
@@ -100,7 +100,7 @@ function generateMessage(array $u, string $abs_url): string {
 .badge-office{background:rgba(16,185,129,.2);color:#34d399}
 .badge-override{background:rgba(251,191,36,.2);color:#fbbf24}
 
-.msg-box{background:rgba(15,23,42,.8);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px;font-size:13px;line-height:1.7;white-space:pre-wrap;color:#cbd5e1;font-family:system-ui,sans-serif;max-height:200px;overflow-y:auto;margin-bottom:10px}
+.msg-box{background:rgba(15,23,42,.8);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px;font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--rmi-text,#cbd5e1);font-family:system-ui,sans-serif;max-height:200px;overflow-y:auto;margin-bottom:10px}
 .copy-btn{padding:7px 16px;background:#25d366;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
 .copy-btn:hover{background:#1ebe57}
 .copy-btn.copied{background:#16a34a}
@@ -116,7 +116,7 @@ function generateMessage(array $u, string $abs_url): string {
 
   <!-- Header -->
   <div style="margin-bottom:16px">
-    <div class="h1">📣 Broadcast Japri — Absensi</div>
+    <div class="h1"><?=rmi_icon('outbox')?> Broadcast Japri — Absensi</div>
     <div class="muted small">Generator pesan WhatsApp personal per karyawan. Klik "Copy Pesan" lalu kirim via WA.</div>
   </div>
 
@@ -174,7 +174,7 @@ function generateMessage(array $u, string $abs_url): string {
   <!-- Copy All -->
   <div class="bc-actions">
     <button class="copy-btn" onclick="copyAll()" id="btnCopyAll">
-      📋 Copy Semua Pesan (<?= count($users) ?>)
+      <?=rmi_icon('clipboard')?> Copy Semua Pesan (<?= count($users) ?>)
     </button>
     <span class="muted small" style="align-self:center">atau copy per orang di bawah</span>
   </div>
@@ -186,7 +186,7 @@ function generateMessage(array $u, string $abs_url): string {
     if ($u['department'] !== $prev_dept):
       $prev_dept = $u['department'];
   ?>
-    <div class="section-dept">📂 <?= htmlspecialchars($u['department']) ?></div>
+    <div class="section-dept"><?=rmi_icon('box')?> <?= htmlspecialchars($u['department']) ?></div>
   <?php endif;
     $msg     = generateMessage($u, $abs_url);
     $msgId   = 'msg_' . $i;
@@ -203,12 +203,12 @@ function generateMessage(array $u, string $abs_url): string {
         <div class="user-meta">@<?= htmlspecialchars($u['username']) ?></div>
         <div class="user-badges">
           <span class="badge badge-dept"><?= htmlspecialchars($u['department']) ?></span>
-          <span class="badge badge-office">📍 <?= htmlspecialchars($office) ?></span>
+          <span class="badge badge-office"><?=rmi_icon('target')?> <?= htmlspecialchars($office) ?></span>
           <?php if ($isOverride): ?>
-            <span class="badge badge-override">⚡ Override Absensi</span>
+            <span class="badge badge-override"><?=rmi_icon('zap')?> Override Absensi</span>
           <?php endif; ?>
           <?php if (!empty($u['phone'])): ?>
-            <span class="phone-badge">📱 <?= htmlspecialchars($u['phone']) ?></span>
+            <span class="phone-badge"><?=rmi_icon('doc')?> <?= htmlspecialchars($u['phone']) ?></span>
           <?php else: ?>
             <span class="no-phone">Belum ada nomor HP</span>
           <?php endif; ?>
@@ -222,11 +222,11 @@ function generateMessage(array $u, string $abs_url): string {
     <!-- Actions -->
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="copy-btn" id="btn_<?= $i ?>" onclick="copyMsg('<?= $msgId ?>','btn_<?= $i ?>')">
-        📋 Copy Pesan
+        <?=rmi_icon('clipboard')?> Copy Pesan
       </button>
       <?php if ($phone): ?>
         <a class="wa-btn" href="https://wa.me/<?= $phone ?>?text=<?= urlencode($msg) ?>" target="_blank">
-          💬 Buka di WA
+          <?=rmi_icon('memo')?> Buka di WA
         </a>
       <?php endif; ?>
     </div>
@@ -245,10 +245,10 @@ function copyMsg(msgId, btnId) {
   const btn = document.getElementById(btnId);
   if (!el || !btn) return;
   navigator.clipboard.writeText(el.textContent).then(() => {
-    btn.textContent = '✅ Tersalin!';
+    btn.textContent = '<?=rmi_icon('check')?> Tersalin!';
     btn.classList.add('copied');
     setTimeout(() => {
-      btn.innerHTML = '📋 Copy Pesan';
+      btn.innerHTML = '<?=rmi_icon('clipboard')?> Copy Pesan';
       btn.classList.remove('copied');
     }, 2500);
   }).catch(() => {
@@ -259,8 +259,8 @@ function copyMsg(msgId, btnId) {
     ta.select();
     document.execCommand('copy');
     document.body.removeChild(ta);
-    btn.textContent = '✅ Tersalin!';
-    setTimeout(() => btn.innerHTML = '📋 Copy Pesan', 2500);
+    btn.textContent = '<?=rmi_icon('check')?> Tersalin!';
+    setTimeout(() => btn.innerHTML = '<?=rmi_icon('clipboard')?> Copy Pesan', 2500);
   });
 }
 
@@ -269,8 +269,8 @@ function copyAll() {
   const all = Array.from(boxes).map(b => b.textContent).join('\n\n' + '—'.repeat(40) + '\n\n');
   const btn = document.getElementById('btnCopyAll');
   navigator.clipboard.writeText(all).then(() => {
-    btn.textContent = '✅ Semua Tersalin!';
-    setTimeout(() => btn.innerHTML = '📋 Copy Semua Pesan (<?= count($users) ?>)', 2500);
+    btn.textContent = '<?=rmi_icon('check')?> Semua Tersalin!';
+    setTimeout(() => btn.innerHTML = '<?=rmi_icon('clipboard')?> Copy Semua Pesan (<?= count($users) ?>)', 2500);
   });
 }
 </script>

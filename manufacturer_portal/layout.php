@@ -4,6 +4,7 @@
  * Layout wrapper untuk halaman portal pabrikan. 3 bahasa: EN, 中文, ID.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 $base = mportal_base();
 $user = mportal_user();
@@ -77,7 +78,7 @@ main{flex:1}
 <nav class="mp-navbar navbar navbar-expand-lg">
   <div class="container">
     <a class="navbar-brand" href="<?= rmi_h($base) ?>/manufacturer_portal/">
-      <div style="width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">🏭</div>
+      <div style="width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px"><?= rmi_icon('office') ?></div>
       <div>
         <div>RMI Manufacturer Portal</div>
         <span class="brand-sub">Rizqullah Mediska Indonesia</span>
@@ -88,10 +89,10 @@ main{flex:1}
     </button>
     <div class="collapse navbar-collapse" id="mpNav">
       <ul class="navbar-nav me-auto gap-1">
-        <li class="nav-item"><a class="nav-link <?= mp_nav_active('index.php') ?>" href="<?= rmi_h($base) ?>/manufacturer_portal/">🏠 <?= rmi_h(mportal_t('dashboard')) ?></a></li>
-        <li class="nav-item"><a class="nav-link <?= mp_nav_active('manufacture_docs.php') ?>" href="<?= rmi_h($base) ?>/manufacturer_portal/manufacture_docs.php">📄 <?= rmi_h(mportal_t('partnership_proposal')) ?></a></li>
-        <li class="nav-item"><a class="nav-link <?= mp_nav_active('rfq.php') ?>" href="<?= rmi_h($base) ?>/manufacturer_portal/rfq.php">📋 <?= rmi_h(mportal_t('rfq')) ?></a></li>
-        <li class="nav-item"><a class="nav-link <?= mp_nav_active('cases.php') ?>" href="<?= rmi_h($base) ?>/manufacturer_portal/cases.php">🏥 <?= rmi_h(mportal_t('reg_alkes_cases')) ?></a></li>
+        <li class="nav-item"><a class="nav-link <?= mp_nav_active('index.php') ?>" href="<?= rmi_h($base) ?>/manufacturer_portal/"><?= rmi_icon('home') ?> <?= rmi_h(mportal_t('dashboard')) ?></a></li>
+        <li class="nav-item"><a class="nav-link <?= mp_nav_active('manufacture_docs.php') ?>" href="<?= rmi_h($base) ?>/manufacturer_portal/manufacture_docs.php"><?= rmi_icon('doc') ?> <?= rmi_h(mportal_t('partnership_proposal')) ?></a></li>
+        <li class="nav-item"><a class="nav-link <?= mp_nav_active('rfq.php') ?>" href="<?= rmi_h($base) ?>/manufacturer_portal/rfq.php"><?= rmi_icon('clipboard') ?> <?= rmi_h(mportal_t('rfq')) ?></a></li>
+        <li class="nav-item"><a class="nav-link <?= mp_nav_active('cases.php') ?>" href="<?= rmi_h($base) ?>/manufacturer_portal/cases.php"><?= rmi_icon('office') ?> <?= rmi_h(mportal_t('reg_alkes_cases')) ?></a></li>
       </ul>
       <div class="d-flex align-items-center gap-2">
         <!-- Language switcher -->
@@ -103,7 +104,7 @@ main{flex:1}
           <a class="lang-btn <?= $lang==='id'?'active-lang':'' ?>" href="<?= rmi_h($reqUri.$sep.'lang=id') ?>">ID</a>
         </div>
         <div style="width:1px;height:20px;background:rgba(255,255,255,.2)"></div>
-        <span style="font-size:12px;color:rgba(255,255,255,.7)">👤 <?= rmi_h($user['full_name'] ?: $user['username']) ?></span>
+        <span style="font-size:12px;color:rgba(255,255,255,.7)"><?= rmi_icon('user') ?> <?= rmi_h($user['full_name'] ?: $user['username']) ?></span>
         <a class="btn btn-sm btn-outline-light" href="<?= rmi_h($base) ?>/manufacturer_portal/logout.php"><?= rmi_h(mportal_t('logout')) ?></a>
       </div>
     </div>

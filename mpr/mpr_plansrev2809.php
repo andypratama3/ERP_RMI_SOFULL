@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 
 // --- Auth guard ---
 $__rmi_guard_dir = __DIR__;
@@ -611,12 +612,12 @@ $today = date('Y-m-d');
     <div class="d-flex gap-2 flex-wrap">
       <?php if ($perm_plan_view): ?>
         <a class="btn btn-sm btn-outline-light" href="<?= e(url_mpr('mpr_plans.php?export=1&status=' . urlencode($filter_status) . '&q=' . urlencode($q))) ?>">
-          📤 Export CSV
+          <?=rmi_icon('outbox')?> Export CSV
         </a>
       <?php endif; ?>
       <?php if ($perm_plan_import): ?>
         <a class="btn btn-sm btn-outline-light" href="<?= e(url_mpr('mpr_plans.php?export=template')) ?>">
-          📋 Download Template
+          <?=rmi_icon('clipboard')?> Download Template
         </a>
       <?php endif; ?>
     </div>
@@ -804,7 +805,7 @@ $today = date('Y-m-d');
             </div>
             <div class="d-flex flex-column gap-1 align-items-end">
               <span class="badge-soft">CSV</span>
-              <a class="mini" href="<?= e(url_mpr('mpr_plans.php?export=template')) ?>">📋 Template</a>
+              <a class="mini" href="<?= e(url_mpr('mpr_plans.php?export=template')) ?>"><?=rmi_icon('clipboard')?> Template</a>
             </div>
           </div>
           <hr style="border-color:rgba(255,255,255,.12)">
@@ -879,7 +880,7 @@ $today = date('Y-m-d');
                   <td class="mini">
                     <div style="color:#e2e8f0;font-weight:700"><?= e($p['customer_name'] ?: '-') ?></div>
                     <?php if (!empty($p['pic_name'])): ?>
-                      <div>👤 <?= e($p['pic_name']) ?><?= !empty($p['pic_role']) ? ' — ' . e($p['pic_role']) : '' ?></div>
+                      <div><?=rmi_icon('user')?> <?= e($p['pic_name']) ?><?= !empty($p['pic_role']) ? ' — ' . e($p['pic_role']) : '' ?></div>
                     <?php else: ?>
                       <div style="color:#64748b">PIC: -</div>
                     <?php endif; ?>
@@ -888,7 +889,7 @@ $today = date('Y-m-d');
                     <div><?= e($p['start_date'] ?: '-') ?></div>
                     <div><?= e($p['end_date'] ?: '-') ?></div>
                     <?php if ($overdue): ?>
-                      <div style="color:#ef4444;font-weight:700">⚠ Overdue</div>
+                      <div style="color:#ef4444;font-weight:700"><?=rmi_icon('warn')?> Overdue</div>
                     <?php endif; ?>
                   </td>
                   <td class="mini" style="white-space:nowrap">
@@ -902,10 +903,10 @@ $today = date('Y-m-d');
                   </td>
                   <td><?= e($p['office_code']) ?></td>
                   <td>
-                    <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_plan_view.php?id='.(int)$p['id'])) ?>">👁</a>
+                    <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_plan_view.php?id='.(int)$p['id'])) ?>"><?=rmi_icon('search')?></a>
 
                     <?php if ($can_edit && $perm_plan_edit): ?>
-                      <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_plans.php?edit='.(int)$p['id'])) ?>">✏️</a>
+                      <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_plans.php?edit='.(int)$p['id'])) ?>"><?=rmi_icon('memo')?></a>
                     <?php endif; ?>
 
                     <?php if ($can_manage && $perm_plan_edit && in_array($st,['DRAFT','REJECTED'],true) && !$deleted): ?>
@@ -913,12 +914,12 @@ $today = date('Y-m-d');
                         <input type="hidden" name="csrf_token" value="<?= e($CSRF_TOKEN) ?>">
                         <input type="hidden" name="action" value="submit">
                         <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
-                        <button class="btn btn-xs btn-outline-light">📤</button>
+                        <button class="btn btn-xs btn-outline-light"><?=rmi_icon('outbox')?></button>
                       </form>
                     <?php endif; ?>
 
                     <?php if (!$deleted && $perm_plan_approve && $st==='SUBMITTED' && ($MPR_IS_ADMIN || mpr_is_manager($MPR_USER)) && $can_manage): ?>
-                      <button class="btn btn-xs btn-outline-light" data-bs-toggle="modal" data-bs-target="#appr<?= (int)$p['id'] ?>">✅</button>
+                      <button class="btn btn-xs btn-outline-light" data-bs-toggle="modal" data-bs-target="#appr<?= (int)$p['id'] ?>"><?=rmi_icon('check')?></button>
                       <div class="modal fade" id="appr<?= (int)$p['id'] ?>" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-sm">
                           <div class="modal-content" style="background:#0b1220;color:#e5e7eb;border:1px solid rgba(255,255,255,.12)">
@@ -933,8 +934,8 @@ $today = date('Y-m-d');
                                 <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
                                 <textarea class="form-control mb-2" name="approval_note" rows="2" placeholder="Catatan (opsional)"></textarea>
                                 <div class="d-flex gap-2">
-                                  <button name="action" value="approve" class="btn btn-sm btn-primary flex-fill">✅ Approve</button>
-                                  <button name="action" value="reject"  class="btn btn-sm btn-outline-danger flex-fill">❌ Reject</button>
+                                  <button name="action" value="approve" class="btn btn-sm btn-primary flex-fill"><?=rmi_icon('check')?> Approve</button>
+                                  <button name="action" value="reject"  class="btn btn-sm btn-outline-danger flex-fill"><?=rmi_icon('cross')?> Reject</button>
                                 </div>
                               </form>
                             </div>
@@ -949,14 +950,14 @@ $today = date('Y-m-d');
                           <input type="hidden" name="csrf_token" value="<?= e($CSRF_TOKEN) ?>">
                           <input type="hidden" name="action" value="soft_delete">
                           <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
-                          <button class="btn btn-xs btn-outline-danger">🗑</button>
+                          <button class="btn btn-xs btn-outline-danger"><?=rmi_icon('x')?></button>
                         </form>
                       <?php else: ?>
                         <form method="post" class="d-inline">
                           <input type="hidden" name="csrf_token" value="<?= e($CSRF_TOKEN) ?>">
                           <input type="hidden" name="action" value="restore">
                           <input type="hidden" name="id" value="<?= (int)$p['id'] ?>">
-                          <button class="btn btn-xs btn-outline-light">♻️</button>
+                          <button class="btn btn-xs btn-outline-light"><?=rmi_icon('refresh')?></button>
                         </form>
                       <?php endif; ?>
                     <?php endif; ?>

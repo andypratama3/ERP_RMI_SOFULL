@@ -21,8 +21,8 @@ rmi_header('Panduan Warehouse (WQS)', [
         'Panduan',
     ],
     'actions' => [
-        ['label' => '📦 Warehouse Dashboard', 'url' => ds_panduan_u('/dashboards/warehouse/wqs_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
-        ['label' => '📚 Panduan Modul Stok', 'url' => ds_panduan_u('/stock/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('box').' Warehouse Dashboard', 'url' => ds_panduan_u('/dashboards/warehouse/wqs_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('books').' Panduan Modul Stok', 'url' => ds_panduan_u('/stock/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 
@@ -30,7 +30,7 @@ echo ds_panduan_styles();
 ?>
 
 <div class="pnd-hero">
-  <div style="font-size:28px;margin-bottom:8px">📦</div>
+  <div style="font-size:28px;margin-bottom:8px"><?=rmi_icon('box')?></div>
   <div style="font-size:20px;font-weight:800;color:#e2e8f0;margin-bottom:6px">Panduan Warehouse (WQS)</div>
   <div class="pnd-desc" style="color:#94a3b8">
     Dashboard gudang merangkum <b>stok per office</b>, <b>incoming</b>, <b>picking/alokasi</b>, barang mendekati/melewati <b>expiry</b>, dan antrian <b>DO</b>.
@@ -41,7 +41,7 @@ echo ds_panduan_styles();
 <div class="row g-3">
   <div class="col-12 col-lg-6">
     <div class="pnd-section accent-teal">
-      <h5 style="color:#2dd4bf;margin-bottom:12px">✅ Fokus operasional</h5>
+      <h5 style="color:#2dd4bf;margin-bottom:12px"><?=rmi_icon('check')?> Fokus operasional</h5>
       <ul class="pnd-list">
         <li>Selesaikan <b>picking</b> dan konfirmasi pengiriman sesuai prioritas DO.</li>
         <li>Rekam <b>incoming</b> dengan lengkap (lot, exp, serial) untuk produk regulasi.</li>
@@ -51,7 +51,7 @@ echo ds_panduan_styles();
   </div>
   <div class="col-12 col-lg-6">
     <div class="pnd-section accent-amber">
-      <h5 style="color:#fcd34d;margin-bottom:12px">🏢 Scope cabang</h5>
+      <h5 style="color:#fcd34d;margin-bottom:12px"><?=rmi_icon('office')?> Scope cabang</h5>
       <ul class="pnd-list">
         <li>Staff cabang biasanya terbatas pada <b>office</b> mereka — jangan asumsi angka global tanpa cek filter.</li>
       </ul>
@@ -60,12 +60,12 @@ echo ds_panduan_styles();
   </div>
   <div class="col-12">
     <div class="pnd-section accent-blue">
-      <h5 style="color:#93c5fd;margin-bottom:12px">🔗 Pintasan</h5>
+      <h5 style="color:#93c5fd;margin-bottom:12px"><?=rmi_icon('doc')?> Pintasan</h5>
       <div class="pnd-quick">
-        <a href="<?= rmi_h(ds_panduan_u('/dashboards/warehouse/wqs_dashboard.php')) ?>">📦 Warehouse Dashboard</a>
-        <a href="<?= rmi_h(ds_panduan_u('/stock/panduan.php')) ?>">📚 Panduan Stok (lengkap)</a>
-        <a href="<?= rmi_h(ds_panduan_u('/dashboards/quality/panduan.php')) ?>">✅ Panduan Quality</a>
-        <a href="<?= rmi_h(ds_panduan_u('/stock/wqs_incoming.php')) ?>">📥 WQS Incoming</a>
+        <a href="<?= rmi_h(ds_panduan_u('/dashboards/warehouse/wqs_dashboard.php')) ?>"><?=rmi_icon('box')?> Warehouse Dashboard</a>
+        <a href="<?= rmi_h(ds_panduan_u('/stock/panduan.php')) ?>"><?=rmi_icon('books')?> Panduan Stok (lengkap)</a>
+        <a href="<?= rmi_h(ds_panduan_u('/dashboards/quality/panduan.php')) ?>"><?=rmi_icon('check')?> Panduan Quality</a>
+        <a href="<?= rmi_h(ds_panduan_u('/stock/wqs_incoming.php')) ?>"><?=rmi_icon('inbox')?> WQS Incoming</a>
       </div>
     </div>
   </div>

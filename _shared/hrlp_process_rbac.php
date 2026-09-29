@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/rmi_icons.php';
 
 /**
  * RBAC HRL Process — izin per tipe pengajuan (CUTI, IZIN, …).
@@ -16,13 +17,13 @@ declare(strict_types=1);
 function hrlp_request_types_meta(): array
 {
     return [
-        'CUTI'                => ['label' => 'Cuti', 'icon' => '🌴', 'color' => '#10b981'],
-        'IZIN'                => ['label' => 'Izin', 'icon' => '📋', 'color' => '#f59e0b'],
-        'LEMBUR'              => ['label' => 'Lembur', 'icon' => '⏰', 'color' => '#3b82f6'],
-        'PERJADIN'            => ['label' => 'Perjadin (Form)', 'icon' => '✈️', 'color' => '#8b5cf6'],
-        'PERMINTAAN_KARYAWAN' => ['label' => 'Permintaan Karyawan', 'icon' => '📦', 'color' => '#ec4899'],
-        'KENAIKAN_GAJI'       => ['label' => 'Kenaikan Gaji', 'icon' => '💰', 'color' => '#14b8a6'],
-        'REKRUTMEN'           => ['label' => 'Rekrutmen', 'icon' => '👥', 'color' => '#f97316'],
+        'CUTI'                => ['label' => 'Cuti', 'icon' => rmi_icon('sun'), 'color' => '#10b981'],
+        'IZIN'                => ['label' => 'Izin', 'icon' => rmi_icon('clipboard'), 'color' => '#f59e0b'],
+        'LEMBUR'              => ['label' => 'Lembur', 'icon' => rmi_icon('calendar'), 'color' => '#3b82f6'],
+        'PERJADIN'            => ['label' => 'Perjadin (Form)', 'icon' => rmi_icon('outbox'), 'color' => '#8b5cf6'],
+        'PERMINTAAN_KARYAWAN' => ['label' => 'Permintaan Karyawan', 'icon' => rmi_icon('box'), 'color' => '#ec4899'],
+        'KENAIKAN_GAJI'       => ['label' => 'Kenaikan Gaji', 'icon' => rmi_icon('money'), 'color' => '#14b8a6'],
+        'REKRUTMEN'           => ['label' => 'Rekrutmen', 'icon' => rmi_icon('users'), 'color' => '#f97316'],
     ];
 }
 

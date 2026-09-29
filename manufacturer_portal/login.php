@@ -4,6 +4,7 @@
  * Login Manufacturer Portal (pabrikan Reg Alkes).
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 
@@ -124,7 +125,7 @@ $sep = (strpos($reqUri, '?') !== false) ? '&' : '?';
             <div class="card shadow">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <span style="font-size: 2.5rem;">🏭</span>
+                        <span style="font-size: 2.5rem;"><?= rmi_icon('office') ?></span>
                         <h4 class="card-title mb-1 mt-2"><?= rmi_h(mportal_t('portal_title')) ?></h4>
                         <p class="text-muted small mb-0"><?= rmi_h(mportal_t('reg_alkes')) ?></p>
                     </div>

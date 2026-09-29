@@ -60,30 +60,30 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Alur Payroll -->
   <div class="pnd-section">
-    <h3>🔄 Alur Proses Payroll Bulanan</h3>
+    <h3><?=rmi_icon('refresh')?> Alur Proses Payroll Bulanan</h3>
     <div class="pnd-pipe">
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#475569;color:#fff">📋</div>
+        <div class="pnd-pipe-dot" style="background:#475569;color:#fff"><?=rmi_icon('clipboard')?></div>
         <div class="pnd-pipe-lbl">Setup<br><span style="color:#94a3b8">Settings + Matrix</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff">▶</div>
+        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff"><?=rmi_icon('zap')?></div>
         <div class="pnd-pipe-lbl">Generate Run<br><span style="color:#60a5fa">DRAFT</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#d97706;color:#fff">✏</div>
+        <div class="pnd-pipe-dot" style="background:#d97706;color:#fff"><?=rmi_icon('memo')?></div>
         <div class="pnd-pipe-lbl">Review & Edit<br><span style="color:#fbbf24">Koreksi</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#16a34a;color:#fff">✓</div>
+        <div class="pnd-pipe-dot" style="background:#16a34a;color:#fff"><?=rmi_icon('tick')?></div>
         <div class="pnd-pipe-lbl">Post<br><span style="color:#34d399">POSTED</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#0d9488;color:#fff">💳</div>
+        <div class="pnd-pipe-dot" style="background:#0d9488;color:#fff"><?=rmi_icon('money')?></div>
         <div class="pnd-pipe-lbl">Bayar<br><span style="color:#2dd4bf">PAID</span></div>
       </div>
     </div>
@@ -95,7 +95,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Langkah 1: Setup -->
   <div class="pnd-section">
-    <h3>⚙️ Langkah 1 — Setup Sebelum Run Payroll</h3>
+    <h3><?=rmi_icon('gear')?> Langkah 1 — Setup Sebelum Run Payroll</h3>
 
     <div class="pnd-step">
       <div class="pnd-num purple">A</div>
@@ -127,7 +127,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Langkah 2: Generate Run -->
   <div class="pnd-section">
-    <h3>▶️ Langkah 2 — Generate Payroll Run</h3>
+    <h3><?=rmi_icon('zap')?> Langkah 2 — Generate Payroll Run</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -170,7 +170,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Langkah 3: Review & Edit -->
   <div class="pnd-section">
-    <h3>✏️ Langkah 3 — Review & Koreksi</h3>
+    <h3><?=rmi_icon('memo')?> Langkah 3 — Review & Koreksi</h3>
 
     <div class="pnd-step">
       <div class="pnd-num yellow">1</div>
@@ -207,7 +207,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Langkah 4: Post & Paid -->
   <div class="pnd-section">
-    <h3>✅ Langkah 4 — Post & Tandai PAID</h3>
+    <h3><?=rmi_icon('check')?> Langkah 4 — Post & Tandai PAID</h3>
 
     <div class="pnd-step">
       <div class="pnd-num green">1</div>
@@ -243,7 +243,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Slip Gaji -->
   <div class="pnd-section">
-    <h3>🧾 Cara Melihat & Cetak Slip Gaji</h3>
+    <h3><?=rmi_icon('receipt')?> Cara Melihat & Cetak Slip Gaji</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -268,7 +268,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
       <div class="pnd-num blue">3</div>
       <div>
         <div class="pnd-title">Cetak atau Download</div>
-        <div class="pnd-desc">Klik <b>Cetak</b> untuk membuka versi print-friendly, lalu gunakan <b>Ctrl+P</b> (atau ⌘+P di Mac) untuk mencetak atau save PDF.</div>
+        <div class="pnd-desc">Klik <b>Cetak</b> untuk membuka versi print-friendly, lalu gunakan <b>Ctrl+P</b> (atau <?=rmi_icon('gear')?>+P di Mac) untuk mencetak atau save PDF.</div>
       </div>
     </div>
 
@@ -280,7 +280,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Komponen Gaji -->
   <div class="pnd-section">
-    <h3>💰 Komponen Gaji yang Dihitung Otomatis</h3>
+    <h3><?=rmi_icon('money')?> Komponen Gaji yang Dihitung Otomatis</h3>
     <div class="pnd-comp-grid">
       <div class="pnd-comp-item">
         <div class="pnd-comp-name">Gaji Pokok</div>
@@ -323,7 +323,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Pinjaman / Kasbon -->
   <div class="pnd-section">
-    <h3>💵 Manajemen Pinjaman & Kasbon</h3>
+    <h3><?=rmi_icon('money')?> Manajemen Pinjaman & Kasbon</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -358,39 +358,39 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- FAQ -->
   <div class="pnd-section">
-    <h3>❓ Pertanyaan Umum (FAQ)</h3>
+    <h3><?=rmi_icon('question')?> Pertanyaan Umum (FAQ)</h3>
 
-    <div class="pnd-faq-q">❓ Payroll run sudah dibuat tapi data absensi tidak terbaca?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Payroll run sudah dibuat tapi data absensi tidak terbaca?</div>
     <div class="pnd-faq-a">
       Pastikan karyawan sudah di-mapping ke akun login ERP di <b>Payroll Settings</b> (kolom "Login User").
       Jika belum, sistem menganggap karyawan hadir penuh dan tidak ada potongan absen.
     </div>
 
-    <div class="pnd-faq-q">❓ Kenapa karyawan tidak muncul di payroll run?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Kenapa karyawan tidak muncul di payroll run?</div>
     <div class="pnd-faq-a">
       Cek: (1) Status karyawan di <b>Master Karyawan</b> harus <b>active</b>. (2) Jika run dibuat dengan filter Office Code,
       pastikan office karyawan sesuai.
     </div>
 
-    <div class="pnd-faq-q">❓ Bagaimana cara mengganti komponen gaji karyawan tertentu?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Bagaimana cara mengganti komponen gaji karyawan tertentu?</div>
     <div class="pnd-faq-a">
       Gunakan <b>Payroll Settings</b> untuk override komponen individual (gaji pokok, tunjangan, rate lembur).
       Override di settings lebih diprioritaskan daripada Salary Matrix.
     </div>
 
-    <div class="pnd-faq-q">❓ Run sudah POSTED, tapi ada kesalahan — bisa dibatalkan?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Run sudah POSTED, tapi ada kesalahan — bisa dibatalkan?</div>
     <div class="pnd-faq-a">
       Status POSTED mengunci data. Untuk membatalkan, hubungi <b>Admin/SYS</b> untuk melakukan reversal.
       Buat run baru untuk periode yang sama hanya jika run lama dibatalkan.
     </div>
 
-    <div class="pnd-faq-q">❓ Slip gaji tidak muncul untuk karyawan tertentu?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Slip gaji tidak muncul untuk karyawan tertentu?</div>
     <div class="pnd-faq-a">
       Slip gaji hanya tersedia jika run sudah berstatus <span class="pnd-badge paid">● PAID</span>
       dan karyawan tersebut ada di run (tidak difilter oleh Office Code).
     </div>
 
-    <div class="pnd-faq-q">❓ Bagaimana cara melihat audit log payroll?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Bagaimana cara melihat audit log payroll?</div>
     <div class="pnd-faq-a">
       Buka <b>Payroll → Audit Log</b>. Tercatat semua aksi: buat run, edit item, post, paid, dll. beserta waktu dan user yang melakukan.
     </div>
@@ -398,7 +398,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Kontak -->
   <div class="pnd-section accent">
-    <h3>🆘 Butuh Bantuan?</h3>
+    <h3><?=rmi_icon('warn')?> Butuh Bantuan?</h3>
     <div class="pnd-desc" style="line-height:1.9">
       Untuk kendala modul Payroll, hubungi <b>Tim FIN / Admin Sistem</b> melalui:
       <ul style="margin-top:10px;padding-left:22px">

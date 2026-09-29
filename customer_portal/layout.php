@@ -4,6 +4,7 @@
  * Layout Portal Customer — Rizqullah Mediska Indonesia
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 $base = portal_base();
 $user = portal_user();
@@ -129,7 +130,7 @@ main { flex:1 }
 <nav class="cp-navbar navbar navbar-expand-lg">
     <div class="container">
     <a class="navbar-brand" href="<?= rmi_h($base) ?>/customer_portal/">
-      <div class="brand-icon">🏥</div>
+      <div class="brand-icon"><?= rmi_icon('office') ?></div>
       <div>
         <div style="line-height:1.1">RMI Portal</div>
         <div style="font-size:10px;opacity:.7;font-weight:400">Rizqullah Mediska Indonesia</div>
@@ -144,17 +145,17 @@ main { flex:1 }
       <ul class="navbar-nav me-auto gap-1">
         <li class="nav-item">
           <a class="nav-link <?= cp_nav_active('index.php') ?>" href="<?= rmi_h($base) ?>/customer_portal/">
-            🏠 Dashboard
+            <?= rmi_icon('home') ?> Dashboard
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link <?= cp_nav_active('catalog.php') ?>" href="<?= rmi_h($base) ?>/customer_portal/catalog.php">
-            📦 Katalog
+            <?= rmi_icon('box') ?> Katalog
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link <?= cp_nav_active('cart.php') ?>" href="<?= rmi_h($base) ?>/customer_portal/cart.php">
-            🛒 Keranjang
+            <?= rmi_icon('cart') ?> Keranjang
             <?php if ($cartCnt > 0): ?>
               <span class="cart-badge"><?= (int)$cartCnt ?></span>
             <?php endif; ?>
@@ -162,14 +163,14 @@ main { flex:1 }
         </li>
                 <li class="nav-item">
           <a class="nav-link <?= cp_nav_active('orders.php') ?>" href="<?= rmi_h($base) ?>/customer_portal/orders.php">
-            📋 Riwayat Order
+            <?= rmi_icon('clipboard') ?> Riwayat Order
                     </a>
                 </li>
             </ul>
 
       <div class="d-flex align-items-center gap-3">
         <div class="cp-user d-none d-lg-block">
-          👤 <strong><?= rmi_h($user['full_name'] ?: $user['username']) ?></strong>
+          <?= rmi_icon('user') ?> <strong><?= rmi_h($user['full_name'] ?: $user['username']) ?></strong>
         </div>
         <a class="btn btn-sm btn-outline-light" href="<?= rmi_h($base) ?>/customer_portal/logout.php">
           Logout

@@ -4,6 +4,7 @@
  * Login Customer Portal (Hermina, dll).
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 
@@ -147,26 +148,26 @@ body{margin:0;min-height:100vh;display:flex;font-family:'Segoe UI',system-ui,san
 
 <!-- Left: Branding -->
 <div class="login-left">
-  <div class="brand-logo">🏥</div>
+  <div class="brand-logo"><?= rmi_icon('office') ?></div>
   <div class="brand-name">RMI Customer Portal</div>
   <div class="brand-tagline">Rizqullah Mediska Indonesia</div>
   <ul class="feature-list">
-    <li><span class="icon">📦</span> Pesan produk alat kesehatan kapan saja</li>
-    <li><span class="icon">📋</span> Pantau status & riwayat order</li>
-    <li><span class="icon">💰</span> Lihat harga khusus untuk institusi Anda</li>
-    <li><span class="icon">📄</span> Upload dan kelola dokumen pesanan</li>
-    <li><span class="icon">🚚</span> Informasi pengiriman real-time</li>
+    <li><span class="icon"><?= rmi_icon('box') ?></span> Pesan produk alat kesehatan kapan saja</li>
+    <li><span class="icon"><?= rmi_icon('clipboard') ?></span> Pantau status & riwayat order</li>
+    <li><span class="icon"><?= rmi_icon('money') ?></span> Lihat harga khusus untuk institusi Anda</li>
+    <li><span class="icon"><?= rmi_icon('doc') ?></span> Upload dan kelola dokumen pesanan</li>
+    <li><span class="icon"><?= rmi_icon('outbox') ?></span> Informasi pengiriman real-time</li>
   </ul>
   <div style="margin-top:32px;font-size:13px;color:rgba(255,255,255,.5)">"We Are Healthy Together"</div>
 </div>
 
 <!-- Right: Login Form -->
 <div class="login-right">
-  <div class="login-title">Selamat Datang 👋</div>
+  <div class="login-title">Selamat Datang <?= rmi_icon('user') ?></div>
   <div class="login-sub">Masuk ke portal customer RMI untuk mulai memesan</div>
 
   <?php if ($error): ?>
-    <div class="alert-danger mb-3">❌ <?= rmi_h($error) ?></div>
+    <div class="alert-danger mb-3"><?= rmi_icon('cross') ?> <?= rmi_h($error) ?></div>
   <?php endif; ?>
 
   <form method="post">

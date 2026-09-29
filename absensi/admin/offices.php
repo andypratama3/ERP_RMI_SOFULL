@@ -166,16 +166,16 @@ try {
 
   <!-- Navigasi Admin HR -->
   <div class="col-12 d-flex flex-wrap gap-2 mb-1">
-    <a class="btn btn-sm btn-outline-secondary" href="rekap.php">📊 Rekap</a>
-    <a class="btn btn-sm btn-outline-secondary" href="approval.php">📋 Approval</a>
-    <a class="btn btn-sm btn-outline-secondary" href="users.php">👥 Users</a>
-    <a class="btn btn-sm btn-outline-secondary" href="payroll_gate.php">💰 Payroll Gate</a>
-    <a class="btn btn-sm btn-primary" href="settings.php">⚙️ Jam Kerja</a>
+    <a class="btn btn-sm btn-outline-secondary" href="rekap.php"><?=rmi_icon('chart')?> Rekap</a>
+    <a class="btn btn-sm btn-outline-secondary" href="approval.php"><?=rmi_icon('clipboard')?> Approval</a>
+    <a class="btn btn-sm btn-outline-secondary" href="users.php"><?=rmi_icon('users')?> Users</a>
+    <a class="btn btn-sm btn-outline-secondary" href="payroll_gate.php"><?=rmi_icon('money')?> Payroll Gate</a>
+    <a class="btn btn-sm btn-primary" href="settings.php"><?=rmi_icon('gear')?> Jam Kerja</a>
   </div>
 
   <!-- Info box: GPS accuracy -->
   <div class="card col-12" style="border-left:3px solid #f59e0b;background:rgba(245,158,11,.06)">
-    <div style="font-weight:800;font-size:13px;margin-bottom:6px">⚠️ Tentang Kendala Jarak GPS</div>
+    <div style="font-weight:800;font-size:13px;margin-bottom:6px"><?=rmi_icon('warn')?> Tentang Kendala Jarak GPS</div>
     <div class="muted small" style="line-height:1.7">
       GPS di HP tidak selalu akurat — bisa meleset <b>30–80 meter</b> tergantung sinyal, gedung, dan cuaca.
       Sistem sudah otomatis menambah <b>toleransi 70% dari akurasi GPS</b> (maks 80m) ke radius kantor.<br>
@@ -183,10 +183,10 @@ try {
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
       <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;font-size:12px">
-        📏 <b>Rekomendasi radius minimum:</b> 150–200m untuk area terbuka, 200–300m untuk gedung/dalam ruangan
+        <?=rmi_icon('search')?> <b>Rekomendasi radius minimum:</b> 150–200m untuk area terbuka, 200–300m untuk gedung/dalam ruangan
       </div>
       <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 14px;font-size:12px">
-        🔓 Atau ubah mode ke <b>Longgar</b> (tetap catat jarak tapi tidak ditolak)
+        <?=rmi_icon('check')?> Atau ubah mode ke <b>Longgar</b> (tetap catat jarak tapi tidak ditolak)
       </div>
     </div>
   </div>
@@ -200,8 +200,8 @@ try {
       <input type="hidden" name="mode" value="save_setting">
       <label class="small muted">Mode GeoFence:</label>
       <select name="geofence_enforce">
-        <option value="1" <?= $enforceVal===1?'selected':'' ?>>🔒 Wajib (tolak di luar radius)</option>
-        <option value="0" <?= $enforceVal===0?'selected':'' ?>>🔓 Longgar (catat jarak, tidak ditolak)</option>
+        <option value="1" <?= $enforceVal===1?'selected':'' ?>><?=rmi_icon('warn')?> Wajib (tolak di luar radius)</option>
+        <option value="0" <?= $enforceVal===0?'selected':'' ?>><?=rmi_icon('check')?> Longgar (catat jarak, tidak ditolak)</option>
       </select>
       <button class="btn ok" type="submit">Simpan</button>
     </form>
@@ -225,14 +225,14 @@ try {
         <div class="oc-name"><?= htmlspecialchars($r['office_name'],ENT_QUOTES,'UTF-8') ?></div>
         <div class="oc-geo">
           <?php if ($hasGeo): ?>
-            📍 <?= number_format((float)$r['lat'],6) ?>, <?= number_format((float)$r['lng'],6) ?><br>
-            📏 Radius: <b><?= $radius ?>m</b>
+            <?=rmi_icon('target')?> <?= number_format((float)$r['lat'],6) ?>, <?= number_format((float)$r['lng'],6) ?><br>
+            <?=rmi_icon('search')?> Radius: <b><?= $radius ?>m</b>
             <?php if ($stat && $stat['avg_dist']): ?>
               · Avg jarak: <b><?= (int)$stat['avg_dist'] ?>m</b>
-              <?php if ($needsLarger): ?> <span style="color:#fbbf24">⚠ radius mungkin terlalu kecil</span><?php endif; ?>
+              <?php if ($needsLarger): ?> <span style="color:#fbbf24"><?=rmi_icon('warn')?> radius mungkin terlalu kecil</span><?php endif; ?>
             <?php endif; ?>
           <?php else: ?>
-            ⚠️ Belum ada koordinat
+            <?=rmi_icon('warn')?> Belum ada koordinat
           <?php endif; ?>
         </div>
         <?php if ($stat): ?>
@@ -242,11 +242,11 @@ try {
         </div>
         <?php endif; ?>
         <?php if (!empty($r['kiosk_token'])): ?>
-        <div class="kiosk-badge">📟 Kiosk aktif</div>
+        <div class="kiosk-badge"><?=rmi_icon('box')?> Kiosk aktif</div>
         <?php else: ?>
-        <div class="kiosk-badge no-token">📟 Kiosk belum dibuat</div>
+        <div class="kiosk-badge no-token"><?=rmi_icon('box')?> Kiosk belum dibuat</div>
         <?php endif; ?>
-        <div class="oc-edit">✏️ Klik untuk setup radius & koordinat</div>
+        <div class="oc-edit"><?=rmi_icon('memo')?> Klik untuk setup radius & koordinat</div>
       </div>
       <?php endforeach; ?>
     </div>
@@ -254,7 +254,7 @@ try {
 
   <!-- Kiosk Management -->
   <div class="card col-12">
-    <div class="h1">📟 Kiosk Absensi</div>
+    <div class="h1"><?=rmi_icon('box')?> Kiosk Absensi</div>
     <div class="muted small" style="margin-bottom:14px">
       Mode kiosk: satu tablet/HP ditempatkan di pintu kantor. Karyawan login dan foto di sana — <b>tidak perlu GPS HP karyawan</b>.
       Titik absensi = koordinat kantor yang sudah disimpan.
@@ -282,15 +282,15 @@ try {
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <a href="<?= htmlspecialchars($kioskUrl,ENT_QUOTES,'UTF-8') ?>" target="_blank"
-             class="btn ok" style="flex:1;text-align:center;font-size:12px;padding:8px">🖥 Buka Kiosk</a>
+             class="btn ok" style="flex:1;text-align:center;font-size:12px;padding:8px"><?=rmi_icon('home')?> Buka Kiosk</a>
           <a href="kiosk_poster.php?office=<?= urlencode($oc) ?>" target="_blank"
-             class="btn" style="flex:1;text-align:center;font-size:12px;padding:8px;background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.3);text-decoration:none">🖨 Print Poster</a>
+             class="btn" style="flex:1;text-align:center;font-size:12px;padding:8px;background:rgba(139,92,246,.15);color:#a78bfa;border:1px solid rgba(139,92,246,.3);text-decoration:none"><?=rmi_icon('print')?> Print Poster</a>
         </div>
         <form method="post" style="margin-top:6px" onsubmit="return confirm('Reset token kiosk <?= htmlspecialchars($oc,ENT_QUOTES,'UTF-8') ?>? Link lama tidak bisa dipakai lagi.')">
           <?= csrf_field() ?>
           <input type="hidden" name="mode" value="gen_kiosk">
           <input type="hidden" name="office_code" value="<?= htmlspecialchars($oc,ENT_QUOTES,'UTF-8') ?>">
-          <button class="btn" style="width:100%;font-size:11px;padding:6px;background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2)">🔄 Reset Token</button>
+          <button class="btn" style="width:100%;font-size:11px;padding:6px;background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2)"><?=rmi_icon('refresh')?> Reset Token</button>
         </form>
       <?php else: ?>
         <div style="text-align:center;padding:20px 0;color:#64748b;font-size:13px">Belum ada token kiosk</div>
@@ -298,7 +298,7 @@ try {
           <?= csrf_field() ?>
           <input type="hidden" name="mode" value="gen_kiosk">
           <input type="hidden" name="office_code" value="<?= htmlspecialchars($oc,ENT_QUOTES,'UTF-8') ?>">
-          <button class="btn ok" style="width:100%;font-size:13px;padding:10px">📟 Generate Kiosk Token</button>
+          <button class="btn ok" style="width:100%;font-size:13px;padding:10px"><?=rmi_icon('box')?> Generate Kiosk Token</button>
         </form>
       <?php endif; ?>
     </div>
@@ -308,7 +308,7 @@ try {
 
   <!-- Editor GeoFence -->
   <div class="card col-12" id="geo-editor" style="display:none">
-    <div class="h1">✏️ Setup GeoFence — <span id="geo-editor-title"></span></div>
+    <div class="h1"><?=rmi_icon('memo')?> Setup GeoFence — <span id="geo-editor-title"></span></div>
     <div class="muted small">Klik di peta untuk set koordinat, atau isi manual. Geser lingkaran untuk pindah titik.</div>
 
     <div id="geo-map"></div>
@@ -333,15 +333,15 @@ try {
                  oninput="syncRadius(this.value)" style="width:100%;margin-top:6px">
           <input type="hidden" name="radius_m" id="f-radius">
           <div style="display:flex;justify-content:space-between;font-size:10px;color:#64748b;margin-top:3px">
-            <span>50m</span><span style="color:#f59e0b">⭐ 150–200m</span><span>1000m</span>
+            <span>50m</span><span style="color:#f59e0b"><?=rmi_icon('target')?> 150–200m</span><span>1000m</span>
           </div>
         </div>
         <div>
-          <button class="btn ok" type="submit">💾 Simpan GeoFence</button>
+          <button class="btn ok" type="submit"><?=rmi_icon('doc')?> Simpan GeoFence</button>
           <button type="button" class="btn" onclick="closeEditor()" style="margin-left:6px">Batal</button>
         </div>
       </div>
-      <div class="muted small" style="margin-top:8px">💡 Tip: Klik di peta untuk set titik, atau geser marker.</div>
+      <div class="muted small" style="margin-top:8px"><?=rmi_icon('question')?> Tip: Klik di peta untuk set titik, atau geser marker.</div>
     </form>
   </div>
 </div>

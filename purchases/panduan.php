@@ -65,35 +65,35 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Pipeline Procurement -->
   <div class="pnd-section">
-    <h3>🔄 Alur Procurement End to End</h3>
+    <h3><?= rmi_icon('refresh') ?> Alur Procurement End to End</h3>
     <div class="pnd-pipe">
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#475569;color:#fff">📋</div>
+        <div class="pnd-pipe-dot" style="background:#475569;color:#fff"><?= rmi_icon('clipboard') ?></div>
         <div class="pnd-pipe-lbl">PR<br><span style="color:#94a3b8">Dari WQS</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff">📨</div>
+        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff"><?= rmi_icon('inbox') ?></div>
         <div class="pnd-pipe-lbl">RFQ<br><span style="color:#60a5fa">Penawaran</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#d97706;color:#fff">📑</div>
+        <div class="pnd-pipe-dot" style="background:#d97706;color:#fff"><?= rmi_icon('doc') ?></div>
         <div class="pnd-pipe-lbl">PO<br><span style="color:#fbbf24">Order</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#7c3aed;color:#fff">🚢</div>
+        <div class="pnd-pipe-dot" style="background:#7c3aed;color:#fff"><?= rmi_icon('outbox') ?></div>
         <div class="pnd-pipe-lbl">GR / Import<br><span style="color:#a78bfa">Penerimaan</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#0d9488;color:#fff">🧾</div>
+        <div class="pnd-pipe-dot" style="background:#0d9488;color:#fff"><?= rmi_icon('receipt') ?></div>
         <div class="pnd-pipe-lbl">Invoice AP<br><span style="color:#2dd4bf">Vendor Bill</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#16a34a;color:#fff">💳</div>
+        <div class="pnd-pipe-dot" style="background:#16a34a;color:#fff"><?= rmi_icon('money') ?></div>
         <div class="pnd-pipe-lbl">Payment<br><span style="color:#34d399">PAID</span></div>
       </div>
     </div>
@@ -105,7 +105,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- RFQ -->
   <div class="pnd-section">
-    <h3>📨 Request for Quotation (RFQ)</h3>
+    <h3><?= rmi_icon('inbox') ?> Request for Quotation (RFQ)</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -158,7 +158,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Purchase Order -->
   <div class="pnd-section">
-    <h3>📑 Purchase Order (PO)</h3>
+    <h3><?= rmi_icon('doc') ?> Purchase Order (PO)</h3>
 
     <div class="pnd-step">
       <div class="pnd-num yellow">1</div>
@@ -206,7 +206,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Goods Receipt -->
   <div class="pnd-section">
-    <h3>📦 Goods Receipt (GR) — Penerimaan Barang</h3>
+    <h3><?= rmi_icon('box') ?> Goods Receipt (GR) — Penerimaan Barang</h3>
 
     <div class="pnd-step">
       <div class="pnd-num green">1</div>
@@ -246,7 +246,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- AP Invoice & Payment -->
   <div class="pnd-section">
-    <h3>🧾 Invoice AP & Pembayaran ke Vendor</h3>
+    <h3><?= rmi_icon('receipt') ?> Invoice AP & Pembayaran ke Vendor</h3>
 
     <div class="pnd-step">
       <div class="pnd-num teal">1</div>
@@ -295,7 +295,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Import Control Tower -->
   <div class="pnd-section">
-    <h3>🚢 Import Control Tower (Barang Impor)</h3>
+    <h3><?= rmi_icon('outbox') ?> Import Control Tower (Barang Impor)</h3>
 
     <div class="pnd-step">
       <div class="pnd-num purple">1</div>
@@ -342,33 +342,33 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- FAQ -->
   <div class="pnd-section">
-    <h3>❓ Pertanyaan Umum (FAQ)</h3>
+    <h3><?= rmi_icon('question') ?> Pertanyaan Umum (FAQ)</h3>
 
-    <div class="pnd-faq-q">❓ PO sudah dibuat tapi supplier belum terima — perlu dikirim ulang?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> PO sudah dibuat tapi supplier belum terima — perlu dikirim ulang?</div>
     <div class="pnd-faq-a">
       Buka detail PO → klik <b>Cetak PO</b> → kirim ulang ke supplier via email atau WhatsApp.
       PO memiliki nomor unik yang bisa dijadikan referensi.
     </div>
 
-    <div class="pnd-faq-q">❓ Barang datang sebagian — bagaimana cara GR?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Barang datang sebagian — bagaimana cara GR?</div>
     <div class="pnd-faq-a">
       Buat GR dengan jumlah yang benar-benar diterima (partial). PO status berubah ke PARTIAL GR.
       Saat sisa barang datang, buat GR lagi dari PO yang sama.
     </div>
 
-    <div class="pnd-faq-q">❓ Invoice AP dari vendor berbeda dengan PO — apa yang harus dilakukan?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Invoice AP dari vendor berbeda dengan PO — apa yang harus dilakukan?</div>
     <div class="pnd-faq-a">
       Sistem akan memberi flag mismatch. Hubungi supplier untuk klarifikasi sebelum approve invoice.
       Jika ada debit/kredit note, input sebagai adjustment di invoice AP.
     </div>
 
-    <div class="pnd-faq-q">❓ Bagaimana cara cek sisa hutang ke vendor (AP aging)?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Bagaimana cara cek sisa hutang ke vendor (AP aging)?</div>
     <div class="pnd-faq-a">
       Buka <b>Purchases → Reports</b> → pilih laporan <b>AP Aging</b> untuk melihat daftar invoice yang belum dibayar
       beserta umur hutang (30/60/90 hari).
     </div>
 
-    <div class="pnd-faq-q">❓ PIB belum keluar — apakah bisa GR dulu?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> PIB belum keluar — apakah bisa GR dulu?</div>
     <div class="pnd-faq-a">
       Tergantung kebijakan. Biasanya GR dilakukan setelah barang secara fisik sudah di gudang dan dokumen PIB sudah ada.
       Koordinasikan dengan Manager Procurement dan Tim Logistik.
@@ -377,7 +377,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Kontak -->
   <div class="pnd-section accent">
-    <h3>🆘 Butuh Bantuan?</h3>
+    <h3><?= rmi_icon('question') ?> Butuh Bantuan?</h3>
     <div class="pnd-desc" style="line-height:1.9">
       Untuk kendala modul Purchases, hubungi <b>Manager Procurement / FIN</b> atau <b>Admin Sistem</b>:
       <ul style="margin-top:10px;padding-left:22px">

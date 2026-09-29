@@ -1579,7 +1579,7 @@ rmi_header('Dashboard Detail ERP', 'dashboard', [
     ],
     'extra_head' => $extraHead,
     'actions' => [
-        ['label' => '📚 Panduan Finance', 'url' => rtrim((string) ($GLOBALS['BASE_PROJECT'] ?? ''), '/') . '/dashboards/finance/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('books').' Panduan Finance', 'url' => rtrim((string) ($GLOBALS['BASE_PROJECT'] ?? ''), '/') . '/dashboards/finance/panduan.php', 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -1647,7 +1647,7 @@ $pctClass = $totalPct >= 100 ? 'ks-pct-ok' : 'ks-pct-low';
   <div style="margin-left:auto">
     <a href="?month=<?= (int)$monthNo ?>&year=<?= (int)$yearNo ?>&as_of=<?= h($data['as_of']) ?>&tab=chart&refresh=60&motion=live&kiosk=0"
        style="background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3);padding:6px 14px;border-radius:8px;font-size:12px;text-decoration:none;font-weight:600">
-      ✕ Keluar Monitoring
+      <?=rmi_icon('x')?> Keluar Monitoring
     </a>
   </div>
 </div>
@@ -1708,17 +1708,17 @@ $pctClass = $totalPct >= 100 ? 'ks-pct-ok' : 'ks-pct-low';
           <div class="btn-group btn-group-sm" role="group">
             <a class="btn btn-outline-success <?= $strictLockExport ? 'btn-export-disabled' : '' ?>"
                href="<?= $strictLockExport ? '#' : ('?month='.(int)$monthNo.'&year='.(int)$yearNo.'&as_of='.h($data['as_of']).'&tab=target&export=target_csv&motion='.h($motionMode).'&strict='.(int)$strictMode) ?>"
-               title="Export Target vs Pencapaian">⬇ Target</a>
+               title="Export Target vs Pencapaian"><?=rmi_icon('inbox')?> Target</a>
             <a class="btn btn-outline-success <?= $strictLockExport ? 'btn-export-disabled' : '' ?>"
                href="<?= $strictLockExport ? '#' : ('?month='.(int)$monthNo.'&year='.(int)$yearNo.'&as_of='.h($data['as_of']).'&tab=finance&export=finance_csv&motion='.h($motionMode).'&strict='.(int)$strictMode) ?>"
-               title="Export Finance Detail">⬇ Finance</a>
+               title="Export Finance Detail"><?=rmi_icon('inbox')?> Finance</a>
           </div>
 
           <div style="width:1px;background:rgba(255,255,255,.15);height:28px;margin:0 2px"></div>
 
           <!-- Grup 5: Monitoring -->
           <a class="btn btn-sm btn-warning" href="?month=<?= (int)$monthNo ?>&year=<?= (int)$yearNo ?>&as_of=<?= h($data['as_of']) ?>&tab=exec&refresh=60&motion=live&kiosk=1" title="Buka Executive Summary + Monitoring Mode">
-            📺 Monitor
+            <?=rmi_icon('chart')?> Monitor
           </a>
         </div>
       </form>
@@ -1845,7 +1845,7 @@ $pctClass = $totalPct >= 100 ? 'ks-pct-ok' : 'ks-pct-low';
       <a class="nav-link <?= $tab === 'chart' ? 'active' : '' ?>" href="?month=<?= (int)$monthNo ?>&year=<?= (int)$yearNo ?>&as_of=<?= h($data['as_of']) ?>&tab=chart&refresh=<?= (int)$refreshSec ?>&motion=<?= h($motionMode) ?>&strict=<?= (int)$strictMode ?>&anomaly_threshold=<?= h(number_format($anomalyThreshold,1,'.','')) ?>">CHART VIEW</a>
     </li>
     <li class="nav-item" role="presentation">
-      <a class="nav-link <?= $tab === 'exec' ? 'active' : '' ?>" href="?month=<?= (int)$monthNo ?>&year=<?= (int)$yearNo ?>&as_of=<?= h($data['as_of']) ?>&tab=exec&refresh=<?= (int)$refreshSec ?>&motion=<?= h($motionMode) ?>&strict=<?= (int)$strictMode ?>&anomaly_threshold=<?= h(number_format($anomalyThreshold,1,'.','')) ?>" style="color:#fbbf24">⭐ EXECUTIVE SUMMARY</a>
+      <a class="nav-link <?= $tab === 'exec' ? 'active' : '' ?>" href="?month=<?= (int)$monthNo ?>&year=<?= (int)$yearNo ?>&as_of=<?= h($data['as_of']) ?>&tab=exec&refresh=<?= (int)$refreshSec ?>&motion=<?= h($motionMode) ?>&strict=<?= (int)$strictMode ?>&anomaly_threshold=<?= h(number_format($anomalyThreshold,1,'.','')) ?>" style="color:#fbbf24">rmi_icon('target') EXECUTIVE SUMMARY</a>
     </li>
   </ul>
 
@@ -2416,7 +2416,7 @@ $pctClass = $totalPct >= 100 ? 'ks-pct-ok' : 'ks-pct-low';
       <div class="exec-kpi" style="border-color:<?= $execPct>=100?'rgba(34,197,94,.4)':'rgba(239,68,68,.3)' ?>">
         <div class="exec-kpi-label">% Pencapaian</div>
         <div class="exec-kpi-val <?= $execPct>=100?'green':'red' ?>"><?= h(f_pct($execPct)) ?></div>
-        <div class="exec-kpi-sub"><?= $execPct>=100?'✅ Target tercapai':'⚠️ Belum mencapai target' ?></div>
+        <div class="exec-kpi-sub"><?= $execPct>=100?rmi_icon('check').' Target tercapai':rmi_icon('warn').' Belum mencapai target' ?></div>
       </div>
       <div class="exec-kpi">
         <div class="exec-kpi-label">Total Piutang</div>
@@ -2554,7 +2554,7 @@ $pctClass = $totalPct >= 100 ? 'ks-pct-ok' : 'ks-pct-low';
         <div class="exec-kpi-label">Monitoring Mode</div>
         <a href="?month=<?= (int)$monthNo ?>&year=<?= (int)$yearNo ?>&as_of=<?= h($data['as_of']) ?>&tab=exec&refresh=60&motion=live&kiosk=1"
            style="background:rgba(251,191,36,.2);color:#fbbf24;border:1px solid rgba(251,191,36,.4);padding:8px 18px;border-radius:10px;font-size:13px;text-decoration:none;font-weight:700;margin-top:4px;display:inline-block">
-          📺 Buka Full Screen
+          <?=rmi_icon('chart')?> Buka Full Screen
         </a>
       </div>
     </div>

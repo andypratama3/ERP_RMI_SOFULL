@@ -66,7 +66,7 @@ h3 { font-size:16px; font-weight:700; margin-bottom:14px }
       <div>
         <div class="pnd-title">Izinkan Akses Kamera & Lokasi</div>
         <div class="pnd-desc">Browser akan meminta izin kamera dan lokasi GPS. Klik <b>Izinkan / Allow</b> untuk keduanya.<br>
-          <span style="color:#f87171;font-size:12px">⚠ Jika ditolak, check-in tidak bisa dilakukan.</span>
+          <span style="color:#f87171;font-size:12px"><?=rmi_icon('warn')?> Jika ditolak, check-in tidak bisa dilakukan.</span>
         </div>
       </div>
     </div>
@@ -168,43 +168,43 @@ h3 { font-size:16px; font-weight:700; margin-bottom:14px }
   <div class="pnd-section">
     <h3>FAQ — Pertanyaan Umum</h3>
 
-    <div class="pnd-faq-q">❓ Kamera tidak mau aktif di browser?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Kamera tidak mau aktif di browser?</div>
     <div class="pnd-faq-a">
       Pastikan browser sudah diberi izin kamera. Buka <b>Pengaturan Browser → Privacy → Izin Kamera</b> dan aktifkan untuk domain ERP.
       Di HP Android: Pengaturan → Aplikasi → Chrome → Izin → Kamera → Izinkan.
     </div>
 
-    <div class="pnd-faq-q">❓ Muncul pesan "Lokasi terlalu jauh dari kantor"?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Muncul pesan "Lokasi terlalu jauh dari kantor"?</div>
     <div class="pnd-faq-a">
       Aktifkan GPS di HP dan pastikan kamu berada di area kantor. Jika GPS sudah aktif tapi masih ditolak, hubungi Tim HRL
       — mungkin perlu kalibrasi radius kantor di sistem.
     </div>
 
-    <div class="pnd-faq-q">❓ Tombol Check-in/Check-out tidak muncul atau abu-abu?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Tombol Check-in/Check-out tidak muncul atau abu-abu?</div>
     <div class="pnd-faq-a">
       Tombol Check-in hanya muncul jika belum check-in hari ini.<br>
       Tombol Check-out hanya muncul setelah check-in dan belum check-out.<br>
       Jika sudah check-in & check-out, keduanya akan nonaktif sampai besok.
     </div>
 
-    <div class="pnd-faq-q">❓ Lupa check-out kemarin?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Lupa check-out kemarin?</div>
     <div class="pnd-faq-a">
       Hubungi Tim HRL untuk koreksi data. Tim HRL bisa melakukan penyesuaian melalui halaman Admin Rekap.
     </div>
 
-    <div class="pnd-faq-q">❓ Bagaimana cara mengajukan izin sakit mendadak?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Bagaimana cara mengajukan izin sakit mendadak?</div>
     <div class="pnd-faq-a">
       Buka ERP → Absensi → <b>Izin / Dinas</b> → pilih <b>Sakit</b> → isi tanggal hari ini → submit.
       Lampirkan foto surat dokter jika memungkinkan. Tim HRL akan memproses.
     </div>
 
-    <div class="pnd-faq-q">❓ Foto absensi saya bisa dilihat siapa?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Foto absensi saya bisa dilihat siapa?</div>
     <div class="pnd-faq-a">
       Foto hanya bisa dilihat oleh kamu sendiri (di Riwayat) dan Tim HRL (di Admin Rekap).
       Foto digunakan semata-mata untuk verifikasi kehadiran.
     </div>
 
-    <div class="pnd-faq-q">❓ Apakah bisa absensi dari luar kantor?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Apakah bisa absensi dari luar kantor?</div>
     <div class="pnd-faq-a">
       Tergantung kebijakan perusahaan. Jika GeoFence aktif, check-in di luar radius kantor akan ditolak otomatis.
       Untuk dinas luar, gunakan fitur <b>Izin / Dinas Luar</b>.

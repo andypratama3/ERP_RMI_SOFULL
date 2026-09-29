@@ -298,14 +298,14 @@ $cardsTop = [
 ];
 
 $cardsMain = [
-    ['icon'=>'📋','value'=>(string)$kpi['do_month'],'label'=>'DO BULAN INI','accent'=>'#3b82f6','url'=>$bp.'/sales/sales_do.php'],
-    ['icon'=>'💰','value'=>bd_money($kpi['sales_mtd']),'label'=>'NILAI DO MTD','accent'=>'#22c55e','url'=>$bp.'/dashboards/finance/dashboard_detail.php'],
-    ['icon'=>'⌛','value'=>(string)$kpi['do_active'],'label'=>'DO AKTIF / BELUM SELESAI','accent'=>'#f59e0b','url'=>$bp.'/sales/sales_do.php'],
-    ['icon'=>'✅','value'=>(string)$kpi['delivered_month'],'label'=>'DELIVERED BULAN INI','accent'=>'#10b981','url'=>$bp.'/sales/scm_do_tasks.php'],
-    ['icon'=>'📍','value'=>(string)$kpi['mpr_visits'],'label'=>'KUNJUNGAN MPR BULAN INI','accent'=>'#06b6d4','url'=>$bp.'/mpr/mpr_visits.php'],
-    ['icon'=>'🎯','value'=>(string)$kpi['mpr_pipeline'],'label'=>'PIPELINE AKTIF','accent'=>'#8b5cf6','url'=>$bp.'/mpr/mpr_pipeline.php'],
-    ['icon'=>'🏆','value'=>(string)$kpi['mpr_won'],'label'=>'DEAL WON BULAN INI','accent'=>'#22c55e','url'=>$bp.'/mpr/mpr_pipeline.php'],
-    ['icon'=>'🗺️','value'=>(string)$kpi['mpr_plans'],'label'=>'PLAN MPR AKTIF','accent'=>'#6366f1','url'=>$bp.'/mpr/mpr_plans.php'],
+    ['icon'=>rmi_icon('clipboard'),'value'=>(string)$kpi['do_month'],'label'=>'DO BULAN INI','accent'=>'#3b82f6','url'=>$bp.'/sales/sales_do.php'],
+    ['icon'=>rmi_icon('money'),'value'=>bd_money($kpi['sales_mtd']),'label'=>'NILAI DO MTD','accent'=>'#22c55e','url'=>$bp.'/dashboards/finance/dashboard_detail.php'],
+    ['icon'=>rmi_icon('refresh'),'value'=>(string)$kpi['do_active'],'label'=>'DO AKTIF / BELUM SELESAI','accent'=>'#f59e0b','url'=>$bp.'/sales/sales_do.php'],
+    ['icon'=>rmi_icon('check'),'value'=>(string)$kpi['delivered_month'],'label'=>'DELIVERED BULAN INI','accent'=>'#10b981','url'=>$bp.'/sales/scm_do_tasks.php'],
+    ['icon'=>rmi_icon('target'),'value'=>(string)$kpi['mpr_visits'],'label'=>'KUNJUNGAN MPR BULAN INI','accent'=>'#06b6d4','url'=>$bp.'/mpr/mpr_visits.php'],
+    ['icon'=>rmi_icon('target'),'value'=>(string)$kpi['mpr_pipeline'],'label'=>'PIPELINE AKTIF','accent'=>'#8b5cf6','url'=>$bp.'/mpr/mpr_pipeline.php'],
+    ['icon'=>rmi_icon('target'),'value'=>(string)$kpi['mpr_won'],'label'=>'DEAL WON BULAN INI','accent'=>'#22c55e','url'=>$bp.'/mpr/mpr_pipeline.php'],
+    ['icon'=>rmi_icon('search'),'value'=>(string)$kpi['mpr_plans'],'label'=>'PLAN MPR AKTIF','accent'=>'#6366f1','url'=>$bp.'/mpr/mpr_plans.php'],
 ];
 
 $actions = [
@@ -341,7 +341,7 @@ rmi_header('Depo Dashboard', 'depo_home', [
 <div class="depo-home">
   <div class="depo-hero">
     <div>
-      <div class="depo-hero-title">🏢 <?= bd_h($officeName) ?></div>
+      <div class="depo-hero-title"><?=rmi_icon('office')?> <?= bd_h($officeName) ?></div>
       <div class="depo-hero-sub">ERP RMI &nbsp;•&nbsp; <?= bd_h(date('l, d F Y')) ?> &nbsp;•&nbsp; Kode: <strong><?= bd_h($office) ?></strong><?php if($officeCity!==''): ?> &nbsp;•&nbsp; <?= bd_h($officeCity) ?><?php endif; ?></div>
     </div>
     <div class="depo-clock"><div class="time" id="depoClock"><?= bd_h(date('H:i:s')) ?></div><div class="lbl">Waktu Server</div></div>
@@ -349,7 +349,7 @@ rmi_header('Depo Dashboard', 'depo_home', [
 
   <div class="depo-panel">
     <div class="depo-panel-head">
-      <div><div class="depo-office-title">🏢 <?= bd_h($officeName) ?></div><div class="small text-secondary">Scope ketat office <?= bd_h($office) ?> • login <?= bd_h($username) ?></div></div>
+      <div><div class="depo-office-title"><?=rmi_icon('office')?> <?= bd_h($officeName) ?></div><div class="small text-secondary">Scope ketat office <?= bd_h($office) ?> • login <?= bd_h($username) ?></div></div>
       <div class="depo-badge"><?= bd_h($office) ?></div>
     </div>
 
@@ -381,14 +381,14 @@ rmi_header('Depo Dashboard', 'depo_home', [
   <div class="depo-panel">
     <div class="depo-panel-head"><div class="depo-office-title">Akses Cepat</div><div class="small text-secondary">Semua link tetap mengikuti guard dan scope office</div></div>
     <div class="depo-quick">
-      <a class="depo-q" href="<?= bd_h($bp) ?>/dashboards/finance/dashboard_detail.php"><span>🎯</span><div><strong>Pencapaian</strong><div class="small text-secondary">Target vs realisasi <?= bd_h($office) ?></div></div></a>
-      <a class="depo-q" href="<?= bd_h($bp) ?>/sales/sales_do.php"><span>📋</span><div><strong>Delivery Order</strong><div class="small text-secondary">DO office <?= bd_h($office) ?></div></div></a>
-      <a class="depo-q" href="<?= bd_h($bp) ?>/stock/wqs_do_tasks.php"><span>⚡</span><div><strong>Task WQS</strong><div class="small text-secondary">Proses DO office sendiri</div></div></a>
-      <a class="depo-q" href="<?= bd_h($bp) ?>/sales/scm_do_tasks.php"><span>🚚</span><div><strong>Task SCM</strong><div class="small text-secondary">Delivery office sendiri</div></div></a>
-      <a class="depo-q" href="<?= bd_h($bp) ?>/mpr/mpr_dashboard.php"><span>🧩</span><div><strong>MPR Dashboard</strong><div class="small text-secondary">Ringkasan aktivitas MPR</div></div></a>
-      <a class="depo-q" href="<?= bd_h($bp) ?>/mpr/mpr_plans.php"><span>🗺️</span><div><strong>MPR Plans</strong><div class="small text-secondary">Plan office <?= bd_h($office) ?></div></div></a>
-      <a class="depo-q" href="<?= bd_h($bp) ?>/mpr/mpr_visits.php"><span>📍</span><div><strong>Kunjungan</strong><div class="small text-secondary">GPS + foto kunjungan</div></div></a>
-      <a class="depo-q" href="<?= bd_h($bp) ?>/mpr/mpr_pipeline.php"><span>🎯</span><div><strong>Pipeline</strong><div class="small text-secondary">Prospek & deal office</div></div></a>
+      <a class="depo-q" href="<?= bd_h($bp) ?>/dashboards/finance/dashboard_detail.php"><span><?=rmi_icon('target')?></span><div><strong>Pencapaian</strong><div class="small text-secondary">Target vs realisasi <?= bd_h($office) ?></div></div></a>
+      <a class="depo-q" href="<?= bd_h($bp) ?>/sales/sales_do.php"><span><?=rmi_icon('clipboard')?></span><div><strong>Delivery Order</strong><div class="small text-secondary">DO office <?= bd_h($office) ?></div></div></a>
+      <a class="depo-q" href="<?= bd_h($bp) ?>/stock/wqs_do_tasks.php"><span><?=rmi_icon('zap')?></span><div><strong>Task WQS</strong><div class="small text-secondary">Proses DO office sendiri</div></div></a>
+      <a class="depo-q" href="<?= bd_h($bp) ?>/sales/scm_do_tasks.php"><span><?=rmi_icon('box')?></span><div><strong>Task SCM</strong><div class="small text-secondary">Delivery office sendiri</div></div></a>
+      <a class="depo-q" href="<?= bd_h($bp) ?>/mpr/mpr_dashboard.php"><span><?=rmi_icon('gear')?></span><div><strong>MPR Dashboard</strong><div class="small text-secondary">Ringkasan aktivitas MPR</div></div></a>
+      <a class="depo-q" href="<?= bd_h($bp) ?>/mpr/mpr_plans.php"><span><?=rmi_icon('search')?></span><div><strong>MPR Plans</strong><div class="small text-secondary">Plan office <?= bd_h($office) ?></div></div></a>
+      <a class="depo-q" href="<?= bd_h($bp) ?>/mpr/mpr_visits.php"><span><?=rmi_icon('target')?></span><div><strong>Kunjungan</strong><div class="small text-secondary">GPS + foto kunjungan</div></div></a>
+      <a class="depo-q" href="<?= bd_h($bp) ?>/mpr/mpr_pipeline.php"><span><?=rmi_icon('target')?></span><div><strong>Pipeline</strong><div class="small text-secondary">Prospek & deal office</div></div></a>
     </div>
   </div>
 </div>

@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 // require_login(); // static scan marker (login enforced via _kpi_bootstrap.php)
 require_once __DIR__ . '/_kpi_bootstrap.php';
 $hasDoc = file_exists(__DIR__ . '/KPI_ENTERPRISE_PHASE1-3_DONE.md');
@@ -47,7 +48,7 @@ $extraCss = <<<'STYLE'
 .kpi-phase-link{font-size:12px;font-weight:700;color:var(--pc);margin-top:10px;display:inline-block}
 
 /* Section title */
-.kpi-sec{font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.6px;margin:16px 0 10px;display:flex;align-items:center;gap:8px}
+.kpi-sec{font-size:11px;font-weight:700;color:var(--rmi-muted);text-transform:uppercase;letter-spacing:.6px;margin:16px 0 10px;display:flex;align-items:center;gap:8px}
 .kpi-sec::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.06)}
 
 /* DB status */
@@ -71,16 +72,16 @@ echo $extraCss;
 kpi_nav('center');
 ?>
 <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
-  <a href="panduan.php" class="btn btn-sm btn-outline-light">📖 Panduan KPI</a>
+  <a href="panduan.php" class="btn btn-sm btn-outline-light"><?=rmi_icon('books')?> Panduan KPI</a>
 </div>
 
 <!-- KPI Center Header -->
 <div class="kpi-ch">
-  <h2>📊 KPI Center</h2>
+  <h2><?=rmi_icon('chart')?> KPI Center</h2>
   <p>Enterprise KPI — SLA, Office, Employee, Snapshot & Audit</p>
   <div class="kpi-ch-stats">
     <div class="kpi-ch-stat">
-      <div class="sv"><?= $allReady ? '✓' : ($hasSales?'⚠':'✗') ?></div>
+      <div class="sv"><?= $allReady ? rmi_icon('tick') : ($hasSales?rmi_icon('warn'):rmi_icon('x')) ?></div>
       <div class="sl">Status</div>
     </div>
     <div class="kpi-ch-stat">
@@ -100,13 +101,13 @@ kpi_nav('center');
 
 
 <!-- Phase Cards -->
-<div class="kpi-sec">📌 Phase & Modul</div>
+<div class="kpi-sec"><?=rmi_icon('target')?> Phase & Modul</div>
 <div class="kpi-phases">
 
   <!-- Phase 1 -->
   <a class="kpi-phase" href="kpi_do_sla.php" style="--pc:#3b82f6">
     <div class="kpi-phase-top">
-      <span class="kpi-phase-icon">⏱️</span>
+      <span class="kpi-phase-icon"><?=rmi_icon('calendar')?></span>
       <span class="kpi-phase-badge <?= $hasSales?'ok':'miss' ?>"><?= $hasSales?'READY':'MISSING' ?></span>
     </div>
     <div class="kpi-phase-title">Phase 1 · KPI DO (SLA)</div>
@@ -116,7 +117,7 @@ kpi_nav('center');
 
   <a class="kpi-phase" href="kpi_do_audit.php" style="--pc:#06b6d4">
     <div class="kpi-phase-top">
-      <span class="kpi-phase-icon">🔍</span>
+      <span class="kpi-phase-icon"><?=rmi_icon('search')?></span>
       <span class="kpi-phase-badge <?= $hasSlaAudit?'ok':'miss' ?>"><?= $hasSlaAudit?'READY':'MISSING' ?></span>
     </div>
     <div class="kpi-phase-title">Phase 1 · DO Audit Trail</div>
@@ -127,7 +128,7 @@ kpi_nav('center');
   <!-- Phase 2 -->
   <a class="kpi-phase" href="kpi_office.php" style="--pc:#22c55e">
     <div class="kpi-phase-top">
-      <span class="kpi-phase-icon">🏢</span>
+      <span class="kpi-phase-icon"><?=rmi_icon('office')?></span>
       <span class="kpi-phase-badge <?= $hasOffice?'ok':'miss' ?>"><?= $hasOffice?'READY':'MISSING' ?></span>
     </div>
     <div class="kpi-phase-title">Phase 2 · KPI Office</div>
@@ -137,7 +138,7 @@ kpi_nav('center');
 
   <a class="kpi-phase" href="kpi_employee.php" style="--pc:#8b5cf6">
     <div class="kpi-phase-top">
-      <span class="kpi-phase-icon">👤</span>
+      <span class="kpi-phase-icon"><?=rmi_icon('user')?></span>
       <span class="kpi-phase-badge <?= $hasEmp?'ok':'miss' ?>"><?= $hasEmp?'READY':'MISSING' ?></span>
     </div>
     <div class="kpi-phase-title">Phase 2 · KPI Employee</div>
@@ -147,7 +148,7 @@ kpi_nav('center');
 
   <a class="kpi-phase" href="kpi_purchases.php" style="--pc:#f59e0b">
     <div class="kpi-phase-top">
-      <span class="kpi-phase-icon">🛒</span>
+      <span class="kpi-phase-icon"><?=rmi_icon('cart')?></span>
       <span class="kpi-phase-badge ok">READY</span>
     </div>
     <div class="kpi-phase-title">Phase 2 · KPI Purchases</div>
@@ -157,7 +158,7 @@ kpi_nav('center');
 
   <a class="kpi-phase" href="kpi_stock.php" style="--pc:#f97316">
     <div class="kpi-phase-top">
-      <span class="kpi-phase-icon">📦</span>
+      <span class="kpi-phase-icon"><?=rmi_icon('box')?></span>
       <span class="kpi-phase-badge ok">READY</span>
     </div>
     <div class="kpi-phase-title">Phase 2 · KPI Stock</div>
@@ -168,7 +169,7 @@ kpi_nav('center');
   <!-- Phase 3 -->
   <a class="kpi-phase" href="kpi_snapshot.php" style="--pc:#ec4899">
     <div class="kpi-phase-top">
-      <span class="kpi-phase-icon">📷</span>
+      <span class="kpi-phase-icon"><?=rmi_icon('doc')?></span>
       <span class="kpi-phase-badge <?= $hasSnap?'ok':'miss' ?>"><?= $hasSnap?'READY':'MISSING' ?></span>
     </div>
     <div class="kpi-phase-title">Phase 3 · Snapshot & Lock</div>
@@ -178,7 +179,7 @@ kpi_nav('center');
 
   <a class="kpi-phase" href="kpi_audit.php" style="--pc:#64748b">
     <div class="kpi-phase-top">
-      <span class="kpi-phase-icon">📋</span>
+      <span class="kpi-phase-icon"><?=rmi_icon('clipboard')?></span>
       <span class="kpi-phase-badge <?= $hasAudit?'ok':'miss' ?>"><?= $hasAudit?'READY':'MISSING' ?></span>
     </div>
     <div class="kpi-phase-title">Phase 3 · Audit Log</div>
@@ -189,26 +190,26 @@ kpi_nav('center');
 </div>
 
 <!-- DB Status -->
-<div class="kpi-sec">🗄️ Status Database</div>
+<div class="kpi-sec"><?=rmi_icon('doc')?> Status Database</div>
 <div class="kpi-db">
   <?php foreach (['sales_do','sales_do_audit','kpi_office','kpi_employee','kpi_snapshot','kpi_snapshot_items','kpi_audit_log'] as $t):
     $ok = kpi_table_exists($pdo,$t);
   ?>
     <div class="kpi-db-item">
       <span class="dn"><?= h($t) ?></span>
-      <span class="ds <?= $ok?'ok':'miss' ?>"><?= $ok?'✓ OK':'✗ MISSING' ?></span>
+      <span class="ds <?= $ok?'ok':'miss' ?>"><?= $ok?rmi_icon('tick').' OK':rmi_icon('x').' MISSING' ?></span>
     </div>
   <?php endforeach; ?>
 </div>
 <?php if (!$allReady): ?>
 <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);border-radius:10px;padding:12px 14px;font-size:12px;color:#fde68a;margin-bottom:16px">
-  ⚠️ Ada tabel yang MISSING. Jalankan SQL: <code style="color:#fde68a">kpi/kpi_enterprise_tables.sql</code> di NAS untuk membuat tabel yang diperlukan.
+  <?=rmi_icon('warn')?> Ada tabel yang MISSING. Jalankan SQL: <code style="color:#fde68a">kpi/kpi_enterprise_tables.sql</code> di NAS untuk membuat tabel yang diperlukan.
 </div>
 <?php endif; ?>
 
 <?php if ($hasDoc): ?>
-<div style="font-size:11px;color:#334155;text-align:center;margin-top:8px">
-  📄 <a href="KPI_ENTERPRISE_PHASE1-3_DONE.md" style="color:#475569">KPI_ENTERPRISE_PHASE1-3_DONE.md</a>
+<div style="font-size:11px;color:var(--rmi-muted);text-align:center;margin-top:8px">
+  <?=rmi_icon('doc')?> <a href="KPI_ENTERPRISE_PHASE1-3_DONE.md" style="color:var(--rmi-muted)">KPI_ENTERPRISE_PHASE1-3_DONE.md</a>
 </div>
 <?php endif; ?>
 

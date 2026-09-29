@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/rmi_icons.php';
 require_once __DIR__ . '/assets.php';
 // _shared/rmi_layout.php
 // Unified layout: topbar + menu drawer (offcanvas) + help panel + theme toggle.
@@ -810,9 +811,9 @@ function rmi_header(string $title = 'RMI ERP', $active = '', array $opts = []): 
       <div class="rmi-topbar-actions">
         <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiMenuDrawer" aria-label="Buka menu ERP" title="Menu ERP">☰ <span class="rmi-topbar-btn-label">Menu</span></button>
         <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" id="rmiContrastToggle" aria-label="Kontras tinggi" title="Kontras tinggi">◐</button>
-        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" id="rmiThemeToggle" aria-label="Ganti tema terang/gelap" title="Tema">🌙</button>
-        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiHelpCanvas" aria-label="Bantuan halaman ini" title="Bantuan (F1)">❓ <span class="rmi-topbar-btn-label">Help</span> <span class="rmi-kbd rmi-topbar-kbd-f1">F1</span></button>
-        <a class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" href="<?= $baseProject ?>/docs/help_center.php" target="_blank" rel="noopener" title="Help Center / Manual" aria-label="Buka Help Center"><span aria-hidden="true">📚</span> <span class="rmi-topbar-btn-label">Manual</span></a>
+        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" id="rmiThemeToggle" aria-label="Ganti tema terang/gelap" title="Tema"><?= rmi_icon('moon') ?></button>
+        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiHelpCanvas" aria-label="Bantuan halaman ini" title="Bantuan (F1)"><?= rmi_icon('question') ?> <span class="rmi-topbar-btn-label">Help</span> <span class="rmi-kbd rmi-topbar-kbd-f1">F1</span></button>
+        <a class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" href="<?= $baseProject ?>/docs/help_center.php" target="_blank" rel="noopener" title="Help Center / Manual" aria-label="Buka Help Center"><span aria-hidden="true"><?= rmi_icon('books') ?></span> <span class="rmi-topbar-btn-label">Manual</span></a>
         <div class="dropdown rmi-topbar-user-dd">
           <button class="btn btn-outline-light btn-sm dropdown-toggle text-truncate rmi-topbar-user-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="<?= rmi_ui_h(($user['username'] ?? '-') . ' / ' . ($role ?: '-')) ?>"><?= rmi_ui_h($user['username'] ?? '-') ?> <span class="rmi-topbar-user-meta"><span class="rmi-topbar-user-sep">/</span> <?= rmi_ui_h($role ?: '-') ?></span></button>
           <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
@@ -851,8 +852,8 @@ function rmi_footer(): void
         $navHtml = '<div class="rmi-brand"><div class="rmi-brand-title">RMI ERP</div><div class="rmi-brand-sub">Unified Layout</div></div>'
             . '<nav class="nav flex-column rmi-nav">'
             . '<div class="rmi-nav-section">MAIN</div>'
-            . '<a class="nav-link" href="' . rmi_ui_h($baseProject . '/dashboards/index.php') . '">📊 Dashboards</a>'
-            . '<a class="nav-link" href="' . rmi_ui_h($baseProject . '/docs/help_center.php') . '">❓ Help Center</a>'
+            . '<a class="nav-link" href="' . rmi_ui_h($baseProject . '/dashboards/index.php') . '">' . rmi_icon('chart') . ' Dashboards</a>'
+            . '<a class="nav-link" href="' . rmi_ui_h($baseProject . '/docs/help_center.php') . '">' . rmi_icon('question') . ' Help Center</a>'
             . '</nav>';
     }
 ?>
@@ -970,7 +971,7 @@ if ($helpEntry) {
       if (empty($l['url'])) continue;
       $url = $base . (strpos($l['url'], '/') === 0 ? $l['url'] : '/' . $l['url']);
       $label = $l['label'] ?? $l['url'];
-      $helpHtml .= '<a class="rmi-help-link" href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener">🔗 ' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</a>';
+      $helpHtml .= '<a class="rmi-help-link" href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener">' . rmi_icon('search') . ' ' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '</a>';
     }
     $helpHtml .= '</div>';
   }
@@ -981,15 +982,15 @@ if ($helpEntry) {
   if ($panduanPath !== '' && preg_match('#\.php$#i', $panduanPath)) {
     $panduanUrl = $base . '/docs/panduan_view.php?p=' . rawurlencode($panduanPath);
     $helpHtml .= '<div class="small fw-semibold mt-2 mb-1">Panduan file (docs/panduan/)</div>';
-    $helpHtml .= '<a class="rmi-help-link" href="' . htmlspecialchars($panduanUrl, ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener">📄 Buka panduan halaman ini</a>';
+    $helpHtml .= '<a class="rmi-help-link" href="' . htmlspecialchars($panduanUrl, ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener">' . rmi_icon('doc') . ' Buka panduan halaman ini</a>';
   }
   $helpHtml .= '<div class="rmi-muted small mt-3">Halaman: <code>' . htmlspecialchars($helpRelPath, ENT_QUOTES, 'UTF-8') . '</code></div>';
 } else {
   $base = $baseProject ?: '';
   $helpHtml = '<h6>Bantuan</h6><div class="rmi-muted small mb-2">Tidak dapat memuat mapping SOP. Gunakan link di bawah.</div>';
-  $helpHtml .= '<ul class="small mb-0"><li>Gunakan tombol ☰ Menu untuk navigasi.</li><li>Tekan 📚 Manual untuk Help Center.</li></ul>';
+  $helpHtml .= '<ul class="small mb-0"><li>Gunakan tombol ☰ Menu untuk navigasi.</li><li>Tekan ' . rmi_icon('books') . ' Manual untuk Help Center.</li></ul>';
   $helpHtml .= '<div class="small fw-semibold mt-2 mb-1">Dokumen lengkap</div><div class="d-flex flex-column gap-1">';
-  $helpHtml .= '<a class="rmi-help-link" href="' . htmlspecialchars($base . '/docs/help_center.php', ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener">🔗 Help Center / indeks panduan</a></div>';
+  $helpHtml .= '<a class="rmi-help-link" href="' . htmlspecialchars($base . '/docs/help_center.php', ENT_QUOTES, 'UTF-8') . '" target="_blank" rel="noopener">' . rmi_icon('search') . ' Help Center / indeks panduan</a></div>';
   $helpHtml .= '<div class="rmi-muted small mt-3">Halaman: <code>' . htmlspecialchars($helpRelPath, ENT_QUOTES, 'UTF-8') . '</code></div>';
 }
 ?>

@@ -683,9 +683,9 @@ rmi_header('HRL Dashboard', [
     'extra_head' => '<style>' . $extraCSS . '</style>'
         . '<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>',
     'actions'    => [
-        ['label' => '📚 Panduan', 'url' => hrlUrl('/dashboards/hrl/panduan.php')],
-        ['label' => '📋 Absensi Admin', 'url' => hrlUrl('/absensi/admin/rekap.php')],
-        ['label' => '📊 KPI Center',    'url' => hrlUrl('/kpi/kpi_center.php')],
+        ['label' => rmi_icon('books').' Panduan', 'url' => hrlUrl('/dashboards/hrl/panduan.php')],
+        ['label' => rmi_icon('clipboard').' Absensi Admin', 'url' => hrlUrl('/absensi/admin/rekap.php')],
+        ['label' => rmi_icon('chart').' KPI Center',    'url' => hrlUrl('/kpi/kpi_center.php')],
     ],
 ]);
 ?>
@@ -711,7 +711,7 @@ rmi_header('HRL Dashboard', [
       <a class="btn btn-sm btn-ghost" href="hrl_dashboard.php">Reset</a>
     <?php endif; ?>
     <?php if (!$is_today): ?>
-      <span style="font-size:11px;color:#fbbf24;align-self:center">📅 Data historis: <?= h(date('d M Y', strtotime($filter_date))) ?></span>
+      <span style="font-size:11px;color:#fbbf24;align-self:center"><?=rmi_icon('calendar')?> Data historis: <?= h(date('d M Y', strtotime($filter_date))) ?></span>
     <?php endif; ?>
   </div>
 </form>
@@ -720,39 +720,39 @@ rmi_header('HRL Dashboard', [
 // ── Alert strips ──────────────────────────────────────────────────────────────
 if ($kpi['pending_izin'] > 0): ?>
 <div class="hrl-alert-strip alert-warn">
-  ⚠️ <b><?= $kpi['pending_izin'] ?></b> request izin/cuti menunggu approval
+  <?=rmi_icon('warn')?> <b><?= $kpi['pending_izin'] ?></b> request izin/cuti menunggu approval
   <a href="<?= h(hrlUrl('/absensi/approval.php')) ?>" style="margin-left:auto;color:inherit;text-decoration:underline">Approve sekarang →</a>
 </div>
 <?php endif; ?>
 
 <?php if ($kpi['reg_alkes_expired'] > 0): ?>
 <div class="hrl-alert-strip alert-danger">
-  ❌ <b><?= $kpi['reg_alkes_expired'] ?></b> NIE Reg Alkes sudah kedaluwarsa
+  <?=rmi_icon('cross')?> <b><?= $kpi['reg_alkes_expired'] ?></b> NIE Reg Alkes sudah kedaluwarsa
   <a href="<?= h(hrlUrl('/hrl_reg_alkes/reg_alkes_expiry_check.php')) ?>" style="margin-left:auto;color:inherit;text-decoration:underline">Lihat expiry NIE →</a>
 </div>
 <?php endif; ?>
 <?php if ($kpi['reg_alkes_expiring_30'] > 0): ?>
 <div class="hrl-alert-strip alert-warn">
-  ⚠️ <b><?= $kpi['reg_alkes_expiring_30'] ?></b> NIE Reg Alkes akan kedaluwarsa dalam 30 hari
+  <?=rmi_icon('warn')?> <b><?= $kpi['reg_alkes_expiring_30'] ?></b> NIE Reg Alkes akan kedaluwarsa dalam 30 hari
   <a href="<?= h(hrlUrl('/hrl_reg_alkes/reg_alkes_expiry_check.php')) ?>" style="margin-left:auto;color:inherit;text-decoration:underline">Lihat expiry NIE →</a>
 </div>
 <?php endif; ?>
 <?php if ($kpi['reg_alkes_expiring_90'] > 0): ?>
 <div class="hrl-alert-strip alert-warn">
-  ⚠️ <b><?= $kpi['reg_alkes_expiring_90'] ?></b> NIE Reg Alkes akan kedaluwarsa dalam 31–90 hari
+  <?=rmi_icon('warn')?> <b><?= $kpi['reg_alkes_expiring_90'] ?></b> NIE Reg Alkes akan kedaluwarsa dalam 31–90 hari
   <a href="<?= h(hrlUrl('/hrl_reg_alkes/reg_alkes_expiry_check.php')) ?>" style="margin-left:auto;color:inherit;text-decoration:underline">Lihat expiry NIE →</a>
 </div>
 <?php endif; ?>
 
 <?php if ($kpi['reg_alkes_revision_overdue'] > 0): ?>
 <div class="hrl-alert-strip alert-danger">
-  ⏱️ <b><?= $kpi['reg_alkes_revision_overdue'] ?></b> revisi Reg Alkes melewati deadline workflow (Stage 11–13)
+  <?=rmi_icon('calendar')?> <b><?= $kpi['reg_alkes_revision_overdue'] ?></b> revisi Reg Alkes melewati deadline workflow (Stage 11–13)
   <a href="<?= h(hrlUrl('/hrl_reg_alkes/reg_alkes_control_tower.php')) ?>" style="margin-left:auto;color:inherit;text-decoration:underline">Buka Control Tower →</a>
 </div>
 <?php endif; ?>
 <?php if ($kpi['reg_alkes_revision_due'] > 0): ?>
 <div class="hrl-alert-strip alert-warn">
-  ⏳ <b><?= $kpi['reg_alkes_revision_due'] ?></b> revisi Reg Alkes memiliki deadline workflow ≤10 hari
+  <?=rmi_icon('refresh')?> <b><?= $kpi['reg_alkes_revision_due'] ?></b> revisi Reg Alkes memiliki deadline workflow ≤10 hari
   <a href="<?= h(hrlUrl('/hrl_reg_alkes/reg_alkes_control_tower.php')) ?>" style="margin-left:auto;color:inherit;text-decoration:underline">Buka Control Tower →</a>
 </div>
 <?php endif; ?>
@@ -760,29 +760,29 @@ if ($kpi['pending_izin'] > 0): ?>
 
 <?php if (!$pdo || !hrl_table_exists($pdo, 'absensi_manual_attendance')): ?>
 <div class="hrl-alert-strip alert-warn">
-  ⚠️ Tabel <b>absensi_manual_attendance</b> belum tersedia. Jalankan SQL patch agar HRL bisa input ALPA/manual hadir saat server down.
+  <?=rmi_icon('warn')?> Tabel <b>absensi_manual_attendance</b> belum tersedia. Jalankan SQL patch agar HRL bisa input ALPA/manual hadir saat server down.
 </div>
 <?php endif; ?>
 
 <?php if ($kpi['manual_server_down_today'] > 0): ?>
 <div class="hrl-alert-strip alert-ok">
-  🛡️ <b><?= (int)$kpi['manual_server_down_today'] ?></b> data manual hadir/server down tercatat. Data ini mencegah karyawan dianggap ALPA karena gangguan sistem.
+  <?=rmi_icon('gear')?> <b><?= (int)$kpi['manual_server_down_today'] ?></b> data manual hadir/server down tercatat. Data ini mencegah karyawan dianggap ALPA karena gangguan sistem.
 </div>
 <?php endif; ?>
 
 <?php if ($pdo && !hrl_table_exists($pdo, 'hrl_leave_adjustments')): ?>
 <div class="hrl-alert-strip alert-warn">
-  ⚠️ Tabel <b>hrl_leave_adjustments</b> belum tersedia. Jalankan SQL patch agar HRL bisa input saldo awal cuti sebelum sistem berjalan.
+  <?=rmi_icon('warn')?> Tabel <b>hrl_leave_adjustments</b> belum tersedia. Jalankan SQL patch agar HRL bisa input saldo awal cuti sebelum sistem berjalan.
 </div>
 <?php endif; ?>
 
 <!-- ══ KPI TILES ══════════════════════════════════════════════════════════════ -->
-<div class="hrl-sh">📊 KPI Hari Ini — <?= h(date('d F Y', strtotime($filter_date))) ?></div>
+<div class="hrl-sh"><?=rmi_icon('chart')?> KPI Hari Ini — <?= h(date('d F Y', strtotime($filter_date))) ?></div>
 <div class="hrl-card p-3 mb-3">
   <div class="hrl-kpi-grid">
 
     <div class="hrl-tile" style="border-color:rgba(34,197,94,.35)">
-      <div class="tl-lbl">✅ Check-in</div>
+      <div class="tl-lbl"><?=rmi_icon('check')?> Check-in</div>
       <div class="tl-val" style="color:#4ade80"><?= $kpi['checkin_today'] ?></div>
       <div class="tl-sub">Dari <?= $kpi['employees_active'] ?> aktif — <?= hrl_pct($kpi['checkin_today'], $kpi['employees_active']) ?></div>
       <div class="tl-delta <?= $delta_checkin>0?'td-up':($delta_checkin<0?'td-dn':'td-neu') ?>">
@@ -792,68 +792,68 @@ if ($kpi['pending_izin'] > 0): ?>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(59,130,246,.35)">
-      <div class="tl-lbl">🚪 Check-out</div>
+      <div class="tl-lbl"><?=rmi_icon('home')?> Check-out</div>
       <div class="tl-val" style="color:#60a5fa"><?= $kpi['checkout_today'] ?></div>
       <div class="tl-sub">Sudah pulang</div>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(251,191,36,.35)">
-      <div class="tl-lbl">⏳ Belum Checkout</div>
+      <div class="tl-lbl"><?=rmi_icon('refresh')?> Belum Checkout</div>
       <div class="tl-val" style="color:#fbbf24"><?= $kpi['belum_checkout'] ?></div>
       <div class="tl-sub">Masih di kantor</div>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(239,68,68,.3)">
-      <div class="tl-lbl">🟠 Tidak Check-in</div>
+      <div class="tl-lbl"><?=rmi_icon('warn')?> Tidak Check-in</div>
       <div class="tl-val" style="color:#f87171"><?= $kpi['not_present'] ?></div>
       <div class="tl-sub">Bukan otomatis ALPA</div>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(249,115,22,.35)">
-      <div class="tl-lbl">⏰ Terlambat (><?= $checkin_std ?>)</div>
+      <div class="tl-lbl"><?=rmi_icon('calendar')?> Terlambat (><?= $checkin_std ?>)</div>
       <div class="tl-val" style="color:#fb923c"><?= $kpi['late_count'] ?></div>
       <div class="tl-sub">Checkin setelah <?= $checkin_std ?></div>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(239,68,68,.35)">
-      <div class="tl-lbl">🚫 ALPA Manual HRL</div>
+      <div class="tl-lbl"><?=rmi_icon('cross')?> ALPA Manual HRL</div>
       <div class="tl-val" style="color:#f87171"><?= (int)$kpi['manual_alpha_today'] ?></div>
       <div class="tl-sub">Hanya yang dikunci HRL</div>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(20,184,166,.35)">
-      <div class="tl-lbl">🛡️ Server Down / Manual Hadir</div>
+      <div class="tl-lbl"><?=rmi_icon('gear')?> Server Down / Manual Hadir</div>
       <div class="tl-val" style="color:#2dd4bf"><?= (int)$kpi['manual_server_down_today'] ?></div>
       <div class="tl-sub">Tidak dihitung ALPA</div>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(6,182,212,.3)">
-      <div class="tl-lbl">👥 Karyawan Aktif</div>
+      <div class="tl-lbl"><?=rmi_icon('users')?> Karyawan Aktif</div>
       <div class="tl-val" style="color:#67e8f9"><?= $kpi['employees_active'] ?></div>
       <div class="tl-sub">Master employees</div>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(139,92,246,.35)">
-      <div class="tl-lbl">📋 Izin Pending</div>
+      <div class="tl-lbl"><?=rmi_icon('clipboard')?> Izin Pending</div>
       <div class="tl-val" style="color:<?= $kpi['pending_izin']>0?'#fbbf24':'#4ade80' ?>"><?= $kpi['pending_izin'] ?></div>
       <div class="tl-sub">Menunggu approval</div>
     </div>
 
     <div class="hrl-tile">
-      <div class="tl-lbl">📄 Dok. Pending</div>
+      <div class="tl-lbl"><?=rmi_icon('doc')?> Dok. Pending</div>
       <div class="tl-val" style="color:<?= $kpi['pending_approval']>0?'#fbbf24':'#4ade80' ?>"><?= $kpi['pending_approval'] ?></div>
       <div class="tl-sub">Menunggu TTD</div>
     </div>
 
     <div class="hrl-tile" style="border-color:rgba(239,68,68,<?= $kpi['reg_alkes_expired']>0?'.35':($kpi['reg_alkes_expiring']>0?'.22':'.1') ?>)">
-      <div class="tl-lbl">🔬 Reg Alkes Open</div>
+      <div class="tl-lbl"><?=rmi_icon('search')?> Reg Alkes Open</div>
       <div class="tl-val" style="color:<?= $kpi['reg_alkes_expired']>0?'#f87171':'#e2e8f0' ?>"><?= $kpi['reg_alkes_open'] ?></div>
       <div class="tl-sub"><?= $kpi['reg_alkes_expired'] ?> NIE expired · <?= $kpi['reg_alkes_expiring_30'] ?> ≤30h · <?= $kpi['reg_alkes_expiring_90'] ?> 31–90h</div>
     </div>
 
     <?php if ($payroll_status): ?>
     <div class="hrl-tile" style="border-color:rgba(16,185,129,.3)">
-      <div class="tl-lbl">💰 Payroll <?= h($payroll_status['period_ym'] ?? '') ?></div>
+      <div class="tl-lbl"><?=rmi_icon('money')?> Payroll <?= h($payroll_status['period_ym'] ?? '') ?></div>
       <div class="tl-val" style="color:#6ee7b7;font-size:14px"><?= hrl_money((float)($payroll_status['total_net']??0)) ?></div>
       <div class="tl-sub">
         <?= h($payroll_status['emp_count']??0) ?> karyawan —
@@ -864,7 +864,7 @@ if ($kpi['pending_izin'] > 0): ?>
     </div>
     <?php else: ?>
     <div class="hrl-tile" style="opacity:.6">
-      <div class="tl-lbl">💰 Payroll <?= h(date('Y-m', strtotime($filter_date))) ?></div>
+      <div class="tl-lbl"><?=rmi_icon('money')?> Payroll <?= h(date('Y-m', strtotime($filter_date))) ?></div>
       <div class="tl-val" style="font-size:14px;color:var(--hrl-muted)">Belum dibuat</div>
       <div class="tl-sub"><a href="<?= h(hrlUrl('/payroll/index.php')) ?>" style="color:#67e8f9">Buat sekarang →</a></div>
     </div>
@@ -875,7 +875,7 @@ if ($kpi['pending_izin'] > 0): ?>
 
 
 <!-- ══ PENGINGAT MASA KONTRAK ═══════════════════════════════════════════════ -->
-<div class="hrl-sh">⏳ Pengingat Masa Kontrak</div>
+<div class="hrl-sh"><?=rmi_icon('refresh')?> Pengingat Masa Kontrak</div>
 <div class="hrl-card p-3 mb-3">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
     <div class="text-muted" style="font-size:12px">Menampilkan kontrak aktif yang sudah expired atau akan berakhir ≤ 90 hari.</div>
@@ -924,9 +924,9 @@ if ($kpi['pending_izin'] > 0): ?>
 </div>
 
 <!-- ══ SALDO CUTI TAHUNAN ════════════════════════════════════════════════════ -->
-<div id="saldo-cuti" class="hrl-sh">🌴 Saldo Cuti Tahunan <?= h((string)$leave_year) ?></div>
+<div id="saldo-cuti" class="hrl-sh"><?=rmi_icon('calendar')?> Saldo Cuti Tahunan <?= h((string)$leave_year) ?></div>
 <div class="hrl-card p-3 mb-3">
-  <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/leave_adjustment.php?year=' . urlencode((string)$leave_year))) ?>">✍️ Input Saldo Awal Cuti</a></div>
+  <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/leave_adjustment.php?year=' . urlencode((string)$leave_year))) ?>"><?=rmi_icon('memo')?> Input Saldo Awal Cuti</a></div>
   <?php if (!$pdo || !hrl_table_exists($pdo, 'hrl_leave_balances')): ?>
     <div style="font-size:12px;color:#fbbf24;line-height:1.6">
       Tabel saldo cuti belum tersedia. Saldo akan otomatis dibuat saat HRL approve pengajuan CUTI dari HRL Process.
@@ -978,15 +978,15 @@ if ($kpi['pending_izin'] > 0): ?>
 </div>
 
 <!-- ══ MPR DAILY VISIT NAVIGATION ═══════════════════════════════════════════════ -->
-<div class="hrl-sh">📍 Laporan Kunjungan MPR Harian</div>
+<div class="hrl-sh"><?=rmi_icon('target')?> Laporan Kunjungan MPR Harian</div>
 <div class="mpr-daily-nav">
   <aside class="mpr-side">
     <div class="mpr-side-title">Navigasi MPR Visit</div>
     <div class="mpr-side-sub">Shortcut laporan kunjungan harian dari modul MPR. Data mengikuti tanggal dan office filter HRL Dashboard.</div>
-    <a class="mpr-side-link" href="<?= h($mpr_nav_url) ?>">📍 Buka Laporan Kunjungan <span>→</span></a>
-    <a class="mpr-side-link" href="<?= h($mpr_nav_url . '?month=' . urlencode(date('Y-m', strtotime($filter_date)))) ?>">📅 Lihat Bulan Ini <span>→</span></a>
-    <a class="mpr-side-link" href="<?= h($mpr_export_today_url) ?>">📤 Export CSV <span>→</span></a>
-    <a class="mpr-side-link" href="<?= h(hrlUrl('/mpr/mpr_plans.php')) ?>">🗂️ MPR Plan <span>→</span></a>
+    <a class="mpr-side-link" href="<?= h($mpr_nav_url) ?>"><?=rmi_icon('target')?> Buka Laporan Kunjungan <span>→</span></a>
+    <a class="mpr-side-link" href="<?= h($mpr_nav_url . '?month=' . urlencode(date('Y-m', strtotime($filter_date)))) ?>"><?=rmi_icon('calendar')?> Lihat Bulan Ini <span>→</span></a>
+    <a class="mpr-side-link" href="<?= h($mpr_export_today_url) ?>"><?=rmi_icon('outbox')?> Export CSV <span>→</span></a>
+    <a class="mpr-side-link" href="<?= h(hrlUrl('/mpr/mpr_plans.php')) ?>"><?=rmi_icon('doc')?> MPR Plan <span>→</span></a>
     <div class="mpr-mini-grid">
       <div class="mpr-mini"><div class="v"><?= (int)$kpi['mpr_visit_today'] ?></div><div class="l">Hari Ini</div></div>
       <div class="mpr-mini"><div class="v"><?= (int)$kpi['mpr_visit_month'] ?></div><div class="l">Bulan Ini</div></div>
@@ -1007,7 +1007,7 @@ if ($kpi['pending_izin'] > 0): ?>
       <div style="padding:18px;color:#fbbf24;font-size:12px">Tabel MPR belum tersedia. Pastikan modul MPR sudah terpasang.</div>
     <?php elseif (empty($mpr_visits_today)): ?>
       <div style="padding:22px;text-align:center;color:#64748b;font-size:12px">
-        <div style="font-size:32px">📍</div>
+        <div style="font-size:32px"><?=rmi_icon('target')?></div>
         Belum ada laporan kunjungan MPR pada tanggal ini.
       </div>
     <?php else: ?>
@@ -1016,12 +1016,12 @@ if ($kpi['pending_izin'] > 0): ?>
           <div class="mpr-visit-main">
             <div class="mpr-visit-title"><?= h($mv['customer_name'] ?? '—') ?></div>
             <div class="mpr-visit-meta">
-              👤 <?= h($mv['visitor_username'] ?? '—') ?>
-              <?php if (!empty($mv['visit_city'])): ?> · 📍 <?= h($mv['visit_city']) ?><?php endif; ?>
-              <?php if (!empty($mv['plan_code'])): ?> · 📋 <?= h($mv['plan_code']) ?><?php endif; ?>
+              <?=rmi_icon('user')?> <?= h($mv['visitor_username'] ?? '—') ?>
+              <?php if (!empty($mv['visit_city'])): ?> · <?=rmi_icon('target')?> <?= h($mv['visit_city']) ?><?php endif; ?>
+              <?php if (!empty($mv['plan_code'])): ?> · <?=rmi_icon('clipboard')?> <?= h($mv['plan_code']) ?><?php endif; ?>
             </div>
             <?php if (!empty($mv['result'])): ?>
-              <div class="mpr-visit-meta">📝 <?= h(mb_strimwidth((string)$mv['result'], 0, 95, '…')) ?></div>
+              <div class="mpr-visit-meta"><?=rmi_icon('memo')?> <?= h(mb_strimwidth((string)$mv['result'], 0, 95, '…')) ?></div>
             <?php endif; ?>
           </div>
           <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end">
@@ -1035,7 +1035,7 @@ if ($kpi['pending_izin'] > 0): ?>
 </div>
 
 <!-- ══ TREN ABSENSI 30 HARI ═══════════════════════════════════════════════════ -->
-<div class="hrl-sh">📈 Tren Kehadiran — 30 Hari Terakhir</div>
+<div class="hrl-sh"><?=rmi_icon('trend')?> Tren Kehadiran — 30 Hari Terakhir</div>
 <div class="hrl-card p-3 mb-3">
   <div class="hrl-chart-wrap">
     <canvas id="hrlTrendChart"></canvas>
@@ -1044,7 +1044,7 @@ if ($kpi['pending_izin'] > 0): ?>
 
 <!-- ══ PENDING IZIN / CUTI ════════════════════════════════════════════════════ -->
 <?php if (!empty($pending_izin)): ?>
-<div class="hrl-sh">📋 Izin & Cuti Pending (<?= count($pending_izin) ?>)</div>
+<div class="hrl-sh"><?=rmi_icon('clipboard')?> Izin & Cuti Pending (<?= count($pending_izin) ?>)</div>
 <div class="hrl-card p-3 mb-3">
   <div style="display:flex;flex-direction:column;gap:8px">
   <?php foreach ($pending_izin as $req):
@@ -1063,7 +1063,7 @@ if ($kpi['pending_izin'] > 0): ?>
           <?php endif; ?>
         </div>
         <div style="font-size:12px;margin-top:3px">
-          📅 <?= h($req['start_date']) ?> — <?= h($req['end_date']) ?>
+          <?=rmi_icon('calendar')?> <?= h($req['start_date']) ?> — <?= h($req['end_date']) ?>
           <?php $days = (int)((strtotime($req['end_date'])-strtotime($req['start_date']))/86400)+1; ?>
           <span style="color:#94a3b8">(<?= $days ?> hari)</span>
         </div>
@@ -1085,7 +1085,7 @@ if ($kpi['pending_izin'] > 0): ?>
 
 
 <!-- ══ MANUAL ATTENDANCE EXCEPTION ════════════════════════════════════════════ -->
-<div class="hrl-sh">🛡️ Koreksi Absensi Manual HRL</div>
+<div class="hrl-sh"><?=rmi_icon('gear')?> Koreksi Absensi Manual HRL</div>
 <div class="hrl-card p-3 mb-3">
   <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
     <div style="font-size:12px;color:var(--hrl-muted);line-height:1.5">
@@ -1130,7 +1130,7 @@ if ($kpi['pending_izin'] > 0): ?>
 
 <!-- ══ REKAP ABSENSI (grouped by office) ══════════════════════════════════════ -->
 <?php if (!empty($absensi_today)): ?>
-<div class="hrl-sh">👤 Rekap Absensi — <?= h(date('d F Y', strtotime($filter_date))) ?></div>
+<div class="hrl-sh"><?=rmi_icon('user')?> Rekap Absensi — <?= h(date('d F Y', strtotime($filter_date))) ?></div>
 <div class="hrl-card mb-3" style="overflow:hidden">
 
   <?php foreach ($absensi_by_office as $oc => $rows):
@@ -1144,10 +1144,10 @@ if ($kpi['pending_izin'] > 0): ?>
   <!-- Office group header -->
   <div class="hrl-grp-head">
     <span style="background:<?= $oc_color['bg'] ?>;color:<?= $oc_color['color'] ?>;padding:2px 10px;border-radius:8px;font-size:11px;letter-spacing:.3px"><?= h($oc) ?></span>
-    <span style="color:#4ade80;font-size:12px">✅ <?= count($rows) ?> hadir</span>
-    <span style="color:#60a5fa;font-size:12px">🚪 <?= $cnt_co ?> checkout</span>
+    <span style="color:#4ade80;font-size:12px"><?=rmi_icon('check')?> <?= count($rows) ?> hadir</span>
+    <span style="color:#60a5fa;font-size:12px"><?=rmi_icon('home')?> <?= $cnt_co ?> checkout</span>
     <?php if ($cnt_late > 0): ?>
-      <span style="color:#fb923c;font-size:12px">⏰ <?= $cnt_late ?> terlambat</span>
+      <span style="color:#fb923c;font-size:12px"><?=rmi_icon('calendar')?> <?= $cnt_late ?> terlambat</span>
     <?php endif; ?>
   </div>
 
@@ -1177,7 +1177,7 @@ if ($kpi['pending_izin'] > 0): ?>
       $rowBg   = !$hasOut ? 'background:rgba(251,191,36,.03)' : '';
     ?>
       <tr style="<?= $rowBg ?>">
-        <td style="color:#4b5563;font-size:11px"><?= $i+1 ?></td>
+        <td style="color:var(--rmi-muted);font-size:11px"><?= $i+1 ?></td>
         <td>
           <?php $empName = trim((string)($row['employee_name'] ?? '')); ?>
           <?php if ($empName !== ''): ?>
@@ -1190,31 +1190,31 @@ if ($kpi['pending_izin'] > 0): ?>
         <td style="white-space:nowrap">
           <?php if ($inTime): ?>
             <span style="color:<?= $isLate?'#fb923c':'#4ade80' ?>;font-weight:600"><?= h($inTime) ?></span>
-            <?php if ($isLate): ?><span style="font-size:10px;color:#fb923c;margin-left:3px">⏰ TL</span><?php endif; ?>
-          <?php else: ?><span style="color:#4b5563">—</span><?php endif; ?>
+            <?php if ($isLate): ?><span style="font-size:10px;color:#fb923c;margin-left:3px"><?=rmi_icon('calendar')?> TL</span><?php endif; ?>
+          <?php else: ?><span style="color:var(--rmi-muted)">—</span><?php endif; ?>
         </td>
         <td style="text-align:center;padding:4px 6px">
           <?php if ($urlIn): ?>
             <a href="<?= h($urlIn) ?>" class="hrl-photo" data-url="<?= h($urlIn) ?>" title="Foto check-in">
               <img src="<?= h($urlIn) ?>" alt="in" loading="lazy"
-                   onerror="this.closest('a').innerHTML='<span style=\'color:#666;font-size:10px\'>—</span>'">
+                   onerror="this.closest('a').innerHTML='<span style=\'color:var(--rmi-muted);font-size:10px\'>—</span>'">
             </a>
-          <?php else: ?><span style="color:#374151">—</span><?php endif; ?>
+          <?php else: ?><span style="color:var(--rmi-muted)">—</span><?php endif; ?>
         </td>
         <td style="white-space:nowrap">
-          <?= $outTime ? '<span style="color:#60a5fa;font-weight:600">'.h($outTime).'</span>' : '<span style="color:#374151">—</span>' ?>
+          <?= $outTime ? '<span style="color:#60a5fa;font-weight:600">'.h($outTime).'</span>' : '<span style="color:var(--rmi-muted)">—</span>' ?>
         </td>
         <td style="text-align:center;padding:4px 6px">
           <?php if ($urlOut): ?>
             <a href="<?= h($urlOut) ?>" class="hrl-photo" data-url="<?= h($urlOut) ?>" title="Foto check-out">
               <img src="<?= h($urlOut) ?>" alt="out" loading="lazy"
-                   onerror="this.closest('a').innerHTML='<span style=\'color:#666;font-size:10px\'>—</span>'">
+                   onerror="this.closest('a').innerHTML='<span style=\'color:var(--rmi-muted);font-size:10px\'>—</span>'">
             </a>
-          <?php else: ?><span style="color:#374151">—</span><?php endif; ?>
+          <?php else: ?><span style="color:var(--rmi-muted)">—</span><?php endif; ?>
         </td>
         <td style="text-align:center">
           <?php if ($hasOut): ?>
-            <span class="hrl-badge" style="background:#0f2a4a;color:#60a5fa;border:1px solid rgba(96,165,250,.25)">Checkout ✓</span>
+            <span class="hrl-badge" style="background:#0f2a4a;color:#60a5fa;border:1px solid rgba(96,165,250,.25)">Checkout <?=rmi_icon('tick')?></span>
           <?php else: ?>
             <span class="hrl-badge" style="background:#3b1f02;color:#fbbf24;border:1px solid rgba(251,191,36,.25)">Belum</span>
           <?php endif; ?>
@@ -1230,7 +1230,7 @@ if ($kpi['pending_izin'] > 0): ?>
 
 <!-- ══ REG ALKES — NIE EXPIRY ═════════════════════════════════════════════════ -->
 <?php if (!empty($expiring_alkes)): ?>
-<div class="hrl-sh">🔬 Reg Alkes — Masa Berlaku NIE Perlu Tindakan (<?= count($expiring_alkes) ?>)</div>
+<div class="hrl-sh"><?=rmi_icon('search')?> Reg Alkes — Masa Berlaku NIE Perlu Tindakan (<?= count($expiring_alkes) ?>)</div>
 <div class="hrl-card p-0 mb-3" style="overflow:hidden">
   <div style="overflow-x:auto">
   <table class="hrl-table">
@@ -1276,7 +1276,7 @@ if ($kpi['pending_izin'] > 0): ?>
 
 <!-- ══ BREAKDOWN KARYAWAN PER DEPT ════════════════════════════════════════════ -->
 <?php if (!empty($dept_breakdown)): ?>
-<div class="hrl-sh">🏢 Distribusi Karyawan Aktif per Dept (Total: <?= $kpi['employees_active'] ?>)</div>
+<div class="hrl-sh"><?=rmi_icon('office')?> Distribusi Karyawan Aktif per Dept (Total: <?= $kpi['employees_active'] ?>)</div>
 <div class="hrl-card p-3 mb-3">
   <?php
   // Group by dept first
@@ -1305,11 +1305,11 @@ if ($kpi['pending_izin'] > 0): ?>
 <div class="row g-3 mb-3">
   <div class="col-md-6">
     <div class="hrl-card p-3 h-100">
-      <div class="hrl-sh" style="margin-top:0">🏗️ Control Center</div>
+      <div class="hrl-sh" style="margin-top:0"><?=rmi_icon('office')?> Control Center</div>
       <div class="hrl-links">
         <a class="hrl-link" href="<?= h(hrlUrl('/hrl/hrl_tower.php')) ?>">HRL Tower</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/tower.php')) ?>">Process Tower</a>
-        <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/employee_mutations.php')) ?>">🔄 Mutasi Karyawan</a>
+        <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/employee_mutations.php')) ?>"><?=rmi_icon('refresh')?> Mutasi Karyawan</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/leave_adjustment.php')) ?>">Input Saldo Cuti</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/hrl_reg_alkes/reg_alkes_control_tower.php')) ?>">Reg Alkes Tower</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/absensi/approval.php')) ?>">Approval Izin</a>
@@ -1319,23 +1319,23 @@ if ($kpi['pending_izin'] > 0): ?>
   </div>
   <div class="col-md-6">
     <div class="hrl-card p-3 h-100">
-      <div class="hrl-sh" style="margin-top:0">🔗 Quick Links</div>
+      <div class="hrl-sh" style="margin-top:0"><?=rmi_icon('doc')?> Quick Links</div>
       <div class="hrl-links">
         <a class="hrl-link" href="<?= h(hrlUrl('/hrl/hrl_docs.php')) ?>">HRL Docs</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/index.php')) ?>">HRL Process</a>
-        <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/employee_mutations.php')) ?>">🔄 Mutasi Karyawan</a>
+        <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/employee_mutations.php')) ?>"><?=rmi_icon('refresh')?> Mutasi Karyawan</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/hrl_reg_alkes/index.php')) ?>">Reg Alkes</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/absensi/index.php')) ?>">Absensi</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/absensi/admin/rekap.php')) ?>">Rekap Absensi</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/dashboards/hrl/absensi_manual_alpha.php')) ?>">ALPA / Koreksi Manual</a>
-        <a class="hrl-link" href="#saldo-cuti">🌴 Saldo Cuti</a>
-        <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/leave_adjustment.php')) ?>">✍️ Input Saldo Cuti</a>
+        <a class="hrl-link" href="#saldo-cuti"><?=rmi_icon('calendar')?> Saldo Cuti</a>
+        <a class="hrl-link" href="<?= h(hrlUrl('/hrl_process/leave_adjustment.php')) ?>"><?=rmi_icon('memo')?> Input Saldo Cuti</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/payroll/index.php')) ?>">Payroll</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/master/master_employees.php')) ?>">Master Karyawan</a>
-        <a class="hrl-link" href="<?= h(hrlUrl('/master/master_employees.php')) ?>">⏳ Masa Kontrak</a>
+        <a class="hrl-link" href="<?= h(hrlUrl('/master/master_employees.php')) ?>"><?=rmi_icon('refresh')?> Masa Kontrak</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/master/master_departements.php')) ?>">Master Departments</a>
         <a class="hrl-link" href="<?= h(hrlUrl('/kpi/kpi_center.php')) ?>">KPI Center</a>
-        <a class="hrl-link" href="<?= h(hrlUrl('/mpr/mpr_visits.php')) ?>">📍 Laporan Kunjungan MPR</a>
+        <a class="hrl-link" href="<?= h(hrlUrl('/mpr/mpr_visits.php')) ?>"><?=rmi_icon('target')?> Laporan Kunjungan MPR</a>
       </div>
     </div>
   </div>

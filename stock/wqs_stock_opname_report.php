@@ -395,18 +395,18 @@ rmi_header('Report Stock Opname', [
         <td class="small">
           <?php if ($d < 0): ?>
             <?php foreach ($dos as $do): ?>
-            <div>DO <a href="<?= h($bp) ?>/stock/wqs_do_tasks.php" target="_blank"><?= h($do['do_code']) ?></a> · <?= number_format($do['qty'], 0) ?> pcs · <span class="<?= $do['has_foto'] ? 'text-success' : 'text-warning' ?>"><?= $do['has_foto'] ? '✓' : '✗' ?></span></div>
+            <div>DO <a href="<?= h($bp) ?>/stock/wqs_do_tasks.php" target="_blank"><?= h($do['do_code']) ?></a> · <?= number_format($do['qty'], 0) ?> pcs · <span class="<?= $do['has_foto'] ? 'text-success' : 'text-warning' ?>"><?= $do['has_foto'] ? rmi_icon('tick') : rmi_icon('x') ?></span></div>
             <?php endforeach; ?>
             <?php foreach ($trfMinus as $tr): ?>
-            <div>TRF <a href="<?= h($bp) ?>/stock/wqs_stock_transfer.php?view=<?= $tr['transfer_id'] ?>" target="_blank"><?= h($tr['transfer_code']) ?></a> · <?= number_format($tr['qty'], 0) ?> pcs · <span class="<?= $tr['has_foto'] ? 'text-success' : 'text-warning' ?>"><?= $tr['has_foto'] ? '✓' : '✗' ?></span></div>
+            <div>TRF <a href="<?= h($bp) ?>/stock/wqs_stock_transfer.php?view=<?= $tr['transfer_id'] ?>" target="_blank"><?= h($tr['transfer_code']) ?></a> · <?= number_format($tr['qty'], 0) ?> pcs · <span class="<?= $tr['has_foto'] ? 'text-success' : 'text-warning' ?>"><?= $tr['has_foto'] ? rmi_icon('tick') : rmi_icon('x') ?></span></div>
             <?php endforeach; ?>
             <?php if (empty($dos) && empty($trfMinus)): ?><span class="text-muted">Tidak ada DO/Transfer terkait</span><?php endif; ?>
           <?php elseif ($d > 0): ?>
             <?php foreach ($incs as $inc): ?>
-            <div>INC <a href="<?= h($bp) ?>/stock/wqs_incoming_view.php?code=<?= urlencode($inc['incoming_code']) ?>" target="_blank"><?= h($inc['incoming_code']) ?></a> · <?= number_format($inc['qty'], 0) ?> pcs · <span class="<?= $inc['has_foto'] ? 'text-success' : 'text-warning' ?>"><?= $inc['has_foto'] ? '✓' : '✗' ?></span></div>
+            <div>INC <a href="<?= h($bp) ?>/stock/wqs_incoming_view.php?code=<?= urlencode($inc['incoming_code']) ?>" target="_blank"><?= h($inc['incoming_code']) ?></a> · <?= number_format($inc['qty'], 0) ?> pcs · <span class="<?= $inc['has_foto'] ? 'text-success' : 'text-warning' ?>"><?= $inc['has_foto'] ? rmi_icon('tick') : rmi_icon('x') ?></span></div>
             <?php endforeach; ?>
             <?php foreach ($trfPlus as $tr): ?>
-            <div>TRF <a href="<?= h($bp) ?>/stock/wqs_stock_transfer.php?view=<?= $tr['transfer_id'] ?>" target="_blank"><?= h($tr['transfer_code']) ?></a> · <?= number_format($tr['qty'], 0) ?> pcs · <span class="<?= $tr['has_foto'] ? 'text-success' : 'text-warning' ?>"><?= $tr['has_foto'] ? '✓' : '✗' ?></span></div>
+            <div>TRF <a href="<?= h($bp) ?>/stock/wqs_stock_transfer.php?view=<?= $tr['transfer_id'] ?>" target="_blank"><?= h($tr['transfer_code']) ?></a> · <?= number_format($tr['qty'], 0) ?> pcs · <span class="<?= $tr['has_foto'] ? 'text-success' : 'text-warning' ?>"><?= $tr['has_foto'] ? rmi_icon('tick') : rmi_icon('x') ?></span></div>
             <?php endforeach; ?>
             <?php if (empty($incs) && empty($trfPlus)): ?><span class="text-muted">Tidak ada Incoming/Transfer terkait</span><?php endif; ?>
           <?php else: ?>

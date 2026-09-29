@@ -425,7 +425,7 @@ if ($f_pay !== '' || $f_pay_from !== '' || $f_pay_to !== '') {
 
 function pct_pill($state, $label) {
   $cls = $state === true ? 'ok' : ($state === 'WAIT' ? 'wait' : ($state === 'LOCK' ? 'lock' : 'no'));
-  $dot = $state === true ? '🟢' : ($state === 'WAIT' ? '🟡' : ($state === 'LOCK' ? '⚪️' : '🔴'));
+  $dot = $state === true ? rmi_icon('check') : ($state === 'WAIT' ? rmi_icon('warn') : ($state === 'LOCK' ? rmi_icon('question') : rmi_icon('cross')));
   return "<span class='pill {$cls}'>{$dot} ".h($label)."</span>";
 }
 
@@ -613,7 +613,7 @@ rmi_header('Local Purchase Control Tower', [
         <button class="btn btn-success btn-sm" type="submit">Close PO</button>
       </form>
     <?php elseif ($status === 'CLOSED'): ?>
-      <div class="muted mt-1">✓ CLOSED</div>
+      <div class="muted mt-1"><?= rmi_icon('tick') ?> CLOSED</div>
     <?php else: ?>
       <div class="muted mt-1">Close menunggu Receiving + AP + Payment</div>
     <?php endif; ?>
@@ -628,7 +628,7 @@ rmi_header('Local Purchase Control Tower', [
         <button class="btn btn-success btn-sm" type="submit">Close PO</button>
       </form>
     <?php elseif ($status === 'CLOSED'): ?>
-      <div class="muted mt-1">✓ CLOSED</div>
+      <div class="muted mt-1"><?= rmi_icon('tick') ?> CLOSED</div>
     <?php elseif (!$incomingOk): ?>
       <div class="muted mt-1">Menunggu Receiving</div>
     <?php elseif (!$apExists || !$apPaidOk): ?>
@@ -644,7 +644,7 @@ rmi_header('Local Purchase Control Tower', [
     <?php elseif (!$apPaidOk): ?>
       <a class="btn btn-soft btn-sm mt-1" href="purchases_payment_ap.php?po_id=<?=h($r['id'])?>">Pay AP</a>
     <?php else: ?>
-      <div class="muted mt-1">✓ FIN Done → PQP Close</div>
+      <div class="muted mt-1"><?= rmi_icon('tick') ?> FIN Done → PQP Close</div>
     <?php endif; ?>
 
   <?php else: ?>

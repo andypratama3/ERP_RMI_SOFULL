@@ -122,7 +122,7 @@ $durStr = ($durMin > 0) ? floor($durMin / 60) . ' jam ' . ($durMin % 60) . ' men
     <div class="col-lg-7">
       <div class="card">
         <div class="card-header">
-          <h5 class="mb-0">⚙️ Jam Kerja &amp; Kehadiran</h5>
+          <h5 class="mb-0"><?=rmi_icon('gear')?> Jam Kerja &amp; Kehadiran</h5>
         </div>
         <div class="card-body">
           <form method="post">
@@ -191,7 +191,7 @@ $durStr = ($durMin > 0) ? floor($durMin / 60) . ' jam ' . ($durMin % 60) . ' men
               Simpan Pengaturan
             </button>
             <a href="rekap.php" class="btn btn-outline-secondary ms-2">Batal</a>
-            <a href="shifts.php" class="btn btn-outline-info ms-2">🔄 Kelola Shift & Lembur</a>
+            <a href="shifts.php" class="btn btn-outline-info ms-2"><?=rmi_icon('refresh')?> Kelola Shift & Lembur</a>
           </form>
         </div>
       </div>
@@ -202,7 +202,7 @@ $durStr = ($durMin > 0) ? floor($durMin / 60) . ' jam ' . ($durMin % 60) . ' men
 
       <!-- Preview jam kerja aktif -->
       <div class="card mb-3">
-        <div class="card-header"><h6 class="mb-0">📋 Pengaturan Aktif Saat Ini</h6></div>
+        <div class="card-header"><h6 class="mb-0"><?=rmi_icon('clipboard')?> Pengaturan Aktif Saat Ini</h6></div>
         <div class="card-body p-0">
           <table class="table table-sm mb-0">
             <tbody>
@@ -240,7 +240,7 @@ $durStr = ($durMin > 0) ? floor($durMin / 60) . ' jam ' . ($durMin % 60) . ' men
       <!-- Info dampak perubahan -->
       <div class="card border-warning">
         <div class="card-header bg-warning bg-opacity-10">
-          <h6 class="mb-0 text-warning-emphasis">⚠️ Catatan Penting</h6>
+          <h6 class="mb-0 text-warning-emphasis"><?=rmi_icon('warn')?> Catatan Penting</h6>
         </div>
         <div class="card-body small">
           <ul class="mb-0 ps-3">

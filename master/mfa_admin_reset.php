@@ -159,7 +159,7 @@ rmi_header('Reset MFA (User lain)', [
             $mid = (int)($u['id'] ?? 0);
             $mun = (string)($u['username'] ?? '');
             $mfaOn = ((int)($u['mfa_enabled'] ?? 0) === 1) && !empty($u['mfa_confirmed_at']);
-            $tag = $mfaOn ? ' 🔑 MFA' : '';
+            $tag = $mfaOn ? ' ' . rmi_icon('gear') . ' MFA' : '';
             ?>
             <option value="<?= $mid ?>"><?= rmi_h($mun . ' — ' . (string)($u['full_name'] ?? '') . ' (' . (string)($u['department'] ?? '') . ')' . $tag) ?></option>
           <?php endforeach; ?>

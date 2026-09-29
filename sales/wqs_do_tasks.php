@@ -1018,7 +1018,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 error_log("[WQS_AUDIT_GAP] sales_do_audit_append missing for WQS_READY do_id={$id} actor={$actorName}");
             }
-            $success = "Status: READY SCM ✅";
+            $success = "Status: READY SCM " . rmi_icon('check');
         }
 
     } catch (Throwable $e) {
@@ -1166,10 +1166,10 @@ rmi_header('WQS - Task DO dari CRM', [
     'WQS - Task DO dari CRM',
   ],
   'actions' => [
-    ['label' => '⚠ Retur / Karantina', 'url' => $baseProject . '/sales/sales_do_return.php?queue=wqs', 'class' => 'btn btn-sm btn-outline-warning'],
-    ['label' => 'ߓꠐanduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => 'ߗ젃ontrol Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
-    ['label' => $showCancelled ? 'ߓ렁ntrean Aktif' : 'ߗ㠒iwayat Batal', 'url' => $baseProject . '/stock/wqs_do_tasks.php' . ($showCancelled ? '' : '?show_cancelled=1'), 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('warn') . ' Retur / Karantina', 'url' => $baseProject . '/sales/sales_do_return.php?queue=wqs', 'class' => 'btn btn-sm btn-outline-warning'],
+    ['label' => rmi_icon('books') . ' Panduan Task', 'url' => $baseProject . '/sales/panduan_do_tasks.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('tower') . ' Control Tower', 'url' => $baseProject . '/sales/sales_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => $showCancelled ? rmi_icon('books') . ' Antrean Aktif' : rmi_icon('tower') . ' Riwayat Batal', 'url' => $baseProject . '/stock/wqs_do_tasks.php' . ($showCancelled ? '' : '?show_cancelled=1'), 'class' => 'btn btn-sm btn-outline-light'],
   ],
   'extra_head' => '<style>
     :root{

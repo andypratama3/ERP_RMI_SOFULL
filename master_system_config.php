@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 require_once __DIR__ . '/_shared/assets.php'; // RMI asset loader
 // --- auto-injected login guard (tools/enforce_login_guards.php) ---
 require_once __DIR__ . '/master/auth.php';
@@ -650,7 +651,7 @@ rmi_header('System Config', [
             <div>
                 <h5>MASTER SYSTEM CONFIG</h5>
                 <small class="text-muted-small">
-                    Pusat pengaturan: numbering, customers, theme, import CSV, dll. Satu pintu, no drama Afrika 🦒
+                    Pusat pengaturan: numbering, customers, theme, import CSV, dll. Satu pintu, no drama Afrika <?= rmi_icon('sun') ?>
                 </small>
             </div>
             <div class="text-end">

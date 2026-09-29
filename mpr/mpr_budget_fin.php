@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 
 // --- Auth guard ---
 $__rmi_guard_dir = __DIR__;
@@ -192,7 +193,7 @@ function mpr_fin_page_url(int $page, array $extras = []): string {
     <div class="d-flex gap-2 align-items-center flex-wrap">
       <a class="btn btn-sm btn-outline-light"
          href="<?= e(url_mpr('mpr_budget_fin.php?export=1&status=' . urlencode($f_status) . '&q=' . urlencode($f_q) . '&date_from=' . urlencode($f_date_from) . '&date_to=' . urlencode($f_date_to))) ?>">
-        📤 Export CSV
+        <?=rmi_icon('outbox')?> Export CSV
       </a>
     </div>
   </div>
@@ -267,7 +268,7 @@ function mpr_fin_page_url(int $page, array $extras = []): string {
               <td>
                 <div class="code"><?= e($r['request_code']) ?></div>
                 <div class="mini" style="color:#64748b"><?= e($r['request_date'] ?: '-') ?></div>
-                <div class="mini" style="color:#475569">by <?= e($r['created_by'] ?: '-') ?></div>
+                <div class="mini" style="color:var(--rmi-muted)">by <?= e($r['created_by'] ?: '-') ?></div>
               </td>
               <td class="mini">
                 <div class="code"><?= e($r['plan_code']) ?></div>
@@ -279,7 +280,7 @@ function mpr_fin_page_url(int $page, array $extras = []): string {
                   <?= e(mpr_fin_money($amt)) ?>
                 </span>
                 <?php if ($isBig): ?>
-                  <div class="mini" style="color:#f87171">⚠ Nominal besar</div>
+                  <div class="mini" style="color:#f87171"><?=rmi_icon('warn')?> Nominal besar</div>
                 <?php endif; ?>
               </td>
               <td>
@@ -287,7 +288,7 @@ function mpr_fin_page_url(int $page, array $extras = []): string {
                 <?php if (!empty($r['approved_by'])): ?>
                   <div class="mini mt-1" style="color:#64748b">By: <?= e($r['approved_by']) ?></div>
                   <?php if (!empty($r['approved_at'])): ?>
-                    <div class="mini" style="color:#475569"><?= e(date('d/m/Y', strtotime((string)$r['approved_at']))) ?></div>
+                    <div class="mini" style="color:var(--rmi-muted)"><?= e(date('d/m/Y', strtotime((string)$r['approved_at']))) ?></div>
                   <?php endif; ?>
                 <?php endif; ?>
               </td>
@@ -295,7 +296,7 @@ function mpr_fin_page_url(int $page, array $extras = []): string {
                 <div><?= e($r['vendor_name'] ?: '-') ?></div>
                 <div style="color:#64748b"><?= e(mpr_fin_trim((string)($r['purpose'] ?: ''),60)) ?></div>
                 <?php if (!empty($r['attachment_path'])): ?>
-                  <div><a class="mini" href="<?= e(base_project().'/'.ltrim((string)$r['attachment_path'],'/')) ?>" target="_blank">📎 Attachment</a></div>
+                  <div><a class="mini" href="<?= e(base_project().'/'.ltrim((string)$r['attachment_path'],'/')) ?>" target="_blank"><?=rmi_icon('doc')?> Attachment</a></div>
                 <?php endif; ?>
                 <?php if (!empty($r['approval_note'])): ?>
                   <div class="mini mt-1" style="color:#94a3b8">Note: <?= e(mpr_fin_trim((string)$r['approval_note'],60)) ?></div>
@@ -311,10 +312,10 @@ function mpr_fin_page_url(int $page, array $extras = []): string {
                           data-code="<?= e($r['request_code']) ?>"
                           data-plan="<?= e($r['plan_code']) ?>"
                           data-amount="<?= e(mpr_fin_money($amt)) ?>">
-                    ✅ Review
+                    <?=rmi_icon('check')?> Review
                   </button>
                 <?php else: ?>
-                  <span class="mini" style="color:#475569">—</span>
+                  <span class="mini" style="color:var(--rmi-muted)">—</span>
                 <?php endif; ?>
               </td>
             </tr>
@@ -348,7 +349,7 @@ function mpr_fin_page_url(int $page, array $extras = []): string {
     </nav>
     <?php endif; ?>
 
-    <div class="mini mt-2" style="color:#475569">
+    <div class="mini mt-2" style="color:var(--rmi-muted)">
       Rule: FIN Manager hanya bisa proses budget office-nya sendiri. Admin bisa override semua.
     </div>
   </div>
@@ -371,8 +372,8 @@ function mpr_fin_page_url(int $page, array $extras = []): string {
           <input type="hidden" name="rid" id="modalRid" value="">
           <textarea class="form-control mb-3" name="note" rows="3" placeholder="Catatan (opsional)"></textarea>
           <div class="d-flex gap-2">
-            <button type="submit" name="action" value="approve" class="btn btn-primary flex-fill">✅ Approve</button>
-            <button type="submit" name="action" value="reject"  class="btn btn-outline-danger flex-fill">❌ Reject</button>
+            <button type="submit" name="action" value="approve" class="btn btn-primary flex-fill"><?=rmi_icon('check')?> Approve</button>
+            <button type="submit" name="action" value="reject"  class="btn btn-outline-danger flex-fill"><?=rmi_icon('cross')?> Reject</button>
           </div>
         </form>
       </div>

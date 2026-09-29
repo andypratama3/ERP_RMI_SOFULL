@@ -1173,7 +1173,7 @@ rmi_header('Master PIC Customers', [
                                         </a>
                                         <?php $hasPortal = !empty($pics_with_portal[(int)$p['id']]); ?>
                                         <?php if ($hasPortal): ?>
-                                            <span class="badge bg-success mb-1" title="Sudah punya akses portal">Portal ✓</span>
+                                            <span class="badge bg-success mb-1" title="Sudah punya akses portal">Portal <?= rmi_icon('tick') ?></span>
                                         <?php elseif ($p['status'] === 'active'): ?>
                                             <a href="master_customer_portal_users.php?from_mpr=<?= (int)$p['id'] ?>"
                                                class="btn btn-sm btn-outline-info mb-1" title="Buat user portal untuk PIC ini">

@@ -374,13 +374,13 @@ body{background:#0b1220;color:#e8ecf4}
 .act-k-val{font-size:22px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
 .act-k-val.sm{font-size:14px}
 .act-k-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
-.act-k-sub{font-size:10px;color:#374151;margin-top:2px}
+.act-k-sub{font-size:10px;color:var(--rmi-muted);margin-top:2px}
 /* Section heading */
-.act-sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#475569;margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+.act-sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--rmi-muted);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
 .act-sh::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.08)}
 /* Mini table */
 .act-tbl{width:100%;border-collapse:collapse;font-size:12px}
-.act-tbl th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#475569;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;white-space:nowrap}
+.act-tbl th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--rmi-muted);padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;white-space:nowrap}
 .act-tbl td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
 .act-tbl tr:hover td{background:rgba(255,255,255,.02)}
 .act-tbl tr:last-child td{border-bottom:none}
@@ -395,7 +395,7 @@ body{background:#0b1220;color:#e8ecf4}
 .act-period-btn:hover,.act-period-btn.act{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fbbf24}
 </style>',
     'actions' => [
-        ['label' => '📚 Panduan', 'url' => act_u('/dashboards/act/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('books').' Panduan', 'url' => act_u('/dashboards/act/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -406,12 +406,12 @@ body{background:#0b1220;color:#e8ecf4}
   <!-- Header -->
   <div class="act-hdr">
     <div>
-      <h2>📝 ACT Dashboard</h2>
+      <h2><?=rmi_icon('memo')?> ACT Dashboard</h2>
       <p>Accounting & Tax — Task DO, Fixed Asset, Tax Invoice, Bank Rekon<?php if ($__actGlobalDashboard): ?> · Scope: <b>ALL</b><?php endif; ?></p>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <a class="act-link" href="<?= h(act_u('/dashboards/index.php')) ?>">🏠 Home</a>
-      <a class="act-link" href="<?= h(act_u('/sales/sales_control_tower.php')) ?>">🗼 Control Tower</a>
+      <a class="act-link" href="<?= h(act_u('/dashboards/index.php')) ?>"><?=rmi_icon('home')?> Home</a>
+      <a class="act-link" href="<?= h(act_u('/sales/sales_control_tower.php')) ?>"><?=rmi_icon('tower')?> Control Tower</a>
     </div>
   </div>
 
@@ -429,42 +429,42 @@ body{background:#0b1220;color:#e8ecf4}
       <a class="act-period-btn <?= $period===$val?'act':'' ?>"
          href="?m=<?= urlencode($val) ?>"><?= h($lbl) ?></a>
     <?php endforeach; ?>
-    <span style="color:#374151;font-size:11px"><?= h($mStart) ?> → <?= h($mEnd) ?></span>
+    <span style="color:var(--rmi-muted);font-size:11px"><?= h($mStart) ?> → <?= h($mEnd) ?></span>
   </div>
 <!-- KPI Tiles -->
   <div class="act-kpi">
     <a class="act-k" href="<?= h(act_u('/sales/act_do_tasks.php')) ?>" style="--kc:<?= $kpi['task_faktur_pajak']>0?'#3b82f6':'#64748b' ?>">
-      <div class="act-k-icon">🧾</div>
+      <div class="act-k-icon"><?=rmi_icon('receipt')?></div>
       <div class="act-k-val" style="color:<?= $kpi['task_faktur_pajak']>0?'#60a5fa':'#fff' ?>"><?= number_format($kpi['task_faktur_pajak']) ?></div>
       <div class="act-k-lbl">Task Faktur Pajak</div>
-      <div class="act-k-sub"><?= $kpi['task_faktur_pajak']>0?'⚡ Belum upload Faktur Pajak':'✓ Clear' ?></div>
+      <div class="act-k-sub"><?= $kpi['task_faktur_pajak']>0?rmi_icon('zap').' Belum upload Faktur Pajak':rmi_icon('tick').' Clear' ?></div>
     </a>
     <a class="act-k" href="<?= h(act_u('/sales/act_do_tasks.php')) ?>" style="--kc:<?= $kpi['task_tukar_faktur']>0?'#f59e0b':'#64748b' ?>">
-      <div class="act-k-icon">📄</div>
+      <div class="act-k-icon"><?=rmi_icon('doc')?></div>
       <div class="act-k-val" style="color:<?= $kpi['task_tukar_faktur']>0?'#fbbf24':'#fff' ?>"><?= number_format($kpi['task_tukar_faktur']) ?></div>
       <div class="act-k-lbl">Task Tukar Faktur</div>
-      <div class="act-k-sub"><?= $kpi['task_tukar_faktur']>0?'⚡ Belum upload Bukti Tukar Faktur':'✓ Clear' ?></div>
+      <div class="act-k-sub"><?= $kpi['task_tukar_faktur']>0?rmi_icon('zap').' Belum upload Bukti Tukar Faktur':rmi_icon('tick').' Clear' ?></div>
     </a>
     <div class="act-k" style="--kc:#f59e0b">
-      <div class="act-k-icon">⏱️</div>
+      <div class="act-k-icon"><?=rmi_icon('calendar')?></div>
       <div class="act-k-val sm" style="color:#fbbf24"><?= h(act_duration($kpi['avg_act_duration_sec'])) ?></div>
       <div class="act-k-lbl">Avg Durasi ACT</div>
       <div class="act-k-sub">SCM delivered → handoff FIN · <?= number_format($kpi['act_duration_measured']) ?> DO terukur</div>
     </div>
     <div class="act-k" style="--kc:#06b6d4">
-      <div class="act-k-icon">✅</div>
+      <div class="act-k-icon"><?=rmi_icon('check')?></div>
       <div class="act-k-val" style="color:#67e8f9"><?= number_format($kpi['act_done_period']) ?></div>
       <div class="act-k-lbl">ACT Selesai Periode</div>
       <div class="act-k-sub">Handoff ke FIN (wait_payment)</div>
     </div>
     <a class="act-k" href="<?= h(act_u('/sales/tax_invoices.php')) ?>" style="--kc:#22c55e">
-      <div class="act-k-icon">🧾</div>
+      <div class="act-k-icon"><?=rmi_icon('receipt')?></div>
       <div class="act-k-val"><?= number_format($kpi['tax_inv_issued']) ?></div>
       <div class="act-k-lbl">Tax Invoice Issued Periode</div>
       <div class="act-k-sub"><?= $sourceState['tax_invoice']==='ok' ? ('Draft current: '.number_format($kpi['tax_inv_draft'])) : 'Source tanggal belum tersedia' ?></div>
     </a>
     <a class="act-k" href="<?= h(act_u('/Fixed_Asset/index.php')) ?>" style="--kc:#8b5cf6">
-      <div class="act-k-icon">🏗️</div>
+      <div class="act-k-icon"><?=rmi_icon('office')?></div>
       <div class="act-k-val"><?= number_format($kpi['assets_active']) ?></div>
       <div class="act-k-lbl">Fixed Asset Aktif</div>
       <div class="act-k-sub"><?= $sourceState['fixed_asset']==='ok' ? 'Current snapshot · Klik → FA Dashboard' : 'Source tidak tersedia' ?></div>
@@ -480,11 +480,11 @@ body{background:#0b1220;color:#e8ecf4}
     <div class="col-12">
       <div class="rmi-card p-3">
         <div class="d-flex justify-content-between align-items-center mb-2">
-          <div class="act-sh" style="margin:0">📋 Task DO ACT Aktif</div>
+          <div class="act-sh" style="margin:0"><?=rmi_icon('clipboard')?> Task DO ACT Aktif</div>
           <a href="<?= h(act_u('/sales/act_do_tasks.php')) ?>" style="font-size:11px;color:#f59e0b;text-decoration:none">Buka semua →</a>
         </div>
         <?php if (empty($recentDOTasks)): ?>
-          <div style="color:#4b5563;font-size:13px;padding:16px 0;text-align:center">✅ Tidak ada task DO untuk ACT saat ini.</div>
+          <div style="color:var(--rmi-muted);font-size:13px;padding:16px 0;text-align:center"><?=rmi_icon('check')?> Tidak ada task DO untuk ACT saat ini.</div>
         <?php else: ?>
           <div class="table-responsive">
           <table class="act-tbl">
@@ -511,20 +511,20 @@ body{background:#0b1220;color:#e8ecf4}
 
   <!-- Quick Links -->
   <div class="rmi-card p-3">
-    <div class="act-sh" style="margin-top:0">⚡ Quick Links</div>
+    <div class="act-sh" style="margin-top:0"><?=rmi_icon('zap')?> Quick Links</div>
     <div class="act-links">
-      <a class="act-link primary" href="<?= h(act_u('/sales/act_do_tasks.php')) ?>">⚡ Task DO ACT</a>
-      <a class="act-link primary" href="<?= h(act_u('/sales/tax_invoices.php')) ?>">🧾 Tax Invoice</a>
-      <a class="act-link" href="<?= h(act_u('/purchases/bank_recon.php')) ?>">🏦 Bank Rekonsiliasi</a>
-      <a class="act-link" href="<?= h(act_u('/purchases/gl_reversal_approvals.php')) ?>">🔄 GL Reversal</a>
-      <a class="act-link" href="<?= h(act_u('/Fixed_Asset/index.php')) ?>">🏗️ Fixed Asset</a>
-      <a class="act-link" href="<?= h(act_u('/fixed_asset/depreciation.php')) ?>">📉 Depresiasi</a>
-      <a class="act-link" href="<?= h(act_u('/Fixed_Asset/tax_annual.php')) ?>">📊 Pajak Tahunan</a>
-      <a class="act-link" href="<?= h(act_u('/master/company_bank_accounts.php')) ?>">🏧 Rekening Perusahaan</a>
-      <a class="act-link" href="<?= h(act_u('/dashboards/finance/dashboard_detail.php')) ?>">💰 Finance Detail</a>
-      <a class="act-link" href="<?= h(act_u('/master/master_tax.php')) ?>">🧾 Master Tax</a>
-      <a class="act-link" href="<?= h(act_u('/kpi/kpi_center.php')) ?>">📈 KPI Center</a>
-      <a class="act-link" href="<?= h(act_u('/absensi/index.php')) ?>">📅 Absensi</a>
+      <a class="act-link primary" href="<?= h(act_u('/sales/act_do_tasks.php')) ?>"><?=rmi_icon('zap')?> Task DO ACT</a>
+      <a class="act-link primary" href="<?= h(act_u('/sales/tax_invoices.php')) ?>"><?=rmi_icon('receipt')?> Tax Invoice</a>
+      <a class="act-link" href="<?= h(act_u('/purchases/bank_recon.php')) ?>"><?=rmi_icon('money')?> Bank Rekonsiliasi</a>
+      <a class="act-link" href="<?= h(act_u('/purchases/gl_reversal_approvals.php')) ?>"><?=rmi_icon('refresh')?> GL Reversal</a>
+      <a class="act-link" href="<?= h(act_u('/Fixed_Asset/index.php')) ?>"><?=rmi_icon('office')?> Fixed Asset</a>
+      <a class="act-link" href="<?= h(act_u('/fixed_asset/depreciation.php')) ?>"><?=rmi_icon('trend')?> Depresiasi</a>
+      <a class="act-link" href="<?= h(act_u('/Fixed_Asset/tax_annual.php')) ?>"><?=rmi_icon('chart')?> Pajak Tahunan</a>
+      <a class="act-link" href="<?= h(act_u('/master/company_bank_accounts.php')) ?>"><?=rmi_icon('money')?> Rekening Perusahaan</a>
+      <a class="act-link" href="<?= h(act_u('/dashboards/finance/dashboard_detail.php')) ?>"><?=rmi_icon('money')?> Finance Detail</a>
+      <a class="act-link" href="<?= h(act_u('/master/master_tax.php')) ?>"><?=rmi_icon('receipt')?> Master Tax</a>
+      <a class="act-link" href="<?= h(act_u('/kpi/kpi_center.php')) ?>"><?=rmi_icon('trend')?> KPI Center</a>
+      <a class="act-link" href="<?= h(act_u('/absensi/index.php')) ?>"><?=rmi_icon('calendar')?> Absensi</a>
     </div>
   </div>
 

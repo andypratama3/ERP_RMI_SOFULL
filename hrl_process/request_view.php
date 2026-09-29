@@ -933,7 +933,7 @@ function milestone_dot(?string $by, ?string $at): string {
           <span class="badge-pill"><?= h($req['dept_code'] ?: '-') ?></span>
           <span class="badge-pill"><?= h($req['office_code'] ?: '-') ?></span>
           <span class="badge-pill"><?= h($statusU) ?></span>
-          <a class="btn btn-ghost btn-sm" href="<?= h(u('/hrl_process/request_print.php?id='.(int)$req['id'])) ?>" target="_blank">🖨️ Print</a>
+          <a class="btn btn-ghost btn-sm" href="<?= h(u('/hrl_process/request_print.php?id='.(int)$req['id'])) ?>" target="_blank"><?=rmi_icon('print')?> Print</a>
         </div>
 
         <?php if (strtoupper((string)$req['req_type']) === 'PERJADIN'): ?>

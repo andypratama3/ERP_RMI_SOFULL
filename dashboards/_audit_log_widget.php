@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 /**
  * _audit_log_widget.php — Widget Audit Log untuk landing page masing-masing dept.
  *
@@ -88,13 +89,13 @@ function _aw_action_color(string $action): string {
 }
 function _aw_action_icon(string $action): string {
     $a = strtoupper($action);
-    if (str_contains($a,'DELETE') || str_contains($a,'CANCEL')) return '🗑️';
-    if (str_contains($a,'CREATE') || str_contains($a,'ADD'))    return '✅';
-    if (str_contains($a,'APPROVE') || str_contains($a,'POST'))  return '📤';
-    if (str_contains($a,'UPDATE') || str_contains($a,'EDIT'))   return '✏️';
-    if (str_contains($a,'SUBMIT'))                              return '📨';
-    if (str_contains($a,'LOGIN'))                               return '🔑';
-    return '📋';
+    if (str_contains($a,'DELETE') || str_contains($a,'CANCEL')) return rmi_icon('x');
+    if (str_contains($a,'CREATE') || str_contains($a,'ADD'))    return rmi_icon('check');
+    if (str_contains($a,'APPROVE') || str_contains($a,'POST'))  return rmi_icon('outbox');
+    if (str_contains($a,'UPDATE') || str_contains($a,'EDIT'))   return rmi_icon('memo');
+    if (str_contains($a,'SUBMIT'))                              return rmi_icon('doc');
+    if (str_contains($a,'LOGIN'))                               return rmi_icon('gear');
+    return rmi_icon('clipboard');
 }
 function _aw_time_ago(string $ts): string {
     $diff = time() - strtotime($ts);
@@ -111,7 +112,7 @@ $_aw_module_label = implode(', ', (array)($_aw_modules));
   <div class="card-body" style="padding:14px 18px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
       <div>
-        <span style="font-size:13px;font-weight:700;color:#e5e7eb">📋 Audit Log Terbaru</span>
+        <span style="font-size:13px;font-weight:700;color:#e5e7eb"><?=rmi_icon('clipboard')?> Audit Log Terbaru</span>
         <span style="font-size:11px;color:#64748b;margin-left:8px"><?= _aw_h($_aw_module_label) ?></span>
       </div>
       <a href="<?= _aw_h($_aw_base) ?>/master/audit_logs.php"
@@ -121,7 +122,7 @@ $_aw_module_label = implode(', ', (array)($_aw_modules));
     </div>
 
     <?php if (empty($_aw_logs)): ?>
-      <div style="text-align:center;padding:20px 0;color:#475569;font-size:13px">
+      <div style="text-align:center;padding:20px 0;color:var(--rmi-muted);font-size:13px">
         Belum ada aktivitas tercatat.
       </div>
     <?php else: ?>
@@ -158,7 +159,7 @@ $_aw_module_label = implode(', ', (array)($_aw_modules));
             </div>
             <div style="text-align:right;flex-shrink:0">
               <div style="font-size:11px;color:#94a3b8"><?= _aw_h($user) ?></div>
-              <div style="font-size:10px;color:#475569"><?= _aw_h($ago) ?></div>
+              <div style="font-size:10px;color:var(--rmi-muted)"><?= _aw_h($ago) ?></div>
             </div>
           </div>
         <?php endforeach; ?>

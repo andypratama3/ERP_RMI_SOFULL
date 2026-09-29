@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 // require_login(); // static scan marker (login enforced via _kpi_bootstrap.php)
 require_once __DIR__ . '/_kpi_bootstrap.php';
 $pdo = kpi_require_pdo();
@@ -59,49 +60,49 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Apa itu KPI Center -->
   <div class="pnd-section">
-    <h3>📊 Apa itu KPI Center?</h3>
+    <h3><?=rmi_icon('chart')?> Apa itu KPI Center?</h3>
     <div class="pnd-desc" style="line-height:1.8;margin-bottom:14px">
       KPI Center adalah pusat dashboard performa seluruh operasional perusahaan — dari penjualan, pengiriman,
       inventory, procurement, hingga kinerja karyawan. Semua KPI dihitung otomatis dari data transaksi real-time di ERP.
     </div>
     <div class="pnd-kpi-grid">
       <div class="pnd-kpi-item">
-        <div class="pnd-kpi-ico">⏱</div>
+        <div class="pnd-kpi-ico"><?=rmi_icon('calendar')?></div>
         <div class="pnd-kpi-name">KPI DO SLA</div>
         <div class="pnd-kpi-desc">Rata-rata waktu proses Delivery Order vs target SLA</div>
       </div>
       <div class="pnd-kpi-item">
-        <div class="pnd-kpi-ico">🔍</div>
+        <div class="pnd-kpi-ico"><?=rmi_icon('search')?></div>
         <div class="pnd-kpi-name">DO Audit</div>
         <div class="pnd-kpi-desc">Audit trail setiap stage DO — siapa, kapan, berapa lama</div>
       </div>
       <div class="pnd-kpi-item">
-        <div class="pnd-kpi-ico">🛒</div>
+        <div class="pnd-kpi-ico"><?=rmi_icon('cart')?></div>
         <div class="pnd-kpi-name">KPI Purchases</div>
         <div class="pnd-kpi-desc">Lead time PO, tepat waktu supplier, AP aging</div>
       </div>
       <div class="pnd-kpi-item">
-        <div class="pnd-kpi-ico">📦</div>
+        <div class="pnd-kpi-ico"><?=rmi_icon('box')?></div>
         <div class="pnd-kpi-name">KPI Stock</div>
         <div class="pnd-kpi-desc">Inventory turnover, stok slow-moving, accuracy opname</div>
       </div>
       <div class="pnd-kpi-item">
-        <div class="pnd-kpi-ico">👤</div>
+        <div class="pnd-kpi-ico"><?=rmi_icon('user')?></div>
         <div class="pnd-kpi-name">KPI Employee</div>
         <div class="pnd-kpi-desc">Kehadiran, productivity, dan target per karyawan</div>
       </div>
       <div class="pnd-kpi-item">
-        <div class="pnd-kpi-ico">🏢</div>
+        <div class="pnd-kpi-ico"><?=rmi_icon('office')?></div>
         <div class="pnd-kpi-name">KPI Office</div>
         <div class="pnd-kpi-desc">Performa per cabang — revenue, DO, dan efisiensi</div>
       </div>
       <div class="pnd-kpi-item">
-        <div class="pnd-kpi-ico">📅</div>
+        <div class="pnd-kpi-ico"><?=rmi_icon('calendar')?></div>
         <div class="pnd-kpi-name">Harian</div>
         <div class="pnd-kpi-desc">Ringkasan KPI hari ini — DO, penerimaan, pembayaran</div>
       </div>
       <div class="pnd-kpi-item">
-        <div class="pnd-kpi-ico">📈</div>
+        <div class="pnd-kpi-ico"><?=rmi_icon('trend')?></div>
         <div class="pnd-kpi-name">Bulanan</div>
         <div class="pnd-kpi-desc">Trend dan perbandingan KPI vs bulan sebelumnya</div>
       </div>
@@ -110,7 +111,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Cara Baca KPI Center -->
   <div class="pnd-section">
-    <h3>🏠 Cara Menggunakan KPI Center</h3>
+    <h3><?=rmi_icon('home')?> Cara Menggunakan KPI Center</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -159,7 +160,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- KPI DO SLA -->
   <div class="pnd-section">
-    <h3>⏱ KPI Delivery Order SLA</h3>
+    <h3><?=rmi_icon('calendar')?> KPI Delivery Order SLA</h3>
 
     <div class="pnd-step">
       <div class="pnd-num green">1</div>
@@ -201,7 +202,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- KPI DO Audit -->
   <div class="pnd-section">
-    <h3>🔍 DO Audit — Rekam Jejak Proses DO</h3>
+    <h3><?=rmi_icon('search')?> DO Audit — Rekam Jejak Proses DO</h3>
 
     <div class="pnd-step">
       <div class="pnd-num yellow">1</div>
@@ -235,7 +236,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- KPI Employee -->
   <div class="pnd-section">
-    <h3>👤 KPI Karyawan</h3>
+    <h3><?=rmi_icon('user')?> KPI Karyawan</h3>
 
     <div class="pnd-step">
       <div class="pnd-num purple">1</div>
@@ -273,7 +274,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Snapshot & Sync -->
   <div class="pnd-section">
-    <h3>📸 Snapshot & Sinkronisasi KPI</h3>
+    <h3><?=rmi_icon('doc')?> Snapshot & Sinkronisasi KPI</h3>
 
     <div class="pnd-step">
       <div class="pnd-num teal">1</div>
@@ -318,7 +319,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Hak Akses KPI -->
   <div class="pnd-section">
-    <h3>🔒 Hak Akses KPI</h3>
+    <h3><?=rmi_icon('gear')?> Hak Akses KPI</h3>
     <div class="pnd-desc" style="line-height:1.8">
       KPI memiliki visibilitas berbeda per peran (sesuai RBAC, mis. <code>KPI.VIEW</code>):
       <ul style="margin-top:8px;padding-left:20px">
@@ -332,33 +333,33 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- FAQ -->
   <div class="pnd-section">
-    <h3>❓ Pertanyaan Umum (FAQ)</h3>
+    <h3><?=rmi_icon('question')?> Pertanyaan Umum (FAQ)</h3>
 
-    <div class="pnd-faq-q">❓ KPI saya tidak sesuai dengan kondisi aktual — kenapa?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> KPI saya tidak sesuai dengan kondisi aktual — kenapa?</div>
     <div class="pnd-faq-a">
       Kemungkinan data sumber belum tersinkronisasi. Coba buka <b>KPI Sync</b> dan klik <b>Sync Sekarang</b>.
       Jika masih tidak sesuai, hubungi Admin/SYS dengan detail perbedaan yang ditemukan.
     </div>
 
-    <div class="pnd-faq-q">❓ Bagaimana cara mengubah target/threshold KPI?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Bagaimana cara mengubah target/threshold KPI?</div>
     <div class="pnd-faq-a">
       Hanya <b>SYS</b> yang mengubah kebijakan (threshold, SLA DO per menit, dll.). Untuk SLA DO: buka <b>KPI DO (SLA)</b> → form <b>Kebijakan SLA DO (SYS)</b>.
       User lain: ajukan ke SYS; akses lihat tetap lewat izin RBAC.
     </div>
 
-    <div class="pnd-faq-q">❓ KPI DO SLA menunjukkan angka tinggi — apa penyebabnya?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> KPI DO SLA menunjukkan angka tinggi — apa penyebabnya?</div>
     <div class="pnd-faq-a">
       Lihat kolom <b>Stage Terlama</b> di DO Audit. Penyebab umum: stok tidak tersedia saat DO dibuat (delay di Allocation),
       tim WQS tidak melakukan picking tepat waktu, atau invoice terlambat dibuat oleh ACT.
     </div>
 
-    <div class="pnd-faq-q">❓ Bisa export data KPI ke Excel?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Bisa export data KPI ke Excel?</div>
     <div class="pnd-faq-a">
       Ya — di halaman KPI DO, klik <b>Export CSV</b> (<code>export_kpi_do_csv.php</code>) untuk mengunduh data mentah.
       Untuk KPI lainnya, gunakan tombol export yang tersedia di masing-masing halaman.
     </div>
 
-    <div class="pnd-faq-q">❓ Apa bedanya KPI Snapshot dengan data KPI live?</div>
+    <div class="pnd-faq-q"><?=rmi_icon('question')?> Apa bedanya KPI Snapshot dengan data KPI live?</div>
     <div class="pnd-faq-a">
       Data KPI <b>live</b> terus berubah seiring transaksi berjalan.
       <b>Snapshot</b> adalah foto kondisi KPI pada satu titik waktu tertentu — data terkunci dan tidak berubah.
@@ -368,7 +369,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Kontak -->
   <div class="pnd-section accent">
-    <h3>🆘 Butuh Bantuan?</h3>
+    <h3><?=rmi_icon('warn')?> Butuh Bantuan?</h3>
     <div class="pnd-desc" style="line-height:1.9">
       Untuk pertanyaan tentang KPI atau konfigurasi threshold, hubungi <b>Admin Sistem / Manager</b>:
       <ul style="margin-top:10px;padding-left:22px">

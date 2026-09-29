@@ -4,6 +4,7 @@
  * Detail order + upload dokumen pendukung.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_once __DIR__ . '/../master/_audit_master.php';
@@ -116,8 +117,8 @@ $pageTitle = 'Detail Order ' . $do['do_code'];
 
 function det_status_badge(string $status): string {
     $s = strtoupper(trim($status));
-    $map = ['PAID'=>['status-paid','✅','Lunas'],'OPEN'=>['status-open','🟡','Open'],'PARTIAL'=>['status-partial','🔵','Partial'],'CANCELLED'=>['status-cancel','❌','Batal'],'DONE'=>['status-paid','✅','Selesai']];
-    $d = $map[$s] ?? ['status-default','⚪',$status];
+    $map = ['PAID'=>['status-paid', rmi_icon('check'),'Lunas'],'OPEN'=>['status-open', rmi_icon('warn'),'Open'],'PARTIAL'=>['status-partial', rmi_icon('refresh'),'Partial'],'CANCELLED'=>['status-cancel', rmi_icon('cross'),'Batal'],'DONE'=>['status-paid', rmi_icon('check'),'Selesai']];
+    $d = $map[$s] ?? ['status-default', rmi_icon('question'),$status];
     return '<span class="status-badge '.$d[0].'">'.$d[1].' '.$d[2].'</span>';
 }
 
@@ -134,12 +135,12 @@ ob_start();
     <div class="text-muted small mb-1">
       <a href="<?= rmi_h($base) ?>/customer_portal/orders.php" style="color:#16a34a;text-decoration:none">← Riwayat Order</a>
     </div>
-    <h4 class="fw-bold mb-1">📋 <?= rmi_h($do['do_code']) ?></h4>
+    <h4 class="fw-bold mb-1"><?= rmi_icon('clipboard') ?> <?= rmi_h($do['do_code']) ?></h4>
     <div><?= det_status_badge((string)$do['status']) ?></div>
   </div>
   <div class="d-flex gap-2 flex-wrap">
-    <a href="<?= rmi_h($base) ?>/customer_portal/do_print.php?id=<?= $id ?>" target="_blank" class="btn btn-outline-secondary btn-sm">🖨️ Print DO</a>
-    <a href="<?= rmi_h($base) ?>/customer_portal/catalog.php" class="btn btn-rmi btn-sm px-4">🛒 Order Lagi</a>
+    <a href="<?= rmi_h($base) ?>/customer_portal/do_print.php?id=<?= $id ?>" target="_blank" class="btn btn-outline-secondary btn-sm"><?= rmi_icon('print') ?> Print DO</a>
+    <a href="<?= rmi_h($base) ?>/customer_portal/catalog.php" class="btn btn-rmi btn-sm px-4"><?= rmi_icon('cart') ?> Order Lagi</a>
   </div>
 </div>
 
@@ -147,7 +148,7 @@ ob_start();
   <!-- Order Info -->
   <div class="col-lg-4">
     <div class="cp-card mb-3">
-      <div class="cp-card-header">📄 Info Order</div>
+      <div class="cp-card-header"><?= rmi_icon('doc') ?> Info Order</div>
       <div class="p-3">
         <div class="mb-2" style="font-size:13px">
           <span class="text-muted">Tanggal</span><br>
@@ -174,7 +175,7 @@ ob_start();
         <?php endif; ?>
         <?php if (!empty($do['note'])): ?>
         <div style="font-size:13px;background:#fef9c3;border-radius:8px;padding:10px;margin-top:8px">
-          📝 <?= rmi_h($do['note']) ?>
+          <?= rmi_icon('memo') ?> <?= rmi_h($do['note']) ?>
         </div>
         <?php endif; ?>
       </div>
@@ -207,7 +208,7 @@ ob_start();
 
     <!-- Items -->
     <div class="cp-card mb-4">
-      <div class="cp-card-header">📦 Item Pesanan</div>
+      <div class="cp-card-header"><?= rmi_icon('box') ?> Item Pesanan</div>
       <div class="table-responsive">
         <table class="cp-table">
           <thead>
@@ -240,18 +241,18 @@ ob_start();
     <!-- Dokumen -->
     <?php if ($hasPortalDocsTable): ?>
     <div class="cp-card">
-      <div class="cp-card-header">📎 Dokumen Pendukung</div>
+      <div class="cp-card-header"><?= rmi_icon('doc') ?> Dokumen Pendukung</div>
       <div class="p-3">
         <?php if (!empty($portalDocs)): ?>
           <div class="mb-3">
             <?php foreach ($portalDocs as $d): ?>
               <div class="d-flex align-items-center gap-3 p-2 mb-2" style="background:#f8fafc;border-radius:8px;font-size:13px">
-                <span style="font-size:18px">📄</span>
+                <span style="font-size:18px"><?= rmi_icon('doc') ?></span>
                 <div class="flex-grow-1">
                   <div class="fw-semibold"><?= rmi_h($d['file_name']) ?></div>
                   <div class="text-muted" style="font-size:11px"><?= rmi_h($d['doc_type']) ?> · <?= rmi_h($d['created_at']) ?></div>
                 </div>
-                <a href="<?= rmi_h($base) ?>/customer_portal/download_doc.php?id=<?= (int)$d['id'] ?>" target="_blank" class="btn btn-sm btn-outline-success">⬇ Download</a>
+                <a href="<?= rmi_h($base) ?>/customer_portal/download_doc.php?id=<?= (int)$d['id'] ?>" target="_blank" class="btn btn-sm btn-outline-success"><?= rmi_icon('inbox') ?> Download</a>
               </div>
             <?php endforeach; ?>
           </div>

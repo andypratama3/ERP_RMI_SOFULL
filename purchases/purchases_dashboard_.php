@@ -148,7 +148,7 @@ $baseProject = function_exists('rmi_layout_base_project') ? rmi_layout_base_proj
 $actions = [
   ['label'=>'RFQ (Request Quotation)', 'url'=>'pqp_rfq.php',   'class'=>'btn btn-sm btn-rmi'],
   ['label'=>'PO',                      'url'=>'purchases_po.php','class'=>'btn btn-sm btn-rmi'],
-  ['label'=>'📖 Panduan',              'url'=>'panduan.php',    'class'=>'btn btn-sm btn-outline-light'],
+  ['label'=>rmi_icon('books').' Panduan',              'url'=>'panduan.php',    'class'=>'btn btn-sm btn-outline-light'],
 ];
 
 $extraHeadPQP = <<<'STYLE'
@@ -162,10 +162,10 @@ $extraHeadPQP = <<<'STYLE'
 .pqp-k-n{font-size:24px;font-weight:800;color:#fff}
 .pqp-k-n.sm{font-size:15px}
 .pqp-k-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.4px;margin-top:3px}
-.pqp-k-sub{font-size:10px;color:#334155;margin-top:2px}
+.pqp-k-sub{font-size:10px;color:var(--rmi-muted,#94a3b8);margin-top:2px}
 .pqp-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
-.pqp-link{padding:7px 13px;border-radius:10px;text-decoration:none;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.12);color:#e2e8f0;background:rgba(255,255,255,.06);transition:all .2s;display:inline-flex;align-items:center;gap:5px}
-.pqp-link:hover{background:rgba(255,255,255,.14);color:#fff}
+.pqp-link{padding:7px 13px;border-radius:10px;text-decoration:none;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.12);color:var(--rmi-text,#e2e8f0);background:rgba(255,255,255,.06);transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.pqp-link:hover{background:rgba(255,255,255,.14);color:var(--rmi-text,#fff)}
 .pqp-link.primary{background:linear-gradient(135deg,#7c3aed,#8b5cf6);border-color:transparent;color:#fff}
 </style>
 STYLE;
@@ -192,56 +192,56 @@ ds_manager_section($pdo, [
 <!-- PQP Header -->
 <div class="pqp-header">
   <div>
-    <h2>🛒 PQP Dashboard</h2>
+    <h2><?= rmi_icon('cart') ?> PQP Dashboard</h2>
     <p>Flow: WQS PR → PQP RFQ/PO → FIN AP/Payment → WQS Incoming
       &nbsp;·&nbsp; Buy price: <?= p_can_view_buy_price() ? '<span style="color:#4ade80;font-weight:700">Visible</span>' : '<span style="color:#94a3b8">Restricted</span>' ?>
     </p>
   </div>
   <div style="display:flex;gap:8px">
-    <a class="pqp-link" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);color:#e2e8f0" href="<?= rmi_h($baseProject . '/dashboards/index.php') ?>">🏠 Home</a>
+    <a class="pqp-link" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);color:var(--rmi-text,#e2e8f0)" href="<?= rmi_h($baseProject . '/dashboards/index.php') ?>"><?= rmi_icon('home') ?> Home</a>
   </div>
 </div>
 
 <!-- KPI Cards -->
 <div class="pqp-kpi">
   <div class="pqp-k" style="--kc:#f59e0b">
-    <div class="pqp-k-icon">📋</div>
+    <div class="pqp-k-icon"><?= rmi_icon('clipboard') ?></div>
     <div class="pqp-k-n"><?= (int)$kpi['rfq_open'] ?></div>
     <div class="pqp-k-lbl">RFQ Open</div>
     <div class="pqp-k-sub">Menunggu quotation</div>
   </div>
   <div class="pqp-k" style="--kc:#94a3b8">
-    <div class="pqp-k-icon">📭</div>
+    <div class="pqp-k-icon"><?= rmi_icon('inbox') ?></div>
     <div class="pqp-k-n"><?= (int)$kpi['rfq_pending'] ?></div>
     <div class="pqp-k-lbl">RFQ Pending</div>
     <div class="pqp-k-sub">Belum ada quotation</div>
   </div>
   <div class="pqp-k" style="--kc:#f97316">
-    <div class="pqp-k-icon">📝</div>
+    <div class="pqp-k-icon"><?= rmi_icon('memo') ?></div>
     <div class="pqp-k-n"><?= (int)$kpi['pr_submitted'] ?></div>
     <div class="pqp-k-lbl">PR Submitted</div>
     <div class="pqp-k-sub">Menunggu dibuat PO</div>
   </div>
   <div class="pqp-k" style="--kc:#3b82f6">
-    <div class="pqp-k-icon">🛒</div>
+    <div class="pqp-k-icon"><?= rmi_icon('cart') ?></div>
     <div class="pqp-k-n"><?= (int)$kpi['po_open'] ?></div>
     <div class="pqp-k-lbl">PO Open</div>
     <div class="pqp-k-sub">On progress</div>
   </div>
   <div class="pqp-k" style="--kc:#22c55e">
-    <div class="pqp-k-icon">💰</div>
+    <div class="pqp-k-icon"><?= rmi_icon('money') ?></div>
     <div class="pqp-k-n sm"><?= p_can_view_buy_price() ? 'Rp '.number_format((float)$kpi['po_value_month']/1e6,1,',','.').'jt' : '—' ?></div>
     <div class="pqp-k-lbl">PO Value MTD</div>
     <div class="pqp-k-sub">Bulan ini</div>
   </div>
   <div class="pqp-k" style="--kc:#ef4444">
-    <div class="pqp-k-icon">💳</div>
+    <div class="pqp-k-icon"><?= rmi_icon('money') ?></div>
     <div class="pqp-k-n"><?= (int)$kpi['ap_outstanding'] ?></div>
     <div class="pqp-k-lbl">AP Outstanding</div>
     <div class="pqp-k-sub"><?= p_can_view_buy_price() ? 'Rp '.number_format((float)$kpi['ap_unpaid']/1e6,1,',','.').'jt' : 'Restricted' ?></div>
   </div>
   <div class="pqp-k" style="--kc:#8b5cf6">
-    <div class="pqp-k-icon">🏭</div>
+    <div class="pqp-k-icon"><?= rmi_icon('office') ?></div>
     <div class="pqp-k-n"><?= (int)$kpi['manufactures_active'] ?></div>
     <div class="pqp-k-lbl">Manufactures Aktif</div>
     <div class="pqp-k-sub">Total: <?= (int)$kpi['manufactures_total'] ?> · Baru bulan ini: <b><?= (int)$kpi['manufactures_new_month'] ?></b></div>
@@ -249,7 +249,7 @@ ds_manager_section($pdo, [
 
   <!-- NEW: GR MTD -->
   <div class="pqp-k" style="--kc:#06b6d4">
-    <div class="pqp-k-icon">✅</div>
+    <div class="pqp-k-icon"><?= rmi_icon('check') ?></div>
     <div class="pqp-k-n"><?= (int)$kpi['gr_mtd'] ?></div>
     <div class="pqp-k-lbl">GR Bulan Ini</div>
     <div class="pqp-k-sub">Barang diterima MTD</div>
@@ -257,16 +257,16 @@ ds_manager_section($pdo, [
 
   <!-- NEW: PO Overdue -->
   <div class="pqp-k" style="--kc:<?= $kpi['po_overdue']>0?'#f97316':'#64748b' ?>">
-    <div class="pqp-k-icon">⏰</div>
+    <div class="pqp-k-icon"><?= rmi_icon('calendar') ?></div>
     <div class="pqp-k-n" style="color:<?= $kpi['po_overdue']>0?'#fb923c':'#fff' ?>"><?= (int)$kpi['po_overdue'] ?></div>
     <div class="pqp-k-lbl">PO Overdue 60d+</div>
-    <div class="pqp-k-sub"><?= $kpi['po_overdue']>0?'⚠ Sudah >60 hari OPEN':'✓ Semua on track' ?></div>
+    <div class="pqp-k-sub"><?= $kpi['po_overdue']>0?rmi_icon('warn').' Sudah >60 hari OPEN':rmi_icon('tick').' Semua on track' ?></div>
   </div>
 
   <!-- Forwarding Tasks Open -->
   <?php if ($kpi['forwarder_open'] > 0): ?>
   <div class="pqp-k" style="--kc:#8b5cf6">
-    <div class="pqp-k-icon">🚢</div>
+    <div class="pqp-k-icon"><?= rmi_icon('outbox') ?></div>
     <div class="pqp-k-n" style="color:#a78bfa"><?= (int)$kpi['forwarder_open'] ?></div>
     <div class="pqp-k-lbl">Forwarding Open</div>
     <div class="pqp-k-sub">Tugas forwarder aktif</div>
@@ -276,7 +276,7 @@ ds_manager_section($pdo, [
   <!-- NEW: AP HOLD_3WM -->
   <?php if ($kpi['ap_3wm'] > 0): ?>
   <div class="pqp-k" style="--kc:#f59e0b">
-    <div class="pqp-k-icon">🔍</div>
+    <div class="pqp-k-icon"><?= rmi_icon('search') ?></div>
     <div class="pqp-k-n" style="color:#fbbf24"><?= (int)$kpi['ap_3wm'] ?></div>
     <div class="pqp-k-lbl">HOLD 3WM</div>
     <div class="pqp-k-sub">3-Way Match pending</div>
@@ -287,7 +287,7 @@ ds_manager_section($pdo, [
 <!-- Alerts -->
 <?php if ($kpi['po_overdue'] > 0): ?>
 <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px">
-  <span style="font-size:18px">⏰</span>
+  <span style="font-size:18px"><?= rmi_icon('calendar') ?></span>
   <span><strong style="color:#fb923c"><?= $kpi['po_overdue'] ?> PO sudah lebih dari 60 hari OPEN</strong>
   <span style="color:#94a3b8"> — perlu follow-up ke supplier</span></span>
   <a href="purchases_po.php" style="margin-left:auto;color:#fb923c;font-size:11px;text-decoration:none">Lihat PO →</a>
@@ -295,7 +295,7 @@ ds_manager_section($pdo, [
 <?php endif; ?>
 <?php if ($kpi['ap_3wm'] > 0): ?>
 <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);border-radius:10px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px">
-  <span style="font-size:18px">🔍</span>
+  <span style="font-size:18px"><?= rmi_icon('search') ?></span>
   <span><strong style="color:#fbbf24"><?= $kpi['ap_3wm'] ?> Invoice HOLD 3-Way Match</strong>
   <span style="color:#94a3b8"> — perlu validasi PO/GR/Invoice</span></span>
   <a href="purchases_invoice_ap.php" style="margin-left:auto;color:#fbbf24;font-size:11px;text-decoration:none">Review →</a>
@@ -304,21 +304,21 @@ ds_manager_section($pdo, [
 
 <!-- Quick Links -->
 <div class="rmi-card p-3 mb-3">
-  <div class="fw-semibold mb-3">⚡ Quick Links — PQP</div>
+  <div class="fw-semibold mb-3"><?= rmi_icon('zap') ?> Quick Links — PQP</div>
   <div class="pqp-links">
-    <a class="pqp-link primary" href="pqp_rfq.php">📋 RFQ</a>
-    <a class="pqp-link primary" href="purchases_po.php">🛒 Purchase Order</a>
-    <a class="pqp-link primary" href="purchases_gr.php">✅ Good Receipt (GR)</a>
-    <a class="pqp-link" href="<?= rmi_h($baseProject . '/master/master_products.php') ?>">📦 Master Products</a>
-    <a class="pqp-link" href="purchases_invoice_ap.php">💳 AP Invoice</a>
-    <a class="pqp-link" href="purchases_payment_ap.php">💸 AP Payment</a>
-    <a class="pqp-link" href="purchases_import_control_tower.php">🗼 Import Control Tower</a>
-    <a class="pqp-link" href="purchases_forwarding_tasks.php">🚢 Forwarding Tasks</a>
-    <a class="pqp-link" href="purchases_reports.php">📊 Purchases Reports</a>
-    <a class="pqp-link" href="<?= rmi_h($baseProject . '/stock/wqs_pr.php') ?>">📝 PR (WQS)</a>
-    <a class="pqp-link" href="<?= rmi_h($baseProject . '/hrl_process/index.php') ?>">📋 HRL Process</a>
-    <a class="pqp-link" href="<?= rmi_h($baseProject . '/absensi/index.php') ?>">📅 Absensi</a>
-    <a class="pqp-link" href="<?= rmi_h($baseProject . '/kpi/kpi_center.php') ?>">📈 KPI Center</a>
+    <a class="pqp-link primary" href="pqp_rfq.php"><?= rmi_icon('clipboard') ?> RFQ</a>
+    <a class="pqp-link primary" href="purchases_po.php"><?= rmi_icon('cart') ?> Purchase Order</a>
+    <a class="pqp-link primary" href="purchases_gr.php"><?= rmi_icon('check') ?> Good Receipt (GR)</a>
+    <a class="pqp-link" href="<?= rmi_h($baseProject . '/master/master_products.php') ?>"><?= rmi_icon('box') ?> Master Products</a>
+    <a class="pqp-link" href="purchases_invoice_ap.php"><?= rmi_icon('money') ?> AP Invoice</a>
+    <a class="pqp-link" href="purchases_payment_ap.php"><?= rmi_icon('money') ?> AP Payment</a>
+    <a class="pqp-link" href="purchases_import_control_tower.php"><?= rmi_icon('tower') ?> Import Control Tower</a>
+    <a class="pqp-link" href="purchases_forwarding_tasks.php"><?= rmi_icon('outbox') ?> Forwarding Tasks</a>
+    <a class="pqp-link" href="purchases_reports.php"><?= rmi_icon('chart') ?> Purchases Reports</a>
+    <a class="pqp-link" href="<?= rmi_h($baseProject . '/stock/wqs_pr.php') ?>"><?= rmi_icon('memo') ?> PR (WQS)</a>
+    <a class="pqp-link" href="<?= rmi_h($baseProject . '/hrl_process/index.php') ?>"><?= rmi_icon('clipboard') ?> HRL Process</a>
+    <a class="pqp-link" href="<?= rmi_h($baseProject . '/absensi/index.php') ?>"><?= rmi_icon('calendar') ?> Absensi</a>
+    <a class="pqp-link" href="<?= rmi_h($baseProject . '/kpi/kpi_center.php') ?>"><?= rmi_icon('trend') ?> KPI Center</a>
   </div>
 </div>
 

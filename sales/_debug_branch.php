@@ -36,7 +36,7 @@ echo "department   : {$u['department']}\n";
 echo "office_code  : {$u['office_code']}\n\n";
 echo "--- SCOPE RESULT ---\n";
 echo "dept_detected: {$dept_ec}\n";
-echo "is_branch    : " . ($is_branch ? 'YES ✓' : 'NO ✗') . "\n";
+echo "is_branch    : " . ($is_branch ? 'YES ' . rmi_icon('tick') : 'NO ' . rmi_icon('x')) . "\n";
 echo "office_scope : " . ($is_branch ? $office : '(null - lihat semua)') . "\n\n";
 echo "--- DATABASE (master_system_login) ---\n";
 if ($dbRow) {

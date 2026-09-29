@@ -297,12 +297,12 @@ if ($f_pay !== '' || $f_pay_from !== '' || $f_pay_to !== '') {
 
 function pill($state, $label){
   $cls = 'no';
-  $dot = '🔴';
-  if ($state === true) { $cls = 'ok'; $dot = '🟢'; }
-  elseif ($state === false) { $cls = 'no'; $dot = '🔴'; }
-  elseif ($state === 'WAIT') { $cls = 'wait'; $dot = '🟡'; }
-  elseif ($state === 'LOCK') { $cls = 'lock'; $dot = '⚪️'; }
-  else { $cls = 'lock'; $dot = '⚪️'; }
+  $dot = rmi_icon('cross');
+  if ($state === true) { $cls = 'ok'; $dot = rmi_icon('check'); }
+  elseif ($state === false) { $cls = 'no'; $dot = rmi_icon('cross'); }
+  elseif ($state === 'WAIT') { $cls = 'wait'; $dot = rmi_icon('warn'); }
+  elseif ($state === 'LOCK') { $cls = 'lock'; $dot = rmi_icon('question'); }
+  else { $cls = 'lock'; $dot = rmi_icon('question'); }
   return "<span class='pill {$cls}'>{$dot} ".h($label)."</span>";
 }
 function chip_role($role){
@@ -335,7 +335,7 @@ rmi_header('Import Control Tower', [
     'Import Control Tower',
   ],
   'actions' => [
-    ['label' => '📚 Panduan', 'url' => $baseProject . '/purchases/panduan_import_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books').' Panduan', 'url' => $baseProject . '/purchases/panduan_import_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
   ],
   'extra_head' => '<link href="' . rmi_assets_base() . '/public/assets/vendor/datatables/1.13.8/css/dataTables.bootstrap5.min.css?v=20260209" rel="stylesheet">'
     . '<link href="' . rmi_assets_base() . '/public/assets/vendor/datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css?v=20260209" rel="stylesheet">'
@@ -550,7 +550,7 @@ rmi_header('Import Control Tower', [
                 $flowLabel = p_po_flow($r);
                 $flowSource = p_po_flow_source($r);
               ?>
-              <div><b><?=h(strtoupper($po_code ?? ''))?></b> <span class="pill ok">🟢 <?=h($flowLabel)?></span></div>
+              <div><b><?=h(strtoupper($po_code ?? ''))?></b> <span class="pill ok"><?= rmi_icon('check') ?> <?=h($flowLabel)?></span></div>
               <div class="muted"><?=h($r['po_date'] ?? '')?></div>
               <?php if ($flowSource !== 'EXPLICIT'): ?>
                 <div class="muted">Legacy flow: <?=h($flowSource)?></div>

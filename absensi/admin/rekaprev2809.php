@@ -491,15 +491,15 @@ function abs_rekap_late_penalty_amount(int $lateMin, array $rules): float {
 
 <!-- ── Quick Links ──────────────────────────────────────────────────────── -->
 <div class="rk-actions">
-  <a class="btn btn-sm btn-ghost" href="approval.php">📋 Approval</a>
-  <a class="btn btn-sm btn-ghost" href="offices.php">🏢 Office</a>
-  <a class="btn btn-sm btn-ghost" href="users.php">👥 Users</a>
-  <a class="btn btn-sm btn-ghost" href="payroll_gate.php">💰 Payroll Gate</a>
-  <a class="btn btn-sm btn-ghost" href="settings.php">⚙️ Jam Kerja</a>
-  <a class="btn btn-sm btn-ghost" href="late_penalty_settings.php">💸 Potongan Telat</a>
-  <a class="btn btn-sm btn-ghost" href="shifts.php">🔄 Shift</a>
-  <a class="btn btn-sm btn-ghost" href="broadcast.php" style="color:#25d366;border-color:rgba(37,211,102,.3)">📣 Broadcast WA</a>
-  <a class="btn btn-sm btn-rmi" href="<?= h(rekap_url(['export'=>'1'])) ?>">📥 Export CSV</a>
+  <a class="btn btn-sm btn-ghost" href="approval.php"><?=rmi_icon('clipboard')?> Approval</a>
+  <a class="btn btn-sm btn-ghost" href="offices.php"><?=rmi_icon('office')?> Office</a>
+  <a class="btn btn-sm btn-ghost" href="users.php"><?=rmi_icon('users')?> Users</a>
+  <a class="btn btn-sm btn-ghost" href="payroll_gate.php"><?=rmi_icon('money')?> Payroll Gate</a>
+  <a class="btn btn-sm btn-ghost" href="settings.php"><?=rmi_icon('gear')?> Jam Kerja</a>
+  <a class="btn btn-sm btn-ghost" href="late_penalty_settings.php"><?=rmi_icon('money')?> Potongan Telat</a>
+  <a class="btn btn-sm btn-ghost" href="shifts.php"><?=rmi_icon('refresh')?> Shift</a>
+  <a class="btn btn-sm btn-ghost" href="broadcast.php" style="color:#25d366;border-color:rgba(37,211,102,.3)"><?=rmi_icon('outbox')?> Broadcast WA</a>
+  <a class="btn btn-sm btn-rmi" href="<?= h(rekap_url(['export'=>'1'])) ?>"><?=rmi_icon('inbox')?> Export CSV</a>
 </div>
 
 <!-- ── Filter Bar ───────────────────────────────────────────────────────── -->
@@ -568,9 +568,9 @@ function abs_rekap_late_penalty_amount(int $lateMin, array $rules): float {
     <label>Status</label>
     <select name="status" class="form-select form-select-sm" style="width:130px">
       <option value=""           <?= $filterStatus === '' ? 'selected' : '' ?>>Semua</option>
-      <option value="on_time"    <?= $filterStatus === 'on_time'    ? 'selected' : '' ?>>✓ Normal</option>
-      <option value="late"       <?= $filterStatus === 'late'       ? 'selected' : '' ?>>⏰ Terlambat</option>
-      <option value="no_checkout"<?= $filterStatus === 'no_checkout'? 'selected' : '' ?>>⚠️ Belum Pulang</option>
+      <option value="on_time"    <?= $filterStatus === 'on_time'    ? 'selected' : '' ?>><?=rmi_icon('tick')?> Normal</option>
+      <option value="late"       <?= $filterStatus === 'late'       ? 'selected' : '' ?>><?=rmi_icon('calendar')?> Terlambat</option>
+      <option value="no_checkout"<?= $filterStatus === 'no_checkout'? 'selected' : '' ?>><?=rmi_icon('warn')?> Belum Pulang</option>
     </select>
   </div>
   <?php endif; ?>
@@ -584,39 +584,39 @@ function abs_rekap_late_penalty_amount(int $lateMin, array $rules): float {
 <!-- ── KPI Summary ──────────────────────────────────────────────────────── -->
 <div class="rk-kpi-row">
   <div class="rk-tile" style="border-color:rgba(34,197,94,.3)">
-    <div class="tl-lbl">✅ Total Hadir</div>
+    <div class="tl-lbl"><?=rmi_icon('check')?> Total Hadir</div>
     <div class="tl-val" style="color:#4ade80"><?= number_format($kpi['hadir']) ?></div>
     <div class="tl-sub">record absensi</div>
   </div>
   <div class="rk-tile" style="border-color:rgba(34,197,94,.15)">
-    <div class="tl-lbl">✓ Normal</div>
+    <div class="tl-lbl"><?=rmi_icon('tick')?> Normal</div>
     <div class="tl-val" style="color:#86efac"><?= number_format($kpi['normal']) ?></div>
     <div class="tl-sub">tepat waktu + checkout</div>
   </div>
   <div class="rk-tile" style="border-color:rgba(251,146,60,.3)">
-    <div class="tl-lbl">⏰ Terlambat</div>
+    <div class="tl-lbl"><?=rmi_icon('calendar')?> Terlambat</div>
     <div class="tl-val" style="color:#fb923c"><?= number_format($kpi['terlambat']) ?></div>
     <div class="tl-sub">masuk &gt; <?= h($stdTimeTol) ?><?= $_tolerance > 0 ? " <span style='opacity:.6;font-size:10px'>(tol. {$_tolerance}m)</span>" : '' ?></div>
   </div>
   <div class="rk-tile" style="border-color:rgba(239,68,68,.28)">
-    <div class="tl-lbl">💸 Potongan Terlambat</div>
+    <div class="tl-lbl"><?=rmi_icon('money')?> Potongan Terlambat</div>
     <div class="tl-val" style="color:#f87171;font-size:20px"><?= abs_rekap_money((float)$kpi['late_penalty']) ?></div>
     <div class="tl-sub">berdasarkan aturan menit</div>
   </div>
   <div class="rk-tile" style="border-color:rgba(251,191,36,.3)">
-    <div class="tl-lbl">⚠️ Belum Pulang</div>
+    <div class="tl-lbl"><?=rmi_icon('warn')?> Belum Pulang</div>
     <div class="tl-val" style="color:#fbbf24"><?= number_format($kpi['belum_pulang']) ?></div>
     <div class="tl-sub">checkin, belum checkout</div>
   </div>
   <?php if ($isOneDay): ?>
   <div class="rk-tile" style="border-color:rgba(239,68,68,.3)">
-    <div class="tl-lbl">❌ Tidak Hadir</div>
+    <div class="tl-lbl"><?=rmi_icon('cross')?> Tidak Hadir</div>
     <div class="tl-val" style="color:#f87171"><?= number_format(count($absentList)) ?></div>
     <div class="tl-sub">aktif tapi tidak checkin</div>
   </div>
   <?php endif; ?>
   <div class="rk-tile">
-    <div class="tl-lbl">📅 Periode</div>
+    <div class="tl-lbl"><?=rmi_icon('calendar')?> Periode</div>
     <div class="tl-val" style="font-size:13px;line-height:1.4;color:#e2e8f0"><?= h(date('d/m', strtotime($from))) ?> — <?= h(date('d/m/Y', strtotime($to))) ?></div>
     <div class="tl-sub"><?= h($filterOffice ?: 'Semua Office') ?> <?= $filterDept ? '· '.h($filterDept) : '' ?></div>
   </div>
@@ -625,12 +625,12 @@ function abs_rekap_late_penalty_amount(int $lateMin, array $rules): float {
 <!-- ── Tab nav ──────────────────────────────────────────────────────────── -->
 <div class="rk-tabs">
   <a class="rk-tab <?= $activeTab==='detail'  ? 'active' : '' ?>"
-     href="<?= h(rekap_url(['tab'=>'detail'])) ?>">📋 Detail</a>
+     href="<?= h(rekap_url(['tab'=>'detail'])) ?>"><?=rmi_icon('clipboard')?> Detail</a>
   <a class="rk-tab <?= $activeTab==='summary' ? 'active' : '' ?>"
-     href="<?= h(rekap_url(['tab'=>'summary'])) ?>">📊 Summary Karyawan</a>
+     href="<?= h(rekap_url(['tab'=>'summary'])) ?>"><?=rmi_icon('chart')?> Summary Karyawan</a>
   <a class="rk-tab <?= $activeTab==='absent'  ? 'active' : '' ?>"
      href="<?= h(rekap_url(['tab'=>'absent'])) ?>">
-    ❌ Tidak Hadir <?= count($absentList) > 0 ? '<span style="background:#ef4444;color:#fff;border-radius:10px;font-size:10px;padding:1px 7px;margin-left:4px">'.count($absentList).'</span>' : '' ?>
+    <?=rmi_icon('cross')?> Tidak Hadir <?= count($absentList) > 0 ? '<span style="background:#ef4444;color:#fff;border-radius:10px;font-size:10px;padding:1px 7px;margin-left:4px">'.count($absentList).'</span>' : '' ?>
   </a>
 </div>
 
@@ -710,13 +710,13 @@ function abs_rekap_late_penalty_amount(int $lateMin, array $rules): float {
 
       // Status badge
       if ($isLate && $noOut) {
-        $badge = '<span style="background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">⏰ Telat+Belum Pulang</span>';
+        $badge = '<span style="background:rgba(239,68,68,.2);color:#f87171;border:1px solid rgba(239,68,68,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">' . rmi_icon("calendar") . ' Telat+Belum Pulang</span>';
       } elseif ($isLate) {
-        $badge = '<span style="background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">⏰ Terlambat</span>';
+        $badge = '<span style="background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">' . rmi_icon("calendar") . ' Terlambat</span>';
       } elseif ($noOut) {
-        $badge = '<span style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">⚠️ Belum Pulang</span>';
+        $badge = '<span style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">' . rmi_icon("warn") . ' Belum Pulang</span>';
       } else {
-        $badge = '<span style="background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">✓ Normal</span>';
+        $badge = '<span style="background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700">' . rmi_icon("tick") . ' Normal</span>';
       }
     ?>
       <tr>
@@ -858,7 +858,7 @@ function abs_rekap_late_penalty_amount(int $lateMin, array $rules): float {
 <div class="rmi-card p-3">
   <?php if (!$isOneDay): ?>
   <div style="padding:12px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:10px;margin-bottom:12px;font-size:12px;color:#fbbf24">
-    ⚠️ Fitur "Tidak Hadir" akurat untuk <strong>1 hari spesifik</strong>.
+    <?=rmi_icon('warn')?> Fitur "Tidak Hadir" akurat untuk <strong>1 hari spesifik</strong>.
     Untuk multi-hari, akan menampilkan karyawan yang tidak hadir pada tanggal <strong><?= h($to) ?></strong> (hari terakhir range).
     Gunakan filter "Hari Ini" atau "Kemarin" untuk akurasi penuh.
   </div>
@@ -872,13 +872,13 @@ function abs_rekap_late_penalty_amount(int $lateMin, array $rules): float {
 
   <?php if (empty($absentList)): ?>
     <div style="text-align:center;padding:30px;color:#4ade80">
-      🎉 Semua karyawan hadir pada tanggal ini!
+      <?=rmi_icon('zap')?> Semua karyawan hadir pada tanggal ini!
     </div>
   <?php else: ?>
   <div class="rk-absent-grid">
     <?php foreach ($absentList as $u): ?>
       <div class="rk-absent-card">
-        <div style="font-weight:700;color:#f1f5f9"><?= $u['employee_name'] ?: h($u['username']) ?></div>
+        <div style="font-weight:700;color:var(--rmi-text,#f1f5f9)"><?= $u['employee_name'] ?: h($u['username']) ?></div>
         <div style="font-size:11px;color:var(--r-muted)"><?= h($u['username']) ?></div>
         <div style="margin-top:5px;display:flex;gap:5px;flex-wrap:wrap">
           <?php if ($u['office_code']): ?>
@@ -918,9 +918,9 @@ function abs_rekap_late_penalty_amount(int $lateMin, array $rules): float {
           <td style="color:var(--r-muted)"><?= h($r['office_code']) ?></td>
           <td style="text-align:center">
             <?php if ($linked): ?>
-              <span style="background:rgba(34,197,94,.15);color:#4ade80;padding:2px 10px;border-radius:12px;font-size:11px">✓</span>
+              <span style="background:rgba(34,197,94,.15);color:#4ade80;padding:2px 10px;border-radius:12px;font-size:11px"><?=rmi_icon('tick')?></span>
             <?php else: ?>
-              <span style="background:rgba(239,68,68,.12);color:#f87171;padding:2px 10px;border-radius:12px;font-size:11px">✗ Belum</span>
+              <span style="background:rgba(239,68,68,.12);color:#f87171;padding:2px 10px;border-radius:12px;font-size:11px"><?=rmi_icon('x')?> Belum</span>
             <?php endif; ?>
           </td>
         </tr>

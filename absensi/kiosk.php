@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             unset($_SESSION['kiosk_uid'], $_SESSION['kiosk_uname'], $_SESSION['kiosk_token']);
 
             $step  = 'done';
-            $flash = ['type'=>'ok','msg'=>($action==='IN'?'✅ Check-in':'✅ Check-out')." berhasil! Selamat bekerja, {$uname}."];
+            $flash = ['type'=>'ok','msg'=>($action==='IN'?'' . rmi_icon("check") . ' Check-in':'' . rmi_icon("check") . ' Check-out')." berhasil! Selamat bekerja, {$uname}."];
         }
     }
 }
@@ -220,7 +220,7 @@ input[type=hidden]{display:none}
 <div class="wrap">
 
   <div class="kiosk-header">
-    <div class="kiosk-logo">🏢</div>
+    <div class="kiosk-logo"><?=rmi_icon('office')?></div>
     <div class="kiosk-office"><?= htmlspecialchars($officeName, ENT_QUOTES, 'UTF-8') ?></div>
     <div class="kiosk-sub">Kiosk Absensi · <?= htmlspecialchars($officeCode, ENT_QUOTES, 'UTF-8') ?></div>
   </div>
@@ -232,7 +232,7 @@ input[type=hidden]{display:none}
   <!-- ── STEP: DONE ───────────────────────────────────── -->
   <?php if ($step === 'done'): ?>
   <div class="card">
-    <div class="done-icon">✅</div>
+    <div class="done-icon"><?=rmi_icon('check')?></div>
     <div class="done-msg"><?= htmlspecialchars($flash['msg'], ENT_QUOTES, 'UTF-8') ?></div>
     <div class="done-sub">Data absensi telah dicatat. Anda dapat menutup layar ini.</div>
     <button class="btn btn-outline" onclick="resetKiosk()">↩ Karyawan berikutnya</button>
@@ -259,13 +259,13 @@ input[type=hidden]{display:none}
 
   <div class="card">
     <div style="font-size:13px;color:var(--muted);margin-bottom:14px;text-align:center">
-      👤 <b><?= $kioskUname ?></b>
+      <?=rmi_icon('user')?> <b><?= $kioskUname ?></b>
     </div>
 
     <!-- Pilih IN / OUT -->
     <div class="action-tabs">
-      <button type="button" class="action-tab in active" id="tabIn"  onclick="setAction('IN')">🟢 Check-in</button>
-      <button type="button" class="action-tab out"       id="tabOut" onclick="setAction('OUT')">🔴 Check-out</button>
+      <button type="button" class="action-tab in active" id="tabIn"  onclick="setAction('IN')"><?=rmi_icon('check')?> Check-in</button>
+      <button type="button" class="action-tab out"       id="tabOut" onclick="setAction('OUT')"><?=rmi_icon('warn')?> Check-out</button>
     </div>
 
     <form method="post" id="kioskPhotoForm"
@@ -278,13 +278,13 @@ input[type=hidden]{display:none}
       <img id="photoPreview" class="photo-preview" alt="Preview">
 
       <label class="btn-cam" id="camLabel">
-        <div style="font-size:36px;margin-bottom:8px">📷</div>
+        <div style="font-size:36px;margin-bottom:8px"><?=rmi_icon('doc')?></div>
         <div id="camLabelText">Tap untuk Ambil Foto Selfie</div>
         <div style="font-size:11px;opacity:.6;margin-top:4px">Kamera depan akan terbuka otomatis</div>
         <input type="file" id="photoFileK" accept="image/*" capture="user" onchange="onPhotoTaken(this)">
       </label>
 
-      <button type="submit" class="btn btn-primary" id="btnSubmitK">✓ Submit Absensi</button>
+      <button type="submit" class="btn btn-primary" id="btnSubmitK"><?=rmi_icon('tick')?> Submit Absensi</button>
     </form>
 
     <div class="back-link" onclick="resetKiosk()">↩ Bukan saya? Ganti karyawan</div>
@@ -305,7 +305,7 @@ input[type=hidden]{display:none}
     document.getElementById('tabIn').classList.toggle('active', v==='IN');
     document.getElementById('tabOut').classList.toggle('active', v==='OUT');
     const btn = document.getElementById('btnSubmitK');
-    btn.textContent = v==='IN' ? '✓ Submit Check-in' : '✓ Submit Check-out';
+    btn.textContent = v==='IN' ? '<?=rmi_icon('tick')?> Submit Check-in' : '<?=rmi_icon('tick')?> Submit Check-out';
     btn.style.background = v==='IN' ? 'var(--green)' : 'var(--red)';
   }
 
@@ -328,7 +328,7 @@ input[type=hidden]{display:none}
       prev.style.display = 'block';
       document.getElementById('photo_data_k').value = e.target.result;
       document.getElementById('camLabel').classList.add('taken');
-      document.getElementById('camLabelText').textContent = '✓ Foto siap — tap untuk ambil ulang';
+      document.getElementById('camLabelText').textContent = '<?=rmi_icon('tick')?> Foto siap — tap untuk ambil ulang';
     };
     reader.readAsDataURL(input.files[0]);
   }
@@ -342,7 +342,7 @@ input[type=hidden]{display:none}
   <div class="kiosk-date" id="kioskDate">-</div>
 
   <div class="card">
-    <div style="font-size:15px;font-weight:700;margin-bottom:4px">👤 Identifikasi Karyawan</div>
+    <div style="font-size:15px;font-weight:700;margin-bottom:4px"><?=rmi_icon('user')?> Identifikasi Karyawan</div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:20px">Masukkan username & password ERP Anda</div>
 
     <form method="post" id="identifyForm">

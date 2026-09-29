@@ -339,7 +339,7 @@ body{background:#0b1220;color:#e5e7eb}.card{background:rgba(17,24,39,.82);border
 STYLE;
 
 $actions = [
-    ['label' => '📚 Panduan', 'url' => u('/dashboards/regulatory/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books').' Panduan', 'url' => u('/dashboards/regulatory/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ['label' => 'Master Products', 'url' => u('/master/master_products.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ['label' => 'Reg Alkes', 'url' => u('/hrl_reg_alkes/reg_alkes.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ['label' => 'Warehouse Dashboard', 'url' => u('/dashboards/warehouse/wqs_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
@@ -358,15 +358,15 @@ rmi_header('Regulatory & Compliance', [
 
     <div class="reg-header">
         <div>
-            <h2>🏥 Regulatory & Compliance Dashboard</h2>
+            <h2><?=rmi_icon('office')?> Regulatory & Compliance Dashboard</h2>
             <p>Product-level compliance dari <code style="color:#fecaca">master_products</code> dan workflow dossier dari <code style="color:#fecaca">hrl_reg_alkes_cases</code>. Dashboard read-only.</p>
         </div>
-        <a class="reg-link" href="<?= h(u('/dashboards/index.php')) ?>">🏠 Home</a>
+        <a class="reg-link" href="<?= h(u('/dashboards/index.php')) ?>"><?=rmi_icon('home')?> Home</a>
     </div>
 
     <?php if ($sourceWarnings): ?>
         <div class="card source-warn mb-3"><div class="card-body py-3">
-            <div class="fw-semibold mb-1">⚠ Data source check</div>
+            <div class="fw-semibold mb-1"><?=rmi_icon('warn')?> Data source check</div>
             <ul class="mb-0 muted">
                 <?php foreach ($sourceWarnings as $warning): ?><li><?= h($warning) ?></li><?php endforeach; ?>
             </ul>
@@ -384,13 +384,13 @@ rmi_header('Regulatory & Compliance', [
     </div></div>
 
     <div class="reg-kpi">
-        <div class="reg-k" style="--kc:#22c55e"><div class="reg-k-icon">📦</div><div class="reg-k-n"><?= h(reg_num($kpi['total'])) ?></div><div class="reg-k-lbl">Produk Aktif</div><div class="reg-k-sub">master_products</div></div>
-        <div class="reg-k" style="--kc:#3b82f6"><div class="reg-k-icon">✅</div><div class="reg-k-n"><?= h(reg_num($kpi['has_reg'])) ?></div><div class="reg-k-lbl">Ada No AKL/NIE/AKD</div><div class="reg-k-sub">minimal 1 nomor registrasi valid</div></div>
-        <div class="reg-k" style="--kc:#f59e0b"><div class="reg-k-icon">⚠️</div><div class="reg-k-n"><?= h(reg_num($kpi['missing_reg'])) ?></div><div class="reg-k-lbl">Missing Registrasi</div><div class="reg-k-sub">produk aktif tanpa nomor registrasi</div></div>
-        <div class="reg-k" style="--kc:#eab308"><div class="reg-k-icon">📅</div><div class="reg-k-n"><?= h(reg_num($kpi['missing_expiry'])) ?></div><div class="reg-k-lbl">Tanggal Izin Belum Diisi</div><div class="reg-k-sub"><?= $expirySourceReady ? h($expiryColumn) : 'N/A — kolom izin belum tersedia' ?></div></div>
-        <div class="reg-k" style="--kc:#a855f7"><div class="reg-k-icon">🛠️</div><div class="reg-k-n"><?= h(reg_num($kpi['invalid_expiry'])) ?></div><div class="reg-k-lbl">Tanggal Izin Tidak Valid</div><div class="reg-k-sub">valid: 2000-01-01 s.d. 2100-12-31</div></div>
-        <div class="reg-k" style="--kc:#f97316"><div class="reg-k-icon">⏰</div><div class="reg-k-n"><?= h(reg_num($kpi['exp_90'])) ?></div><div class="reg-k-lbl">Expiry Izin ≤90 Hari</div><div class="reg-k-sub">tidak memakai expiry batch/lot</div></div>
-        <div class="reg-k" style="--kc:#ef4444"><div class="reg-k-icon">❌</div><div class="reg-k-n"><?= h(reg_num($kpi['expired'])) ?></div><div class="reg-k-lbl">Izin Expired</div><div class="reg-k-sub">tanggal izin khusus &lt; hari ini</div></div>
+        <div class="reg-k" style="--kc:#22c55e"><div class="reg-k-icon"><?=rmi_icon('box')?></div><div class="reg-k-n"><?= h(reg_num($kpi['total'])) ?></div><div class="reg-k-lbl">Produk Aktif</div><div class="reg-k-sub">master_products</div></div>
+        <div class="reg-k" style="--kc:#3b82f6"><div class="reg-k-icon"><?=rmi_icon('check')?></div><div class="reg-k-n"><?= h(reg_num($kpi['has_reg'])) ?></div><div class="reg-k-lbl">Ada No AKL/NIE/AKD</div><div class="reg-k-sub">minimal 1 nomor registrasi valid</div></div>
+        <div class="reg-k" style="--kc:#f59e0b"><div class="reg-k-icon"><?=rmi_icon('warn')?></div><div class="reg-k-n"><?= h(reg_num($kpi['missing_reg'])) ?></div><div class="reg-k-lbl">Missing Registrasi</div><div class="reg-k-sub">produk aktif tanpa nomor registrasi</div></div>
+        <div class="reg-k" style="--kc:#eab308"><div class="reg-k-icon"><?=rmi_icon('calendar')?></div><div class="reg-k-n"><?= h(reg_num($kpi['missing_expiry'])) ?></div><div class="reg-k-lbl">Tanggal Izin Belum Diisi</div><div class="reg-k-sub"><?= $expirySourceReady ? h($expiryColumn) : 'N/A — kolom izin belum tersedia' ?></div></div>
+        <div class="reg-k" style="--kc:#a855f7"><div class="reg-k-icon"><?=rmi_icon('gear')?></div><div class="reg-k-n"><?= h(reg_num($kpi['invalid_expiry'])) ?></div><div class="reg-k-lbl">Tanggal Izin Tidak Valid</div><div class="reg-k-sub">valid: 2000-01-01 s.d. 2100-12-31</div></div>
+        <div class="reg-k" style="--kc:#f97316"><div class="reg-k-icon"><?=rmi_icon('calendar')?></div><div class="reg-k-n"><?= h(reg_num($kpi['exp_90'])) ?></div><div class="reg-k-lbl">Expiry Izin ≤90 Hari</div><div class="reg-k-sub">tidak memakai expiry batch/lot</div></div>
+        <div class="reg-k" style="--kc:#ef4444"><div class="reg-k-icon"><?=rmi_icon('cross')?></div><div class="reg-k-n"><?= h(reg_num($kpi['expired'])) ?></div><div class="reg-k-lbl">Izin Expired</div><div class="reg-k-sub">tanggal izin khusus &lt; hari ini</div></div>
     </div>
 
     <div class="card mb-3"><div class="card-body">
@@ -405,14 +405,14 @@ rmi_header('Regulatory & Compliance', [
     </div></div>
 
     <div class="reg-links">
-        <a class="reg-link primary" href="<?= h(u('/hrl_reg_alkes/reg_alkes.php')) ?>">📋 Reg Alkes (Dossier)</a>
-        <a class="reg-link primary" href="<?= h(u('/master/master_products.php')) ?>">📦 Master Products</a>
-        <a class="reg-link" href="<?= h(u('/hrl/hrl_tower.php')) ?>">🗼 HRL Tower</a>
-        <a class="reg-link" href="<?= h(u('/hrl_process/index.php')) ?>">📋 HRL Process</a>
-        <a class="reg-link" href="<?= h(u('/dashboards/quality/qc_complaint_dashboard.php')) ?>">✅ Quality Dashboard</a>
-        <a class="reg-link" href="<?= h(u('/stock/wqs_incoming.php')) ?>">📥 WQS Incoming</a>
-        <a class="reg-link" href="<?= h(u('/dashboards/warehouse/wqs_dashboard.php')) ?>">📦 Warehouse</a>
-        <a class="reg-link" href="<?= h(u('/kpi/kpi_center.php')) ?>">📊 KPI Center</a>
+        <a class="reg-link primary" href="<?= h(u('/hrl_reg_alkes/reg_alkes.php')) ?>"><?=rmi_icon('clipboard')?> Reg Alkes (Dossier)</a>
+        <a class="reg-link primary" href="<?= h(u('/master/master_products.php')) ?>"><?=rmi_icon('box')?> Master Products</a>
+        <a class="reg-link" href="<?= h(u('/hrl/hrl_tower.php')) ?>"><?=rmi_icon('tower')?> HRL Tower</a>
+        <a class="reg-link" href="<?= h(u('/hrl_process/index.php')) ?>"><?=rmi_icon('clipboard')?> HRL Process</a>
+        <a class="reg-link" href="<?= h(u('/dashboards/quality/qc_complaint_dashboard.php')) ?>"><?=rmi_icon('check')?> Quality Dashboard</a>
+        <a class="reg-link" href="<?= h(u('/stock/wqs_incoming.php')) ?>"><?=rmi_icon('inbox')?> WQS Incoming</a>
+        <a class="reg-link" href="<?= h(u('/dashboards/warehouse/wqs_dashboard.php')) ?>"><?=rmi_icon('box')?> Warehouse</a>
+        <a class="reg-link" href="<?= h(u('/kpi/kpi_center.php')) ?>"><?=rmi_icon('chart')?> KPI Center</a>
     </div>
 
     <div class="row g-3">

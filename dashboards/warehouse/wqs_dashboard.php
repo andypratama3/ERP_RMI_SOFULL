@@ -798,15 +798,15 @@ table{color:#e8ecf4}
 .wqs-k-icon{font-size:18px;margin-bottom:5px}
 .wqs-k-n{font-size:22px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
 .wqs-k-lbl{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
-.wqs-k-sub{font-size:10px;color:#374151;margin-top:2px}
+.wqs-k-sub{font-size:10px;color:var(--rmi-muted);margin-top:2px}
 
 /* Section heading */
-.wqs-sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#475569;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.wqs-sh{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--rmi-muted);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
 .wqs-sh::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.08)}
 
 /* Mini table */
 .wqs-mini-table{width:100%;border-collapse:collapse;font-size:12px}
-.wqs-mini-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#475569;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;white-space:nowrap}
+.wqs-mini-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--rmi-muted);padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;white-space:nowrap}
 .wqs-mini-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
 .wqs-mini-table tr:hover td{background:rgba(255,255,255,.02)}
 .wqs-mini-table tr:last-child td{border-bottom:none}
@@ -827,7 +827,7 @@ rmi_header('Warehouse Dashboard', [
     'subtitle'   => 'WQS — Stock, Incoming, Picking, Expiry, DO Tasks',
     'extra_head' => $extraHead,
     'actions'    => [
-        ['label' => '📚 Panduan', 'url' => u('/dashboards/warehouse/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('books').' Panduan', 'url' => u('/dashboards/warehouse/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -840,26 +840,26 @@ rmi_header('Warehouse Dashboard', [
   <!-- Header -->
   <div class="wqs-header">
     <div>
-      <h2>📦 Warehouse (WQS) Dashboard</h2>
+      <h2><?=rmi_icon('box')?> Warehouse (WQS) Dashboard</h2>
       <p>
         <?= h($chartFrom) ?> → <?= h($chartTo) ?>
         <?php if ($scopeOfficeFilter): ?> · Office: <b><?= h($scopeOffice) ?></b><?php endif; ?>
         <?php if ($kpi['exp_expired'] > 0): ?>
-          &nbsp;<span style="background:rgba(239,68,68,.3);color:#fca5a5;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700">⚠ <?= $kpi['exp_expired'] ?> EXPIRED</span>
+          &nbsp;<span style="background:rgba(239,68,68,.3);color:#fca5a5;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700"><?=rmi_icon('warn')?> <?= $kpi['exp_expired'] ?> EXPIRED</span>
         <?php endif; ?>
         <?php if ($kpi['do_waiting'] > 0): ?>
-          &nbsp;<span style="background:rgba(249,115,22,.3);color:#fdba74;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700">📋 <?= $kpi['do_waiting'] ?> DO nunggu</span>
+          &nbsp;<span style="background:rgba(249,115,22,.3);color:#fdba74;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:700"><?=rmi_icon('clipboard')?> <?= $kpi['do_waiting'] ?> DO nunggu</span>
         <?php endif; ?>
       </p>
     </div>
     <div class="d-flex gap-2 flex-wrap">
-      <a class="btn btn-sm btn-outline-light" href="<?= h(u('/dashboards/index.php')) ?>">🏠 Home</a>
+      <a class="btn btn-sm btn-outline-light" href="<?= h(u('/dashboards/index.php')) ?>"><?=rmi_icon('home')?> Home</a>
       <form method="post" action="<?= h(u('/dashboards/warehouse/wqs_dashboard_export.php')) ?>" class="d-inline">
         <?= function_exists('csrf_field') ? csrf_field() : (function_exists('rmi_csrf_input') ? rmi_csrf_input() : '') ?>
         <input type="hidden" name="report_id" value="wqs_dashboard">
         <input type="hidden" name="from" value="<?= h($chartFrom) ?>">
         <input type="hidden" name="to"   value="<?= h($chartTo)   ?>">
-        <button type="submit" class="btn btn-sm btn-outline-warning" name="format" value="csv">⬇ Export CSV</button>
+        <button type="submit" class="btn btn-sm btn-outline-warning" name="format" value="csv"><?=rmi_icon('inbox')?> Export CSV</button>
       </form>
     </div>
   </div>
@@ -909,15 +909,15 @@ rmi_header('Warehouse Dashboard', [
   <div class="wqs-kpi">
     <!-- DO Waiting WQS — NEW critical tile -->
     <a class="wqs-k" href="<?= h(u('/stock/wqs_do_tasks.php')) ?>" style="--kc:<?= $kpi['do_waiting']>0?'#f97316':'#64748b' ?>">
-      <div class="wqs-k-icon">📋</div>
+      <div class="wqs-k-icon"><?=rmi_icon('clipboard')?></div>
       <div class="wqs-k-n" style="color:<?= $kpi['do_waiting']>0?'#fb923c':'#fff' ?>"><?= number_format((int)$kpi['do_waiting']) ?></div>
       <div class="wqs-k-lbl">DO Waiting WQS</div>
-      <div class="wqs-k-sub"><?= $kpi['do_waiting']>0?'⚡ Current open backlog':'✓ Tidak ada antrian' ?></div>
+      <div class="wqs-k-sub"><?= $kpi['do_waiting']>0?rmi_icon('zap').' Current open backlog':rmi_icon('tick').' Tidak ada antrian' ?></div>
     </a>
 
     <!-- PR Open — NEW -->
     <a class="wqs-k" href="<?= h(u('/stock/wqs_pr.php')) ?>" style="--kc:#8b5cf6">
-      <div class="wqs-k-icon">📝</div>
+      <div class="wqs-k-icon"><?=rmi_icon('memo')?></div>
       <div class="wqs-k-n" style="color:<?= $kpi['pr_open']>0?'#c4b5fd':'#fff' ?>"><?= number_format((int)$kpi['pr_open']) ?></div>
       <div class="wqs-k-lbl">PR Open</div>
       <div class="wqs-k-sub">Current: DRAFT + SUBMITTED</div>
@@ -925,28 +925,28 @@ rmi_header('Warehouse Dashboard', [
 
     <!-- AVG Durasi SLA WQS -->
     <a class="wqs-k" href="<?= h(u('/stock/wqs_do_tasks.php')) ?>" style="--kc:#06b6d4" title="Buka sumber SLA WQS">
-      <div class="wqs-k-icon">⏱️</div>
+      <div class="wqs-k-icon"><?=rmi_icon('calendar')?></div>
       <div class="wqs-k-n" style="color:#67e8f9"><?= h(wqs_duration_label((float)$kpi['avg_wqs_minutes'])) ?></div>
       <div class="wqs-k-lbl">Avg Durasi SLA WQS</div>
       <div class="wqs-k-sub">Selesai WQS pada periode · n=<?= number_format((int)$kpi['avg_wqs_samples']) ?></div>
     </a>
 
     <a class="wqs-k" href="<?= h(u('/stock/wqs_stock.php')) ?>" style="--kc:#3b82f6">
-      <div class="wqs-k-icon">📊</div>
+      <div class="wqs-k-icon"><?=rmi_icon('chart')?></div>
       <div class="wqs-k-n"><?= number_format((int)$kpi['sku_onhand']) ?></div>
       <div class="wqs-k-lbl">SKU On-hand</div>
       <div class="wqs-k-sub">Total Qty: <?= number_format((float)$kpi['qty_onhand'], 0, ',', '.') ?></div>
     </a>
 
     <a class="wqs-k" href="<?= h(u('/stock/wqs_incoming.php?from=' . rawurlencode($mStart) . '&to=' . rawurlencode($mEnd))) ?>" style="--kc:#22c55e">
-      <div class="wqs-k-icon">📥</div>
+      <div class="wqs-k-icon"><?=rmi_icon('inbox')?></div>
       <div class="wqs-k-n"><?= number_format((int)$kpi['incoming_mtd']) ?></div>
       <div class="wqs-k-lbl">Incoming Periode</div>
       <div class="wqs-k-sub"><?= h($chartFrom) ?> → <?= h($chartTo) ?></div>
     </a>
 
     <a class="wqs-k" href="<?= h(u('/stock/wqs_do_tasks.php?date_from=' . rawurlencode($mStart) . '&date_to=' . rawurlencode($mEnd))) ?>" style="--kc:#f97316">
-      <div class="wqs-k-icon">🚚</div>
+      <div class="wqs-k-icon"><?=rmi_icon('box')?></div>
       <div class="wqs-k-n"><?= number_format((int)$kpi['picking_mtd']) ?></div>
       <div class="wqs-k-lbl">Picking / WQS Selesai</div>
       <div class="wqs-k-sub"><?= h($chartFrom) ?> → <?= h($chartTo) ?> · <?= h($kpi['picking_source']) ?></div>
@@ -961,7 +961,7 @@ rmi_header('Warehouse Dashboard', [
 
     <!-- Low-stock — NEW -->
     <a class="wqs-k" href="<?= h(u('/dashboards/warehouse/wqs_low_stock_office.php')) ?>" style="--kc:<?= $kpi['low_stock_sku']>0?'#f59e0b':'#64748b' ?>">
-      <div class="wqs-k-icon">📉</div>
+      <div class="wqs-k-icon"><?=rmi_icon('trend')?></div>
       <div class="wqs-k-n" style="color:<?= $kpi['low_stock_sku']>0?'#fbbf24':'#fff' ?>"><?= number_format((int)$kpi['low_stock_sku']) ?></div>
       <div class="wqs-k-lbl">Low-Stock Office-SKU</div>
       <div class="wqs-k-sub">Stok &lt; <?= $lowThreshold ?> unit</div>
@@ -972,18 +972,18 @@ rmi_header('Warehouse Dashboard', [
          href="#wqs-expiry-90-detail"
          style="--kc:<?= (int)$kpi['exp_90'] > 0 ? '#ef4444' : '#64748b' ?>"
          title="Buka detail lot dengan sisa stok dan expiry hari ini sampai 90 hari ke depan.">
-      <div class="wqs-k-icon">⏰</div>
+      <div class="wqs-k-icon"><?=rmi_icon('calendar')?></div>
       <div class="wqs-k-n" style="color:<?= (int)$kpi['exp_90'] > 0 ? '#f87171' : '#fff' ?>">
         <?= number_format((int)$kpi['exp_90']) ?>
       </div>
       <div class="wqs-k-lbl">Expiry &lt; 90 Hari</div>
       <div class="wqs-k-sub">
         <?php if ((int)$kpi['exp_expired'] > 0): ?>
-          ❌ <?= number_format((int)$kpi['exp_expired']) ?> Expired
+          <?=rmi_icon('cross')?> <?= number_format((int)$kpi['exp_expired']) ?> Expired
         <?php elseif ((int)$kpi['exp_90'] > 0): ?>
-          ⚠ Mendekati expiry
+          <?=rmi_icon('warn')?> Mendekati expiry
         <?php else: ?>
-          ✓ Tidak ada expiry &lt; 90 hari
+          <?=rmi_icon('tick')?> Tidak ada expiry &lt; 90 hari
         <?php endif; ?>
       </div>
     </a>
@@ -995,8 +995,8 @@ rmi_header('Warehouse Dashboard', [
       <div class="card"><div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
           <div>
-            <div class="fw-semibold" style="font-size:14px">📊 Aktivitas Gudang Harian</div>
-            <div style="font-size:11px;color:#475569">Incoming · Picking · Adjustment — <?= h($chartFrom) ?> → <?= h($chartTo) ?></div>
+            <div class="fw-semibold" style="font-size:14px"><?=rmi_icon('chart')?> Aktivitas Gudang Harian</div>
+            <div style="font-size:11px;color:var(--rmi-muted)">Incoming · Picking · Adjustment — <?= h($chartFrom) ?> → <?= h($chartTo) ?></div>
           </div>
           <div style="display:flex;gap:14px;font-size:11px;color:#64748b">
             <span><span style="display:inline-block;width:10px;height:10px;background:#3b82f6;border-radius:2px;margin-right:4px"></span>Incoming</span>
@@ -1042,7 +1042,7 @@ rmi_header('Warehouse Dashboard', [
     <?php if (!empty($officeBreakdown)): ?>
     <div class="col-lg-4">
       <div class="card"><div class="card-body">
-        <div class="wqs-sh" style="margin-top:0">🏢 Stok per Office</div>
+        <div class="wqs-sh" style="margin-top:0"><?=rmi_icon('office')?> Stok per Office</div>
         <?php
         $maxQty = max(1, ...array_map(fn($o) => (float)($o['total_qty'] ?? $o['batch_count'] ?? 1), $officeBreakdown));
         foreach ($officeBreakdown as $o):
@@ -1056,7 +1056,7 @@ rmi_header('Warehouse Dashboard', [
               <span style="font-size:11px;color:#f97316;font-weight:700"><?= number_format($qty, 0, ',', '.') ?> <?= isset($o['total_qty']) ? 'qty' : 'batch' ?></span>
             </div>
             <div class="office-bar"><div class="office-bar-fill" style="width:<?= $barPct ?>%"></div></div>
-            <div style="font-size:10px;color:#374151;margin-top:2px"><?= $sku ?> <?= isset($o['total_qty']) ? 'SKU' : 'PO' ?></div>
+            <div style="font-size:10px;color:var(--rmi-muted);margin-top:2px"><?= $sku ?> <?= isset($o['total_qty']) ? 'SKU' : 'PO' ?></div>
           </div>
         <?php endforeach; ?>
       </div></div>
@@ -1066,7 +1066,7 @@ rmi_header('Warehouse Dashboard', [
     <!-- Low-Stock Office-SKU: detail dipisahkan ke halaman khusus -->
     <div class="col-lg-<?= empty($officeBreakdown) ? '6' : '4' ?>">
       <div class="card"><div class="card-body">
-        <div class="wqs-sh" style="margin-top:0">📉 Low-Stock per Kantor</div>
+        <div class="wqs-sh" style="margin-top:0"><?=rmi_icon('trend')?> Low-Stock per Kantor</div>
         <div style="font-size:28px;font-weight:800;color:<?= $kpi['low_stock_sku']>0?'#fbbf24':'#fff' ?>;margin:8px 0"><?= number_format((int)$kpi['low_stock_sku']) ?></div>
         <div class="muted" style="margin-bottom:12px">Office-SKU dengan stok 1–<?= $lowThreshold-1 ?> unit. Detail dipisahkan dari halaman Stock agar tidak mencampur snapshot stok dengan exception low-stock per kantor.</div>
         <a class="btn btn-sm btn-outline-warning" href="<?= h(u('/dashboards/warehouse/wqs_low_stock_office.php')) ?>">Buka Low-Stock per Kantor →</a>
@@ -1077,9 +1077,9 @@ rmi_header('Warehouse Dashboard', [
     <?php if (!empty($expSoon) || (int)$kpi['exp_expired'] > 0): ?>
     <div class="col-lg-<?= empty($officeBreakdown) ? '6' : '4' ?>" id="wqs-expiry-90-detail">
       <div class="card"><div class="card-body">
-        <div class="wqs-sh" style="margin-top:0">⏰ Expiry &lt; 90 Hari (Top 15)</div>
+        <div class="wqs-sh" style="margin-top:0"><?=rmi_icon('calendar')?> Expiry &lt; 90 Hari (Top 15)</div>
         <?php if (empty($expSoon)): ?>
-          <div class="muted" style="padding:12px 0">✅ Belum ada produk mendekati expiry.</div>
+          <div class="muted" style="padding:12px 0"><?=rmi_icon('check')?> Belum ada produk mendekati expiry.</div>
         <?php else: ?>
           <div class="table-responsive">
           <table class="wqs-mini-table">
@@ -1094,7 +1094,7 @@ rmi_header('Warehouse Dashboard', [
                 <td style="font-size:11px;color:#64748b"><?= h($r['lot_number'] ?? '') ?></td>
                 <td style="white-space:nowrap">
                   <span style="font-size:11px;color:<?= $expColor ?>;font-weight:700"><?= h($r['exp_date']) ?></span>
-                  <span style="font-size:10px;color:#374151"> (<?= $daysLeft ?>h)</span>
+                  <span style="font-size:10px;color:var(--rmi-muted)"> (<?= $daysLeft ?>h)</span>
                 </td>
                 <td style="text-align:right;font-size:12px;font-weight:600"><?= number_format((float)($r['remaining_qty']??0), 0, ',', '.') ?></td>
               </tr>
@@ -1112,7 +1112,7 @@ rmi_header('Warehouse Dashboard', [
   <div class="row g-3 mb-3">
     <div class="col-lg-6">
       <div class="card"><div class="card-body">
-        <div class="wqs-sh" style="margin-top:0">📥 Incoming Terbaru</div>
+        <div class="wqs-sh" style="margin-top:0"><?=rmi_icon('inbox')?> Incoming Terbaru</div>
         <?php if (empty($recentIncoming)): ?>
           <div class="muted">Belum ada data incoming.</div>
         <?php else: ?>
@@ -1124,7 +1124,7 @@ rmi_header('Warehouse Dashboard', [
               <tr>
                 <td>
                   <a href="<?= h(u('/stock/wqs_incoming_view.php?po_code=' . rawurlencode($r['po_code'] ?? ''))) ?>" style="color:#60a5fa;font-size:12px;font-weight:600"><?= h($r['po_code'] ?? '—') ?></a>
-                  <?php if (!empty($r['note'])): ?><div style="font-size:10px;color:#374151"><?= h(mb_strimwidth($r['note'], 0, 30, '…')) ?></div><?php endif; ?>
+                  <?php if (!empty($r['note'])): ?><div style="font-size:10px;color:var(--rmi-muted)"><?= h(mb_strimwidth($r['note'], 0, 30, '…')) ?></div><?php endif; ?>
                 </td>
                 <td style="font-size:11px"><span style="background:rgba(249,115,22,.15);color:#fdba74;padding:1px 6px;border-radius:5px;font-weight:700"><?= h(strtoupper($r['office_code'] ?? '—')) ?></span></td>
                 <td style="font-size:11px;color:#94a3b8;white-space:nowrap"><?= h($r['received_date'] ?? '') ?></td>
@@ -1141,7 +1141,7 @@ rmi_header('Warehouse Dashboard', [
 
     <div class="col-lg-6">
       <div class="card"><div class="card-body">
-        <div class="wqs-sh" style="margin-top:0">🚚 Picking Terbaru</div>
+        <div class="wqs-sh" style="margin-top:0"><?=rmi_icon('box')?> Picking Terbaru</div>
         <?php if (empty($recentPicking)): ?>
           <div class="muted">Belum ada data picking.</div>
         <?php else: ?>
@@ -1153,7 +1153,7 @@ rmi_header('Warehouse Dashboard', [
               <tr>
                 <td>
                   <a href="<?= h(u('/stock/wqs_picking_view.php?id=' . (int)$r['id'])) ?>" style="color:#60a5fa;font-size:12px;font-weight:600"><?= h($r['do_code'] ?? '—') ?></a>
-                  <?php if (!empty($r['note'])): ?><div style="font-size:10px;color:#374151"><?= h(mb_strimwidth($r['note'], 0, 30, '…')) ?></div><?php endif; ?>
+                  <?php if (!empty($r['note'])): ?><div style="font-size:10px;color:var(--rmi-muted)"><?= h(mb_strimwidth($r['note'], 0, 30, '…')) ?></div><?php endif; ?>
                 </td>
                 <td style="font-size:11px"><span style="background:rgba(249,115,22,.15);color:#fdba74;padding:1px 6px;border-radius:5px;font-weight:700"><?= h(strtoupper($r['office_code'] ?? '—')) ?></span></td>
                 <td style="font-size:11px;color:#94a3b8;white-space:nowrap"><?= h($r['picked_at'] ? date('d/m H:i', strtotime($r['picked_at'])) : '') ?></td>
@@ -1170,22 +1170,22 @@ rmi_header('Warehouse Dashboard', [
 
   <!-- Quick Links -->
   <div class="card"><div class="card-body">
-    <div class="wqs-sh" style="margin-top:0">⚡ Quick Links</div>
+    <div class="wqs-sh" style="margin-top:0"><?=rmi_icon('zap')?> Quick Links</div>
     <div class="wqs-links">
-      <a class="wqs-link primary" href="<?= h(u('/stock/wqs_do_tasks.php')) ?>">📋 DO Tasks</a>
-      <a class="wqs-link primary" href="<?= h(u('/stock/wqs_picking.php')) ?>">🚚 Picking</a>
-      <a class="wqs-link primary" href="<?= h(u('/stock/wqs_incoming.php')) ?>">📥 Incoming</a>
-      <a class="wqs-link primary" href="<?= h(u('/stock/wqs_stock.php')) ?>">📊 Lihat Stok</a>
-      <a class="wqs-link" href="<?= h(u('/stock/wqs_allocation.php')) ?>">🗂️ Allocation</a>
-      <a class="wqs-link" href="<?= h(u('/stock/wqs_pr.php')) ?>">📝 Purchase Request</a>
-      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_opname.php')) ?>">🔢 Stock Opname</a>
-      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_opname_report.php')) ?>">📋 Opname Report</a>
-      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_adjustment.php')) ?>">✏️ Adjustment</a>
-      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_audit.php')) ?>">🔍 Stock Audit</a>
-      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_transfer.php')) ?>">🔄 Transfer Stok</a>
-      <a class="wqs-link" href="<?= h(u('/sales/sales_control_tower.php')) ?>">🗼 Control Tower</a>
-      <a class="wqs-link" href="<?= h(u('/master/master_products.php')) ?>">📦 Master Produk</a>
-      <a class="wqs-link" href="<?= h(u('/absensi/index.php')) ?>">📅 Absensi</a>
+      <a class="wqs-link primary" href="<?= h(u('/stock/wqs_do_tasks.php')) ?>"><?=rmi_icon('clipboard')?> DO Tasks</a>
+      <a class="wqs-link primary" href="<?= h(u('/stock/wqs_picking.php')) ?>"><?=rmi_icon('box')?> Picking</a>
+      <a class="wqs-link primary" href="<?= h(u('/stock/wqs_incoming.php')) ?>"><?=rmi_icon('inbox')?> Incoming</a>
+      <a class="wqs-link primary" href="<?= h(u('/stock/wqs_stock.php')) ?>"><?=rmi_icon('chart')?> Lihat Stok</a>
+      <a class="wqs-link" href="<?= h(u('/stock/wqs_allocation.php')) ?>"><?=rmi_icon('doc')?> Allocation</a>
+      <a class="wqs-link" href="<?= h(u('/stock/wqs_pr.php')) ?>"><?=rmi_icon('memo')?> Purchase Request</a>
+      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_opname.php')) ?>"><?=rmi_icon('chart')?> Stock Opname</a>
+      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_opname_report.php')) ?>"><?=rmi_icon('clipboard')?> Opname Report</a>
+      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_adjustment.php')) ?>"><?=rmi_icon('memo')?> Adjustment</a>
+      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_audit.php')) ?>"><?=rmi_icon('search')?> Stock Audit</a>
+      <a class="wqs-link" href="<?= h(u('/stock/wqs_stock_transfer.php')) ?>"><?=rmi_icon('refresh')?> Transfer Stok</a>
+      <a class="wqs-link" href="<?= h(u('/sales/sales_control_tower.php')) ?>"><?=rmi_icon('tower')?> Control Tower</a>
+      <a class="wqs-link" href="<?= h(u('/master/master_products.php')) ?>"><?=rmi_icon('box')?> Master Produk</a>
+      <a class="wqs-link" href="<?= h(u('/absensi/index.php')) ?>"><?=rmi_icon('calendar')?> Absensi</a>
     </div>
   </div></div>
 
@@ -1228,7 +1228,7 @@ $extraJs = $chartJs . "\n"
     if (fb) fb.style.display = "none";
   } else {
     var el = document.getElementById("chartStockMovement");
-    if (el && el.parentNode) el.parentNode.innerHTML = "<div style=\'color:#4b5563;padding:24px;font-size:12px;text-align:center\'>Belum ada data movement untuk periode ini.</div>";
+    if (el && el.parentNode) el.parentNode.innerHTML = "<div style=\'color:var(--rmi-muted);padding:24px;font-size:12px;text-align:center\'>Belum ada data movement untuk periode ini.</div>";
   }
 })();
 </script>';

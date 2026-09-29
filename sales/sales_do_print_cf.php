@@ -290,7 +290,7 @@ rmi_header('Sales Do Print Cf', [
 
     <!-- Toolbar hanya di layar -->
     <div class="no-print">
-        <button type="button" onclick="window.print()">🖨 Print Continuous Form</button>
+        <button type="button" onclick="window.print()"><?= rmi_icon('print') ?> Print Continuous Form</button>
         &nbsp;
         <a href="sales_do.php">Kembali ke DO</a>
         <hr>

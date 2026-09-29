@@ -51,7 +51,7 @@ rmi_header($page_title, [
     <div class="d-flex flex-wrap gap-2">
       <a class="btn btn-soft btn-sm" href="<?= h(um('tower.php')) ?>">Tower</a>
       <a class="btn btn-ghost btn-sm" href="<?= h(um('my_pin.php')) ?>">PIN TTD</a>
-      <a class="btn btn-ghost btn-sm" href="<?= h(um('panduan.php')) ?>">📖 Panduan</a>
+      <a class="btn btn-ghost btn-sm" href="<?= h(um('panduan.php')) ?>"><?=rmi_icon('books')?> Panduan</a>
     </div>
   </div>
 </div>

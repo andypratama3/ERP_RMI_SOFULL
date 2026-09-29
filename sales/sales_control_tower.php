@@ -602,7 +602,7 @@ function sct_milestone_bar(string $status, bool $wqsOk, bool $scmOk, bool $actOk
             $icon    = '✕';
         } elseif ($done) {
             $stepCls = "ms-step done {$cls}";
-            $icon    = '✓';
+            $icon    = rmi_icon('tick');
         } elseif ($isActive) {
             $stepCls = "ms-step active {$cls}";
             $icon    = '●';
@@ -636,7 +636,7 @@ $sctBreadcrumbs = [
     'Control Tower',
 ];
 $sctActions = [
-    ['label' => '📚 Panduan', 'url' => $baseProject . '/sales/panduan_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
+    ['label' => rmi_icon('books') . ' Panduan', 'url' => $baseProject . '/sales/panduan_control_tower.php', 'class' => 'btn btn-sm btn-outline-light'],
 ];
 if ($sctCanSalesDashboard) {
     $sctActions[] = ['label' => 'Sales Dashboard', 'url' => $baseProject . '/sales/sales_dashboard.php', 'class' => 'btn btn-sm btn-outline-light'];
@@ -791,11 +791,11 @@ rmi_header('Sales Control Tower', 'sales', [
   </div>
   <div class="sum-card green">
     <div class="sc-num"><?= $summary['done_today'] ?></div>
-    <div class="sc-lbl">✅ Done Hari Ini</div>
+    <div class="sc-lbl"><?= rmi_icon('check') ?> Done Hari Ini</div>
   </div>
   <div class="sum-card red">
     <div class="sc-num"><?= $summary['stuck'] ?></div>
-    <div class="sc-lbl">⚠️ Macet &gt;3 hari</div>
+    <div class="sc-lbl"><?= rmi_icon('warn') ?> Macet &gt;3 hari</div>
   </div>
   <div class="sum-card gray">
     <div class="sc-num"><?= $summary['cancelled'] ?></div>
@@ -904,7 +904,7 @@ rmi_header('Sales Control Tower', 'sales', [
     <div class="fw-semibold mb-2">DO List <?php if (count($rows) >= 500): ?><span class="muted">(menampilkan maks 500 baris — gunakan filter untuk mempersempit)</span><?php endif; ?></div>
 
     <?php if (count($rows) === 0): ?>
-      <div class="alert alert-warning" style="background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.25);color:#fff">
+      <div class="alert alert-warning" style="background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.25);color:var(--rmi-text)">
         Tidak ada DO yang cocok dengan filter saat ini.
         <div class="muted" style="color:#fde68a">Tips: set <b>Status</b> ke <b>-- all --</b> atau buat DO baru di <code>sales/sales_do.php</code>.</div>
       </div>
@@ -980,7 +980,7 @@ rmi_header('Sales Control Tower', 'sales', [
               <div class="item-mix">Item: <?= h($itemMix !== '' ? $itemMix : ($docGroup==='BMHP'?'BMHP':'-')) ?></div>
               <div class="muted" style="font-size:10px"><?= h($doDate) ?> · <?= h($r['tracking_code'] ?? '-') ?></div>
               <?php if ($isStuck): ?>
-                <div style="margin-top:3px"><span class="badge-stuck">⚠ <?= $daysSince ?>h</span></div>
+                <div style="margin-top:3px"><span class="badge-stuck"><?= rmi_icon('warn') ?> <?= $daysSince ?>h</span></div>
               <?php elseif ($lastUpdated !== ''): ?>
                 <div style="margin-top:3px"><span class="badge-ontime"><?= $daysSince ?>h lalu</span></div>
               <?php endif; ?>
@@ -1025,7 +1025,7 @@ rmi_header('Sales Control Tower', 'sales', [
 
             <!-- Tanggal: compact -->
             <td>
-              <div style="font-size:12px">📅 <?= h($doDate) ?></div>
+              <div style="font-size:12px"><?= rmi_icon('calendar') ?> <?= h($doDate) ?></div>
               <?php
                 $paidDateDisplay = '';
                 if (!empty($r['paid_date_effective'])) $paidDateDisplay = substr((string)$r['paid_date_effective'], 0, 10);
@@ -1033,7 +1033,7 @@ rmi_header('Sales Control Tower', 'sales', [
                 elseif (!empty($r['fin_paid_date'])) $paidDateDisplay = substr((string)$r['fin_paid_date'], 0, 10);
               ?>
               <?php if ($paidDateDisplay !== ''): ?>
-                <div class="muted" style="font-size:10px;color:#a7f3d0">💰 PAID: <?= h($paidDateDisplay) ?></div>
+                <div class="muted" style="font-size:10px;color:#a7f3d0"><?= rmi_icon('money') ?> PAID: <?= h($paidDateDisplay) ?></div>
               <?php endif; ?>
               <?php if ($lastUpdated !== ''): ?>
                 <div class="muted" style="font-size:10px"><?= h(substr($lastUpdated, 0, 16)) ?></div>
@@ -1049,7 +1049,7 @@ rmi_header('Sales Control Tower', 'sales', [
             <!-- Aksi: kompak, grouped -->
             <td>
               <div class="act-group">
-                <a class="act-btn primary" href="sales_do_view.php?id=<?= $id ?>">🔍 Open</a>
+                <a class="act-btn primary" href="sales_do_view.php?id=<?= $id ?>"><?= rmi_icon('search') ?> Open</a>
                 <a class="act-btn" href="sales_do.php?edit=<?= $id ?>">CRM</a>
                 <div class="act-sep"></div>
                 <a class="act-btn" href="../stock/wqs_do_tasks.php?focus=<?= $id ?>">WQS</a>
@@ -1074,8 +1074,8 @@ rmi_header('Sales Control Tower', 'sales', [
     </div>
 
     <div class="mt-3 muted">
-      Milestone progress bar: <b>✓ hijau</b> = selesai · <b>● aktif</b> = sedang di tahap ini · <b>○</b> = belum.
-      Badge <span class="badge-stuck">⚠ X hari</span> muncul jika DO tidak diupdate lebih dari 3 hari (non-final).
+      Milestone progress bar: <b><?= rmi_icon('tick') ?> hijau</b> = selesai · <b>● aktif</b> = sedang di tahap ini · <b>○</b> = belum.
+      Badge <span class="badge-stuck"><?= rmi_icon('warn') ?> X hari</span> muncul jika DO tidak diupdate lebih dari 3 hari (non-final).
     </div>
   </div>
 </div>
@@ -1107,7 +1107,7 @@ function renderLive(items){
     return '<div class="live-item">'
       +'<div class="live-title"><div><b>'+escHtml(x.do_code)+'</b><div class="muted">'+escHtml(customer)+' · '+escHtml(x.office_code)+'</div></div>'
       +'<span class="gps-badge '+gpsBadgeClass(x.gps_color)+'">● '+escHtml(x.gps_state)+'</span></div>'
-      +'<div class="live-meta">📍 '+escHtml(coord)+'<br>🎯 Accuracy: '+escHtml(acc)+'<br>🕒 Last GPS: '+escHtml(x.live_at || 'belum ada')+' ('+escHtml(x.age_label || '-')+')</div>'
+      +'<div class="live-meta">📍 '+escHtml(coord)+'<br><?= rmi_icon('target') ?> Accuracy: '+escHtml(acc)+'<br>🕒 Last GPS: '+escHtml(x.live_at || 'belum ada')+' ('+escHtml(x.age_label || '-')+')</div>'
       +'<div style="margin-top:9px;display:flex;gap:6px;flex-wrap:wrap">'+mapBtn+'<a class="act-btn" href="scm_do_tasks.php?focus='+encodeURIComponent(x.id)+'">SCM Task</a></div>'
       +'</div>';
   }).join('');

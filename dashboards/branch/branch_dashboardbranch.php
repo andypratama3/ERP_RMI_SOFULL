@@ -140,7 +140,7 @@ rmi_header('Branch Dashboard', [
     'subtitle'     => h($office_name) . ' — Operasional Harian',
     'extra_head'   => $extraHead,
     'actions'      => [
-        ['label' => '📚 Panduan', 'url' => u('/dashboards/branch/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('books').' Panduan', 'url' => u('/dashboards/branch/panduan.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 ?>
@@ -150,7 +150,7 @@ rmi_header('Branch Dashboard', [
   <!-- Greeting -->
   <div class="b-greeting">
     <div>
-      <h2>🏢 <?= h($office_name ?: 'Branch Dashboard') ?></h2>
+      <h2><?=rmi_icon('office')?> <?= h($office_name ?: 'Branch Dashboard') ?></h2>
       <p>ERP RMI &nbsp;·&nbsp; <?= h(date('l, d F Y')) ?> &nbsp;·&nbsp; Kode: <strong><?= h($office) ?></strong></p>
     </div>
     <div style="text-align:right">
@@ -162,37 +162,37 @@ rmi_header('Branch Dashboard', [
   <!-- KPI Cards -->
   <div class="b-kpi">
     <div class="b-kpi-card" style="--kc:#3b82f6">
-      <div class="b-kpi-icon">📋</div>
+      <div class="b-kpi-icon"><?=rmi_icon('clipboard')?></div>
       <div class="b-kpi-val"><?= $kpi['do_count'] ?></div>
       <div class="b-kpi-lbl">DO Bulan Ini</div>
     </div>
     <div class="b-kpi-card" style="--kc:#22c55e">
-      <div class="b-kpi-icon">💰</div>
+      <div class="b-kpi-icon"><?=rmi_icon('money')?></div>
       <div class="b-kpi-val" style="font-size:16px">Rp <?= fmt_money($kpi['do_value']) ?></div>
       <div class="b-kpi-lbl">Nilai Penjualan MTD</div>
     </div>
     <div class="b-kpi-card" style="--kc:#f59e0b">
-      <div class="b-kpi-icon">⏳</div>
+      <div class="b-kpi-icon"><?=rmi_icon('refresh')?></div>
       <div class="b-kpi-val"><?= $kpi['do_open'] ?></div>
       <div class="b-kpi-lbl">DO Belum Lunas</div>
     </div>
     <div class="b-kpi-card" style="--kc:#ef4444">
-      <div class="b-kpi-icon">💳</div>
+      <div class="b-kpi-icon"><?=rmi_icon('money')?></div>
       <div class="b-kpi-val" style="font-size:16px">Rp <?= fmt_money($kpi['piutang']) ?></div>
       <div class="b-kpi-lbl">Piutang Outstanding</div>
     </div>
     <div class="b-kpi-card" style="--kc:#06b6d4">
-      <div class="b-kpi-icon">📦</div>
+      <div class="b-kpi-icon"><?=rmi_icon('box')?></div>
       <div class="b-kpi-val"><?= $kpi['picking'] ?></div>
       <div class="b-kpi-lbl">Picking Pending</div>
     </div>
     <div class="b-kpi-card" style="--kc:#8b5cf6">
-      <div class="b-kpi-icon">📝</div>
+      <div class="b-kpi-icon"><?=rmi_icon('memo')?></div>
       <div class="b-kpi-val"><?= $kpi['pr_pending'] ?></div>
       <div class="b-kpi-lbl">PR Pending</div>
     </div>
     <div class="b-kpi-card" style="--kc:#10b981">
-      <div class="b-kpi-icon">✅</div>
+      <div class="b-kpi-icon"><?=rmi_icon('check')?></div>
       <div class="b-kpi-val"><?= $kpi['hadir'] ?></div>
       <div class="b-kpi-lbl">Hadir Hari Ini</div>
     </div>
@@ -203,59 +203,59 @@ rmi_header('Branch Dashboard', [
 
     <!-- Sales -->
     <div class="b-link-group">
-      <div class="b-link-group-title">💼 Sales & CRM</div>
-      <a class="b-link" href="<?= h(u('/sales/sales_do.php')) ?>"><span class="li">📋</span> Delivery Order (DO)</a>
-      <a class="b-link" href="<?= h(u('/sales/sales_control_tower.php')) ?>"><span class="li">🗼</span> Sales Control Tower</a>
-      <a class="b-link" href="<?= h(u('/sales/crm_leads.php')) ?>"><span class="li">🎯</span> CRM Leads</a>
+      <div class="b-link-group-title"><?=rmi_icon('money')?> Sales & CRM</div>
+      <a class="b-link" href="<?= h(u('/sales/sales_do.php')) ?>"><span class="li"><?=rmi_icon('clipboard')?></span> Delivery Order (DO)</a>
+      <a class="b-link" href="<?= h(u('/sales/sales_control_tower.php')) ?>"><span class="li"><?=rmi_icon('tower')?></span> Sales Control Tower</a>
+      <a class="b-link" href="<?= h(u('/sales/crm_leads.php')) ?>"><span class="li"><?=rmi_icon('target')?></span> CRM Leads</a>
       <a class="b-link" href="<?= h(u('/stock/wqs_do_tasks.php')) ?>">
-        <span class="li">⚡</span> Task DO dari CRM
+        <span class="li"><?=rmi_icon('zap')?></span> Task DO dari CRM
         <?php if ($kpi['picking'] > 0): ?><span class="lbadge yellow"><?= $kpi['picking'] ?></span><?php endif; ?>
       </a>
     </div>
 
     <!-- Stock / WQS -->
     <div class="b-link-group">
-      <div class="b-link-group-title">📦 Warehouse & Stock</div>
+      <div class="b-link-group-title"><?=rmi_icon('box')?> Warehouse & Stock</div>
       <a class="b-link" href="<?= h(u('/stock/wqs_picking.php')) ?>">
-        <span class="li">🚚</span> Picking DO
+        <span class="li"><?=rmi_icon('box')?></span> Picking DO
         <?php if ($kpi['picking'] > 0): ?><span class="lbadge yellow"><?= $kpi['picking'] ?></span><?php endif; ?>
       </a>
-      <a class="b-link" href="<?= h(u('/stock/wqs_incoming.php')) ?>"><span class="li">📥</span> Incoming Barang</a>
-      <a class="b-link" href="<?= h(u('/stock/wqs_stock.php')) ?>"><span class="li">📊</span> Lihat Stok</a>
-      <a class="b-link" href="<?= h(u('/stock/wqs_stock_opname.php')) ?>"><span class="li">🔢</span> Stock Opname</a>
+      <a class="b-link" href="<?= h(u('/stock/wqs_incoming.php')) ?>"><span class="li"><?=rmi_icon('inbox')?></span> Incoming Barang</a>
+      <a class="b-link" href="<?= h(u('/stock/wqs_stock.php')) ?>"><span class="li"><?=rmi_icon('chart')?></span> Lihat Stok</a>
+      <a class="b-link" href="<?= h(u('/stock/wqs_stock_opname.php')) ?>"><span class="li"><?=rmi_icon('chart')?></span> Stock Opname</a>
       <a class="b-link" href="<?= h(u('/stock/wqs_pr.php')) ?>">
-        <span class="li">📝</span> Purchase Request (PR)
+        <span class="li"><?=rmi_icon('memo')?></span> Purchase Request (PR)
         <?php if ($kpi['pr_pending'] > 0): ?><span class="lbadge"><?= $kpi['pr_pending'] ?></span><?php endif; ?>
       </a>
     </div>
 
     <!-- Purchasing -->
     <div class="b-link-group">
-      <div class="b-link-group-title">🛒 Purchasing</div>
-      <a class="b-link" href="<?= h(u('/purchases/purchases_po.php')) ?>"><span class="li">📄</span> Purchase Order (PO)</a>
-      <a class="b-link" href="<?= h(u('/purchases/purchases_gr.php')) ?>"><span class="li">✅</span> Good Receipt (GR)</a>
-      <a class="b-link" href="<?= h(u('/sales/scm_do_tasks.php')) ?>"><span class="li">🔄</span> SCM Task DO</a>
+      <div class="b-link-group-title"><?=rmi_icon('cart')?> Purchasing</div>
+      <a class="b-link" href="<?= h(u('/purchases/purchases_po.php')) ?>"><span class="li"><?=rmi_icon('doc')?></span> Purchase Order (PO)</a>
+      <a class="b-link" href="<?= h(u('/purchases/purchases_gr.php')) ?>"><span class="li"><?=rmi_icon('check')?></span> Good Receipt (GR)</a>
+      <a class="b-link" href="<?= h(u('/sales/scm_do_tasks.php')) ?>"><span class="li"><?=rmi_icon('refresh')?></span> SCM Task DO</a>
     </div>
 
     <!-- HR & Lain -->
     <div class="b-link-group">
-      <div class="b-link-group-title">👥 HR & Lainnya</div>
+      <div class="b-link-group-title"><?=rmi_icon('users')?> HR & Lainnya</div>
       <a class="b-link" href="<?= h(u('/absensi/index.php')) ?>">
-        <span class="li">📅</span> Absensi
+        <span class="li"><?=rmi_icon('calendar')?></span> Absensi
         <?php if ($kpi['hadir'] > 0): ?><span class="lbadge green"><?= $kpi['hadir'] ?> hadir</span><?php endif; ?>
       </a>
-      <a class="b-link" href="<?= h(u('/hrl_process/index.php')) ?>"><span class="li">📋</span> HRL Process</a>
-      <a class="b-link" href="<?= h(u('/chat/index.php')) ?>"><span class="li">💬</span> Chat Internal</a>
+      <a class="b-link" href="<?= h(u('/hrl_process/index.php')) ?>"><span class="li"><?=rmi_icon('clipboard')?></span> HRL Process</a>
+      <a class="b-link" href="<?= h(u('/chat/index.php')) ?>"><span class="li"><?=rmi_icon('memo')?></span> Chat Internal</a>
       <?php if ($branchDashShowKpi): ?>
-      <a class="b-link" href="<?= h(u('/kpi/kpi_center.php')) ?>"><span class="li">📊</span> KPI Center</a>
+      <a class="b-link" href="<?= h(u('/kpi/kpi_center.php')) ?>"><span class="li"><?=rmi_icon('chart')?></span> KPI Center</a>
       <?php endif; ?>
-      <a class="b-link" href="<?= h(u('/dashboards/index.php')) ?>"><span class="li">🏠</span> Dashboard Center</a>
-      <a class="b-link" href="<?= h(u('/dashboards/branch/panduan.php')) ?>" style="border-color:rgba(16,185,129,.4);color:#34d399"><span class="li">📚</span> Panduan BRANCH</a>
+      <a class="b-link" href="<?= h(u('/dashboards/index.php')) ?>"><span class="li"><?=rmi_icon('home')?></span> Dashboard Center</a>
+      <a class="b-link" href="<?= h(u('/dashboards/branch/panduan.php')) ?>" style="border-color:rgba(16,185,129,.4);color:#34d399"><span class="li"><?=rmi_icon('books')?></span> Panduan BRANCH</a>
     </div>
 
   </div>
 
-  <div style="margin-top:12px;font-size:11px;color:#334155;text-align:center">
+  <div style="margin-top:12px;font-size:11px;color:var(--rmi-muted);text-align:center">
     Periode MTD: <?= h($periodStart) ?> s/d <?= h($periodEnd) ?>
   </div>
 </div>

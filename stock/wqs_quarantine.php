@@ -10,6 +10,9 @@
  */
 
 require_once __DIR__ . '/../master/auth.php';
+if (!function_exists('rmi_icon') && is_file(__DIR__ . '/../_shared/rmi_icons.php')) {
+    require_once __DIR__ . '/../_shared/rmi_icons.php';
+}
 
 if (function_exists('require_login')) {
     require_login();
@@ -395,13 +398,13 @@ table{width:100%;border-collapse:collapse}th{background:#0b1220;color:#cbd5e1;te
 <body>
 <div class="top">
   <div>
-    <h1>🚧 WQS - Karantina Barang</h1>
+    <h1><?= rmi_icon('warn') ?> WQS - Karantina Barang</h1>
     <div class="sub">Barang retur rusak/expired/unknown ditahan di sini sebelum diputuskan.</div>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <a class="btn sm" href="<?= h(u('/dashboards/warehouse/wqs_dashboard.php')) ?>">📊 Dashboard WQS</a>
-    <a class="btn sm" href="<?= h(u('/stock/wqs_stock.php')) ?>">📦 Lihat Stok</a>
-    <a class="btn sm" href="<?= h(u('/sales/sales_do.php')) ?>">🧾 Sales DO</a>
+    <a class="btn sm" href="<?= h(u('/dashboards/warehouse/wqs_dashboard.php')) ?>"><?= rmi_icon('chart') ?> Dashboard WQS</a>
+    <a class="btn sm" href="<?= h(u('/stock/wqs_stock.php')) ?>"><?= rmi_icon('box') ?> Lihat Stok</a>
+    <a class="btn sm" href="<?= h(u('/sales/sales_do.php')) ?>"><?= rmi_icon('receipt') ?> Sales DO</a>
   </div>
 </div>
 
@@ -488,13 +491,13 @@ table{width:100%;border-collapse:collapse}th{background:#0b1220;color:#cbd5e1;te
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                 <input type="hidden" name="action" value="release">
                 <textarea name="decision_note" placeholder="Catatan release..."></textarea>
-                <button class="btn green sm" type="submit">✅ Release ke Stok</button>
+                <button class="btn green sm" type="submit"><?= rmi_icon('check') ?> Release ke Stok</button>
               </form>
               <form method="post" onsubmit="return confirm('Tandai scrap/rusak?');">
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                 <input type="hidden" name="action" value="scrap">
                 <textarea name="decision_note" placeholder="Catatan scrap..."></textarea>
-                <button class="btn red sm" type="submit">🗑️ Scrap</button>
+                <button class="btn red sm" type="submit"><?= rmi_icon('cross') ?> Scrap</button>
               </form>
               <form method="post" onsubmit="return confirm('Return supplier?');">
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
@@ -507,7 +510,7 @@ table{width:100%;border-collapse:collapse}th{background:#0b1220;color:#cbd5e1;te
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                 <input type="hidden" name="action" value="hold">
                 <textarea name="decision_note" placeholder="Catatan hold..."></textarea>
-                <button class="btn sm" type="submit">⏸ Hold</button>
+                <button class="btn sm" type="submit"><?= rmi_icon('warn') ?> Hold</button>
               </form>
               <?php endif; ?>
             <?php else: ?>

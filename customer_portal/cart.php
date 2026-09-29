@@ -4,6 +4,7 @@
  * Keranjang belanja.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_portal_login();
@@ -53,11 +54,11 @@ ob_start();
 
 <?php if (empty($cart)): ?>
   <div class="text-center py-5">
-    <div style="font-size:64px;margin-bottom:16px">🛒</div>
+    <div style="font-size:64px;margin-bottom:16px"><?= rmi_icon('cart') ?></div>
     <h4 class="fw-bold mb-2">Keranjang Kosong</h4>
     <p class="text-muted mb-4">Belum ada produk di keranjang. Yuk mulai belanja!</p>
     <a href="<?= rmi_h($base) ?>/customer_portal/catalog.php" class="btn btn-rmi px-5 py-2">
-      📦 Lihat Katalog Produk
+      <?= rmi_icon('box') ?> Lihat Katalog Produk
     </a>
   </div>
 
@@ -68,7 +69,7 @@ ob_start();
     <div class="col-lg-8">
       <div class="cp-card">
         <div class="cp-card-header">
-          🛒 Keranjang Belanja
+          <?= rmi_icon('cart') ?> Keranjang Belanja
           <span class="text-muted" style="font-size:13px;font-weight:400"><?= count($cart) ?> produk</span>
         </div>
         <form method="post" id="updateForm">
@@ -78,7 +79,7 @@ ob_start();
             <?php foreach ($cart as $key => $it): $sub = ($it['qty']??0)*($it['unit_price']??0); ?>
             <div class="d-flex align-items-center gap-3 py-3" style="border-bottom:1px solid #f1f5f9">
               <!-- Icon -->
-              <div style="width:44px;height:44px;background:#f0fdf4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📦</div>
+              <div style="width:44px;height:44px;background:#f0fdf4;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0"><?= rmi_icon('box') ?></div>
               <!-- Info -->
               <div class="flex-grow-1 min-width-0">
                 <div class="fw-semibold" style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><?= rmi_h($it['name']??'') ?></div>
@@ -102,7 +103,7 @@ ob_start();
                   <input type="hidden" name="csrf_token" value="<?= rmi_h($csrf) ?>">
                   <input type="hidden" name="action" value="remove">
                   <input type="hidden" name="key" value="<?= rmi_h($key) ?>">
-                  <button type="submit" class="btn btn-sm btn-outline-danger border-0" title="Hapus">✕</button>
+                  <button type="submit" class="btn btn-sm btn-outline-danger border-0" title="Hapus"><?= rmi_icon('x') ?></button>
                 </form>
               </div>
             </div>
@@ -110,11 +111,11 @@ ob_start();
           </div>
           <!-- Cart actions -->
           <div class="px-3 pb-3 d-flex gap-2 flex-wrap">
-            <button type="submit" class="btn btn-outline-secondary btn-sm">🔄 Update Qty</button>
+            <button type="submit" class="btn btn-outline-secondary btn-sm"><?= rmi_icon('refresh') ?> Update Qty</button>
             <form method="post" class="d-inline" onsubmit="return confirm('Kosongkan keranjang?')">
               <input type="hidden" name="csrf_token" value="<?= rmi_h($csrf) ?>">
               <input type="hidden" name="action" value="clear">
-              <button type="submit" class="btn btn-outline-danger btn-sm">🗑️ Kosongkan</button>
+              <button type="submit" class="btn btn-outline-danger btn-sm"><?= rmi_icon('cross') ?> Kosongkan</button>
             </form>
             <a href="<?= rmi_h($base) ?>/customer_portal/catalog.php" class="btn btn-outline-secondary btn-sm ms-auto">+ Tambah Produk</a>
           </div>
@@ -125,7 +126,7 @@ ob_start();
     <!-- Summary -->
     <div class="col-lg-4">
       <div class="cp-card" style="position:sticky;top:20px">
-        <div class="cp-card-header">📊 Ringkasan Pesanan</div>
+        <div class="cp-card-header"><?= rmi_icon('chart') ?> Ringkasan Pesanan</div>
         <div class="p-3">
           <?php foreach ($cart as $it): ?>
             <div class="d-flex justify-content-between mb-2" style="font-size:13px">

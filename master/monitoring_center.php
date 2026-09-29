@@ -355,19 +355,19 @@ rmi_header('Monitoring & Control', [
   <div class="row g-2">
     <?php
     $links = [
-        ['📋', 'Audit Log (filter)', $base . '/master/audit_logs.php', 'Detail semua baris system_audit_logs'],
-        ['🧾', 'Enterprise Audit (static)', $base . '/tools/enterprise_audit.php', 'Scan keamanan &amp; coverage (perlu TOOLS)'],
-        ['💻', 'ITC Dashboard', $base . '/dashboards/itc/itc_dashboard.php', 'Ringkasan ITC'],
-        ['🛠️', 'Tools', $base . '/tools/index.php', 'Smoke, backup, QA, ops'],
-        ['🗼', 'Sales Control Tower', $base . '/sales/sales_control_tower.php', 'Status DO per tahap'],
-        ['🧭', 'Import Control Tower', $base . '/purchases/purchases_import_control_tower.php', 'Pipeline import'],
-        ['📈', 'KPI Center', $base . '/kpi/kpi_center.php', 'Metrik &amp; snapshot'],
-        ['📊', 'Exec Summary', $base . '/dashboards/owner/exec_summary.php', 'Ringkasan owner / lintas modul'],
-        ['⏰', 'Backup Schedule', $base . '/tools/backup_schedule.php', 'Jadwal &amp; tes backup'],
-        ['❤️', 'Health', $base . '/tools/health.php', 'Cek cepat app/DB'],
+        [rmi_icon('clipboard'), 'Audit Log (filter)', $base . '/master/audit_logs.php', 'Detail semua baris system_audit_logs'],
+        [rmi_icon('receipt'), 'Enterprise Audit (static)', $base . '/tools/enterprise_audit.php', 'Scan keamanan &amp; coverage (perlu TOOLS)'],
+        [rmi_icon('gear'), 'ITC Dashboard', $base . '/dashboards/itc/itc_dashboard.php', 'Ringkasan ITC'],
+        [rmi_icon('gear'), 'Tools', $base . '/tools/index.php', 'Smoke, backup, QA, ops'],
+        [rmi_icon('tower'), 'Sales Control Tower', $base . '/sales/sales_control_tower.php', 'Status DO per tahap'],
+        [rmi_icon('target'), 'Import Control Tower', $base . '/purchases/purchases_import_control_tower.php', 'Pipeline import'],
+        [rmi_icon('trend'), 'KPI Center', $base . '/kpi/kpi_center.php', 'Metrik &amp; snapshot'],
+        [rmi_icon('chart'), 'Exec Summary', $base . '/dashboards/owner/exec_summary.php', 'Ringkasan owner / lintas modul'],
+        [rmi_icon('calendar'), 'Backup Schedule', $base . '/tools/backup_schedule.php', 'Jadwal &amp; tes backup'],
+        [rmi_icon('check'), 'Health', $base . '/tools/health.php', 'Cek cepat app/DB'],
     ];
     if ($mcCanOwnerActivity) {
-        array_unshift($links, ['👁️', 'Owner Activity Control', $base . '/master/owner_activity_control.php', 'History departemen → akun → pekerjaan → tahap terakhir']);
+        array_unshift($links, [rmi_icon('search'), 'Owner Activity Control', $base . '/master/owner_activity_control.php', 'History departemen → akun → pekerjaan → tahap terakhir']);
     }
     foreach ($links as $L):
         [$icon, $label, $href, $desc] = $L;

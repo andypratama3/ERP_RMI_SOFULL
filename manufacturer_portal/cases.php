@@ -4,6 +4,7 @@
  * Daftar case Reg Alkes untuk manufacture.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_mportal_login();
@@ -89,12 +90,12 @@ $content = '
 
 <div class="mp-page-header">
   <div>
-    <h1 class="mp-page-title">🏥 ' . rmi_h(mportal_t('reg_alkes_cases')) . '</h1>
+    <h1 class="mp-page-title">' . rmi_icon('office') . ' ' . rmi_h(mportal_t('reg_alkes_cases')) . '</h1>
     <p class="mp-page-sub">' . rmi_h(mportal_t('cases_for')) . ' ' . rmi_h($mc) . '</p>
   </div>
 </div>
 
-' . ($cases ? '<div class="mp-alert"><strong>💡 ' . rmi_h(mportal_t('upload_hint')) . '</strong></div>' : '') . '
+' . ($cases ? '<div class="mp-alert"><strong>' . rmi_icon('question') . ' ' . rmi_h(mportal_t('upload_hint')) . '</strong></div>' : '') . '
 
 <div class="mp-card">
   <div class="table-responsive">

@@ -12,6 +12,13 @@ if (ob_get_level() === 0) { @ob_start(); }
 require_once __DIR__ . '/../../master/auth.php';
 require_once __DIR__ . '/../../master/_audit_master.php';
 
+// Icon pusat (rmi_icon) — pastikan tersedia untuk modul HRL
+if (!function_exists('rmi_icon')) {
+  $__rmi_icons = __DIR__ . '/../../_shared/rmi_icons.php';
+  if (is_file($__rmi_icons)) require_once $__rmi_icons;
+  unset($__rmi_icons);
+}
+
 // Load centralized error logger agar rmi_log_module_error() tersedia di semua halaman HRL
 $__hrl_elg = __DIR__ . '/../../_shared/rmi_error_logger.php';
 if (is_file($__hrl_elg)) require_once $__hrl_elg;

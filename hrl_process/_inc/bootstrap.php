@@ -29,6 +29,13 @@ if ($BASE_PROJECT === '/') { $BASE_PROJECT = ''; }
 // --- Auth / DB ---
 require_once __DIR__ . '/../../master/auth.php';
 require_once __DIR__ . '/../../_shared/hrlp_process_rbac.php';
+
+// Icon pusat (rmi_icon) — pastikan tersedia untuk modul HRL Process
+if (!function_exists('rmi_icon')) {
+  $__rmi_icons = __DIR__ . '/../../_shared/rmi_icons.php';
+  if (is_file($__rmi_icons)) require_once $__rmi_icons;
+  unset($__rmi_icons);
+}
 require_login();
 
 // ACCESS FIX:

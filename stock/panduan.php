@@ -63,45 +63,45 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Menu Utama WQS -->
   <div class="pnd-section">
-    <h3>🗺️ Menu Utama Modul WQS</h3>
+    <h3><?= rmi_icon('target') ?> Menu Utama Modul WQS</h3>
     <div class="pnd-menu-grid">
       <div class="pnd-menu-item">
-        <div class="pnd-menu-ico">📦</div>
+        <div class="pnd-menu-ico"><?= rmi_icon('box') ?></div>
         <div class="pnd-menu-name">WQS Stock</div>
         <div class="pnd-menu-desc">Lihat posisi stok saat ini per produk & office</div>
       </div>
       <div class="pnd-menu-item">
-        <div class="pnd-menu-ico">📥</div>
+        <div class="pnd-menu-ico"><?= rmi_icon('inbox') ?></div>
         <div class="pnd-menu-name">Incoming</div>
         <div class="pnd-menu-desc">Penerimaan barang dari supplier (GR)</div>
       </div>
       <div class="pnd-menu-item">
-        <div class="pnd-menu-ico">📤</div>
+        <div class="pnd-menu-ico"><?= rmi_icon('outbox') ?></div>
         <div class="pnd-menu-name">Picking</div>
         <div class="pnd-menu-desc">Pengambilan barang untuk DO</div>
       </div>
       <div class="pnd-menu-item">
-        <div class="pnd-menu-ico">🗂️</div>
+        <div class="pnd-menu-ico"><?= rmi_icon('clipboard') ?></div>
         <div class="pnd-menu-name">Allocation</div>
         <div class="pnd-menu-desc">Alokasi stok ke Delivery Order</div>
       </div>
       <div class="pnd-menu-item">
-        <div class="pnd-menu-ico">📋</div>
+        <div class="pnd-menu-ico"><?= rmi_icon('clipboard') ?></div>
         <div class="pnd-menu-name">Purchase Request</div>
         <div class="pnd-menu-desc">PR ke Procurement saat stok menipis</div>
       </div>
       <div class="pnd-menu-item">
-        <div class="pnd-menu-ico">🔢</div>
+        <div class="pnd-menu-ico"><?= rmi_icon('chart') ?></div>
         <div class="pnd-menu-name">Stock Opname</div>
         <div class="pnd-menu-desc">Perhitungan stok fisik berkala</div>
       </div>
       <div class="pnd-menu-item">
-        <div class="pnd-menu-ico">↔️</div>
+        <div class="pnd-menu-ico"><?= rmi_icon('refresh') ?></div>
         <div class="pnd-menu-name">Transfer Stok</div>
         <div class="pnd-menu-desc">Pindah stok antar cabang/office</div>
       </div>
       <div class="pnd-menu-item">
-        <div class="pnd-menu-ico">⚖️</div>
+        <div class="pnd-menu-ico"><?= rmi_icon('gear') ?></div>
         <div class="pnd-menu-name">Adjustment</div>
         <div class="pnd-menu-desc">Koreksi stok (manager only)</div>
       </div>
@@ -110,25 +110,25 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Alur Barang Masuk -->
   <div class="pnd-section">
-    <h3>📥 Alur Barang Masuk (Incoming / Goods Receipt)</h3>
+    <h3><?= rmi_icon('inbox') ?> Alur Barang Masuk (Incoming / Goods Receipt)</h3>
     <div class="pnd-pipe">
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff">🚚</div>
+        <div class="pnd-pipe-dot" style="background:#2563eb;color:#fff"><?= rmi_icon('cart') ?></div>
         <div class="pnd-pipe-lbl">Barang Tiba<br><span style="color:#60a5fa">Supplier</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#d97706;color:#fff">📋</div>
+        <div class="pnd-pipe-dot" style="background:#d97706;color:#fff"><?= rmi_icon('clipboard') ?></div>
         <div class="pnd-pipe-lbl">Buat GR<br><span style="color:#fbbf24">Incoming</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#7c3aed;color:#fff">✓</div>
+        <div class="pnd-pipe-dot" style="background:#7c3aed;color:#fff"><?= rmi_icon('tick') ?></div>
         <div class="pnd-pipe-lbl">Verifikasi<br><span style="color:#a78bfa">Manager</span></div>
       </div>
       <div class="pnd-pipe-line"></div>
       <div class="pnd-pipe-step">
-        <div class="pnd-pipe-dot" style="background:#16a34a;color:#fff">📦</div>
+        <div class="pnd-pipe-dot" style="background:#16a34a;color:#fff"><?= rmi_icon('box') ?></div>
         <div class="pnd-pipe-lbl">Stok Masuk<br><span style="color:#34d399">Update</span></div>
       </div>
     </div>
@@ -183,7 +183,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Alur Barang Keluar (Picking) -->
   <div class="pnd-section">
-    <h3>📤 Proses Picking Barang untuk DO</h3>
+    <h3><?= rmi_icon('outbox') ?> Proses Picking Barang untuk DO</h3>
 
     <div class="pnd-step">
       <div class="pnd-num green">1</div>
@@ -228,7 +228,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Purchase Request -->
   <div class="pnd-section">
-    <h3>📋 Purchase Request (PR) — Saat Stok Menipis</h3>
+    <h3><?= rmi_icon('clipboard') ?> Purchase Request (PR) — Saat Stok Menipis</h3>
 
     <div class="pnd-step">
       <div class="pnd-num yellow">1</div>
@@ -273,7 +273,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Stock Opname -->
   <div class="pnd-section">
-    <h3>🔢 Stock Opname — Perhitungan Fisik Berkala</h3>
+    <h3><?= rmi_icon('chart') ?> Stock Opname — Perhitungan Fisik Berkala</h3>
 
     <div class="pnd-step">
       <div class="pnd-num teal">1</div>
@@ -321,7 +321,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Transfer Stok -->
   <div class="pnd-section">
-    <h3>↔️ Transfer Stok Antar Cabang</h3>
+    <h3><?= rmi_icon('refresh') ?> Transfer Stok Antar Cabang</h3>
 
     <div class="pnd-step">
       <div class="pnd-num blue">1</div>
@@ -358,31 +358,31 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- FAQ -->
   <div class="pnd-section">
-    <h3>❓ Pertanyaan Umum (FAQ)</h3>
+    <h3><?= rmi_icon('question') ?> Pertanyaan Umum (FAQ)</h3>
 
-    <div class="pnd-faq-q">❓ Stok berkurang padahal tidak ada picking?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Stok berkurang padahal tidak ada picking?</div>
     <div class="pnd-faq-a">
       Cek <b>Stock Audit</b> untuk melihat riwayat perubahan stok lengkap beserta waktu, user, dan alasan.
       Jika ada kejanggalan, hubungi Manager WQS atau Admin.
     </div>
 
-    <div class="pnd-faq-q">❓ Barang diterima tapi Incoming tidak bisa dibuat?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Barang diterima tapi Incoming tidak bisa dibuat?</div>
     <div class="pnd-faq-a">
       Pastikan PO sudah dibuat oleh tim Procurement dan statusnya belum CLOSED.
       Jika PO belum ada, hubungi Procurement untuk membuatnya terlebih dahulu.
     </div>
 
-    <div class="pnd-faq-q">❓ DO tidak muncul di daftar Picking?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> DO tidak muncul di daftar Picking?</div>
     <div class="pnd-faq-a">
       DO hanya muncul di Picking setelah melewati proses Allocation. Hubungi tim Sales/SCM jika DO belum dialokasikan.
     </div>
 
-    <div class="pnd-faq-q">❓ Bisa tidak Picking sebagian dulu?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Bisa tidak Picking sebagian dulu?</div>
     <div class="pnd-faq-a">
       Ya — isi jumlah aktual yang dipicking. Sisa bisa dipicking di sesi berikutnya sampai DO selesai.
     </div>
 
-    <div class="pnd-faq-q">❓ Salah input stok di Opname — bisa dikoreksi?</div>
+    <div class="pnd-faq-q"><?= rmi_icon('question') ?> Salah input stok di Opname — bisa dikoreksi?</div>
     <div class="pnd-faq-a">
       Selama sesi Opname belum difinalisasi, data masih bisa diedit. Setelah finalisasi, gunakan
       <b>Stock Adjustment</b> (Manager only) untuk koreksi. Setiap perubahan tercatat di audit log.
@@ -391,7 +391,7 @@ h3 { font-size:15px; font-weight:700; margin:0 0 14px 0; display:flex; align-ite
 
   <!-- Kontak -->
   <div class="pnd-section accent">
-    <h3>🆘 Butuh Bantuan?</h3>
+    <h3><?= rmi_icon('question') ?> Butuh Bantuan?</h3>
     <div class="pnd-desc" style="line-height:1.9">
       Untuk kendala operasional WQS, hubungi <b>Manager WQS</b> atau <b>Admin Sistem</b>:
       <ul style="margin-top:10px;padding-left:22px">

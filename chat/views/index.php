@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 if (!function_exists('chat_h')) {
     function chat_h(string $v): string { return htmlspecialchars($v, ENT_QUOTES, 'UTF-8'); }
@@ -124,7 +125,7 @@ if (!function_exists('chat_h')) {
         <div class="chat-compose-row">
           <textarea class="form-control" id="chatComposer" rows="2" maxlength="5000" placeholder="Write a message... (@username)"></textarea>
           <input type="file" id="chatAttachInput" multiple hidden accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx">
-          <button class="btn btn-outline-light btn-icon" id="chatAttachBtn" title="Attach file">📎</button>
+          <button class="btn btn-outline-light btn-icon" id="chatAttachBtn" title="Attach file"><?= rmi_icon('doc') ?></button>
           <button class="btn btn-primary" id="chatSendBtn" disabled>Send</button>
         </div>
       </div>

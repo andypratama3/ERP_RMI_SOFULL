@@ -123,17 +123,17 @@ rmi_header('Local Purchase Process', [
   <div class="row g-3 mb-3">
     <div class="col-md-4"><div class="step <?=$receivingOk?'ok':'wait'?>">
       <div class="muted">STEP 1 · WQS</div><h5>Receiving</h5>
-      <b><?=$receivingOk?'✓ Barang sudah diterima':'Menunggu receiving'?></b>
+      <b><?=$receivingOk?rmi_icon('tick').' Barang sudah diterima':'Menunggu receiving'?></b>
       <div class="muted mt-1">FIN mulai AP setelah receiving tersedia.</div>
     </div></div>
     <div class="col-md-4"><div class="step <?=$apExists?'ok':($receivingOk?'wait':'lock')?>">
       <div class="muted">STEP 2 · FIN</div><h5>AP Invoice</h5>
-      <b><?=$apExists?'✓ AP tercatat':($receivingOk?'AP belum dibuat':'Terkunci — tunggu receiving')?></b><br>
+      <b><?=$apExists?rmi_icon('tick').' AP tercatat':($receivingOk?'AP belum dibuat':'Terkunci — tunggu receiving')?></b><br>
       <?php if(($isFin || $isSys) && $receivingOk && !$apExists): ?><a class="btn btn-info btn-sm mt-2" href="purchases_invoice_ap.php?po_id=<?=$id?>">Buat / Registrasi AP</a><?php endif; ?>
     </div></div>
     <div class="col-md-4"><div class="step <?=$payOk?'ok':($apExists?'wait':'lock')?>">
       <div class="muted">STEP 3 · FIN</div><h5>AP Payment</h5>
-      <b><?=$payOk?'✓ Payment lunas':($apExists?'Menunggu payment':'Terkunci — AP belum ada')?></b><br>
+      <b><?=$payOk?rmi_icon('tick').' Payment lunas':($apExists?'Menunggu payment':'Terkunci — AP belum ada')?></b><br>
       <?php if(($isFin || $isSys) && $apExists && !$payOk): ?><a class="btn btn-warning btn-sm mt-2" href="purchases_payment_ap.php?po_id=<?=$id?>">Proses Payment</a><?php endif; ?>
     </div></div>
   </div>

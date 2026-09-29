@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 // --- Auth guard ---
 $__rmi_guard_dir = __DIR__;
 for ($__rmi_guard_i = 0; $__rmi_guard_i < 5; $__rmi_guard_i++) {
@@ -17,15 +18,15 @@ mpr_schema_ensure($pdo);
 require_once __DIR__ . '/../master/_audit_master.php';
 
 // Pipeline stages definition
-const MPR_STAGES = [
-    'PROSPEK'     => ['label'=>'🔍 Prospek',       'color'=>'#64748b', 'order'=>1],
-    'KUNJUNGAN'   => ['label'=>'📍 Kunjungan',      'color'=>'#14b8a6', 'order'=>2],
-    'FOLLOW_UP'   => ['label'=>'🔄 Follow-Up',      'color'=>'#f59e0b', 'order'=>3],
-    'PRESENTASI'  => ['label'=>'📊 Presentasi',     'color'=>'#3b82f6', 'order'=>4],
-    'NEGOSIASI'   => ['label'=>'🤝 Negosiasi',      'color'=>'#8b5cf6', 'order'=>5],
-    'WON'         => ['label'=>'🏆 DEAL WON',       'color'=>'#22c55e', 'order'=>6],
-    'LOST'        => ['label'=>'❌ Lost',            'color'=>'#ef4444', 'order'=>7],
-];
+define('MPR_STAGES', [
+    'PROSPEK'     => ['label'=>rmi_icon('search').' Prospek',       'color'=>'#64748b', 'order'=>1],
+    'KUNJUNGAN'   => ['label'=>rmi_icon('target').' Kunjungan',      'color'=>'#14b8a6', 'order'=>2],
+    'FOLLOW_UP'   => ['label'=>rmi_icon('refresh').' Follow-Up',      'color'=>'#f59e0b', 'order'=>3],
+    'PRESENTASI'  => ['label'=>rmi_icon('chart').' Presentasi',     'color'=>'#3b82f6', 'order'=>4],
+    'NEGOSIASI'   => ['label'=>rmi_icon('users').' Negosiasi',      'color'=>'#8b5cf6', 'order'=>5],
+    'WON'         => ['label'=>rmi_icon('target').' DEAL WON',       'color'=>'#22c55e', 'order'=>6],
+    'LOST'        => ['label'=>rmi_icon('cross').' Lost',            'color'=>'#ef4444', 'order'=>7],
+]);
 
 const MPR_PROSPECT_TYPES = ['RS','KLINIK','APOTEK','LABORATORIUM','OPTIK','LAINNYA'];
 
@@ -178,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id,
             ]);
             mpr_audit($pdo,$MPR_USER,'HANDOVER_CRM','mpr_pipeline',$id,(string)$pr['prospect_code'],'Serah terima ke CRM',['purchasing_pic'=>$purchasing_name,'handover_to'=>$handover_to]);
-            flash_set('success',"✅ Serah terima <b>".e((string)$pr['prospect_name'])."</b> ke CRM berhasil. PIC Purchasing: <b>".e($purchasing_name)."</b>".(($handover_to!=='')?" → ".e($handover_to):'').".");
+            flash_set('success',rmi_icon('check')." Serah terima <b>".e((string)$pr['prospect_name'])."</b> ke CRM berhasil. PIC Purchasing: <b>".e($purchasing_name)."</b>".(($handover_to!=='')?" → ".e($handover_to):'').".");
             rmi_redirect(url_mpr('mpr_pipeline.php'));
         }
 
@@ -258,11 +259,11 @@ $today = date('Y-m-d');
 <div class="rmi-card">
   <div class="rmi-card-header d-flex flex-wrap gap-2 justify-content-between align-items-start">
     <div>
-      <h5>🎯 Pipeline Akuisisi Customer Baru</h5>
+      <h5><?=rmi_icon('target')?> Pipeline Akuisisi Customer Baru</h5>
       <div class="sub">Kelola semua prospek — Staff &amp; Manager wajib update status pipeline</div>
     </div>
     <div class="d-flex gap-2 flex-wrap">
-      <a class="btn btn-sm btn-outline-light" href="<?= e(url_mpr('mpr_pipeline.php?export=1')) ?>">📤 Export</a>
+      <a class="btn btn-sm btn-outline-light" href="<?= e(url_mpr('mpr_pipeline.php?export=1')) ?>"><?=rmi_icon('outbox')?> Export</a>
     </div>
   </div>
   <div class="rmi-card-body">
@@ -305,7 +306,7 @@ $today = date('Y-m-d');
       <!-- Form Add/Edit -->
       <div class="col-lg-4">
         <div class="p-3 rounded-3" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1)">
-          <div class="mini fw-semibold mb-1"><?= $edit ? '✏️ Edit Prospek' : '➕ Tambah Prospek Baru' ?></div>
+          <div class="mini fw-semibold mb-1"><?= $edit ? rmi_icon('memo').' Edit Prospek' : rmi_icon('check').' Tambah Prospek Baru' ?></div>
           <div class="mini mb-2" style="color:#64748b">Staff &amp; Manager wajib update pipeline setiap ada perubahan.</div>
           <?php if ($can_create): ?>
           <form method="post">
@@ -376,7 +377,7 @@ $today = date('Y-m-d');
               <textarea class="form-control form-control-sm" name="notes" rows="2"><?= e($edit['notes'] ?? '') ?></textarea>
             </div>
             <div class="d-flex gap-2 mt-2">
-              <button class="btn btn-primary btn-sm flex-fill">💾 Simpan</button>
+              <button class="btn btn-primary btn-sm flex-fill"><?=rmi_icon('doc')?> Simpan</button>
               <?php if ($edit): ?><a class="btn btn-outline-light btn-sm" href="<?= e(url_mpr('mpr_pipeline.php')) ?>">Cancel</a><?php endif; ?>
             </div>
           </form>
@@ -414,10 +415,10 @@ $today = date('Y-m-d');
                     <?= !empty($pr['prospect_city']) ? ' • '.e($pr['prospect_city']) : '' ?>
                   </div>
                   <?php if (!empty($pr['pic_name'])): ?>
-                    <div class="pipeline-card-meta">👤 <?= e(mb_strimwidth((string)$pr['pic_name'],0,25,'…')) ?></div>
+                    <div class="pipeline-card-meta"><?=rmi_icon('user')?> <?= e(mb_strimwidth((string)$pr['pic_name'],0,25,'…')) ?></div>
                   <?php endif; ?>
                   <div class="pipeline-card-meta">
-                    🧑‍💼 <?= e($pr['owner_username']) ?>
+                    <?=rmi_icon('user')?> <?= e($pr['owner_username']) ?>
                     <span style="color:<?= in_array(strtoupper((string)$pr['owner_level']),['MANAGER'],true)?'#fbbf24':'#64748b' ?>">
                       (<?= e(strtolower((string)$pr['owner_level'] ?: 'staff')) ?>)
                     </span>
@@ -426,22 +427,22 @@ $today = date('Y-m-d');
                     <div class="pipeline-card-deal">Rp <?= number_format((float)$pr['est_deal_value'],0,',','.') ?></div>
                   <?php endif; ?>
                   <?php if (!empty($pr['est_closing_date'])): ?>
-                    <div class="pipeline-card-meta <?= $overdue?'text-danger':'' ?>">⏰ <?= e($pr['est_closing_date']) ?><?= $overdue?' ⚠':'' ?></div>
+                    <div class="pipeline-card-meta <?= $overdue?'text-danger':'' ?>"><?=rmi_icon('calendar')?> <?= e($pr['est_closing_date']) ?><?= $overdue?' '.rmi_icon('warn'):'' ?></div>
                   <?php endif; ?>
                   <div class="d-flex gap-1 mt-2">
-                    <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_pipeline.php?edit='.(int)$pr['id'])) ?>">✏️</a>
+                    <a class="btn btn-xs btn-outline-light" href="<?= e(url_mpr('mpr_pipeline.php?edit='.(int)$pr['id'])) ?>"><?=rmi_icon('memo')?></a>
                     <?php if (!$MPR_DEPO_RESTRICTED && ($MPR_IS_ADMIN || $pr['owner_username']===$MPR_USER['username'] || $is_manager)): ?>
                     <form method="post" class="d-inline" onsubmit="return confirm('Hapus prospek ini?')">
                       <input type="hidden" name="csrf_token" value="<?= e($CSRF_TOKEN) ?>">
                       <input type="hidden" name="action" value="delete">
                       <input type="hidden" name="id" value="<?= (int)$pr['id'] ?>">
-                      <button class="btn btn-xs btn-outline-danger">🗑</button>
+                      <button class="btn btn-xs btn-outline-danger"><?=rmi_icon('x')?></button>
                     </form>
                     <?php endif; ?>
                   </div>
                 </div>
                 <?php endforeach; ?>
-                <?php if (empty($cards)): ?><div style="font-size:11px;color:#334155;text-align:center;padding:12px">Kosong</div><?php endif; ?>
+                <?php if (empty($cards)): ?><div style="font-size:11px;color:var(--rmi-muted);text-align:center;padding:12px">Kosong</div><?php endif; ?>
               </div>
             </div>
             <?php endforeach; ?>
@@ -463,13 +464,13 @@ $today = date('Y-m-d');
                   ?>
                   <div class="pipeline-card <?= $sl==='WON'?'pipeline-won':'' ?>">
                     <div class="pipeline-card-name"><?= e(mb_strimwidth((string)$pr['prospect_name'],0,28,'…')) ?></div>
-                    <div class="pipeline-card-meta">🧑‍💼 <?= e($pr['owner_username']) ?> (<?= e(strtolower((string)$pr['owner_level']?:'staff')) ?>)</div>
+                    <div class="pipeline-card-meta"><?=rmi_icon('user')?> <?= e($pr['owner_username']) ?> (<?= e(strtolower((string)$pr['owner_level']?:'staff')) ?>)</div>
                     <?php if (!empty($pr['est_deal_value'])): ?><div class="pipeline-card-deal">Rp <?= number_format((float)$pr['est_deal_value'],0,',','.') ?></div><?php endif; ?>
                     <?php if ($sl==='LOST' && !empty($pr['lost_reason'])): ?><div class="pipeline-card-meta" style="color:#94a3b8"><?= e(mb_strimwidth((string)$pr['lost_reason'],0,50,'…')) ?></div><?php endif; ?>
                     <?php if ($sl==='WON'): ?>
                       <?php if ($hasHandover): ?>
                         <div class="pipeline-card-meta" style="color:#4ade80;margin-top:4px">
-                          ✅ Serah terima ke CRM<br>
+                          <?=rmi_icon('check')?> Serah terima ke CRM<br>
                           <span style="color:#94a3b8">PIC: <?= e((string)$pr['purchasing_pic_name']) ?></span>
                           <?php if (!empty($pr['handover_to'])): ?>
                             <br><span style="color:#64748b">→ <?= e((string)$pr['handover_to']) ?></span>
@@ -482,14 +483,14 @@ $today = date('Y-m-d');
                                 data-bs-target="#modalHandover"
                                 data-id="<?= (int)$pr['id'] ?>"
                                 data-name="<?= e((string)$pr['prospect_name']) ?>">
-                          🤝 Serah Terima ke CRM
+                          <?=rmi_icon('users')?> Serah Terima ke CRM
                         </button>
                       <?php endif; ?>
                     <?php endif; ?>
-                    <a class="btn btn-xs btn-outline-light mt-1" href="<?= e(url_mpr('mpr_pipeline.php?edit='.(int)$pr['id'])) ?>">✏️ Update</a>
+                    <a class="btn btn-xs btn-outline-light mt-1" href="<?= e(url_mpr('mpr_pipeline.php?edit='.(int)$pr['id'])) ?>"><?=rmi_icon('memo')?> Update</a>
                   </div>
                   <?php endforeach; ?>
-                  <?php if (empty($slCards)): ?><div style="font-size:11px;color:#334155;text-align:center;padding:12px">Kosong</div><?php endif; ?>
+                  <?php if (empty($slCards)): ?><div style="font-size:11px;color:var(--rmi-muted);text-align:center;padding:12px">Kosong</div><?php endif; ?>
                 </div>
               </div>
             </div>
@@ -506,7 +507,7 @@ $today = date('Y-m-d');
   <div class="modal-dialog">
     <div class="modal-content" style="background:#0b1220;color:#e5e7eb;border:1px solid rgba(255,255,255,.12)">
       <div class="modal-header py-2" style="border-bottom:1px solid rgba(255,255,255,.08)">
-        <h6 class="modal-title">🤝 Serah Terima ke CRM</h6>
+        <h6 class="modal-title"><?=rmi_icon('users')?> Serah Terima ke CRM</h6>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -558,7 +559,7 @@ $today = date('Y-m-d');
           <div class="d-flex gap-2">
             <button type="submit" class="btn btn-sm flex-fill"
                     style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.4)">
-              ✅ Konfirmasi Serah Terima
+              <?=rmi_icon('check')?> Konfirmasi Serah Terima
             </button>
             <button type="button" class="btn btn-sm btn-outline-light" data-bs-dismiss="modal">Batal</button>
           </div>

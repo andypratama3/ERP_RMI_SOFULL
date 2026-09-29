@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 // rbac/index.php — RBAC Center (matrix Dept×Role + registry permission).
 // Mutasi: SYSTEM.RBAC_MANAGE. Baca: + SYSTEM.RBAC_VIEW.
 //
@@ -461,7 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         master_audit($pdo,'rbac','rbac_user_permissions','TOGGLE_USER_PERM',
           $tUid, $tPerm,
           ($tCur?"Revoke":"Grant").": {$tPerm} untuk user_id={$tUid} oleh {$actor}", []);
-        rbac_set_flash('ok', ($tCur?'✗ Dicabut':'✓ Diberikan').": {$tPerm}");
+        rbac_set_flash('ok', ($tCur ? rmi_icon('x') . ' Dicabut' : rmi_icon('tick') . ' Diberikan').": {$tPerm}");
       } else {
         rbac_set_flash('bad', 'Toggle user perm gagal: user_id atau perm_code tidak valid.');
       }
@@ -1458,24 +1459,24 @@ body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:var(--bg);c
 <?php
 // Module icon map
 $modIcons = [
-    'SYSTEM'     => '⚙️',
-    'MASTER'     => '🗂️',
-    'SALES'      => '💼',
-    'PURCHASES'  => '🛒',
-    'STOCK'      => '📦',
-    'WQS'        => '🏗️',
-    'HRL'        => '👥',
-    'HRL_PROCESS'=> '📋',
-    'PAYROLL'    => '💵',
-    'ABSENSI'    => '📅',
-    'FIXED_ASSET'=> '🏛️',
-    'PQP'        => '🔍',
-    'MPR'        => '📋',
-    'KPI'        => '🎯',
-    'DASHBOARD'  => '📊',
-    'PANDUAN'    => '📖',
-    'TOOLS'      => '🔧',
-    'CHAT'       => '💬',
+    'SYSTEM' => rmi_icon('gear'),
+    'MASTER' => rmi_icon('box'),
+    'SALES' => rmi_icon('money'),
+    'PURCHASES' => rmi_icon('cart'),
+    'STOCK' => rmi_icon('box'),
+    'WQS' => rmi_icon('office'),
+    'HRL' => rmi_icon('users'),
+    'HRL_PROCESS' => rmi_icon('clipboard'),
+    'PAYROLL' => rmi_icon('money'),
+    'ABSENSI' => rmi_icon('calendar'),
+    'FIXED_ASSET' => rmi_icon('office'),
+    'PQP' => rmi_icon('search'),
+    'MPR' => rmi_icon('clipboard'),
+    'KPI' => rmi_icon('target'),
+    'DASHBOARD' => rmi_icon('chart'),
+    'PANDUAN' => rmi_icon('books'),
+    'TOOLS' => rmi_icon('gear'),
+    'CHAT' => rmi_icon('users'),
 ];
 
 // Registry halaman ↔ permission (untuk tampilan per user / dokumentasi)
@@ -1512,7 +1513,7 @@ $totalEnabled = array_sum($modEnabled);
   <!-- Header -->
   <div class="rc-header">
       <div>
-      <div class="rc-title">🔐 RBAC Center</div>
+      <div class="rc-title"><?= rmi_icon('gear') ?> RBAC Center</div>
       <div class="rc-subtitle">
         <b>SYS</b> privileged = Allow All. Lainnya ikut matrix <b>Dept + Role</b> + override per user bila ada.
         <ol class="rc-flow">
@@ -1523,26 +1524,26 @@ $totalEnabled = array_sum($modEnabled);
         </div>
         </div>
     <div class="rc-topbtns">
-      <a class="btn primary" href="<?= rmi_h(u('/dashboards/index.php')) ?>">🏠 Dashboard</a>
-      <a class="btn" href="<?= rmi_h(u('/master/master_system_login.php')) ?>">👤 System Login</a>
+      <a class="btn primary" href="<?= rmi_h(u('/dashboards/index.php')) ?>"><?= rmi_icon('home') ?> Dashboard</a>
+      <a class="btn" href="<?= rmi_h(u('/master/master_system_login.php')) ?>"><?= rmi_icon('user') ?> System Login</a>
 
-      <a class="btn good sm" href="<?= rmi_h($rbac_sys_matrix_url) ?>" title="Langsung ke matrix Dept SYS + role SYS">⚙️ SYS / SYS</a>
-      <a class="btn sm" href="<?= rmi_h(u('/rbac/panduan.php')) ?>">📖 Panduan</a>
-      <a class="btn sm" href="<?= rmi_h(u('/rbac/nav_parallel_report.php')) ?>" title="Sidebar vs Page Registry vs bootstrap vs mod_card">🧭 Nav audit</a>
+      <a class="btn good sm" href="<?= rmi_h($rbac_sys_matrix_url) ?>" title="Langsung ke matrix Dept SYS + role SYS"><?= rmi_icon('gear') ?> SYS / SYS</a>
+      <a class="btn sm" href="<?= rmi_h(u('/rbac/panduan.php')) ?>"><?= rmi_icon('books') ?> Panduan</a>
+      <a class="btn sm" href="<?= rmi_h(u('/rbac/nav_parallel_report.php')) ?>" title="Sidebar vs Page Registry vs bootstrap vs mod_card"><?= rmi_icon('target') ?> Nav audit</a>
       </div>
     </div>
 
     <?php if ($db_error): ?>
-    <div class="flash warn"><b>⚠ Warning:</b> <?= rmi_h($db_error) ?></div>
+    <div class="flash warn"><b><?= rmi_icon('warn') ?> Warning:</b> <?= rmi_h($db_error) ?></div>
     <?php endif; ?>
     <?php if ($permIncomplete): ?>
-    <div class="flash warn"><b>⚠ Permission registry belum lengkap</b> (<?= (int)$permCount ?> permissions). Gunakan <b>Sync Permissions</b> di sidebar.</div>
+    <div class="flash warn"><b><?= rmi_icon('warn') ?> Permission registry belum lengkap</b> (<?= (int)$permCount ?> permissions). Gunakan <b>Sync Permissions</b> di sidebar.</div>
     <?php endif; ?>
     <?php if ($flash): ?>
     <div class="flash <?= rmi_h($flash['type'] === 'ok' ? 'ok' : ($flash['type']==='bad'?'bad':'warn')) ?>"><?= rmi_h($flash['msg'] ?? '') ?></div>
   <?php endif; ?>
   <?php if (!$rbacManage): ?>
-    <div class="flash warn"><b>👁 Mode baca saja:</b> Anda memiliki <span class="pc">SYSTEM.RBAC_VIEW</span> (tanpa <span class="pc">SYSTEM.RBAC_MANAGE</span>). Matrix ditampilkan tetapi tidak bisa disimpan, sinkron, import, atau export JSON.</div>
+    <div class="flash warn"><b><?= rmi_icon('search') ?> Mode baca saja:</b> Anda memiliki <span class="pc">SYSTEM.RBAC_VIEW</span> (tanpa <span class="pc">SYSTEM.RBAC_MANAGE</span>). Matrix ditampilkan tetapi tidak bisa disimpan, sinkron, import, atau export JSON.</div>
   <?php endif; ?>
 
   <!-- Stats Bar -->
@@ -1585,14 +1586,14 @@ $totalEnabled = array_sum($modEnabled);
 
       <!-- Jalur cepat SYS (dept SYS = satu-satunya dengan role sys di matrix) -->
       <div class="rc-panel rc-sys-lane">
-        <div class="rc-panel-head"><h3>⚙️ Pengaturan System (SYS)</h3></div>
+        <div class="rc-panel-head"><h3><?= rmi_icon('gear') ?> Pengaturan System (SYS)</h3></div>
         <div class="rc-panel-body" style="padding-top:10px;padding-bottom:12px">
           <div class="info-box" style="margin-bottom:10px;border-color:rgba(251,191,36,.25);background:rgba(245,158,11,.06)">
             Matrix <span class="pc">SYS</span> / <span class="pc">SYS</span> = izin di registry untuk akun dept System. User <b>privileged</b> (session SYS/ADMIN/SUPERADMIN) di app tetap <b>allow all</b> tanpa membaca matrix ini.
           </div>
           <div class="btn-row-sys">
             <?php if ($rbac_is_sys_sys_context): ?>
-            <span class="btn good sm" style="opacity:.95;cursor:default;justify-content:center">✓ Sedang: SYS / SYS</span>
+            <span class="btn good sm" style="opacity:.95;cursor:default;justify-content:center"><?= rmi_icon('tick') ?> Sedang: SYS / SYS</span>
             
 
 <?php else: ?>
@@ -1607,7 +1608,7 @@ $totalEnabled = array_sum($modEnabled);
 
       <!-- Dept + Role Selector -->
       <div class="rc-panel">
-        <div class="rc-panel-head"><h3>🎯 Pilih Dept + Role</h3></div>
+        <div class="rc-panel-head"><h3><?= rmi_icon('target') ?> Pilih Dept + Role</h3></div>
         <div style="padding:8px 10px 0">
           <div style="font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Department</div>
           <div class="dept-grid">
@@ -1623,7 +1624,7 @@ $totalEnabled = array_sum($modEnabled);
           <div class="role-pills">
             <?php foreach ($roles as $r): ?>
             <div class="role-pill <?= $r===$role_sel?'active':'' ?>" data-role-code="<?= rmi_h($r) ?>" onclick="selectRole('<?= rmi_h($r) ?>')">
-              <?= $r==='SYS'?'⚙️':'('.($r==='MANAGER'?'👔':'👤').')' ?> <?= rmi_h($r) ?>
+              <?= $r==='SYS' ? rmi_icon('gear') : '('.($r==='MANAGER' ? rmi_icon('user') : rmi_icon('user')).')' ?> <?= rmi_h($r) ?>
             </div>
             <?php endforeach; ?>
           </div>
@@ -1637,7 +1638,7 @@ $totalEnabled = array_sum($modEnabled);
         </form>
           <div style="display:flex;gap:5px;padding:8px 0 6px;flex-wrap:wrap;align-items:center">
             <?php if ($rbacManage): ?>
-            <a class="btn sm" href="<?= rmi_h(u('/rbac/index.php?action=export_json&dept_code='.urlencode($dept_sel).'&role_code='.urlencode($role_sel).'&rbac_layout='.urlencode($rbac_matrix_layout))) ?>">⬇ Export JSON</a>
+            <a class="btn sm" href="<?= rmi_h(u('/rbac/index.php?action=export_json&dept_code='.urlencode($dept_sel).'&role_code='.urlencode($role_sel).'&rbac_layout='.urlencode($rbac_matrix_layout))) ?>"><?= rmi_icon('inbox') ?> Export JSON</a>
             
 
 <?php else: ?>
@@ -1649,12 +1650,12 @@ $totalEnabled = array_sum($modEnabled);
         <?php if ($rbacManage): ?>
         <!-- Tabbed actions -->
         <div class="rc-tabs" id="sidebar-tabs">
-          <div class="rc-tab active" onclick="switchTab(this,'tab-sync')">🔄 Sync</div>
-          <div class="rc-tab" onclick="switchTab(this,'tab-copy')">📋 Salin</div>
-          <div class="rc-tab" onclick="switchTab(this,'tab-preset')">📦 Paket</div>
-          <div class="rc-tab" onclick="switchTab(this,'tab-baseline')">🛡 Default</div>
-          <div class="rc-tab" onclick="switchTab(this,'tab-import')">📥 Import</div>
-          <div class="rc-tab" onclick="switchTab(this,'tab-addperm')">➕ Add Perm</div>
+          <div class="rc-tab active" onclick="switchTab(this,'tab-sync')"><?= rmi_icon('refresh') ?> Sync</div>
+          <div class="rc-tab" onclick="switchTab(this,'tab-copy')"><?= rmi_icon('clipboard') ?> Salin</div>
+          <div class="rc-tab" onclick="switchTab(this,'tab-preset')"><?= rmi_icon('box') ?> Paket</div>
+          <div class="rc-tab" onclick="switchTab(this,'tab-baseline')"><?= rmi_icon('warn') ?> Default</div>
+          <div class="rc-tab" onclick="switchTab(this,'tab-import')"><?= rmi_icon('inbox') ?> Import</div>
+          <div class="rc-tab" onclick="switchTab(this,'tab-addperm')"><?= rmi_icon('check') ?> Add Perm</div>
         </div>
 
         <!-- Tab: Sync -->
@@ -1665,7 +1666,7 @@ $totalEnabled = array_sum($modEnabled);
             <input type="hidden" name="dept_code" value="<?= rmi_h($dept_sel) ?>">
             <input type="hidden" name="role_code" value="<?= rmi_h($role_sel) ?>">
             <div class="info-box">Sinkronkan permission dari <span class="pc">config/rbac_permissions.php</span> atau fallback <span class="pc">_shared/rbac.php</span> ke database.</div>
-            <button class="btn good" type="submit" style="margin-top:10px;width:100%">🔄 Sync Full Permissions</button>
+            <button class="btn good" type="submit" style="margin-top:10px;width:100%"><?= rmi_icon('refresh') ?> Sync Full Permissions</button>
           </form>
           <div class="sep"></div>
           <form method="post" action="<?= rmi_h(u('/rbac/index.php')) ?>" onsubmit="return confirm('Hapus dari database semua permission yang TIDAK ada di config/rbac_permissions.php?\n\nBaris matrix Dept+Role dan user override yang mereferensi kode tersebut ikut terhapus (FK CASCADE).\n\nPastikan sudah Sync + migrasi 161/162 bila perlu.');">
@@ -1674,14 +1675,14 @@ $totalEnabled = array_sum($modEnabled);
             <input type="hidden" name="dept_code" value="<?= rmi_h($dept_sel) ?>">
             <input type="hidden" name="role_code" value="<?= rmi_h($role_sel) ?>">
             <div class="info-box">Hapus <b>orphan registry</b>: baris di <span class="pc">rbac_permissions</span> yang tidak tercantum di config (mengatasi selisih “file → DB” setelah sync additive). CLI: <span class="pc">php tools/rbac/prune_rbac_orphan_permissions.php</span></div>
-            <button class="btn warn-btn" type="submit" style="margin-top:10px;width:100%">🧹 Hapus orphan registry (selisih DB vs config)</button>
+            <button class="btn warn-btn" type="submit" style="margin-top:10px;width:100%"><?= rmi_icon('cross') ?> Hapus orphan registry (selisih DB vs config)</button>
           </form>
           <div class="sep"></div>
           <form method="post" action="<?= rmi_h(u('/rbac/index.php')) ?>">
             <input type="hidden" name="csrf" value="<?= rmi_h($csrf) ?>">
             <input type="hidden" name="action" value="grant_all_sys">
             <div class="info-box">Beri <b>SYS/SYS</b> semua permission dari registry. Jalankan setelah Sync.</div>
-            <button class="btn primary" type="submit" style="margin-top:10px;width:100%">⚡ Grant All ke SYS/SYS</button>
+            <button class="btn primary" type="submit" style="margin-top:10px;width:100%"><?= rmi_icon('zap') ?> Grant All ke SYS/SYS</button>
           </form>
           </div>
 
@@ -1721,7 +1722,7 @@ $totalEnabled = array_sum($modEnabled);
             </label>
             <button class="btn primary" type="submit" style="width:100%"
               onclick="return confirm('Salin permission dari dept/role yang dipilih ke <?= rmi_h($dept_sel) ?>/<?= rmi_h($role_sel) ?>?')">
-              📋 Salin Sekarang
+              <?= rmi_icon('clipboard') ?> Salin Sekarang
             </button>
         </form>
         </div>
@@ -1733,12 +1734,12 @@ $totalEnabled = array_sum($modEnabled);
           </div>
           <?php
           $presets = [
-            ['name' => 'view_only',      'icon' => '👁',  'label' => 'VIEW Saja',          'desc' => 'Hanya semua permission *.VIEW — baca tanpa mutasi'],
-            ['name' => 'ops_standard',   'icon' => '👤',  'label' => 'Ops Standar (Staff)', 'desc' => 'VIEW + CREATE + EDIT + EXPORT (tanpa DELETE/APPROVE/finance)'],
-            ['name' => 'ops_full',       'icon' => '👔',  'label' => 'Ops Lengkap (Mgr)',   'desc' => 'Semua kecuali RBAC/USER MANAGE/finance approval'],
-            ['name' => 'panduan_only',   'icon' => '📖',  'label' => 'Panduan Saja',        'desc' => 'Hanya PANDUAN.* — baca panduan modul'],
-            ['name' => 'hrl_process',    'icon' => '🔁',  'label' => 'HRL Process',         'desc' => 'HRL.* + HRL_PROCESS.* + PANDUAN.* — untuk user lintas dept'],
-            ['name' => 'absensi_kpi',    'icon' => '⏱️',  'label' => 'Absensi + KPI',       'desc' => 'ABSENSI.* + KPI.* + CHAT.* — akses dasar semua user'],
+            ['name' => 'view_only',      'icon' => rmi_icon('search'),  'label' => 'VIEW Saja',          'desc' => 'Hanya semua permission *.VIEW — baca tanpa mutasi'],
+            ['name' => 'ops_standard',   'icon' => rmi_icon('user'),  'label' => 'Ops Standar (Staff)', 'desc' => 'VIEW + CREATE + EDIT + EXPORT (tanpa DELETE/APPROVE/finance)'],
+            ['name' => 'ops_full',       'icon' => rmi_icon('user'),  'label' => 'Ops Lengkap (Mgr)',   'desc' => 'Semua kecuali RBAC/USER MANAGE/finance approval'],
+            ['name' => 'panduan_only',   'icon' => rmi_icon('books'),  'label' => 'Panduan Saja',        'desc' => 'Hanya PANDUAN.* — baca panduan modul'],
+            ['name' => 'hrl_process',    'icon' => rmi_icon('refresh'),  'label' => 'HRL Process',         'desc' => 'HRL.* + HRL_PROCESS.* + PANDUAN.* — untuk user lintas dept'],
+            ['name' => 'absensi_kpi',    'icon' => rmi_icon('calendar'),  'label' => 'Absensi + KPI',       'desc' => 'ABSENSI.* + KPI.* + CHAT.* — akses dasar semua user'],
           ];
           ?>
           <form method="post" action="<?= rmi_h(u('/rbac/index.php')) ?>">
@@ -1764,7 +1765,7 @@ $totalEnabled = array_sum($modEnabled);
             </label>
             <button class="btn primary" type="submit" style="width:100%"
               onclick="return confirm('Terapkan paket ke <?= rmi_h($dept_sel) ?>/<?= rmi_h($role_sel) ?>?')">
-              📦 Terapkan Paket
+              <?= rmi_icon('box') ?> Terapkan Paket
             </button>
         </form>
           <script>
@@ -1787,7 +1788,7 @@ $totalEnabled = array_sum($modEnabled);
             <div class="info-box">Terapkan RBAC Default (aman) untuk STAFF/MANAGER. Gunakan hanya untuk setup awal.</div>
             <label class="chk-row" style="margin-top:10px"><input type="checkbox" name="replace_rules" value="1"> Hapus semua rules lama</label>
             <label class="chk-row"><input type="checkbox" name="replace_user_overrides" value="1"> Hapus user overrides</label>
-            <button class="btn warn-btn" type="submit" style="margin-top:10px;width:100%">🛡 Apply RBAC Default</button>
+            <button class="btn warn-btn" type="submit" style="margin-top:10px;width:100%"><?= rmi_icon('warn') ?> Apply RBAC Default</button>
           </form>
             </div>
 
@@ -1803,7 +1804,7 @@ $totalEnabled = array_sum($modEnabled);
               <input type="file" name="import_file" accept="application/json">
           </div>
             <label class="chk-row"><input type="checkbox" name="import_replace" value="1" checked> Replace rules untuk <?= rmi_h($dept_sel) ?>/<?= rmi_h($role_sel) ?></label>
-            <button class="btn primary" type="submit" style="margin-top:10px;width:100%">📥 Import JSON</button>
+            <button class="btn primary" type="submit" style="margin-top:10px;width:100%"><?= rmi_icon('inbox') ?> Import JSON</button>
             <div class="field-note" style="margin-top:8px">Format: <span class="pc">{"allow":["A","B"]}</span> atau <span class="pc">["A","B"]</span></div>
           </form>
           </div>
@@ -1817,7 +1818,7 @@ $totalEnabled = array_sum($modEnabled);
             <div class="field"><label>perm_name</label><input type="text" name="perm_name" placeholder="Stock - Adjustment"></div>
             <div class="field"><label>module</label><input type="text" name="module" placeholder="STOCK"></div>
             <div class="field"><label>description</label><textarea name="description" placeholder="keterangan singkat (opsional)"></textarea></div>
-            <button class="btn good" type="submit" style="width:100%">➕ Simpan Permission</button>
+            <button class="btn good" type="submit" style="width:100%"><?= rmi_icon('check') ?> Simpan Permission</button>
         </form>
         </div>
         
@@ -1832,24 +1833,24 @@ $totalEnabled = array_sum($modEnabled);
 
       <!-- Quick Access Links ── BARU -->
       <div class="rc-panel">
-        <div class="rc-panel-head"><h3>⚡ Akses Cepat per Dept</h3></div>
+        <div class="rc-panel-head"><h3><?= rmi_icon('zap') ?> Akses Cepat per Dept</h3></div>
         <div class="rc-panel-body" style="padding:8px 10px">
           <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Klik untuk buka matrix dept + role langsung:</div>
           <?php
           $quickLinks = [
-            ['dept'=>'HRL',    'role'=>'STAFF',   'icon'=>'👥', 'label'=>'HRL Staff'],
-            ['dept'=>'HRL',    'role'=>'MANAGER',  'icon'=>'👥', 'label'=>'HRL Manager'],
-            ['dept'=>'CRM',    'role'=>'STAFF',   'icon'=>'💼', 'label'=>'CRM Staff'],
-            ['dept'=>'CRM',    'role'=>'MANAGER',  'icon'=>'💼', 'label'=>'CRM Manager'],
-            ['dept'=>'PQP',    'role'=>'STAFF',   'icon'=>'🛒', 'label'=>'PQP Staff'],
-            ['dept'=>'FIN',    'role'=>'STAFF',   'icon'=>'💰', 'label'=>'FIN Staff'],
-            ['dept'=>'FIN',    'role'=>'MANAGER',  'icon'=>'💰', 'label'=>'FIN Manager'],
-            ['dept'=>'ACT',    'role'=>'STAFF',   'icon'=>'📝', 'label'=>'ACT Staff'],
-            ['dept'=>'WQS',    'role'=>'STAFF',   'icon'=>'📦', 'label'=>'WQS Staff'],
-            ['dept'=>'SCM',    'role'=>'STAFF',   'icon'=>'🚢', 'label'=>'SCM Staff'],
-            ['dept'=>'ITC',    'role'=>'STAFF',   'icon'=>'💻', 'label'=>'ITC Staff'],
-            ['dept'=>'BRANCH', 'role'=>'STAFF',   'icon'=>'🏢', 'label'=>'Branch Staff'],
-            ['dept'=>'BRANCH', 'role'=>'MANAGER',  'icon'=>'🏢', 'label'=>'Branch Manager'],
+            ['dept'=>'HRL',    'role'=>'STAFF',   'icon' => rmi_icon('users'), 'label'=>'HRL Staff'],
+            ['dept'=>'HRL',    'role'=>'MANAGER',  'icon' => rmi_icon('users'), 'label'=>'HRL Manager'],
+            ['dept'=>'CRM',    'role'=>'STAFF',   'icon' => rmi_icon('money'), 'label'=>'CRM Staff'],
+            ['dept'=>'CRM',    'role'=>'MANAGER',  'icon' => rmi_icon('money'), 'label'=>'CRM Manager'],
+            ['dept'=>'PQP',    'role'=>'STAFF',   'icon' => rmi_icon('cart'), 'label'=>'PQP Staff'],
+            ['dept'=>'FIN',    'role'=>'STAFF',   'icon' => rmi_icon('money'), 'label'=>'FIN Staff'],
+            ['dept'=>'FIN',    'role'=>'MANAGER',  'icon' => rmi_icon('money'), 'label'=>'FIN Manager'],
+            ['dept'=>'ACT',    'role'=>'STAFF',   'icon' => rmi_icon('memo'), 'label'=>'ACT Staff'],
+            ['dept'=>'WQS',    'role'=>'STAFF',   'icon' => rmi_icon('box'), 'label'=>'WQS Staff'],
+            ['dept'=>'SCM',    'role'=>'STAFF',   'icon' => rmi_icon('outbox'), 'label'=>'SCM Staff'],
+            ['dept'=>'ITC',    'role'=>'STAFF',   'icon' => rmi_icon('gear'), 'label'=>'ITC Staff'],
+            ['dept'=>'BRANCH', 'role'=>'STAFF',   'icon' => rmi_icon('office'), 'label'=>'Branch Staff'],
+            ['dept'=>'BRANCH', 'role'=>'MANAGER',  'icon' => rmi_icon('office'), 'label'=>'Branch Manager'],
           ];
           foreach ($quickLinks as $ql):
             $isActive = ($ql['dept'] === $dept_sel && $ql['role'] === $role_sel);
@@ -1869,14 +1870,14 @@ $totalEnabled = array_sum($modEnabled);
       <!-- Info box -->
       <div class="rc-panel">
         <div class="rc-panel-body">
-          <div class="rc-mini-head">ℹ Tentang RBAC</div>
+          <div class="rc-mini-head"><?= rmi_icon('question') ?> Tentang RBAC</div>
           <div class="info-box">Assign <b>Role</b>, <b>Dept</b>, <b>Office</b> per user di <a class="link-inline" href="<?= rmi_h(u('/master/master_system_login.php')) ?>">Master System Login</a>.<br>Master data departemen: <a class="link-inline" href="<?= rmi_h(u('/master/master_departements.php')) ?>">Master Dept</a>.</div>
         </div>
       </div>
 
       <!-- Health / QA (CLI utama di NAS; link web butuh akses Tools = SYS) -->
       <div class="rc-panel">
-        <div class="rc-panel-head"><h3>🩺 Health / QA</h3></div>
+        <div class="rc-panel-head"><h3><?= rmi_icon('check') ?> Health / QA</h3></div>
         <div class="rc-panel-body">
           <p class="tiny" style="margin-bottom:4px"><strong>CLI (disarankan di NAS):</strong></p>
           <div class="rc-code-block">cd /volume4/web/ERP_RMI_SOFULL
@@ -1894,7 +1895,7 @@ php tools/qa/rbac_coverage_check.php</div>
 
       <!-- ── ROW 3: 🧪 Simulasi Permission Efektif ── -->
       <div class="rc-sidebar-row3">
-        <span class="r3-label">🧪 Simulasi</span>
+        <span class="r3-label"><?= rmi_icon('search') ?> Simulasi</span>
         <form method="get" action="<?= rmi_h(u('/rbac/index.php')) ?>" style="display:contents">
           <input type="hidden" name="dept_code"   value="<?= rmi_h($dept_sel) ?>">
           <input type="hidden" name="role_code"   value="<?= rmi_h($role_sel) ?>">
@@ -1914,7 +1915,7 @@ php tools/qa/rbac_coverage_check.php</div>
         </form>
         <?php if (is_array($effectiveBundle)): ?>
           <?php if (!empty($effectiveBundle['privileged'])): ?>
-            <span class="r3-badge privileged">⭐ Privileged</span>
+            <span class="r3-badge privileged"><?= rmi_icon('target') ?> Privileged</span>
           
 
 <?php else: ?>
@@ -1930,18 +1931,18 @@ php tools/qa/rbac_coverage_check.php</div>
           this.classList.toggle('open');
           document.getElementById('tools-body').classList.toggle('open');
         ">
-          <span>⚙️ Tools</span>
+          <span><?= rmi_icon('gear') ?> Tools</span>
           <span style="font-size:10px;color:var(--muted);margin-left:4px">Sync · Salin · Paket · Baseline · Import · Add Perm</span>
           <span class="tt-arrow">▼</span>
         </button>
         <div class="rc-tools-body" id="tools-body">
           <!-- Tool tabs dari panel dept+role dipindahkan ke sini -->
           <div class="rc-tabs" id="sidebar-tabs2">
-            <div class="rc-tab active" onclick="switchTab2(this,'t2-sync')">🔄 Sync</div>
-            <div class="rc-tab" onclick="switchTab2(this,'t2-copy')">📋 Salin</div>
-            <div class="rc-tab" onclick="switchTab2(this,'t2-preset')">📦 Paket</div>
-            <div class="rc-tab" onclick="switchTab2(this,'t2-baseline')">🛡 Default</div>
-            <div class="rc-tab" onclick="switchTab2(this,'t2-import')">📥 Import</div>
+            <div class="rc-tab active" onclick="switchTab2(this,'t2-sync')"><?= rmi_icon('refresh') ?> Sync</div>
+            <div class="rc-tab" onclick="switchTab2(this,'t2-copy')"><?= rmi_icon('clipboard') ?> Salin</div>
+            <div class="rc-tab" onclick="switchTab2(this,'t2-preset')"><?= rmi_icon('box') ?> Paket</div>
+            <div class="rc-tab" onclick="switchTab2(this,'t2-baseline')"><?= rmi_icon('warn') ?> Default</div>
+            <div class="rc-tab" onclick="switchTab2(this,'t2-import')"><?= rmi_icon('inbox') ?> Import</div>
             </div>
           <div class="rc-tab-panel active" id="t2-sync" style="max-height:220px;overflow-y:auto">
             <form method="post" action="<?= rmi_h(u('/rbac/index.php')) ?>">
@@ -1950,7 +1951,7 @@ php tools/qa/rbac_coverage_check.php</div>
               <input type="hidden" name="dept_code" value="<?= rmi_h($dept_sel) ?>">
               <input type="hidden" name="role_code" value="<?= rmi_h($role_sel) ?>">
               <div class="info-box" style="margin-bottom:8px">Sync permission dari <span class="pc">config/rbac_permissions.php</span> ke DB.</div>
-              <button class="btn good sm" type="submit" style="width:100%">🔄 Sync Full Permissions</button>
+              <button class="btn good sm" type="submit" style="width:100%"><?= rmi_icon('refresh') ?> Sync Full Permissions</button>
             </form>
 
           </div>
@@ -1973,7 +1974,7 @@ php tools/qa/rbac_coverage_check.php</div>
                   <option value="STAFF">STAFF</option><option value="MANAGER">MANAGER</option><option value="SYS">SYS</option>
                 </select>
               </div>
-              <button class="btn primary sm" type="submit" style="width:100%" onclick="return confirm('Salin permission ke <?= rmi_h($dept_sel) ?>/<?= rmi_h($role_sel) ?>?')">📋 Salin Sekarang</button>
+              <button class="btn primary sm" type="submit" style="width:100%" onclick="return confirm('Salin permission ke <?= rmi_h($dept_sel) ?>/<?= rmi_h($role_sel) ?>?')"><?= rmi_icon('clipboard') ?> Salin Sekarang</button>
             </form>
           </div>
           <div class="rc-tab-panel" id="t2-preset" style="max-height:220px;overflow-y:auto">
@@ -1984,14 +1985,14 @@ php tools/qa/rbac_coverage_check.php</div>
               <input type="hidden" name="role_code" value="<?= rmi_h($role_sel) ?>">
               <div class="field"><label>Paket</label>
                 <select name="preset_name">
-                  <option value="view_only">👁 VIEW Saja</option>
-                  <option value="ops_standard">👤 Ops Standar (Staff)</option>
-                  <option value="ops_full">👔 Ops Lengkap (Mgr)</option>
-                  <option value="panduan_only">📖 Panduan Saja</option>
-                  <option value="absensi_kpi">⏱️ Absensi + KPI</option>
+                  <option value="view_only"><?= rmi_icon('search') ?> VIEW Saja</option>
+                  <option value="ops_standard"><?= rmi_icon('user') ?> Ops Standar (Staff)</option>
+                  <option value="ops_full"><?= rmi_icon('user') ?> Ops Lengkap (Mgr)</option>
+                  <option value="panduan_only"><?= rmi_icon('books') ?> Panduan Saja</option>
+                  <option value="absensi_kpi"><?= rmi_icon('calendar') ?> Absensi + KPI</option>
                 </select>
               </div>
-              <button class="btn primary sm" type="submit" style="width:100%" onclick="return confirm('Terapkan paket ke <?= rmi_h($dept_sel) ?>/<?= rmi_h($role_sel) ?>?')">📦 Terapkan</button>
+              <button class="btn primary sm" type="submit" style="width:100%" onclick="return confirm('Terapkan paket ke <?= rmi_h($dept_sel) ?>/<?= rmi_h($role_sel) ?>?')"><?= rmi_icon('box') ?> Terapkan</button>
             </form>
           </div>
           <div class="rc-tab-panel" id="t2-baseline" style="max-height:220px;overflow-y:auto">
@@ -2000,7 +2001,7 @@ php tools/qa/rbac_coverage_check.php</div>
               <input type="hidden" name="action" value="apply_baseline">
               <div class="info-box" style="margin-bottom:8px">RBAC Default aman untuk STAFF/MANAGER.</div>
               <label class="chk-row"><input type="checkbox" name="replace_rules" value="1"> Hapus rules lama</label>
-              <button class="btn warn-btn sm" type="submit" style="margin-top:8px;width:100%">🛡 Apply Default</button>
+              <button class="btn warn-btn sm" type="submit" style="margin-top:8px;width:100%"><?= rmi_icon('warn') ?> Apply Default</button>
             </form>
           </div>
           <div class="rc-tab-panel" id="t2-import" style="max-height:220px;overflow-y:auto">
@@ -2012,7 +2013,7 @@ php tools/qa/rbac_coverage_check.php</div>
               <div class="field"><label>File JSON</label>
                 <input type="file" name="import_file" accept="application/json">
               </div>
-              <button class="btn primary sm" type="submit" style="width:100%">📥 Import JSON</button>
+              <button class="btn primary sm" type="submit" style="width:100%"><?= rmi_icon('inbox') ?> Import JSON</button>
             </form>
           </div>
         </div>
@@ -2025,7 +2026,7 @@ php tools/qa/rbac_coverage_check.php</div>
     <div class="rc-between-sections">
 <div class="rc-section">
     <div class="rc-section-head">
-      <h3>🧪 Simulasi Permission Efektif</h3>
+      <h3><?= rmi_icon('search') ?> Simulasi Permission Efektif</h3>
       <span style="font-size:11px;color:var(--muted-lt)">Matrix Dept+Role + override per-user</span>
             </div>
     <div class="rc-section-body">
@@ -2132,7 +2133,7 @@ php tools/qa/rbac_coverage_check.php</div>
           <?php if (!$rbac_is_sys_sys_context): ?>
           <div class="matrix-context-bar" role="region" aria-label="Pintasan System SYS">
             <div class="matrix-context-bar-inner">
-              <span class="matrix-context-title">⚙️ System (SYS)</span>
+              <span class="matrix-context-title"><?= rmi_icon('gear') ?> System (SYS)</span>
               <a class="btn sm good" href="<?= rmi_h($rbac_sys_matrix_url) ?>" style="text-decoration:none;flex-shrink:0">Buka matrix SYS / SYS</a>
               <span class="matrix-context-note">Pindah ke tabel matrix untuk dept <span class="pc">SYS</span> + role <span class="pc">SYS</span>. Isi semua centang cepat: <b>Sidebar → tab Sync → Grant All ke SYS/SYS</b> (setelah Sync registry).</span>
             </div>
@@ -2145,7 +2146,7 @@ php tools/qa/rbac_coverage_check.php</div>
           </div>
           <?php endif; ?>
           <div class="matrix-search-row">
-            <div class="matrix-search">🔎 <input id="permSearch" type="text" placeholder="Cari permission, nama, modul..."></div>
+            <div class="matrix-search"><?= rmi_icon('search') ?> <input id="permSearch" type="text" placeholder="Cari permission, nama, modul..."></div>
             <select class="matrix-catsel" id="permCategory">
               <option value="ALL">Semua tipe</option>
               <?php foreach (['VIEW','CREATE','EDIT','DELETE','APPROVE','IMPORT','EXPORT','PROCESS','AUDIT','SETTINGS','API','OTHER'] as $c): ?>
@@ -2154,9 +2155,9 @@ php tools/qa/rbac_coverage_check.php</div>
             </select>
             <select class="matrix-catsel" id="permStaffMgrTier" title="Filter kelompok Staff vs Manager">
               <option value="ALL">Semua kelompok S/M</option>
-              <option value="STAFF_OPS">👤 Hanya Staff (ops)</option>
-              <option value="MANAGER_PRIV">👔 Hanya Manager</option>
-              <option value="TECH_OTHER">🔧 Hanya Audit/API/lain</option>
+              <option value="STAFF_OPS"><?= rmi_icon('user') ?> Hanya Staff (ops)</option>
+              <option value="MANAGER_PRIV"><?= rmi_icon('user') ?> Hanya Manager</option>
+              <option value="TECH_OTHER"><?= rmi_icon('gear') ?> Hanya Audit/API/lain</option>
             </select>
           </div>
           <div class="rc-matrix-tabs" role="tablist" aria-label="Tampilan RBAC">
@@ -2167,10 +2168,10 @@ php tools/qa/rbac_coverage_check.php</div>
           <p class="tiny" style="margin:8px 0 0;color:var(--muted-lt);line-height:1.45"><b>Per user</b> = ringkasan hak efektif (matrix + override). <b>Matrix</b> = centang permission untuk <b>Dept + Role</b> yang dipilih di sidebar lalu <b>Simpan</b>.</p>
           <div class="matrix-actions">
             <?php if (!$rbac_is_sys_sys_context): ?>
-            <a class="btn sm good" href="<?= rmi_h($rbac_sys_matrix_url) ?>" style="text-decoration:none" title="Buka matrix Dept SYS + role SYS">⚙ SYS/SYS</a>
+            <a class="btn sm good" href="<?= rmi_h($rbac_sys_matrix_url) ?>" style="text-decoration:none" title="Buka matrix Dept SYS + role SYS"><?= rmi_icon('gear') ?> SYS/SYS</a>
             <?php endif; ?>
             <?php if ($rbacManage && $rbac_matrix_layout === 'module'): ?>
-            <button class="btn good" type="submit" form="rbac-matrix-form">💾 Save Rules</button>
+            <button class="btn good" type="submit" form="rbac-matrix-form"><?= rmi_icon('check') ?> Save Rules</button>
             <?php endif; ?>
           </div>
         </div>
@@ -2200,7 +2201,7 @@ php tools/qa/rbac_coverage_check.php</div>
           ?>
           <!-- Per User Active -->
           <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;padding:12px 14px;background:rgba(168,85,247,.06);border-radius:10px;border:1px solid rgba(168,85,247,.2);align-items:center">
-            <span style="font-size:11px;font-weight:700;color:#c084fc;white-space:nowrap">👤 Pilih User:</span>
+            <span style="font-size:11px;font-weight:700;color:#c084fc;white-space:nowrap"><?= rmi_icon('user') ?> Pilih User:</span>
             <form method="get" action="<?= rmi_h(u('/rbac/index.php')) ?>" style="display:flex;gap:8px;flex:1;align-items:center;flex-wrap:wrap">
               <input type="hidden" name="rbac_layout" value="user">
               <input type="hidden" name="dept_code" value="<?= rmi_h($dept_sel) ?>">
@@ -2221,7 +2222,7 @@ php tools/qa/rbac_coverage_check.php</div>
               <?php if ($hl_user_row): ?>
               <span style="font-size:11px;color:#c084fc;white-space:nowrap">
                 <b><?= rmi_h((string)($hl_user_row['department']??'')) ?></b> / <b><?= rmi_h((string)($hl_user_row['role']??'')) ?></b>
-                <?php if ($hl_is_privileged): ?>&nbsp;· <span style="color:#fcd34d;font-weight:700">⭐ Privileged</span>
+                <?php if ($hl_is_privileged): ?>&nbsp;· <span style="color:#fcd34d;font-weight:700"><?= rmi_icon('target') ?> Privileged</span>
                 <?php else: ?>&nbsp;· <span style="color:#6ee7b7"><?= count($hl_effective_map) ?> perm efektif</span>
                 <?php endif; ?>
               </span>
@@ -2230,7 +2231,7 @@ php tools/qa/rbac_coverage_check.php</div>
       </div>
 
           <?php if (!$hl_user_row): ?>
-            <div style="padding:32px;text-align:center;color:var(--muted-lt);font-size:13px">👆 Pilih user aktif di atas untuk melihat permission efektifnya per halaman.</div>
+            <div style="padding:32px;text-align:center;color:var(--muted-lt);font-size:13px"><?= rmi_icon('target') ?> Pilih user aktif di atas untuk melihat permission efektifnya per halaman.</div>
           <?php elseif (empty($pageRegistry)): ?>
             <div class="flash warn">config/page_registry.php tidak ditemukan.</div>
           <?php else: ?>
@@ -2240,7 +2241,7 @@ php tools/qa/rbac_coverage_check.php</div>
               <tr style="background:rgba(0,0,0,.3)">
                 <th rowspan="2" style="padding:8px 14px;text-align:left;font-size:10px;color:var(--muted-lt);font-weight:700;position:sticky;left:0;background:rgba(8,13,23,.98);z-index:3;min-width:220px;border-right:1px solid var(--border)">HALAMAN / URL</th>
                 <?php if ($hl_is_privileged): ?>
-                <th colspan="9" style="padding:6px 8px;text-align:center;font-size:10px;font-weight:700;color:#fcd34d;border-left:2px solid rgba(245,158,11,.4);border-bottom:1px solid var(--border)">⭐ PRIVILEGED — ALLOW ALL DI RUNTIME</th>
+                <th colspan="9" style="padding:6px 8px;text-align:center;font-size:10px;font-weight:700;color:#fcd34d;border-left:2px solid rgba(245,158,11,.4);border-bottom:1px solid var(--border)"><?= rmi_icon('target') ?> PRIVILEGED — ALLOW ALL DI RUNTIME</th>
                 <?php else: ?>
                 <th colspan="9" style="padding:6px 8px;text-align:center;font-size:10px;font-weight:700;color:#c084fc;border-left:2px solid rgba(168,85,247,.4);border-bottom:1px solid var(--border)"><?= rmi_h((string)($hl_user_row['username']??'')) ?> · <?= rmi_h((string)($hl_user_row['department']??'')) ?>/<?= rmi_h((string)($hl_user_row['role']??'')) ?></th>
                 <?php endif; ?>
@@ -2266,18 +2267,18 @@ php tools/qa/rbac_coverage_check.php</div>
                 echo "<tr style='border-top:1px solid rgba(255,255,255,.04)'>";
                 echo "<td style='padding:6px 14px;position:sticky;left:0;background:rgba(8,13,23,.95);z-index:1;border-right:1px solid rgba(255,255,255,.06)'>";
                 echo "<div style='font-weight:600;font-size:12px;color:".($isSpecial?'#fcd34d':($isSysOnly?'#6b7280':'#e2e8f0'))."'>{$label}</div>";
-                if($url) echo "<div style='font-size:9px;color:#374151;font-family:ui-monospace,monospace;margin-top:1px'>{$url}</div>";
-                if($note) echo "<div style='font-size:9px;color:#6b7280;margin-top:2px'>{$note}</div>";
+                if($url) echo "<div style='font-size:9px;color:var(--rmi-muted);font-family:ui-monospace,monospace;margin-top:1px'>{$url}</div>";
+                if($note) echo "<div style='font-size:9px;color:var(--rmi-muted);margin-top:2px'>{$note}</div>";
                 echo "</td>";
                 foreach ($ACTION_KEYS as $ai=>$ak):
                   $pc=$perms[$ak]??null; $bl=$ai===0?'border-left:2px solid rgba(168,85,247,.2);':'';
-                  if($pc===null): echo "<td style='{$bl}text-align:center;padding:5px 4px'><span style='font-size:10px;color:#2d3748'>-</span></td>";
-                  elseif($isSpecial): echo "<td style='{$bl}text-align:center;padding:5px 4px'><span style='font-size:12px;color:#fcd34d'>⭐</span></td>";
-                  elseif($hl_is_privileged): echo "<td style='{$bl}text-align:center;padding:5px 4px'><span style='font-size:14px;font-weight:700;color:#fcd34d'>✓</span></td>";
+                  if($pc===null): echo "<td style='{$bl}text-align:center;padding:5px 4px'><span style='font-size:10px;color:var(--rmi-muted)'>-</span></td>";
+                  elseif($isSpecial): echo "<td style='{$bl}text-align:center;padding:5px 4px'><span style='font-size:12px;color:#fcd34d'>' . rmi_icon('target') . '</span></td>";
+                  elseif($hl_is_privileged): echo "<td style='{$bl}text-align:center;padding:5px 4px'><span style='font-size:14px;font-weight:700;color:#fcd34d'>' . rmi_icon('tick') . '</span></td>";
                   else:
                     $hasIt  = isset($hl_effective_map[$pc]);
                     $ovFlag = $hl_override_map[$pc] ?? -1; // -1=no override, 0=deny, 1=allow
-                    $icon   = $hasIt ? '✓' : '✗';
+                    $icon   = $hasIt ? rmi_icon('tick') : rmi_icon('x');
                     // Warna: hijau=ok (matrix), teal=ok (override+), merah=no, oranye=override deny
                     $color  = $hasIt
                         ? ($ovFlag===1 ? '#34d399' : '#6ee7b7')   // teal jika dari override grant
@@ -2307,12 +2308,12 @@ php tools/qa/rbac_coverage_check.php</div>
           </table>
     </div>
           <div style="margin-top:8px;padding:7px 14px;font-size:10px;color:var(--muted-lt);background:rgba(0,0,0,.15);border-radius:8px">
-            <span style="color:#6ee7b7;font-weight:700">✓</span> Dari matrix &nbsp;·&nbsp;
-            <span style="color:#34d399;font-weight:700">✓</span> Override grant &nbsp;·&nbsp;
-            <span style="color:#f59e0b;font-weight:700">✗</span> Override deny &nbsp;·&nbsp;
-            <span style="color:#ef444455;font-weight:700">✗</span> Tidak punya &nbsp;·&nbsp;
-            <span style="color:#2d3748">-</span> N/A &nbsp;·&nbsp;
-            <span style="color:#fcd34d">✓</span> Privileged (Allow All)
+            <span style="color:#6ee7b7;font-weight:700"><?= rmi_icon('tick') ?></span> Dari matrix &nbsp;·&nbsp;
+            <span style="color:#34d399;font-weight:700"><?= rmi_icon('tick') ?></span> Override grant &nbsp;·&nbsp;
+            <span style="color:#f59e0b;font-weight:700"><?= rmi_icon('x') ?></span> Override deny &nbsp;·&nbsp;
+            <span style="color:#ef444455;font-weight:700"><?= rmi_icon('x') ?></span> Tidak punya &nbsp;·&nbsp;
+            <span style="color:var(--rmi-muted)">-</span> N/A &nbsp;·&nbsp;
+            <span style="color:#fcd34d"><?= rmi_icon('tick') ?></span> Privileged (Allow All)
             <br><b>ACCESS</b> vs <b>VIEW</b>: ACCESS = buka URL/route; VIEW = lihat konten — <span class="pc">config/page_registry.php</span>. Di kode pakai <span class="pc">require_route_access()</span> / <span class="pc">require_content_view()</span> (<span class="pc">master/auth.php</span>); hindari OR dengan *.VIEW lebar di gate route. Matrix + override per user; hover header = keterangan.
           </div>
           <?php endif; ?>
@@ -2335,7 +2336,7 @@ php tools/qa/rbac_coverage_check.php</div>
           $en = (int)($modEnabled[$mod] ?? 0);
           $pct = $cnt > 0 ? round($en / $cnt * 100) : 0;
           $collapsed = !in_array($mod, $expandFirst, true);
-          $icon = $modIcons[$mod] ?? '📁';
+          $icon = $modIcons[$mod] ?? rmi_icon('doc');
           $barClass = $pct >= 100 ? 'full' : ($pct === 0 ? 'none' : '');
           ?>
           <div class="mod-block <?= $collapsed ? 'collapsed' : '' ?>" data-module="<?= rmi_h($mod) ?>">
@@ -2352,10 +2353,10 @@ php tools/qa/rbac_coverage_check.php</div>
             </div>
             <?php if ($rbacManage): ?>
             <div class="mod-actions mod-content" onclick="event.stopPropagation()">
-              <button class="btn sm" type="button" onclick="toggleModulePerms(this,true,null)">✓ All</button>
-              <button class="btn sm" type="button" onclick="toggleModulePerms(this,false,null)">✕ Clear</button>
-              <button class="btn sm" type="button" onclick="toggleModulePerms(this,true,'VIEW')">👁 VIEW</button>
-              <button class="btn sm" type="button" onclick="toggleModulePerms(this,true,'CRUD')">✏ CRUD</button>
+              <button class="btn sm" type="button" onclick="toggleModulePerms(this,true,null)"><?= rmi_icon('tick') ?> All</button>
+              <button class="btn sm" type="button" onclick="toggleModulePerms(this,false,null)"><?= rmi_icon('x') ?> Clear</button>
+              <button class="btn sm" type="button" onclick="toggleModulePerms(this,true,'VIEW')"><?= rmi_icon('search') ?> VIEW</button>
+              <button class="btn sm" type="button" onclick="toggleModulePerms(this,true,'CRUD')"><?= rmi_icon('memo') ?> CRUD</button>
             </div>
             <?php endif; ?>
             <table class="perm-table mod-content">
@@ -2398,7 +2399,7 @@ php tools/qa/rbac_coverage_check.php</div>
 
   <div class="rc-section">
     <div class="rc-section-head">
-      <h3>📋 Audit Log RBAC</h3>
+      <h3><?= rmi_icon('clipboard') ?> Audit Log RBAC</h3>
       <?php if (!empty($audit_rows)): ?>
         <span style="font-size:11px;color:var(--muted-lt)"><?= count($audit_rows) ?> entry terbaru</span>
       <?php endif; ?>
@@ -2630,7 +2631,7 @@ function hlToggleUser(btn) {
       }
       var newAllowed = allowed ? 0 : 1;
       btn.dataset.allowed = String(newAllowed);
-      btn.textContent = newAllowed ? '✓' : '✗';
+      btn.textContent = newAllowed ? '<?= rmi_icon('tick') ?>' : '<?= rmi_icon('x') ?>';
       btn.style.color = newAllowed ? '#34d399' : '#ef444455';
       btn.title = perm + (newAllowed ? ' [override+]' : ' [override-]');
       btn.style.transform = 'scale(1.4)';

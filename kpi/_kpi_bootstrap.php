@@ -1,4 +1,5 @@
 <?php
+if (!function_exists('rmi_icon')) { require_once __DIR__ . '/../_shared/rmi_icons.php'; }
 // KPI Bootstrap (stable, enterprise helpers) - MGR KPI VIEW RBAC FIX v11
 // - Includes project config.php (root) first to avoid redeclare issues.
 // - Builds $pdo if not already available.
@@ -569,15 +570,15 @@ function kpi_header(string $title): void {
 
 function kpi_nav(string $active=''): void {
     $links = [
-        'center'   => ['🏠 Center',        'kpi_center.php'],
-        'do'       => ['⏱ DO SLA',          'kpi_do_sla.php'],
-        'do_audit' => ['🔍 DO Audit',       'kpi_do_audit.php'],
-        'purch'    => ['🛒 Purchases',      'kpi_purchases.php'],
-        'stock'    => ['📦 Stock',          'kpi_stock.php'],
-        'office'   => ['🏢 Office',         'kpi_office.php'],
-        'employee' => ['👤 Employee',       'kpi_employee.php'],
-        'snapshot' => ['📷 Snapshot',       'kpi_snapshot.php'],
-        'audit'    => ['📋 Audit Log',      'kpi_audit.php'],
+        'center'   => [rmi_icon('home').' Center',        'kpi_center.php'],
+        'do'       => [rmi_icon('calendar').' DO SLA',          'kpi_do_sla.php'],
+        'do_audit' => [rmi_icon('search').' DO Audit',       'kpi_do_audit.php'],
+        'purch'    => [rmi_icon('cart').' Purchases',      'kpi_purchases.php'],
+        'stock'    => [rmi_icon('box').' Stock',          'kpi_stock.php'],
+        'office'   => [rmi_icon('office').' Office',         'kpi_office.php'],
+        'employee' => [rmi_icon('user').' Employee',       'kpi_employee.php'],
+        'snapshot' => [rmi_icon('doc').' Snapshot',       'kpi_snapshot.php'],
+        'audit'    => [rmi_icon('clipboard').' Audit Log',      'kpi_audit.php'],
     ];
     $titles = [
         'center'   => 'KPI Center',
@@ -594,7 +595,7 @@ function kpi_nav(string $active=''): void {
     echo "<div class='kpi-nav-bar'>";
     if ($active !== '' && $active !== 'center') {
         echo "<div class='kpi-nav-bar-top'>";
-        echo "<div><span class='kpi-nav-title'>📊 " . h($activeLabel) . "</span><span class='kpi-nav-sub'>— KPI Enterprise</span></div>";
+        echo "<div><span class='kpi-nav-title'>".rmi_icon('chart')." " . h($activeLabel) . "</span><span class='kpi-nav-sub'>— KPI Enterprise</span></div>";
         echo "</div>";
     }
     echo "<div class='kpi-nav-links'>";

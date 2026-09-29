@@ -92,9 +92,9 @@ require_once __DIR__ . '/_layout_top.php';
 
 <div class="abs-form-wrap">
   <div class="abs-card">
-    <div class="abs-title">📸 Foto Check-out</div>
+    <div class="abs-title"><?=rmi_icon('doc')?> Foto Check-out</div>
     <div class="abs-sub">Foto diambil secara <strong>real-time</strong> via kamera — tidak bisa upload dari galeri.</div>
-    <div class="realtime-badge">🔴 LIVE &nbsp;Real-time Only</div>
+    <div class="realtime-badge"><?=rmi_icon('warn')?> LIVE &nbsp;Real-time Only</div>
 
     <div class="gps-bar" id="gpsBar">
       <span class="gps-dot"></span>
@@ -112,7 +112,7 @@ require_once __DIR__ . '/_layout_top.php';
       <img id="photoPreview" class="photo-preview" alt="Preview foto">
 
       <label class="btn-cam" id="camLabel">
-        <div style="font-size:36px;margin-bottom:8px">📷</div>
+        <div style="font-size:36px;margin-bottom:8px"><?=rmi_icon('doc')?></div>
         <div id="camLabelText">Tap untuk Ambil Foto Selfie</div>
         <div style="font-size:11px;opacity:.6;margin-top:4px">Kamera depan akan terbuka otomatis</div>
         <input type="file" name="photo_file" id="photoFile"
@@ -120,7 +120,7 @@ require_once __DIR__ . '/_layout_top.php';
                onchange="onPhotoTaken(this)">
       </label>
 
-      <button type="submit" class="btn-submit" id="btnSubmit" disabled>✓ Submit Check-out</button>
+      <button type="submit" class="btn-submit" id="btnSubmit" disabled><?=rmi_icon('tick')?> Submit Check-out</button>
       <a class="btn-cancel" href="index.php">Batal</a>
     </form>
   </div>
@@ -143,7 +143,7 @@ function setGPS(lat, lng, acc) {
     return;
   }
   gpsBar.className = 'gps-bar ok';
-  gpsText.textContent = 'Lokasi terdeteksi ✓ (±' + Math.round(acc) + 'm)';
+  gpsText.textContent = 'Lokasi terdeteksi <?=rmi_icon('tick')?> (±' + Math.round(acc) + 'm)';
   if (btnSubmit) btnSubmit.disabled = false;
 }
 function gpsError() {

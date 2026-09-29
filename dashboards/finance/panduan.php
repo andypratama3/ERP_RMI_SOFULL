@@ -20,8 +20,8 @@ rmi_header('Panduan Finance Dashboard', [
         'Panduan',
     ],
     'actions' => [
-        ['label' => '💰 Finance Dashboard', 'url' => ds_panduan_u('/dashboards/finance/ar_ap_cash_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
-        ['label' => '📊 Dashboard Detail', 'url' => ds_panduan_u('/dashboards/finance/dashboard_detail.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('money').' Finance Dashboard', 'url' => ds_panduan_u('/dashboards/finance/ar_ap_cash_dashboard.php'), 'class' => 'btn btn-sm btn-outline-light'],
+        ['label' => rmi_icon('chart').' Dashboard Detail', 'url' => ds_panduan_u('/dashboards/finance/dashboard_detail.php'), 'class' => 'btn btn-sm btn-outline-light'],
     ],
 ]);
 
@@ -29,7 +29,7 @@ echo ds_panduan_styles();
 ?>
 
 <div class="pnd-hero">
-  <div style="font-size:28px;margin-bottom:8px">💰</div>
+  <div style="font-size:28px;margin-bottom:8px"><?=rmi_icon('money')?></div>
   <div style="font-size:20px;font-weight:800;color:#e2e8f0;margin-bottom:6px">Panduan Finance Dashboard</div>
   <div class="pnd-desc" style="color:#94a3b8">
     Dashboard ini merangkum posisi <b>piutang (AR)</b>, <b>hutang (AP)</b>, arus kas, dan payroll per periode.
@@ -40,7 +40,7 @@ echo ds_panduan_styles();
 <div class="row g-3">
   <div class="col-12 col-lg-6">
     <div class="pnd-section accent-green">
-      <h5 style="color:#86efac;margin-bottom:12px">✅ Alur kerja singkat</h5>
+      <h5 style="color:#86efac;margin-bottom:12px"><?=rmi_icon('check')?> Alur kerja singkat</h5>
       <div class="pnd-step">
         <div class="pnd-num">1</div>
         <div>
@@ -66,7 +66,7 @@ echo ds_panduan_styles();
   </div>
   <div class="col-12 col-lg-6">
     <div class="pnd-section accent-amber">
-      <h5 style="color:#fcd34d;margin-bottom:12px">⚠️ Scope &amp; data</h5>
+      <h5 style="color:#fcd34d;margin-bottom:12px"><?=rmi_icon('warn')?> Scope &amp; data</h5>
       <ul class="pnd-list">
         <li>User cabang mungkin hanya melihat <b>office</b> mereka — cek label di header dashboard.</li>
         <li>Angka mengikuti status dokumen di database; sinkronkan dengan tim ACT untuk rekonsiliasi.</li>
@@ -75,12 +75,12 @@ echo ds_panduan_styles();
   </div>
   <div class="col-12">
     <div class="pnd-section accent-blue">
-      <h5 style="color:#93c5fd;margin-bottom:12px">🔗 Pintasan</h5>
+      <h5 style="color:#93c5fd;margin-bottom:12px"><?=rmi_icon('doc')?> Pintasan</h5>
       <div class="pnd-quick">
-        <a href="<?= rmi_h(ds_panduan_u('/dashboards/finance/ar_ap_cash_dashboard.php')) ?>">💰 Finance Dashboard</a>
-        <a href="<?= rmi_h(ds_panduan_u('/dashboards/act/panduan.php')) ?>">📝 Panduan ACT</a>
-        <a href="<?= rmi_h(ds_panduan_u('/purchases/panduan.php')) ?>">🛒 Panduan Purchases</a>
-        <a href="<?= rmi_h(ds_panduan_u('/kpi/kpi_center.php')) ?>">📊 KPI Center</a>
+        <a href="<?= rmi_h(ds_panduan_u('/dashboards/finance/ar_ap_cash_dashboard.php')) ?>"><?=rmi_icon('money')?> Finance Dashboard</a>
+        <a href="<?= rmi_h(ds_panduan_u('/dashboards/act/panduan.php')) ?>"><?=rmi_icon('memo')?> Panduan ACT</a>
+        <a href="<?= rmi_h(ds_panduan_u('/purchases/panduan.php')) ?>"><?=rmi_icon('cart')?> Panduan Purchases</a>
+        <a href="<?= rmi_h(ds_panduan_u('/kpi/kpi_center.php')) ?>"><?=rmi_icon('chart')?> KPI Center</a>
       </div>
     </div>
   </div>

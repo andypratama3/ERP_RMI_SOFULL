@@ -4,6 +4,7 @@
  * Riwayat order.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 
 require_once __DIR__ . '/_bootstrap.php';
 require_portal_login();
@@ -51,14 +52,14 @@ ob_start();
 
 function ord_status_badge(string $status): string {
     $s = strtoupper(trim($status));
-    $map = ['PAID'=>['status-paid','✅','Lunas'],'OPEN'=>['status-open','🟡','Open'],'PARTIAL'=>['status-partial','🔵','Partial'],'CANCELLED'=>['status-cancel','❌','Batal'],'DONE'=>['status-paid','✅','Selesai']];
-    $d = $map[$s] ?? ['status-default','⚪',$status];
+    $map = ['PAID'=>['status-paid', rmi_icon('check'),'Lunas'],'OPEN'=>['status-open', rmi_icon('warn'),'Open'],'PARTIAL'=>['status-partial', rmi_icon('refresh'),'Partial'],'CANCELLED'=>['status-cancel', rmi_icon('cross'),'Batal'],'DONE'=>['status-paid', rmi_icon('check'),'Selesai']];
+    $d = $map[$s] ?? ['status-default', rmi_icon('question'),$status];
     return '<span class="status-badge '.$d[0].'">'.$d[1].' '.$d[2].'</span>';
 }
 ?>
 
 <div class="cp-card mb-4">
-  <div class="cp-card-header">📋 Riwayat Order</div>
+  <div class="cp-card-header"><?= rmi_icon('clipboard') ?> Riwayat Order</div>
   <div class="p-3">
     <form method="get" class="row g-2 align-items-end">
       <div class="col-12 col-md-auto">
@@ -88,7 +89,7 @@ function ord_status_badge(string $status): string {
 
 <?php if (empty($orders)): ?>
   <div class="text-center py-5 text-muted">
-    <div style="font-size:48px;margin-bottom:12px">📭</div>
+    <div style="font-size:48px;margin-bottom:12px"><?= rmi_icon('inbox') ?></div>
     <h5>Belum ada order</h5>
     <p>Mulai pesan produk dari <a href="<?= rmi_h($base) ?>/customer_portal/catalog.php">Katalog →</a></p>
   </div>

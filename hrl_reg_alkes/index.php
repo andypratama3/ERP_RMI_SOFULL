@@ -94,8 +94,8 @@ rmi_header('REG Alkes — Dashboard', [
     'subtitle'   => 'Registrasi Alat Kesehatan (NIE/AKL/AKD) · Tracking 15 Tahap · PQP & HRL Legal',
     'breadcrumbs' => ['REG Alkes Dashboard'],
     'actions'    => [
-        ['label' => '📖 Panduan', 'url' => $baseProject . '/hrl_reg_alkes/panduan.php', 'class' => 'btn-ghost'],
-        ['label' => '🗼 Control Tower', 'url' => $baseProject . '/hrl_reg_alkes/reg_alkes_control_tower.php', 'class' => 'btn-soft'],
+        ['label' => '' . rmi_icon("books") . ' Panduan', 'url' => $baseProject . '/hrl_reg_alkes/panduan.php', 'class' => 'btn-ghost'],
+        ['label' => '' . rmi_icon("tower") . ' Control Tower', 'url' => $baseProject . '/hrl_reg_alkes/reg_alkes_control_tower.php', 'class' => 'btn-soft'],
     ],
 ]);
 ?>
@@ -187,46 +187,46 @@ rmi_header('REG Alkes — Dashboard', [
 <div class="ra-modules">
 
   <div class="ra-mod">
-    <div class="ra-mod-ico">🗼</div>
+    <div class="ra-mod-ico"><?=rmi_icon('tower')?></div>
     <div class="ra-mod-title">Control Tower</div>
     <div class="ra-mod-desc">Buat case baru, tracking 15 tahap proses NIE, update stage, dossier per-case, filter & export.</div>
     <a class="btn btn-rmi btn-sm" href="<?= h($baseProject) ?>/hrl_reg_alkes/reg_alkes_control_tower.php">Buka Control Tower →</a>
   </div>
 
   <div class="ra-mod">
-    <div class="ra-mod-ico">📦</div>
+    <div class="ra-mod-ico"><?=rmi_icon('box')?></div>
     <div class="ra-mod-title">Import SKU → Master Products</div>
     <div class="ra-mod-desc">Upload dossier HRL, preview AKL/AKD CSV/XLSX, import SKU ke master_products secara idempotent.</div>
     <a class="btn btn-soft btn-sm" href="<?= h($baseProject) ?>/hrl_reg_alkes/reg_alkes.php">Buka Import SKU →</a>
   </div>
 
   <div class="ra-mod">
-    <div class="ra-mod-ico">🔍</div>
+    <div class="ra-mod-ico"><?=rmi_icon('search')?></div>
     <div class="ra-mod-title">SKU by NIE</div>
     <div class="ra-mod-desc">Cari dan tampilkan semua SKU di master_products berdasarkan nomor NIE/AKL/AKD tertentu.</div>
     <a class="btn btn-ghost btn-sm" href="<?= h($baseProject) ?>/hrl_reg_alkes/reg_alkes_sku_by_nie.php">Buka SKU by NIE →</a>
   </div>
 
   <div class="ra-mod">
-    <div class="ra-mod-ico">⏳</div>
+    <div class="ra-mod-ico"><?=rmi_icon('calendar')?></div>
     <div class="ra-mod-title">Expiry Check NIE</div>
     <div class="ra-mod-desc">Scan NIE yang akan expired dalam 30/90 hari. Dijalankan via cron atau manual dari sini.
       <?php if ($expiryData): ?>
-        <br><span style="color:#f59e0b;font-size:11px">⚠ <?= (int)($expiryData['counts']['expiring_30d'] ?? 0) ?> NIE akan expired ≤30 hari</span>
+        <br><span style="color:#f59e0b;font-size:11px"><?=rmi_icon('warn')?> <?= (int)($expiryData['counts']['expiring_30d'] ?? 0) ?> NIE akan expired ≤30 hari</span>
       <?php endif; ?>
     </div>
     <a class="btn btn-ghost btn-sm" href="<?= h($baseProject) ?>/hrl_reg_alkes/reg_alkes_expiry_check.php">Buka Expiry Check →</a>
   </div>
 
   <div class="ra-mod">
-    <div class="ra-mod-ico">📊</div>
+    <div class="ra-mod-ico"><?=rmi_icon('chart')?></div>
     <div class="ra-mod-title">Export Compliance</div>
     <div class="ra-mod-desc">Export laporan kepatuhan Reg Alkes: daftar NIE aktif, status, tanggal terbit, dan pabrikan.</div>
     <a class="btn btn-ghost btn-sm" href="<?= h($baseProject) ?>/hrl_reg_alkes/reg_alkes_export_compliance.php">Buka Export →</a>
   </div>
 
   <div class="ra-mod" style="border-color:rgba(99,102,241,.25)">
-    <div class="ra-mod-ico">📖</div>
+    <div class="ra-mod-ico"><?=rmi_icon('books')?></div>
     <div class="ra-mod-title">Panduan REG Alkes</div>
     <div class="ra-mod-desc">Panduan lengkap 15 tahap proses registrasi NIE, siapa mengerjakan apa, dan cara pakai sistem.</div>
     <a class="btn btn-ghost btn-sm" href="<?= h($baseProject) ?>/hrl_reg_alkes/panduan.php">Baca Panduan →</a>
@@ -275,7 +275,7 @@ rmi_header('REG Alkes — Dashboard', [
 <?php if (!empty($recentCases)): ?>
 <div class="ra-recent">
   <div class="ra-recent-head">
-    <span>📋 Case Terbaru</span>
+    <span><?=rmi_icon('clipboard')?> Case Terbaru</span>
     <a href="<?= h($baseProject) ?>/hrl_reg_alkes/reg_alkes_control_tower.php" class="btn btn-ghost btn-sm">Semua Case →</a>
   </div>
   <div style="overflow-x:auto">
@@ -314,7 +314,7 @@ rmi_header('REG Alkes — Dashboard', [
           </td>
           <td>
             <span class="ra-badge <?= $st === 'CLOSED' ? 'closed' : 'open' ?>">
-              <?= $st === 'CLOSED' ? '✓ Selesai' : '● Aktif' ?>
+              <?= $st === 'CLOSED' ? '' . rmi_icon("tick") . ' Selesai' : '● Aktif' ?>
             </span>
           </td>
           <td class="mono" style="font-size:11px;color:var(--rmi-muted,#9ca3af)">
@@ -335,7 +335,7 @@ rmi_header('REG Alkes — Dashboard', [
 <?php elseif ($tableExists && $stats['total'] === 0): ?>
 <div style="background:var(--rmi-card,#1a2235);border:1px solid var(--rmi-border,rgba(255,255,255,.1));
             border-radius:14px;padding:48px;text-align:center;color:var(--rmi-muted,#9ca3af)">
-  <div style="font-size:40px;margin-bottom:14px">🗂</div>
+  <div style="font-size:40px;margin-bottom:14px"><?=rmi_icon('box')?></div>
   <div style="font-size:15px;font-weight:600;margin-bottom:6px">Belum ada case</div>
   <div style="font-size:13px;margin-bottom:18px">Buat case registrasi pertama di Control Tower.</div>
   <a class="btn btn-rmi btn-sm" href="<?= h($baseProject) ?>/hrl_reg_alkes/reg_alkes_control_tower.php">

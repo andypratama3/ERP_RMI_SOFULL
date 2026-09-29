@@ -439,11 +439,11 @@ rmi_header('Transfer Antar Kantor', [
               $hasRecvAfter = !empty(trim((string)($r['wqs_stock_after_penerima'] ?? '')));
               $hasFisikMasuk = !empty(trim((string)($r['foto_fisik_masuk'] ?? '')));
               ?>
-              Pengirim: <?= $hasBefore && $hasAfter ? '<span class="text-success">✓</span>' : '<span class="text-warning">✗</span>' ?>
-              Fisik keluar: <?= $hasFisik ? '<span class="text-success">✓</span>' : '<span class="text-warning">✗</span>' ?>
+              Pengirim: <?= $hasBefore && $hasAfter ? '<span class="text-success">'.rmi_icon('tick').'</span>' : '<span class="text-warning">'.rmi_icon('x').'</span>' ?>
+              Fisik keluar: <?= $hasFisik ? '<span class="text-success">'.rmi_icon('tick').'</span>' : '<span class="text-warning">'.rmi_icon('x').'</span>' ?>
               <?php if ($st === 'SENT' || $st === 'RECEIVED'): ?>
-              <br>Penerima: <?= $hasRecv && $hasRecvAfter ? '<span class="text-success">✓</span>' : '<span class="text-warning">✗</span>' ?>
-              Fisik masuk: <?= $hasFisikMasuk ? '<span class="text-success">✓</span>' : '<span class="text-warning">✗</span>' ?>
+              <br>Penerima: <?= $hasRecv && $hasRecvAfter ? '<span class="text-success">'.rmi_icon('tick').'</span>' : '<span class="text-warning">'.rmi_icon('x').'</span>' ?>
+              Fisik masuk: <?= $hasFisikMasuk ? '<span class="text-success">'.rmi_icon('tick').'</span>' : '<span class="text-warning">'.rmi_icon('x').'</span>' ?>
               <?php endif; ?>
             </td>
             <td>

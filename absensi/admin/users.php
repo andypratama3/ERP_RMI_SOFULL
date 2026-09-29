@@ -213,12 +213,12 @@ $base_url_msl = '../../master/master_system_login.php';
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px 0">
       <a href="users.php?setup=sudah" style="text-decoration:none">
         <span style="background:#16a34a;color:#fff;padding:4px 14px;border-radius:16px;font-size:13px;font-weight:600;cursor:pointer">
-          ✓ Sudah Setup: <?= $total_setup_sudah ?>
+          <?=rmi_icon('tick')?> Sudah Setup: <?= $total_setup_sudah ?>
         </span>
       </a>
       <a href="users.php?setup=belum" style="text-decoration:none">
         <span style="background:#dc2626;color:#fff;padding:4px 14px;border-radius:16px;font-size:13px;font-weight:600;cursor:pointer">
-          ✗ Belum Setup: <?= $total_setup_belum ?>
+          <?=rmi_icon('x')?> Belum Setup: <?= $total_setup_belum ?>
         </span>
       </a>
       <span style="color:#888;font-size:12px;align-self:center">
@@ -271,8 +271,8 @@ $base_url_msl = '../../master/master_system_login.php';
         <label class="small muted" style="display:block;margin-bottom:3px">Status Setup</label>
         <select name="setup" style="padding:5px 9px;font-size:13px">
           <option value="" <?= $filter_setup==='' ? 'selected':'' ?>>Semua</option>
-          <option value="sudah" <?= $filter_setup==='sudah' ? 'selected':'' ?>>✓ Sudah Setup</option>
-          <option value="belum" <?= $filter_setup==='belum' ? 'selected':'' ?>>✗ Belum Setup</option>
+          <option value="sudah" <?= $filter_setup==='sudah' ? 'selected':'' ?>><?=rmi_icon('tick')?> Sudah Setup</option>
+          <option value="belum" <?= $filter_setup==='belum' ? 'selected':'' ?>><?=rmi_icon('x')?> Belum Setup</option>
         </select>
       </div>
       <div>
@@ -297,7 +297,7 @@ $base_url_msl = '../../master/master_system_login.php';
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <div class="muted small">Menampilkan <b><?= count($users) ?></b> user</div>
         <button type="submit" class="btn ok" style="padding:6px 18px;font-size:13px;font-weight:600">
-          💾 Simpan Semua (<?= count($users) ?>)
+          <?=rmi_icon('doc')?> Simpan Semua (<?= count($users) ?>)
         </button>
       </div>
 
@@ -359,7 +359,7 @@ $base_url_msl = '../../master/master_system_login.php';
             <td style="text-align:center">
               <?php if ($isProtected): ?>
                 <input type="checkbox" checked disabled title="Akun SYS/ADMIN selalu HR Admin — tidak bisa dicabut">
-                <span style="font-size:10px;color:#f59e0b;display:block">🔒 Protected</span>
+                <span style="font-size:10px;color:#f59e0b;display:block"><?=rmi_icon('warn')?> Protected</span>
               <?php else: ?>
                 <input type="checkbox" name="is_hr_admin_<?= $uid ?>" value="1"
                   <?= ((int)$p['is_hr_admin']===1) ? 'checked' : '' ?>>
@@ -367,11 +367,11 @@ $base_url_msl = '../../master/master_system_login.php';
             </td>
             <td style="text-align:center">
               <?php if ($linked): ?>
-                <span style="background:#14532d;color:#4ade80;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600">✓</span>
+                <span style="background:#14532d;color:#4ade80;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600"><?=rmi_icon('tick')?></span>
               <?php else: ?>
                 <a href="<?= htmlspecialchars($base_url_msl . '?edit=' . $uid, ENT_QUOTES, 'UTF-8') ?>"
                    style="background:#450a0a;color:#f87171;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;text-decoration:none"
-                   title="Set Holder Employee">✗ Set</a>
+                   title="Set Holder Employee"><?=rmi_icon('x')?> Set</a>
               <?php endif; ?>
             </td>
           </tr>
@@ -382,7 +382,7 @@ $base_url_msl = '../../master/master_system_login.php';
 
       <div style="text-align:right;margin-top:8px">
         <button type="submit" class="btn ok" style="padding:7px 22px;font-size:13px;font-weight:600">
-          💾 Simpan Semua (<?= count($users) ?>)
+          <?=rmi_icon('doc')?> Simpan Semua (<?= count($users) ?>)
         </button>
       </div>
     </form>
@@ -418,13 +418,13 @@ $base_url_msl = '../../master/master_system_login.php';
     <!-- Summary badges -->
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 16px 0">
       <span style="background:#22c55e;color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600">
-        ✅ Hadir Hari Ini: <?= $total_today_in ?>
+        <?=rmi_icon('check')?> Hadir Hari Ini: <?= $total_today_in ?>
       </span>
       <span style="background:#3b82f6;color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600">
-        🔄 Sudah Checkout: <?= $total_today_out ?>
+        <?=rmi_icon('refresh')?> Sudah Checkout: <?= $total_today_out ?>
       </span>
       <span style="background:#ef4444;color:#fff;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:600">
-        ❌ Belum Hadir: <?= $total_belum ?>
+        <?=rmi_icon('cross')?> Belum Hadir: <?= $total_belum ?>
       </span>
     </div>
 
@@ -448,9 +448,9 @@ $base_url_msl = '../../master/master_system_login.php';
 
         // Status hari ini
         if ($abs && $abs['today_in'] && $abs['today_out']) {
-          $status_badge = '<span style="background:#3b82f6;color:#fff;padding:2px 10px;border-radius:12px;font-size:12px">Checkout ✓</span>';
+          $status_badge = '<span style="background:#3b82f6;color:#fff;padding:2px 10px;border-radius:12px;font-size:12px">Checkout ' . rmi_icon("tick") . '</span>';
         } elseif ($abs && $abs['today_in']) {
-          $status_badge = '<span style="background:#22c55e;color:#fff;padding:2px 10px;border-radius:12px;font-size:12px">Hadir ✓</span>';
+          $status_badge = '<span style="background:#22c55e;color:#fff;padding:2px 10px;border-radius:12px;font-size:12px">Hadir ' . rmi_icon("tick") . '</span>';
         } else {
           $status_badge = '<span style="background:#e5e7eb;color:#666;padding:2px 10px;border-radius:12px;font-size:12px">Belum</span>';
         }

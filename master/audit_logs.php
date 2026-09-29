@@ -189,7 +189,7 @@ rmi_header('Audit Logs', [
             <td style="white-space:nowrap;color:#94a3b8;font-size:12px"><?= al_h(substr((string)($r['created_at'] ?? ''), 0, 19)) ?></td>
             <td><code style="font-size:11px"><?= al_h($r['module'] ?? '') ?></code></td>
             <td style="font-size:12px;<?= $actionStyle ?>">
-              <?php if ($isLoginOk): ?>✅ <?php elseif ($isLoginFail): ?>❌ <?php endif; ?>
+              <?php if ($isLoginOk): ?><?= rmi_icon('check') ?> <?php elseif ($isLoginFail): ?><?= rmi_icon('cross') ?> <?php endif; ?>
               <?= al_h($action) ?>
             </td>
             <td style="font-size:12px">

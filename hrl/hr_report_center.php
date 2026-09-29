@@ -65,13 +65,13 @@ try {
             <ul class="list-unstyled mb-0">
               <li class="mb-2">
                 <a class="btn btn-outline-primary btn-sm w-100 text-start" href="<?= e(url_hrl('hrl_ack_report.php')) ?>">
-                  📋 Acknowledgement Report
+                  <?=rmi_icon('clipboard')?> Acknowledgement Report
                 </a>
                 <div class="small text-muted mt-1">Ringkasan ack per dokumen (versi aktif)</div>
               </li>
               <li class="mb-2">
                 <a class="btn btn-outline-primary btn-sm w-100 text-start" href="<?= e($urlRegAlkes) ?>">
-                  📥 Reg Alkes Export Compliance
+                  <?=rmi_icon('inbox')?> Reg Alkes Export Compliance
                 </a>
                 <div class="small text-muted mt-1">Export CSV/Excel data compliance registrasi alkes</div>
               </li>
