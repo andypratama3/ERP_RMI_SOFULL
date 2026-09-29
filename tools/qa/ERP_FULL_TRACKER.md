@@ -5,10 +5,10 @@
 
 | | |
 |---|---|
-| Dibuat | `2026-09-29T05:28:23+00:00` |
+| Dibuat | `2026-09-29T08:09:42+00:00` |
 | Root | `ERP_RMI_SOFULL` |
 | Generator | `tools/qa/feature_inventory_scan.php` |
-| Halaman terinventarisasi | **930** (778 halaman + 152 helper/include) |
+| Halaman terinventarisasi | **928** (776 halaman + 152 helper/include) |
 | Modul | **23** |
 
 > **Aturan status:** kolom `status` hanya `UNDETECTED` (belum diperiksa manusia)
@@ -37,9 +37,9 @@ adalah status manusia dan tidak boleh diubah oleh tool.
 | Status | Jumlah | Arti |
 |---|---:|---|
 | **BLOCKED** | 1 | Buntu — butuh keputusan manusia. Tidak boleh ditebak. |
-| **IN_PROGRESS** | 3 | Dikerjakan, belum selesai. |
+| **IN_PROGRESS** | 2 | Dikerjakan, belum selesai. |
 | **TODO** | 21 | Belum dimulai. |
-| **FIXED** | 12 | Perubahan sudah masuk, **belum** di-retest. Tidak sama dengan PASS. |
+| **FIXED** | 13 | Perubahan sudah masuk, **belum** di-retest. Tidak sama dengan PASS. |
 | **PASS** | 5 | Lolos retest dengan evidence. |
 | **DONE** | 0 | Selesai penuh. |
 
@@ -47,7 +47,6 @@ adalah status manusia dan tidak boleh diubah oleh tool.
 |---|---|---|---|---|
 | `PENDING-05` | 23 actor unlinked + 2 department mismatch | BLOCKED | check_actor_relation.php | Butuh keputusan data owner; dilarang menebak |
 | `PENDING-01` | Gate SVG + regresi spreadsheet belum ada di lint job | IN_PROGRESS | sudah dipasang di qa-nas | Tanya: lint job GitHub-hosted tidak bisa render authenticated, jadi hanya qa-nas |
-| `PENDING-03` | tools/qa/run_full_suite.php | IN_PROGRESS | belum stabil | Memanggil runtime_sweep.php --json-out=... yang belum didukung; hanya cover render SYS, belum CRUD/RBAC/audit/print per role |
 | `QA-018` | ALL | IN_PROGRESS | grep list | 2026-09-29 05:07 |
 | `PENDING-02` | Sapuan SVG seluruh repo (semua 675 halaman) | TODO | Percobaan pertama di-interrupt; perlu diulang sampai tuntas | — |
 | `PENDING-06` | Config Nginx belum ter-versioning | TODO | Rule _shared/ statis hanya ada di /etc/nginx/sites-available/erp.andypratama.studio. Deploy ulang ke server lain akan reproduce bug CSS 404. Perlu file deploy/nginx-erp.conf di repo | — |
@@ -78,6 +77,7 @@ adalah status manusia dan tidak boleh diubah oleh tool.
 | `DEP-008` | Migration 164 hrl_employee_mutations | FIXED | 5 file HRL -> "1146 table doesn't exist" | Tabel dipakai kode tapi tidak ada di dump mana pun |
 | `DEP-009` | Migration 165 fa_assets + gl_journal_lines.description | FIXED | migration idempotent, assets.php 200 | Menutup PENDING-04. fa_ensure_asset_core_columns() added sebagai self-healing |
 | `DEP-010` | Migration 166 normalisasi collation | FIXED | 200 tabel -> utf8mb4_0900_ai_ci, sisa non-0900 = 0 | Dump MariaDB (unicode_ci) bercampur dengan tabel hasil migration (0900_ai_ci) -> "Illegal mix of collations" di JOIN. Backup pra-conversi: /var/backups/erp/erp_rmi_sofull_pre_collation.sql |
+| `PENDING-03` | tools/qa/run_full_suite.php | FIXED | runtime_sweep.php --json-out sekarang didukung | Ditutup 2026-09-29: kontrak JSON vs argumen posisi sudah cocok. Hanya cover render SYS — belum CRUD/RBAC/audit/print per role |
 | `PENDING-04` | Fixed_Asset/assets.php -> Unknown column 'quantity' | FIXED | migration 165 + fa_ensure_asset_core_columns() | Selesai di sesi deploy 2026-09-29 -> lihat tabel DEP-009 |
 | `SEC-001` | phpoffice/phpspreadsheet 5.5.0, 8 advisory (5 high, 1 critical CVE-2026-34084, 2 medium) | FIXED | 5.5.0 -> 5.8.1, composer audit bersih | Advisory bisa dieksploitasi lewat file spreadsheet yang di-upload user, jadi ini bukan teori |
 | `SEC-002` | Constraint ^5.5 masih mengizinkan versi rentan | FIXED | composer.json -> "^5.8.1", composer validate OK | Floor versi naik supaya composer update berikutnya tidak bisa balik ke 5.5.0 |
@@ -265,7 +265,7 @@ pentingnya bisnis — itu perlu owner yang menetapkan.
 | `sales` | 59 | 32 | 29 | 13 | 28 | 5 | 26 | 210 |
 | `dashboards` | 67 | 29 | 20 | 4 | 19 | 0 | 11 | 186 |
 | `purchases` | 62 | 34 | 26 | 9 | 20 | 1 | 33 | 166 |
-| `api` | 229 | 32 | 20 | 2 | 18 | 0 | 2 | 158 |
+| `api` | 227 | 32 | 20 | 2 | 18 | 0 | 2 | 158 |
 | `mpr` | 28 | 17 | 15 | 8 | 13 | 0 | 8 | 129 |
 | `stock` | 36 | 19 | 19 | 13 | 9 | 8 | 19 | 127 |
 | `hrl_process` | 21 | 10 | 8 | 7 | 7 | 0 | 0 | 108 |
@@ -586,7 +586,7 @@ pentingnya bisnis — itu perlu owner yang menetapkan.
 | `purchases/revbaru1.php` | R | 3 | 0 | 8 | — | Ya | UNDETECTED |
 | `purchases/stock_update_from_gr.php` | — | 0 | 0 | 0 | — | Ya | UNDETECTED |
 
-### `api` — 229 halaman
+### `api` — 227 halaman
 
 | Halaman | CRUD | Filter | Aksi | Workflow | Audit | Perm | Status |
 |---|---|---:|---:|---:|:-:|:-:|---|
@@ -611,7 +611,6 @@ pentingnya bisnis — itu perlu owner yang menetapkan.
 | `api/chat/export_create.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/chat/export_download.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/chat/exports.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
-| `api/chat/exports/download.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/chat/mark_all_read.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/chat/message_context.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/chat/message_delete.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
@@ -721,7 +720,6 @@ pentingnya bisnis — itu perlu owner yang menetapkan.
 | `api/v1/chat/export_create.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/v1/chat/export_download.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/v1/chat/exports.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
-| `api/v1/chat/exports/download.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/v1/chat/mark_all_read.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/v1/chat/message_context.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 | `api/v1/chat/message_delete.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
