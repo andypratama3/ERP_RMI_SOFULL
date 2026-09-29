@@ -237,11 +237,21 @@ function rupiah($angka)
 
 /**
  * True bila nilai adalah kode dept/role (data lama), bukan username orang.
+ *
+ * SENGAJA tidak memuat ADMIN/SUPERADMIN/MANAGER/STAFF/BRANCH/SYSTEM:
+ * 'admin' adalah username sungguhan (akun login dominan di sales_do_audit)
+ * dan akan ikut terbuang bila disaring case-insensitive. Hanya kode
+ * departemen/fungsi yang terbukti tertulis sebagai label generik yang disaring.
+ * Sufiks _TRACKING menandai akun layanan (mis. SCM_TRACKING) — bukan manusia,
+ * jangan pernah menampilkannya sebagai penandatangan.
  */
 function sdv_is_dept_code(string $v): bool
 {
-    static $codes = ['WQS','SCM','CRM','FIN','ACT','PQP','MPR','HRL','ITC','SYS','ADMIN','SUPERADMIN','MANAGER','STAFF','BRANCH','SYSTEM'];
-    return in_array(strtoupper(trim($v)), $codes, true);
+    static $codes = ['WQS','SCM','CRM','FIN','ACT','PQP','MPR','HRL','ITC','SYS'];
+    $u = strtoupper(trim($v));
+    if ($u === '') return false;
+    if (in_array($u, $codes, true)) return true;
+    return (bool)preg_match('/_TRACKING$/', $u);
 }
 // Label & relasi pelaku:helpers pusat _shared/actor_stamp.php (sudah include via bootstrap).
 // sdv_is_dept_code() di atas tetap dipakai sebagai pagar data lama.
@@ -563,7 +573,13 @@ foreach (['wqs_ready_by','wqs_completed_by','wqs_updated_by','wqs_by'] as $k) {
     $v = trim((string)($do[$k] ?? ''));
     if ($v !== '' && !sdv_is_dept_code($v)) { $wqs_prepared_by_print = $v; break; }
 }
-$wqs_prepared_at_print = trim((string)($do['wqs_ready_at'] ?? ''));
+// Waktu stamp mengikuti urutan fallback yang sama dengan blok Alur & Pelaku
+// (wqs_ready_at -> mulai/pick -> updated) agar kedua blok tidak bertentangan.
+$wqs_prepared_at_print = '';
+foreach (['wqs_ready_at', 'wqs_started_at', 'wqs_picked_at', 'wqs_updated_at'] as $__k) {
+    $__v = trim((string)($do[$__k] ?? ''));
+    if ($__v !== '' && stripos($__v, '0000-00-00') === false) { $wqs_prepared_at_print = $__v; break; }
+}
 
 if ($wqs_prepared_by_print === '' && sdv_table_exists($pdo, 'system_audit_logs')) {
     try {
@@ -589,14 +605,18 @@ if ($wqs_prepared_by_print === '' && sdv_table_exists($pdo, 'system_audit_logs')
     }
 }
 
+// Daftar kolom SAMA dengan 'by' tahap SCM di $sdvStageDefs: last_updated_by
+// SENGAJA tidak dipakai — kolom generik itu sering berisi kode dept
+// ('FIN') atau akun layanan ('SCM_TRACKING'), bukan pengirim barang.
 $scm_sent_by_print = '';
-foreach (['scm_on_delivery_by','scm_delivered_by','scm_updated_by','last_updated_by'] as $k) {
+foreach (['scm_on_delivery_by','scm_delivered_by','scm_updated_by'] as $k) {
     $v = trim((string)($do[$k] ?? ''));
     if ($v !== '' && !sdv_is_dept_code($v)) { $scm_sent_by_print = $v; break; }
 }
-$scm_sent_at_print = trim((string)($do['scm_on_delivery_at'] ?? ''));
-if ($scm_sent_at_print === '') {
-    $scm_sent_at_print = trim((string)($do['scm_delivered_at'] ?? ''));
+$scm_sent_at_print = '';
+foreach (['scm_on_delivery_at', 'scm_delivered_at', 'scm_updated_at'] as $__k) {
+    $__v = trim((string)($do[$__k] ?? ''));
+    if ($__v !== '' && stripos($__v, '0000-00-00') === false) { $scm_sent_at_print = $__v; break; }
 }
 
 // Lapisan terakhir: sales_do_audit (actor_name = username asli per transisi).
@@ -683,50 +703,88 @@ if (sdv_table_exists($pdo, 'sales_do_audit')) {
 }
 $sdvAuditByDept = [];
 $sdvAuditByTo   = [];
+$sdvAuditFirstByTo = [];
 foreach ($sdvAuditRows as $__ar) {
     $__d = strtoupper(trim((string)($__ar['actor_dept'] ?? '')));
     $__n = trim((string)($__ar['actor_name'] ?? ''));
+    $__fr = strtolower(trim((string)($__ar['status_from'] ?? '')));
+    $__nt = trim((string)($__ar['note'] ?? ''));
     // Simpan transisi TERAKHIR per dept: untuk "Disiapkan" yang relevan adalah
     // aksi terakhir WQS (wqs_processing -> ready_scm), bukan aksi pertamanya.
+    // from/note ikut disimpan agar tiap kartu Alur menampilkan aksi
+    // masing-masing tahap (bukan sekadar nama pelaku yang sama).
+    // Baris dari→ke IDENTIK (aksi save tanpa pindah status) tidak boleh
+    // mengalahkan transisi status yang sesungguhnya: save SCM belakangan
+    // tidak boleh menghapus fakta bahwa WQS-lah yang memindahkan ke ready_scm.
+    $__isNoop = ($__fr !== '' && $__fr === strtolower(trim((string)($__ar['status_to'] ?? ''))));
     if ($__d !== '' && $__n !== '') {
-        $sdvAuditByDept[$__d] = ['name' => $__n, 'at' => trim((string)($__ar['created_at'] ?? ''))];
+        $__curD = $sdvAuditByDept[$__d] ?? null;
+        if ($__curD === null || (($__curD['noop'] ?? false) && !$__isNoop)) {
+            $sdvAuditByDept[$__d] = ['name' => $__n, 'at' => trim((string)($__ar['created_at'] ?? '')), 'from' => $__fr, 'to' => strtolower(trim((string)($__ar['status_to'] ?? ''))), 'note' => $__nt, 'noop' => $__isNoop];
+        }
     }
     $__t = strtolower(trim((string)($__ar['status_to'] ?? '')));
     if ($__t !== '' && $__n !== '') {
-        $sdvAuditByTo[$__t] = ['name' => $__n, 'at' => trim((string)($__ar['created_at'] ?? ''))];
+        if (!isset($sdvAuditFirstByTo[$__t])) {
+            $sdvAuditFirstByTo[$__t] = ['name' => $__n, 'at' => trim((string)($__ar['created_at'] ?? ''))];
+        }
+        // Pengecualian: transisi FIN approve_revision (revision_fin_review ->
+        // crm_to_wqs) tidak boleh menimpa atribusi PEMBUAT CRM. Aksi FIN itu
+        // pengembalian revisi, bukan pembuatan DO.
+        if ($__t === 'crm_to_wqs' && isset($sdvAuditByTo[$__t]) && $__d !== 'CRM') {
+            continue;
+        }
+        $__curT = $sdvAuditByTo[$__t] ?? null;
+        if ($__curT === null || (($__curT['noop'] ?? false) && !$__isNoop)) {
+            $sdvAuditByTo[$__t] = ['name' => $__n, 'at' => trim((string)($__ar['created_at'] ?? '')), 'from' => $__fr, 'note' => $__nt, 'noop' => $__isNoop];
+        }
     }
 }
 
 $sdvStageDefs = [
+    // Kolom *_updated_at adalah fallback waktu milik tiap tahap sendiri
+    // (data lama mengisi wqs/scm/act/fin_updated_at walau kolom *_ready_at
+    // masih NULL). JANGAN pakai kolom tahap lain sebagai bukti utama:
+    // FIN sebelumnya memakai act_invoiced_at (kolom ACT, NULL di semua 39
+    // baris) sehingga FIN selalu "Menunggu" bahkan untuk DO paid/fin_done.
+    // 'by' diurutkan dari bukti penyelesaian TERKUAT ke terlemah; nama kolom
+    // yang tidak ada di skema dilewati aman via ?? '' (ditandai agar tidak
+    // dikira cakupan yang sudah ada).
     ['key' => 'CRM',  'label' => 'CRM',  'sub' => 'DO dibuat & dikirim ke WQS',
-     'by' => ['created_by', 'crm_by'], 'at' => ['crm_finish_at', 'crm_start_at', 'crm_created_at'],
+     'by' => ['crm_created_by', 'created_by', 'crm_by'],
+     'at' => ['crm_finish_at', 'crm_start_at', 'crm_created_at', 'created_at'],
      'to' => ['crm_to_wqs', 'sent_wqs']],
     ['key' => 'WQS',  'label' => 'WQS',  'sub' => 'Disiapkan / picking',
-     'by' => ['wqs_ready_by', 'wqs_completed_by', 'wqs_updated_by', 'wqs_by'],
-     'at' => ['wqs_ready_at', 'wqs_started_at', 'wqs_picked_at'],
+     'by' => ['wqs_ready_by', 'wqs_completed_by', 'wqs_updated_by', 'wqs_started_by', 'wqs_by'],
+     'at' => ['wqs_ready_at', 'wqs_started_at', 'wqs_picked_at', 'wqs_updated_at'],
      'to' => ['ready_scm']],
     ['key' => 'SCM',  'label' => 'SCM',  'sub' => 'Dikirim & diantar',
      'by' => ['scm_on_delivery_by', 'scm_delivered_by', 'scm_updated_by'],
-     'at' => ['scm_on_delivery_at', 'scm_delivered_at'],
+     'at' => ['scm_on_delivery_at', 'scm_delivered_at', 'scm_updated_at'],
      'to' => ['delivered', 'on_delivery']],
     ['key' => 'ACT',  'label' => 'ACT',  'sub' => 'Diterima & invoices',
-     'by' => ['act_reviewed_by', 'act_updated_by'],
-     'at' => ['act_ready_fin_at', 'act_invoiced_at'],
+     'by' => ['act_reviewed_by', 'act_ready_by', 'act_updated_by'],
+     'at' => ['act_ready_fin_at', 'act_invoiced_at', 'act_updated_at'],
      'to' => ['wait_payment']],
     ['key' => 'FIN',  'label' => 'FIN',  'sub' => 'Verifikasi & approval',
-     'by' => ['fin_approved_by', 'fin_updated_by'],
-     'at' => ['act_invoiced_at'],
-     'to' => ['fin_done']],
+     'by' => ['fin_approved_by', 'fin_paid_by', 'fin_updated_by'],
+     'at' => ['fin_updated_at'],
+     // 'paid' sebagai fallback: transisi wait_payment -> paid dikerjakan dept
+     // FIN (lihat sales_do_audit DO paid) dan tidak ada status_to='fin_done'
+     // yang pernah tercatat, jadi tanpa fallback ini FIN paid pun "Menunggu".
+     'to' => ['fin_done', 'paid']],
+    // fin_done != paid: DO terverifikasi FIN boleh menunggu bayar; PAID hanya
+    // selesai bila status/coretan pembayaran benar-benar ada.
     ['key' => 'PAID', 'label' => 'PAID', 'sub' => 'Pembayaran diterima',
      'by' => ['fin_paid_by'],
-     'at' => ['fin_paid_at'],
+     'at' => ['fin_paid_at', 'fin_paid_date'],
      'to' => ['paid']],
 ];
 // Tahap yang sedang berjalan, untuk penanda "sekarang".
 $sdvStatusStage = (function (string $s): string {
     switch ($s) {
         case 'crm_to_wqs': case 'sent_wqs': case 'revision_requested': case 'wqs_processing':
-        case 'wqs_done': case 'WQS_PICKED': return 'WQS';
+        case 'wqs_done': case 'wqs_picked': return 'WQS';
         case 'ready_scm': return 'SCM';
         case 'on_delivery': return 'SCM';
         case 'delivered': return 'ACT';
@@ -758,7 +816,30 @@ foreach ($sdvStageDefs as $__sd) {
     if ($__aname === '' && isset($sdvAuditByDept[$__sd['key']])) {
         $__aname = $sdvAuditByDept[$__sd['key']]['name'];
     }
-    $__account = $__aname;
+    // Audit (transisi spesifik) diutamakan, tapi JANGAN buang pelaku dari
+    // kolom *_by bila audit tidak punya catatannya — bug lama menimpa dengan
+    // string kosong sehingga pelaku yang sebenarnya ada jadi "tidak tercatat".
+    // Baris audit yang menang juga menjadi keterangan aksi kartu ini
+    // (dari→ke + catatan), supaya tiap tahap terbaca dari aksinya sendiri.
+    $__transFrom = '';
+    $__transTo = '';
+    $__transNote = '';
+    if ($__aname !== '') {
+        $__account = $__aname;
+        foreach ($__sd['to'] as $__to) {
+            if (isset($sdvAuditByTo[$__to])) {
+                $__transFrom = (string)($sdvAuditByTo[$__to]['from'] ?? '');
+                $__transNote = (string)($sdvAuditByTo[$__to]['note'] ?? '');
+                $__transTo = $__to;
+                break;
+            }
+        }
+        if ($__transFrom === '' && isset($sdvAuditByDept[$__sd['key']])) {
+            $__transFrom = (string)($sdvAuditByDept[$__sd['key']]['from'] ?? '');
+            $__transNote = (string)($sdvAuditByDept[$__sd['key']]['note'] ?? '');
+            $__transTo = (string)($sdvAuditByDept[$__sd['key']]['to'] ?? '');
+        }
+    }
     if ($__time === '') {
         foreach ($__sd['to'] as $__to) {
             if (isset($sdvAuditByTo[$__to]) && $sdvAuditByTo[$__to]['at'] !== '') {
@@ -770,17 +851,64 @@ foreach ($sdvStageDefs as $__sd) {
             $__time = $sdvAuditByDept[$__sd['key']]['at'];
         }
     }
+    // CRM "Dibuat": pakai bukti TERAYER (min), bukan terakhir — footer halaman
+    // memakai baris audit PERTAMA, jadi keduanya konsisten pada menit yang sama.
+    if ($__sd['key'] === 'CRM') {
+        $__crmTimes = [];
+        foreach (['crm_finish_at', 'crm_start_at', 'crm_created_at', 'created_at'] as $__cc) {
+            $__cv = trim((string)($do[$__cc] ?? ''));
+            if ($__cv !== '' && stripos($__cv, '0000-00-00') === false && ($__ct = strtotime($__cv)) !== false) {
+                $__crmTimes[] = $__ct;
+            }
+        }
+        foreach (['crm_to_wqs', 'sent_wqs'] as $__cto) {
+            if (isset($sdvAuditFirstByTo[$__cto]) && ($__ct = strtotime((string)$sdvAuditFirstByTo[$__cto]['at'])) !== false) {
+                $__crmTimes[] = $__ct;
+            }
+        }
+        if ($__crmTimes) $__time = date('Y-m-d H:i:s', min($__crmTimes));
+    }
     $__info  = $__account !== '' ? rmi_actor_info($pdo, $__account) : ['label' => ''];
     $__done  = $__time !== '' || $__account !== '';
+    // Inferensi progres status — konvensi yang sama dipakai
+    // sales_control_tower.php:$wqsOk/$scmOk/$actOk/$finOk: tahap dianggap
+    // selesai bila status DO sudah melewatinya. Ini aturan bisnis repo,
+    // bukan karangan: DO fin_done pasti sudah lewat WQS/SCM/ACT.
+    // Tahap seperti ini ditandai 'inferred' dan dirender dengan label jujur
+    // "Selesai — waktu tak tercatat" (bukan "Waktu tercatat").
+    $__inferred = false;
+    if (!$__done) {
+        $__stNow = strtolower(trim((string)($do['status'] ?? '')));
+        $__beyond = [
+            'WQS'  => ['ready_scm','on_delivery','delivered','wait_payment','paid','closed','wqs_done','wqs_picked','scm_done','act_done','fin_done','paid_done'],
+            'SCM'  => ['delivered','wait_payment','paid','closed','scm_done','act_done','fin_done','paid_done'],
+            'ACT'  => ['wait_payment','paid','closed','act_done','fin_done','paid_done'],
+            'FIN'  => ['paid','closed','fin_done','paid_done'],
+            'PAID' => ['paid','closed','paid_done'],
+        ];
+        if (isset($__beyond[$__sd['key']]) && in_array($__stNow, $__beyond[$__sd['key']], true)) {
+            $__done = true;
+            $__inferred = true;
+        }
+    }
+    $__trans = '';
+    if ($__transFrom !== '' && $__transTo !== '') {
+        $__trans = $__transFrom . '→' . $__transTo;
+        if ($__transNote !== '') $__trans .= ' • ' . $__transNote;
+    } elseif ($__transNote !== '') {
+        $__trans = $__transNote;
+    }
     $sdvFlowStages[] = [
-        'key'     => $__sd['key'],
-        'label'   => $__sd['label'],
-        'sub'     => $__sd['sub'],
-        'account' => $__account,
-        'name'    => $__info['label'] !== '' ? $__info['label'] : ($__account !== '' ? $__account : ''),
-        'time'    => rmi_actor_stamp_datetime($__time),
-        'done'    => $__done,
-        'current' => $__done && $__sd['key'] === $sdvStatusStage,
+        'key'      => $__sd['key'],
+        'label'    => $__sd['label'],
+        'sub'      => $__sd['sub'],
+        'account'  => $__account,
+        'name'     => $__info['label'] !== '' ? $__info['label'] : ($__account !== '' ? $__account : ''),
+        'time'     => rmi_actor_stamp_datetime($__time),
+        'trans'    => $__trans,
+        'done'     => $__done,
+        'inferred' => $__inferred,
+        'current'  => $__done && $__sd['key'] === $sdvStatusStage,
     ];
 }
 $sdvFlowDone = 0;
@@ -1279,6 +1407,13 @@ $extraHead = '<style>
             line-height: 1.25;
             color: #4b5563;
         }
+        .sdv-flow-trans {
+            font-size: 7.5px;
+            line-height: 1.3;
+            color: #6b7280;
+            font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+            word-break: break-word;
+        }
         .sdv-flow-wait {
             font-size: 8.5px;
             font-style: italic;
@@ -1553,7 +1688,7 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
     </div>
 
     <div class="classification-summary">
-        <strong>Kelompok DO:</strong>
+        <strong>Kelompok DO (dari item):</strong>
         <span class="class-pill"><?= htmlspecialchars($doBusinessGroup === 'UNIT_ACC' ? 'UNIT ACC' : 'BMHP') ?></span>
         <?php if ($doBusinessGroup === 'UNIT_ACC'): ?>
             <span style="margin-left:8px">Item Unit ACC dapat terdiri dari <b>ALKES</b> dan <b>AKSESORIS</b> dalam satu DO; kategori tetap melekat per item.</span>
@@ -1616,6 +1751,49 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
             </p>
         </div>
     </div>
+
+    <?php
+    // Blok logistik: HANYA dari data yang ada (mode/vendor/resi/bukti terima
+    // WQS->SCM). Tidak mengarang — baris yang datanya kosong menampilkan '-'.
+    $__sdv_carrier = trim((string)($do['carrier_provider'] ?? ''));
+    $__sdv_resi = trim((string)($do['carrier_tracking_no'] ?? ($do['carrier_courier_code'] ?? '')));
+    $__sdv_mode = strtoupper(trim((string)($do['delivery_mode'] ?? '')));
+    if ($__sdv_mode === '' && ($delivery_vendor_name !== '' || $__sdv_carrier !== '')) $__sdv_mode = 'VENDOR';
+    if ($__sdv_mode === '') $__sdv_mode = 'INTERNAL';
+    $__sdv_recv_photo = sdv_project_file_url((string)($do['scm_receive_photo'] ?? ''), $baseProject);
+    $__sdv_recv_video = sdv_project_file_url((string)($do['scm_receive_video'] ?? ''), $baseProject);
+    $__sdv_has_logistics = ($__sdv_mode === 'VENDOR' || $delivery_vendor_name !== '' || $__sdv_carrier !== '' || $__sdv_resi !== '' || $__sdv_recv_photo !== '' || $__sdv_recv_video !== '');
+    ?>
+    <?php if ($__sdv_has_logistics): ?>
+    <div class="note-block" style="margin-top:8px;">
+        <div class="note-title">Pengiriman</div>
+        <div class="note-body">
+            <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                <tr>
+                    <td style="width:150px;padding:3px 0;color:#6b7280;">Mode</td>
+                    <td style="padding:3px 0;"><?= htmlspecialchars($__sdv_mode === 'VENDOR' ? 'VENDOR / Ekspedisi' : 'INTERNAL') ?></td>
+                </tr>
+                <tr>
+                    <td style="padding:3px 0;color:#6b7280;">Vendor / Ekspedisi</td>
+                    <td style="padding:3px 0;"><?= htmlspecialchars($delivery_vendor_name !== '' ? $delivery_vendor_name : ($__sdv_carrier !== '' ? $__sdv_carrier : '-')) ?></td>
+                </tr>
+                <tr>
+                    <td style="padding:3px 0;color:#6b7280;">No Resi / Tracking</td>
+                    <td style="padding:3px 0;"><?= htmlspecialchars($__sdv_resi !== '' ? $__sdv_resi : '-') ?></td>
+                </tr>
+                <?php if ($__sdv_recv_photo !== '' || $__sdv_recv_video !== ''): ?>
+                <tr>
+                    <td style="padding:3px 0;color:#6b7280;vertical-align:top;">Bukti Terima WQS→SCM</td>
+                    <td style="padding:3px 0;">
+                        <?php if ($__sdv_recv_photo !== ''): ?><a href="<?= htmlspecialchars($__sdv_recv_photo) ?>" target="_blank" rel="noopener noreferrer">📷 Foto Terima ↗</a><?php endif; ?>
+                        <?php if ($__sdv_recv_video !== ''): ?><?= $__sdv_recv_photo !== '' ? ' · ' : '' ?><a href="<?= htmlspecialchars($__sdv_recv_video) ?>" target="_blank" rel="noopener noreferrer">🎥 Video Terima ↗</a><?php endif; ?>
+                    </td>
+                </tr>
+                <?php endif; ?>
+            </table>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <table class="items">
         <thead>
@@ -1808,8 +1986,8 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
         </div>
         <?php if ($scm_delivered_at_print !== '' || $scm_delivered_by_print !== ''): ?>
         <div style="margin-top:7px;color:#4b5563">
-            <?php if ($scm_delivered_at_print !== ''): ?>
-                Delivered: <b><?= htmlspecialchars(date('d-m-Y H:i:s', strtotime($scm_delivered_at_print))) ?></b>
+            <?php if ($scm_delivered_at_print !== '' && ($__dv = rmi_actor_stamp_datetime($scm_delivered_at_print)) !== ''): ?>
+                Delivered: <b><?= htmlspecialchars($__dv) ?></b>
             <?php endif; ?>
             <?php if ($scm_delivered_by_print !== ''): ?>
                 <?= $scm_delivered_at_print !== '' ? ' · ' : '' ?>PIC SCM: <b><?= htmlspecialchars($scm_delivered_by_print) ?></b>
@@ -1831,9 +2009,10 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
                 <img class="scm-signature-img" src="<?= htmlspecialchars($scm_signature_src, ENT_QUOTES, 'UTF-8') ?>" alt="TTD Customer">
                 <div class="signature-meta">
                     TTD Digital Customer
-                    <?php if ($scm_delivered_at_print !== ''): ?><br><?= htmlspecialchars(date('d-m-Y H:i:s', strtotime($scm_delivered_at_print))) ?><?php endif; ?>
+                    <?php if ($scm_delivered_at_print !== '' && ($__dv2 = rmi_actor_stamp_datetime($scm_delivered_at_print)) !== ''): ?><br><?= htmlspecialchars($__dv2) ?><?php endif; ?>
                 </div>
                 <div class="sign-name"><?= $customer_pic !== '' ? htmlspecialchars($customer_pic) : '&nbsp;' ?></div>
+                <div class="signature-meta">PIC terdaftar DO — bukan verifikasi penandatangan</div>
             <?php else: ?>
                 <div class="erp-actor-stamp">
                     <div class="erp-actor-name">&nbsp;</div>
@@ -1864,13 +2043,18 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
                     <?php if ($__fs['account'] !== '' && $__fs['account'] !== $__fs['name']): ?>
                         <div class="sdv-flow-account">Akun: <?= htmlspecialchars($__fs['account'], ENT_QUOTES, 'UTF-8') ?></div>
                     <?php endif; ?>
-                <?php elseif ($__fs['done']): ?>
+                <?php elseif ($__fs['time'] !== ''): ?>
                     <div class="sdv-flow-wait">Waktu tercatat, pelaku tidak</div>
+                <?php elseif ($__fs['done']): ?>
+                    <div class="sdv-flow-wait">Selesai — waktu tak tercatat</div>
                 <?php else: ?>
                     <div class="sdv-flow-wait">Menunggu</div>
                 <?php endif; ?>
                 <?php if ($__fs['time'] !== ''): ?>
                     <div class="sdv-flow-time"><?= htmlspecialchars($__fs['time'], ENT_QUOTES, 'UTF-8') ?></div>
+                <?php endif; ?>
+                <?php if (($__fs['trans'] ?? '') !== ''): ?>
+                    <div class="sdv-flow-trans"><?= htmlspecialchars($__fs['trans'], ENT_QUOTES, 'UTF-8') ?></div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
@@ -1922,7 +2106,7 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
         <div>
             Dicetak: <?= htmlspecialchars($printed_at) ?>
             <?php if ($crm_created_by_print !== ''): ?>
-            <br>Dibuat: <?= htmlspecialchars($crm_created_by_print) ?><?= $crm_created_at_print !== '' ? ' • ' . htmlspecialchars(date('d-m-Y H:i', strtotime($crm_created_at_print))) : '' ?>
+            <br>Dibuat: <?= htmlspecialchars($crm_created_by_print) ?><?= ($__cd = rmi_actor_stamp_datetime((string)$crm_created_at_print)) !== '' ? ' • ' . htmlspecialchars(substr($__cd, 0, 16)) : '' ?>
             <?php endif; ?>
         </div>
         <div>

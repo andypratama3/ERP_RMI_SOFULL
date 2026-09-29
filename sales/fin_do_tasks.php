@@ -492,7 +492,10 @@ $action = trim((string)($_POST['action'] ?? ''));
         );
 
         if ($action === 'save') {
-            $sets = "fin_note=?, fin_status=?, fin_updated_by=?, last_updated_by=?, last_updated_at=NOW()";
+            // fin_updated_at WAJIB ditulis: kolom ini dibaca print DO sebagai
+            // bukti waktu tahap FIN. Sebelumnya hanya fin_updated_by yang diisi
+            // sehingga FIN selalu tampil "Menunggu" tanpa audit fin_done.
+            $sets = "fin_note=?, fin_status=?, fin_updated_by=?, fin_updated_at=NOW(), last_updated_by=?, last_updated_at=NOW()";
             $params = [$note, $fin_status, $finActor, $finActor];
 
             if ($pay_up) { $sets .= ", fin_payment_file=?"; $params[] = $pay_up; }
@@ -521,6 +524,11 @@ $action = trim((string)($_POST['action'] ?? ''));
                 $code = (string)($r['do_code'] ?? '');
                 master_audit($pdo, 'sales_do', 'sales_do', 'FIN_SAVE', $id, $code, "DO FIN save: {$code}", []);
             }
+            // Jejak transisi agar tahap FIN selalu punya pelaku di print DO.
+            // Satu-satunya aksi FIN yang sebelumnya tanpa sales_do_audit.
+            if (function_exists('sales_do_audit_append')) {
+                sales_do_audit_append($pdo, $id, $curStatus, $curStatus, 'FIN', $note);
+            }
             $success = "Tersimpan (FIN).";
         }
 
@@ -534,6 +542,7 @@ $action = trim((string)($_POST['action'] ?? ''));
                 fin_note=?,
                 fin_status='Done',
                 fin_updated_by=?,
+                fin_updated_at=NOW(),
                 last_updated_by=?,
                 " . ($hasFinSlaStartAt ? "fin_sla_start_at=NULL," : "") . "
                 " . ($hasFinDurationDays ? "fin_duration_days=NULL," : "") . "
@@ -639,6 +648,7 @@ $action = trim((string)($_POST['action'] ?? ''));
                     fin_paid_at=NOW(),
                     fin_paid_by=?,
                     fin_updated_by=?,
+                    fin_updated_at=NOW(),
                     last_updated_by=?,
                     " . ($hasFinSlaStartAt ? "fin_sla_start_at=?," : "") . "
                     " . ($hasFinDurationDays ? "fin_duration_days=?," : "") . "

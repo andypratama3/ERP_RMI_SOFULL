@@ -1,5 +1,11 @@
 <?php
 declare(strict_types=1);
+
+// Prevent direct web access to this include-only file.
+if (PHP_SAPI !== 'cli' && basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'] ?? '')) {
+    http_response_code(403);
+    exit('Forbidden');
+}
 /**
  * _do_task_helpers.php
  * Shared helpers untuk semua halaman DO Task (WQS, SCM, ACT, FIN).

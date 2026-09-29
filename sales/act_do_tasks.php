@@ -1177,7 +1177,7 @@ if ($_f_status !== '' && in_array($_f_status, $_allowed_act_status, true)) {
 // Ini menjaga backlog default ACT tetap ringan dan tidak memaksa DO yang belum mencapai ACT.
 $_include_paid_history = ($_f_status === 'paid' || $_f_date_fr !== '' || $_f_date_to !== '' || $_f_exchange_date_fr !== '' || $_f_exchange_date_to !== '');
 $_act_status_scope_sql = $_include_paid_history
-    ? "(d.status IN ('delivered','wait_payment') OR (d.status='paid' AND (NULLIF(d.act_ready_fin_at,'') IS NOT NULL OR NULLIF(d.act_tax_invoice_file,'') IS NOT NULL OR NULLIF(d.act_exchange_doc_file,'') IS NOT NULL)))"
+    ? "(d.status IN ('delivered','wait_payment') OR (d.status='paid' AND (d.act_ready_fin_at IS NOT NULL OR NULLIF(d.act_tax_invoice_file,'') IS NOT NULL OR NULLIF(d.act_exchange_doc_file,'') IS NOT NULL)))"
     : "d.status IN ('delivered','wait_payment')";
 if ($_f_date_fr !== '') { $_act_extra_sql .= " AND d.do_date >= ?"; $_act_extra_params[] = $_f_date_fr; }
 if ($_f_date_to !== '') { $_act_extra_sql .= " AND d.do_date <= ?"; $_act_extra_params[] = $_f_date_to; }
