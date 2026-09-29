@@ -1,9 +1,9 @@
 <?php
 // require_login(); // static scan marker (login enforced via _kpi_bootstrap.php)
 // KPI DO (SLA) - Phase 1 Enterprise+++
-require_once __DIR__ . '/_kpi_bootstrap.php';
-require_once __DIR__ . '/_kpi_metrics.php';
-require_once __DIR__ . '/_kpi_policy.php';
+require_once __DIR__ . '/../kpi/_kpi_bootstrap.php';
+require_once __DIR__ . '/../kpi/_kpi_metrics.php';
+require_once __DIR__ . '/../kpi/_kpi_policy.php';
 if (function_exists('require_route_access')) {
     require_route_access(['KPI.DO_VIEW', 'SALES.AUDIT']);
 } elseif (function_exists('require_any_permission')) {

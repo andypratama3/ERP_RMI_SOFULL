@@ -1,7 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../config/db.php';
-session_start();
+require_once __DIR__ . '/auth.php';
+require_once __DIR__ . '/../_shared/db.php';
+require_login();
+if (function_exists('require_any_permission')) {
+    require_any_permission(['MASTER.PRODUCT.MANAGE', 'MASTER.PRODUCT.VIEW', 'SYSTEM.MASTER_MANAGE']);
+}
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $message = '';
 

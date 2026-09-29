@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../../../_shared/bootstrap.php';
-require_once __DIR__ . '/../../../../_shared/rbac.php';
-require_once __DIR__ . '/../../../../_shared/erp_audit.php';
-require_once __DIR__ . '/../../../../tools/ops/_lib/ops_thresholds_lib.php';
+require_once __DIR__ . '/../../../_shared/bootstrap.php';
+require_once __DIR__ . '/../../../_shared/rbac.php';
+require_once __DIR__ . '/../../../_shared/erp_audit.php';
+require_once __DIR__ . '/../../../tools/ops/_lib/ops_thresholds_lib.php';
 
 require_login();
 if (function_exists('require_any_permission')) {

@@ -55,6 +55,27 @@ function fa_ensure_legacy_asset_code_column(PDO $pdo): void {
 }
 
 
+/**
+ * Pastikan kolom inti Register Asset (klasifikasi + jumlah + harga satuan) tersedia.
+ * Kolom ini dipakai halaman Register Asset, import, dan rekap nilai, namun belum
+ * ada di dump lama — tanpa ini halaman fatal "Unknown column 'quantity'".
+ */
+function fa_ensure_asset_core_columns(PDO $pdo): void {
+  $cols = [
+    'asset_category_code' => "ALTER TABLE fa_assets ADD COLUMN asset_category_code VARCHAR(50) NULL AFTER legacy_asset_code",
+    'quantity'            => "ALTER TABLE fa_assets ADD COLUMN quantity INT NOT NULL DEFAULT 1 AFTER asset_category_code",
+    'unit_cost'           => "ALTER TABLE fa_assets ADD COLUMN unit_cost DECIMAL(18,2) NOT NULL DEFAULT 0.00 AFTER quantity",
+  ];
+  foreach ($cols as $col => $sql) {
+    try {
+      $st = $pdo->query("SHOW COLUMNS FROM fa_assets LIKE " . $pdo->quote($col));
+      if (!$st || !$st->fetch(PDO::FETCH_ASSOC)) $pdo->exec($sql);
+    } catch (Throwable $e) {
+      if (function_exists('fa_log')) fa_log($pdo,'ASSET_CORE_PREFLIGHT_ERROR','ASSET',0,['column'=>$col,'error'=>$e->getMessage()]);
+    }
+  }
+}
+
 /** Pastikan kolom foto aset tersedia tanpa merusak database existing. */
 function fa_ensure_asset_photo_columns(PDO $pdo): void {
   $cols = [
@@ -353,6 +374,7 @@ function fa_asset_copy_receive_photo_to_asset_folder(?string $receivePath, strin
  */
 function fa_normalize_legacy_asset_codes(PDO $pdo, array $asset_categories): array {
   fa_ensure_legacy_asset_code_column($pdo);
+  fa_ensure_asset_core_columns($pdo);
 
   $st = $pdo->query("SELECT id,asset_code,asset_category_code,category,office_code FROM fa_assets WHERE deleted_at IS NULL ORDER BY id ASC");
   $rows = $st ? $st->fetchAll(PDO::FETCH_ASSOC) : [];
@@ -421,6 +443,8 @@ function fa_normalize_legacy_asset_codes(PDO $pdo, array $asset_categories): arr
 }
 
 
+fa_ensure_legacy_asset_code_column($pdo);
+fa_ensure_asset_core_columns($pdo);
 fa_ensure_asset_photo_columns($pdo);
 
 $master_offices = fa_master_offices($pdo);

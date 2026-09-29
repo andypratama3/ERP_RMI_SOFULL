@@ -99,12 +99,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'itc_r
 
 <?php
 /* 4) Saat ACT register asset, pastikan hanya status RECEIVED_BY_ITC yang boleh masuk fa_assets.
-   Jangan izinkan RECEIVED_MISMATCH_ITC. */
-if (($req['status'] ?? '') !== 'RECEIVED_BY_ITC') {
+   Jangan izinkan RECEIVED_MISMATCH_ITC.
+   Blok ini hanya valid bila file ini di-require dari assets.php (handler POST sudah
+   mengisi $req). Diakses langsung sebagai halaman, $req tidak ada — jangan fatal. */
+$__faItcRequest = isset($req) && is_array($req) ? $req : null;
+if ($__faItcRequest !== null && ($__faItcRequest['status'] ?? '') !== 'RECEIVED_BY_ITC') {
     throw new RuntimeException('ACT hanya dapat register aset jika ITC sudah menerima barang dan status barang sesuai.');
 }
 
 /* 5) Tambahkan tampilan bukti foto pada tabel workflow, misalnya di kolom Status atau Aksi. */
-if (!empty($row['itc_receive_photo'])): ?>
+if (isset($row['itc_receive_photo']) && !empty($row['itc_receive_photo'])): ?>
   <a href="<?= htmlspecialchars($row['itc_receive_photo']) ?>" target="_blank">Lihat Foto ITC</a>
 <?php endif; ?>
