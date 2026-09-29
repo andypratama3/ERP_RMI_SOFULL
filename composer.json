@@ -5,7 +5,7 @@
     "require": {
         "php": ">=8.0",
         "lbuchs/webauthn": "^2.2",
-        "phpoffice/phpspreadsheet": "^5.5"
+        "phpoffice/phpspreadsheet": "^5.8.1"
     },
     "autoload": {
         "psr-4": {

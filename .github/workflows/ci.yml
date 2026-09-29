@@ -104,12 +104,16 @@ jobs:
           coverage: none
           tools: composer:v2
 
+      # Exit code diambil dari PIPESTATUS, bukan $?. Setelah `composer audit |
+      # tee audit.txt`, $? adalah status tee (selalu 0), sehingga semua
+      # advisory akan lolos tanpa terdeteksi.
       - name: composer audit
         id: audit
         continue-on-error: true
         run: |
+          set -o pipefail
           composer audit --format=summary 2>&1 | tee audit.txt
-          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Ringkasan advisory
         if: always()
@@ -117,7 +121,7 @@ jobs:
           {
             echo "## Security"
             echo
-            if grep -q 'No security vulnerability' audit.txt 2>/dev/null; then
+            if [ "${{ steps.audit.outputs.exit_code }}" = "0" ]; then
               echo "Tidak ada advisory composer." >> "$GITHUB_STEP_SUMMARY"
             else
               echo '```' >> "$GITHUB_STEP_SUMMARY"
@@ -128,21 +132,22 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # Sengaja memblokir. Advisory phpspreadsheet yang sekarang ada bisa
-      # dieksploitasi lewat file yang di-upload user, jadi tidak boleh hijau
-      # palsu. Untuk sementara EXPECTED_ADVISORIES=8; turunkan angka ini
-      # setiap kali/library sudah di-patch.
+      # Gate keras. Advisory phpspreadsheet bisa dieksploitasi lewat file
+      # spreadsheet yang di-upload user, jadi tidak boleh hijau palsu.
+      # Angka/CVE tidak ditulis di sini supaya gate ini tidak basi setiap kali
+      # library sudah di-patch: cukup satu advisory baru = merah.
       - name: Gerbang advisory
         run: |
-          if grep -q 'No security vulnerability' audit.txt 2>/dev/null; then
-            echo "Bersih."; exit 0
+          if [ "${{ steps.audit.outputs.exit_code }}" = "0" ]; then
+            echo "Bersih: tidak ada advisory composer."
+            exit 0
           fi
-          echo "Ditemukan advisory pada composer.lock."
-          echo ""
-          echo "CVE-2026-34084 (critical) + 7 advisory lain pada phpoffice/phpspreadsheet 5.5.0"
-          echo "diperbaiki dengan upgrade ke >= 5.8.1 (tersedia 5.10.0)."
-          echo ""
-          echo "Job ini sengaja MERAH sampai upgrade selesai — lihat tracker."
+          echo "Ditemukan advisory pada composer.lock:"
+          echo
+          composer audit --format=summary 2>&1 | sed 's/^/  /' || true
+          echo
+          echo "Perbaiki dengan: composer require phpoffice/phpspreadsheet:^<versi-terpatch> --no-interaction"
+          echo "Detail tugas ada di tools/qa/ERP_MASTER_TASK_TRACKER.md"
           exit 1
 
   # --------------------------------------------------------------------------
@@ -155,6 +160,10 @@ jobs:
     runs-on: [self-hosted, linux, rmi-nas]
     timeout-minutes: 90
     steps:
+      # Wajib: tanpa checkout, self-hosted runner bisa saja memakai workspace
+      # sisa job sebelumnya, bukan commit yang sedang diuji.
+      - uses: actions/checkout@v4
+
       - name: Pastikan APP_ROOT benar
         run: |
           echo "APP_ROOT=$APP_ROOT"
@@ -173,6 +182,15 @@ jobs:
 
       - name: Sapuan runtime seluruh halaman
         run: php tools/qa/runtime_sweep.php 1000
+
+      # Gate SVG: menangkap pemanggil yang meng-escape rmi_icon() hanya bisa
+      # lewat render nyata. Sapuan inilah yang memunculkan bug markup ter-escape
+      # di halaman KPI dan dashboard manager.
+      - name: Gate SVG ter-escape
+        run: bash tools/qa/check_escaped_svg.sh
+
+      - name: Regresi spreadsheet (phpspreadsheet)
+        run: bash tools/qa/spreadsheet_regression.sh
 
       - name: Cek drift skema vs kode
         run: php tools/qa/schema_drift.php

@@ -1,5 +1,49 @@
 # ERP MASTER TASK TRACKER (SINGLE SOURCE)
 
+> **ATURAN TRACKER (WAJIB, DARI OWNER):** setiap temuan, perubahan, dan hasil
+> verifikasi baru **harus** ditulis ke file ini. Tidak ada pekerjaan QA yang
+> dianggap selesai kalau tidak tercatat di sini beserta evidence-nya.
+
+_Updated: 2026-09-29 10:05 | Fixes: phpspreadsheet 5.5.0 -> 5.8.1 (CVE-2026-34084 tertutup); SVG ter-escape di KPI + dashboard manager | Root lokal: /Users/andypratama3/Development/ERP_RMI_SOFULL (prompt menyebut /volume4/web/ERP_RMI_SOFULL = NAS produksi)_
+
+## Sesi 2026-09-29 — GitHub Actions + Phpspreadsheet + SVG escape
+
+| ID | Task | Status | Evidence | Notes |
+|----|------|--------|----------|-------|
+| CI-001 | Workflow `.github/workflows/ci.yml` 3 job (lint/security/qa-nas) | PASS | YAML valid: 3 jobs, 7/5/10 steps | qa-nas butuh repo var `RMI_SELF_HOSTED_ENABLED=true` + runner ber-label `[self-hosted, linux, rmi-nas]` |
+| CI-002 | Job `security` merah karena advisory | **FIXED** | `composer audit` -> "No security vulnerability advisories found." | Gate dirombak: tidak lagi hardcode CVE/jumlah advisory; cukup 1 advisory baru = merah |
+| CI-003 | `composer audit` exit code salah dibaca | **FIXED** | `PIPESTATUS[0]` menggantikan `$?` | Sebelumnya `$?` = status `tee` (selalu 0) sehingga semua advisory lolos |
+| CI-004 | `qa-nas` tanpa `actions/checkout` | **FIXED** | step `actions/checkout@v4` ditambahkan | Tanpa ini runner bisa menguji sisa workspace, bukan commit yang sedang diuji |
+| SEC-001 | `phpoffice/phpspreadsheet` 5.5.0, 8 advisory (5 high, 1 critical `CVE-2026-34084`, 2 medium) | **FIXED** | 5.5.0 -> **5.8.1**, `composer audit` bersih | Advisory bisa dieksploitasi lewat file spreadsheet yang di-upload user, jadi ini bukan teori |
+| SEC-002 | Constraint `^5.5` masih mengizinkan versi rentan | **FIXED** | `composer.json` -> `"^5.8.1"`, `composer validate` OK | Floor versi naik supaya `composer update` berikutnya tidak bisa balik ke 5.5.0 |
+| SEC-003 | Regresi spreadsheet (tulis/baca XLSX + guard env) | **PASS** | `bash tools/qa/spreadsheet_regression.sh` -> LULUS | Lihat detail di bawah |
+| UI-001 | SVG ter-escape tampil sebagai teks mentah di 9 halaman KPI | **FIXED** | `check_escaped_svg.sh '^kpi/'` -> BERSIH | Sumber: `kpi/_kpi_bootstrap.php` menaruh `rmi_icon()` di dalam string yang lalu di-`h()` |
+| UI-002 | SVG ter-escape di `kpi_dashboard_daily.php` + `kpi_dashboard_monthly.php` (5 ikon/card) | **FIXED** | `check_escaped_svg.sh '^kpi/'` -> BERSIH (23 halaman) | Sumber: `dashboards/_manager_scope.php` meng-`$esc()` markup SVG milik kartu |
+| UI-003 | XSS risk pada ikon kartu dashboard | **FIXED** | kartu kini menyimpan `icon_name` (string), `rmi_icon()` dipanggil saat render | `extra_metrics` bisa disuplai pemanggil; mencetak HTML mentah membuka celah injeksi |
+| UI-004 | Detektor SVG false-positive pada `data-icon-dark/light` | **FIXED** | strip atribut `data-icon-*` sebelum hitung | Escaping di dalam atribut WAJIB (browser un-escape saat parse, lalu JS `innerHTML`) |
+| UI-005 | `declare(strict_types=1)` salah posisi di `purchases/bank_statement_import.php` | **FIXED** | `php -l` bersih | Pernah jadi fatal error |
+| PENDING-01 | Gate SVG + regresi spreadsheet belum ada di `lint` job | IN_PROGRESS | sudah dipasang di `qa-nas` | Tanya: `lint` job GitHub-hosted tidak bisa render authenticated, jadi hanya `qa-nas` |
+| PENDING-02 | Sapuan SVG seluruh repo (semua 675 halaman) | TODO | - | Percobaan pertama di-interrupt; perlu diulang sampai tuntas |
+| PENDING-03 | `tools/qa/run_full_suite.php` | IN_PROGRESS | belum stabil | Memanggil `runtime_sweep.php --json-out=...` yang belum didukung; hanya cover render SYS, belum CRUD/RBAC/audit/print per role |
+| PENDING-04 | `Fixed_Asset/assets.php` -> `Unknown column 'quantity'` | BLOCKED | runtime error terkonfirmasi | Butuh keputusan semantics + migration idempotent untuk `quantity`, `unit_cost`, `asset_category_code` |
+| PENDING-05 | 23 actor unlinked + 2 department mismatch | BLOCKED | `check_actor_relation.php` | Butuh keputusan data owner; **dilarang** menebak |
+
+### Detail SEC-003 — apa yang diuji `spreadsheet_regression.sh`
+1. `composer audit` bersih (gate keras).
+2. Versi terpasang di `composer.lock` >= floor `5.8.1`.
+3. Tulis XLSX lalu baca ulang: sheet title, header, nilai numerik, desimal,
+   number format, baris terakhir. Magic byte harus `PK`.
+4. `export_xlsx_if_available()` produksi menghasilkan file saat
+   `ENABLE_EXCEL_EXPORT=1`.
+5. Guard: jalur XLSX **tertutup** saat env bukan 1.
+6. Jalur CSV default tetap berfungsi.
+
+> Catatan harness: anak proses wajib `require vendor/autoload.php` **sebelum**
+> `_shared/export_excel.php`. Tanpa itu `class_exists(Spreadsheet::class)`
+> bernilai false dan fungsi menolak diam-diam (return false) — bukan bug
+> kode produksi, tapi bug harness yang sempat menyesatkan.
+
+
 _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; panduan render MD+tombol | _Generated: 2026-09-29 05:07 | Features: 346 | P0: 16 | P1: 121 | Root lokal: /Users/andypratama3/Development/ERP_RMI_SOFULL (prompt menyebut /volume4/web/ERP_RMI_SOFULL = NAS produksi)_
 
 | ID | Core | Feature | Task | Priority | Agent | Status | Evidence | Last Test | Notes |
