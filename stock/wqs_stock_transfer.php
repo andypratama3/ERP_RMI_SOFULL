@@ -25,6 +25,7 @@ if (function_exists('require_any_permission')) {
 
 require_once __DIR__ . '/_stock_office_helper.php';
 require_once __DIR__ . '/../master/_audit_master.php';
+require_once __DIR__ . '/_audit_helper.php'; // rmi_audit_safe() used by transfer_create/send/receive
 
 if (!function_exists('h')) { function h($v) { return rmi_h($v); } }
 function up($v) { return strtoupper(trim((string)($v ?? ''))); }

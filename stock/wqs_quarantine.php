@@ -7,12 +7,22 @@
  * - Tidak menjalankan ALTER TABLE berulang yang membuat halaman lambat.
  * - Lengkapi kolom tabel secara aman tanpa error duplicate column.
  * - Tidak memakai AFTER agar tidak error jika kolom referensi belum ada.
+ *
+ * NEEDS-OWNER: halaman ini hanya memanggil require_login(). Belum ada gate
+ * permission (require_any_permission / rbac_require) padahal aksinya
+ * memengaruhi stok (release menambah qty di wqs_stock_by_office). Tidak ada
+ * permission WQS.QUARANTINE_* di rbac_permissions, jadi memilih permission yang
+ * benar adalah keputusan owner. JANGAN menebak permission-nya.
  */
 
 require_once __DIR__ . '/../master/auth.php';
 if (!function_exists('rmi_icon') && is_file(__DIR__ . '/../_shared/rmi_icons.php')) {
     require_once __DIR__ . '/../_shared/rmi_icons.php';
 }
+
+// PATCH_3_AUDIT
+require_once __DIR__ . '/_audit_helper.php'; // rmi_audit_safe() used by quarantine release/scrap/return_supplier/hold
+require_once __DIR__ . '/../master/_audit_master.php';
 
 if (function_exists('require_login')) {
     require_login();
@@ -251,6 +261,48 @@ function wqs_q_add_stock(PDO $pdo, array $qrow, string $note): void {
     }
 }
 
+/**
+ * Audit trail untuk keputusan karantina (release / scrap / return_supplier / hold).
+ * Fail-soft: masalah audit TIDAK boleh بمنahkan aksi bisnis.
+ * Pola sama dengan stock/wqs_stock_transfer.php (rmi_audit_safe + master_audit).
+ */
+function wqs_q_audit(PDO $pdo, string $action, int $id, ?array $row, string $outcome, string $newStatus = '', string $note = '', string $error = ''): void {
+    try {
+        $act = strtoupper($action) ?: 'UNKNOWN';
+        $code = 'Q#' . ($id > 0 ? $id : 0);
+        $sku = trim((string)($row['sku'] ?? ''));
+        $after = strtoupper(trim((string)$newStatus));
+
+        $extra = [
+            'event'           => 'quarantine_' . strtolower($act),
+            'outcome'         => $outcome,
+            'quarantine_id'   => $id,
+            'quarantine_code' => $code,
+            'status_before'   => strtoupper((string)($row['quarantine_status'] ?? '')),
+            'status_after'    => $after,
+            'sku'             => $sku,
+            'product_id'      => (int)($row['product_id'] ?? 0),
+            'office_code'     => (string)($row['office_code'] ?? ''),
+            'qty'             => (float)($row['qty'] ?? 0),
+            'decision_note'   => $note,
+        ];
+        if ($error !== '') $extra['error'] = $error;
+
+        rmi_audit_safe($act, 'STOCK.WQS_QUARANTINE', $id, null, null, $extra);
+
+        if (function_exists('master_audit')) {
+            $descr = 'Quarantine ' . $act . ': ' . $code
+                . ($sku !== '' ? " ({$sku})" : '')
+                . " [{$outcome}]"
+                . ($after !== '' ? " -> {$after}" : '')
+                . ($error !== '' ? " - {$error}" : '');
+            master_audit($pdo, 'wqs_quarantine', 'wqs_stock_quarantine', $act, $id > 0 ? $id : null, $code, $descr, $extra);
+        }
+    } catch (Throwable $e) {
+        error_log('WQS_QUARANTINE audit fail-soft: ' . $e->getMessage());
+    }
+}
+
 $msg = '';
 $err = '';
 
@@ -266,12 +318,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdo && !$err) {
     $action = strtolower(trim((string)($_POST['action'] ?? '')));
     $decisionNote = trim((string)($_POST['decision_note'] ?? ''));
 
+    $row = null;
+    $curStatus = '';
+    $newStatus = '';
+
     try {
         if ($id <= 0) throw new RuntimeException('ID karantina tidak valid.');
 
         $st = $pdo->prepare("SELECT * FROM wqs_stock_quarantine WHERE id=? LIMIT 1");
         $st->execute([$id]);
-        $row = $st->fetch(PDO::FETCH_ASSOC);
+        $row = $st->fetch(PDO::FETCH_ASSOC) ?: null;
         if (!$row) throw new RuntimeException('Data karantina tidak ditemukan.');
 
         $curStatus = strtoupper((string)($row['quarantine_status'] ?? 'OPEN'));
@@ -309,9 +365,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $pdo && !$err) {
         $up->execute([$newStatus, wqs_q_user(), $decisionNote, $id]);
 
         $pdo->commit();
+
+        wqs_q_audit($pdo, $action, $id, $row, 'SUCCESS', $newStatus, $decisionNote);
     } catch (Throwable $e) {
         if ($pdo && $pdo->inTransaction()) $pdo->rollBack();
         $err = $e->getMessage();
+        wqs_q_audit($pdo, $action, $id, $row, 'FAILED', $newStatus, $decisionNote, $e->getMessage());
     }
 }
 
@@ -490,18 +549,21 @@ table{width:100%;border-collapse:collapse}th{background:#0b1220;color:#cbd5e1;te
               <form method="post" onsubmit="return confirm('Release ke stok jual?');">
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                 <input type="hidden" name="action" value="release">
+                <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
                 <textarea name="decision_note" placeholder="Catatan release..."></textarea>
                 <button class="btn green sm" type="submit"><?= rmi_icon('check') ?> Release ke Stok</button>
               </form>
               <form method="post" onsubmit="return confirm('Tandai scrap/rusak?');">
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                 <input type="hidden" name="action" value="scrap">
+                <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
                 <textarea name="decision_note" placeholder="Catatan scrap..."></textarea>
                 <button class="btn red sm" type="submit"><?= rmi_icon('cross') ?> Scrap</button>
               </form>
               <form method="post" onsubmit="return confirm('Return supplier?');">
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                 <input type="hidden" name="action" value="return_supplier">
+                <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
                 <textarea name="decision_note" placeholder="Catatan return supplier..."></textarea>
                 <button class="btn yellow sm" type="submit">↩ Return Supplier</button>
               </form>
@@ -509,6 +571,7 @@ table{width:100%;border-collapse:collapse}th{background:#0b1220;color:#cbd5e1;te
               <form method="post">
                 <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                 <input type="hidden" name="action" value="hold">
+                <input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>">
                 <textarea name="decision_note" placeholder="Catatan hold..."></textarea>
                 <button class="btn sm" type="submit"><?= rmi_icon('warn') ?> Hold</button>
               </form>

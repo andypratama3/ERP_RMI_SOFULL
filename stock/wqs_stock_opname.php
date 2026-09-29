@@ -10,6 +10,7 @@ require_once __DIR__ . '/../_shared/assets.php';
 require_once __DIR__ . '/../_shared/rmi_layout.php';
 require_once __DIR__ . '/../master/auth.php';
 require_once __DIR__ . '/../master/_audit_master.php';
+require_once __DIR__ . '/_audit_helper.php'; // rmi_audit_safe() used by opname_save/apply
 require_login();
 require_once __DIR__ . '/_wqs_bootstrap.php';
 require_any_permission(['STOCK.CREATE', 'WQS.INCOMING_VIEW', 'WQS.INCOMING_CREATE', 'WQS.INCOMING_EDIT', 'WQS.PICKING_VIEW', 'WQS.PICKING_CREATE', 'WQS.PICKING_EDIT']);
