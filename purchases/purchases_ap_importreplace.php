@@ -4,6 +4,7 @@ purchases_require_login();
 require_once __DIR__ . '/../_shared/assets.php';
 require_once __DIR__ . '/../master/auth.php';
 require_once __DIR__ . '/../_shared/rbac_guard.php';
+require_once __DIR__ . '/../master/_audit_master.php';
 require_login();
 
 if (function_exists('require_any_permission')) {
@@ -331,6 +332,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         fclose($fh);
         $pdo->commit();
         $success = "Import selesai. Berhasil {$ok} baris; dilewati/gagal {$skip} baris. Batch {$importBatch}.";
+        if (function_exists('master_audit')) {
+            master_audit(
+                $pdo,
+                'fin_ap_opening',
+                'fin_ap_opening',
+                'IMPORT_REPLACE',
+                null,
+                $importBatch,
+                "Replace import hutang lama: {$ok} baris masuk, {$skip} dilewati/gagal.",
+                ['import_batch' => $importBatch, 'inserted' => $ok, 'skipped' => $skip]
+            );
+        }
     } catch (Throwable $e) {
         if ($pdo->inTransaction()) $pdo->rollBack();
         $error = 'Error: ' . $e->getMessage();

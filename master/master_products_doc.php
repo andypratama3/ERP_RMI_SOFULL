@@ -32,6 +32,29 @@ $canSave = rbac_can($pdo, 'MASTER.PRODUCTS.SAVE');
 
 function esc($v): string { return rmi_h($v); }
 
+// Helper ini tidak ada di _shared (verifikasi: tidak terdefinisi di repo mana pun).
+// Definisi lokal agar halaman tidak fatal; hanya affects quoting/column map.
+if (!function_exists('rmi_qi')) {
+    function rmi_qi($id): string {
+        $id = (string)$id;
+        return (preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $id) === 1) ? ('`' . $id . '`') : '`invalid_identifier`';
+    }
+}
+
+if (!function_exists('rmi_table_columns')) {
+    function rmi_table_columns(PDO $pdo, string $table): array {
+        try {
+            $st = $pdo->prepare('SELECT column_name FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = ?');
+            $st->execute([$table]);
+            $out = [];
+            foreach ($st->fetchAll(PDO::FETCH_NUM) as $r) { $out[strtolower((string)$r[0])] = (string)$r[0]; }
+            return $out;
+        } catch (Throwable $e) {
+            return [];
+        }
+    }
+}
+
 // Guard tables
 if (!rmi_table_exists($pdo, 'master_products_doc')) {
     http_response_code(500);
@@ -40,8 +63,20 @@ if (!rmi_table_exists($pdo, 'master_products_doc')) {
     exit;
 }
 
-$mp = rmi_master_product_resolve($pdo);
-if (!$mp['table']) {
+// master_product_resolver.php mengekspos master_products_resolve_columns() yang
+// mengembalikan key id/sku/name (bukan id_col/sku_col/name_col).
+if (function_exists('master_products_resolve_columns')) {
+    $mpCols = master_products_resolve_columns($pdo);
+    $mp = [
+        'table'   => $mpCols['table'] ?? 'master_products',
+        'id_col'  => $mpCols['id']   ?? 'id',
+        'sku_col' => $mpCols['sku']  ?? 'sku',
+        'name_col' => $mpCols['name'] ?? 'products_name',
+    ];
+} else {
+    $mp = ['table' => 'master_products', 'id_col' => 'id', 'sku_col' => 'sku', 'name_col' => 'products_name'];
+}
+if (!$mp['table'] || !rmi_table_exists($pdo, $mp['table'])) {
     http_response_code(500);
     echo '<h2>DB belum siap</h2>';
     echo '<p>Tabel master produk tidak ditemukan. Pastikan tabel <code>master_products</code> ada.</p>';

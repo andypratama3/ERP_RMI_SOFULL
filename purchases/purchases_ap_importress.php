@@ -4,6 +4,7 @@ purchases_require_login();
 require_once __DIR__ . '/../_shared/assets.php';
 require_once __DIR__ . '/../master/auth.php';
 require_once __DIR__ . '/../_shared/rbac_guard.php';
+require_once __DIR__ . '/../master/_audit_master.php';
 require_login();
 
 if (function_exists('require_any_permission')) {
@@ -220,6 +221,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->commit();
         $modeText = $importMode === 'reset_all' ? " Mode hapus import lama: {$deleted} baris lama dihapus." : ' Mode update/replace per dokumen.';
         $success = "Import selesai. Berhasil {$ok} baris; dilewati {$skip} baris. Batch {$batch}." . $modeText;
+        if (function_exists('master_audit')) {
+            master_audit(
+                $pdo,
+                'fin_ap_opening',
+                'fin_ap_opening',
+                $importMode === 'reset_all' ? 'IMPORT_RESET_ALL' : 'IMPORT_UPSERT',
+                null,
+                $batch,
+                "Import hutang lama: {$ok} baris masuk, {$skip} dilewati, {$deleted} baris lama dihapus (mode {$importMode}).",
+                ['import_batch' => $batch, 'import_mode' => $importMode, 'inserted' => $ok, 'skipped' => $skip, 'deleted' => $deleted]
+            );
+        }
     } catch (Throwable $e) {
         if ($pdo->inTransaction()) $pdo->rollBack();
         $error = 'Error: ' . $e->getMessage();

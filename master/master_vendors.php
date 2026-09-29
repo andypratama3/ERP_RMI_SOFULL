@@ -1069,16 +1069,28 @@ $where  = " WHERE 1=1 ";
 $params = [];
 
 if ($search !== '') {
-    $officeSearch = $has_office_code ? "v.office_code  LIKE :search OR\n        " : '';
-    $where .= " AND (
-        v.vendors_code LIKE :search OR
-        v.vendors_name LIKE :search OR
-        " . $officeSearch . "
-        v.vendor_type  LIKE :search OR
-        v.city         LIKE :search OR
-        v.category     LIKE :search
-    )";
-    $params[':search'] = '%' . $search . '%';
+    // PDO native prepares (ATTR_EMULATE_PREPARES = false) tidak mendukung
+    // named placeholder yang dipakai berulang dalam 1 statement.
+    // Pakai placeholder unik per kolom.
+    $search_cols = [
+        'v.vendors_code',
+        'v.vendors_name',
+        'v.vendor_type',
+        'v.city',
+        'v.category',
+    ];
+    if ($has_office_code) {
+        $search_cols[] = 'v.office_code';
+    }
+    $search_like = '%' . $search . '%';
+    $search_parts = [];
+    $i = 1;
+    foreach ($search_cols as $col) {
+        $ph = ':search' . $i++;
+        $search_parts[] = "{$col} LIKE {$ph}";
+        $params[$ph] = $search_like;
+    }
+    $where .= " AND (" . implode(' OR ', $search_parts) . ")";
 }
 if ($filter_office !== '' && $has_office_code) {
     $where .= " AND UPPER(TRIM(COALESCE(v.office_code,''))) = :filter_office ";

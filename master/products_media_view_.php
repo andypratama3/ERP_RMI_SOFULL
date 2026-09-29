@@ -4,6 +4,11 @@ require_once __DIR__ . '/../_shared/assets.php'; // RMI asset loader
 // --- auto-injected login guard (tools/enforce_login_guards.php) ---
 require_once dirname(__DIR__, 1) . '/master/auth.php';
 require_login();
+// Salinan lama products_media_view.php. Tanpa gate ini file ini bisa dibaca
+// user login mana pun (tanpa MASTER.PRODUCT_VIEW) via direct URL. Gate disamakan
+// dengan pasangannya; tidak ada kode izin baru.
+require_once __DIR__ . '/../_shared/rbac.php';
+require_any_permission(['MASTER.PRODUCT_VIEW', 'MASTER_PRODUCTS.MEDIA_VIEW']);
 // -------------------------------------------------------------
 
 // products_media_view.php

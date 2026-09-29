@@ -31,10 +31,14 @@ if (!$row) {
 }
 
 $root = realpath(__DIR__ . '/..') ?: dirname(__DIR__);
-$path = $root . '/' . ltrim((string)$row['file_rel'], '/');
-if (!is_file($path) || !is_readable($path)) {
+$path = realpath($root . '/' . ltrim((string)$row['file_rel'], '/'));
+if ($path === false || !is_file($path) || !is_readable($path)) {
     http_response_code(404);
     exit('File tidak ditemukan.');
+}
+if (strncmp($path, $root . DIRECTORY_SEPARATOR, strlen($root) + 1) !== 0) {
+    http_response_code(403);
+    exit('Forbidden');
 }
 
 $mime = mime_content_type($path) ?: 'application/octet-stream';

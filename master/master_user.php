@@ -629,6 +629,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_mpr'])) {
             $id,
         ]);
 
+        if ($ok && function_exists('master_audit')) {
+            master_audit($pdo, 'master_mpr', 'master_mpr', 'UPDATE', (int)$id, $customers_code . '/' . $contact_name, "PIC updated: {$contact_name} ({$customers_code})", [
+                'is_primary' => $is_primary,
+                'status'     => $status,
+            ]);
+        }
+
         set_flash($ok ? 'success' : 'danger',
             $ok ? 'Data PIC berhasil diupdate.' : 'Gagal mengupdate data PIC.');
 

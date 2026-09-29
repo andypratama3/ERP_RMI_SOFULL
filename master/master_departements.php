@@ -577,6 +577,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_dept'])) {
                 ':status'     => $status,
                 ':id'         => $id,
             ]);
+            if (function_exists('master_audit')) {
+                master_audit($pdo, 'master_departements', 'master_departements', 'UPDATE', (int)$id, $dept_code, "Dept updated: {$dept_code} - {$dept_name}", [
+                    'level_type' => $level_type,
+                    'status'     => $status,
+                    'office_code'=> $office_code_db,
+                ]);
+            }
             set_flash('success', 'Data departemen berhasil diperbarui.');
         }
 

@@ -166,6 +166,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tax'])) {
                     ':office_scope' => $office_scope,
                     ':status'       => $status ?: 'active',
                 ]);
+                if (function_exists('master_audit')) {
+                    $newId = (int)$pdo->lastInsertId();
+                    master_audit($pdo, 'master_tax', 'master_tax', 'CREATE', $newId, $tax_code, "Tax created: {$tax_code} - {$tax_name}", [
+                        'tax_type'     => $tax_type,
+                        'rate_percent' => $rate_percent,
+                        'level_type'   => $level_type,
+                        'office_scope' => $office_scope,
+                        'status'       => $status ?: 'active',
+                    ]);
+                }
                 set_flash('success', 'Data Tax Profile berhasil ditambahkan.');
             }
         } else {
@@ -198,6 +208,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tax'])) {
                     ':status'       => $status ?: 'active',
                     ':id'           => $id,
                 ]);
+                if (function_exists('master_audit')) {
+                    master_audit($pdo, 'master_tax', 'master_tax', 'UPDATE', (int)$id, $tax_code, "Tax updated: {$tax_code} - {$tax_name}", [
+                        'tax_type'     => $tax_type,
+                        'rate_percent' => $rate_percent,
+                        'level_type'   => $level_type,
+                        'office_scope' => $office_scope,
+                        'status'       => $status ?: 'active',
+                    ]);
+                }
                 set_flash('success', 'Data Tax Profile berhasil diperbarui.');
             }
         }

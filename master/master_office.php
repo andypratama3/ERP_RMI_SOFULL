@@ -621,6 +621,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_office'])) {
                     ':office_radius_m' => $office_radius_m,
                     ':is_active'   => $is_active,
                 ]);
+                if (function_exists('master_audit')) {
+                    $newId = (int)$pdo->lastInsertId();
+                    master_audit($pdo, 'master_office', 'master_office', 'INSERT', $newId, $office_code, "Office created: {$office_code} - {$office_name}", [
+                        'city'       => $city,
+                        'is_active'  => $is_active,
+                    ]);
+                }
                 set_flash('success', 'Data office baru berhasil ditambahkan.');
             }
         } else {
