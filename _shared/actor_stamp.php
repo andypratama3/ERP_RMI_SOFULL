@@ -10,10 +10,14 @@
  *     -> master_employees.employee_code / employee_name
  *
  * Format standar (semua halaman WAJIB sama):
- *     Nama Karyawan (KODE)      <- bila relasi employee utuh
- *     dd-mm-yyyy HH:ii:ss       <- waktu aksi
- *     Tercatat otomatis oleh ERP
- *     Akun: username            <- bukti relasi ke akun
+ *     username                <- AKUN pelaku, baris utama (mis. StaffWQS_TGR)
+ *     Nama Karyawan (KODE)    <- bila relasi employee utuh
+ *     dd-mm-yyyy HH:ii:ss     <- waktu aksi
+ *     Tercatat otomatis oleh ERP  <- di atas garis tanda tangan
+ *
+ * Akun TIDAK lagi dicetak sebagai baris "Akun: ..." di paling bawah: posisi
+ * lama menaruhnya di bawah garis tanda tangan (.erp-actor-line punya
+ * border-top) sehingga terlihat lepas dari identitas pelaku.
  *
  * Kalau relasi putus: TAMPILKAN APA ADANYA (nama akun / username), JANGAN
  * mengarang nama dan JANGAN menulis kode departemen ('WQS'/'SCM') sebagai orang.
@@ -119,16 +123,23 @@ if (!function_exists('rmi_actor_stamp')) {
             // Belum ada aksi: tetap cetak label, TIDAK pernah mengarang pelaku.
             $out .= '<div class="erp-actor-stamp"><div class="erp-actor-name">' . $h($ph) . '</div>';
         } else {
+            // Baris utama = AKUN pelaku (mis. StaffWQS_TGR). Ini yang dicari
+            // pembaca print, jadi naik ke atas tanpa prefix "Akun:".
+            // Dulu akun diletak paling bawah — di BAWAH garis tanda tangan
+            // (.erp-actor-line punya border-top), jadi terlihat lepas dari
+            // identitas pelaku.
+            $main = ($showAcc && $info['account'] !== '') ? $info['account'] : $info['label'];
             $out .= '<div class="erp-actor-stamp">'
-                 . '<div class="erp-actor-name">' . $h($info['label']) . '</div>';
+                 . '<div class="erp-actor-name">' . $h($main) . '</div>';
+            // Nama employee tetap dicetak di bawah, TIDAK pernah dikarang.
+            if ($info['label'] !== '' && $info['label'] !== $main) {
+                $out .= '<div class="erp-actor-meta">' . $h($info['label']) . '</div>';
+            }
             if ($datetime !== '') {
                 $out .= '<div class="erp-actor-meta">' . $h($datetime) . '</div>';
             }
             if ($note !== '') {
                 $out .= '<div class="erp-actor-line">' . $h($note) . '</div>';
-            }
-            if ($showAcc && $info['account'] !== '') {
-                $out .= '<div class="erp-actor-account">Akun: ' . $h($info['account']) . '</div>';
             }
         }
         return $out . '</div></div>';
@@ -150,10 +161,11 @@ if (!function_exists('rmi_actor_stamp_text')) {
             return $s . str_repeat(' ', max(0, $w - $len));
         };
         $name = $info['label'] !== '' ? $info['label'] : '-';
-        $l1 = $pad($name);
-        $l2 = $pad($datetime);
-        $l3 = $pad('Tercatat otomatis oleh ERP');
-        $l4 = $pad($info['account'] !== '' ? 'Akun: ' . $info['account'] : '');
+        // Sama seperti rmi_actor_stamp(): akun jadi baris utama, tanpa prefix.
+        $l1 = $pad($info['account'] !== '' ? $info['account'] : $name);
+        $l2 = $pad($info['label'] !== '' && $info['label'] !== $info['account'] ? $info['label'] : '');
+        $l3 = $pad($datetime);
+        $l4 = $pad('Tercatat otomatis oleh ERP');
         return $l1 . "\n" . $l2 . $l3 . $l4;
     }
 }

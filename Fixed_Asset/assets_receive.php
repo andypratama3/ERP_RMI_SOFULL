@@ -79,11 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'itc_r
 }
 
 /* 3) Ubah form tombol Terima ITC di tabel workflow.
-   Ganti form lama yang hanya note + tombol Terima ITC menjadi contoh berikut. */
+   Ganti form lama yang hanya note + tombol Terima ITC menjadi contoh berikut.
+   Berkas ini adalah patch untuk assets.php, dipanggil di dalam loop baris,
+   jadi $row disetel oleh pemanggil. Diakses langsung sebagai halaman $row
+   tidak ada — form dilewati, bukan fatal (pola sama seperti blok 5). */
+$__faItcRow = isset($row) && is_array($row) ? $row : null;
 ?>
+<?php if ($__faItcRow !== null): ?>
 <form method="post" enctype="multipart/form-data" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
   <input type="hidden" name="action" value="itc_receive_asset">
-  <input type="hidden" name="request_id" value="<?= (int)$row['id'] ?>">
+  <input type="hidden" name="request_id" value="<?= (int)$__faItcRow['id'] ?>">
 
   <select name="itc_receive_match_status" required>
     <option value="MATCH">Barang sesuai</option>
@@ -96,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'itc_r
 
   <button type="submit" class="btn btn-warning">Terima ITC</button>
 </form>
+<?php endif; ?>
 
 <?php
 /* 4) Saat ACT register asset, pastikan hanya status RECEIVED_BY_ITC yang boleh masuk fa_assets.

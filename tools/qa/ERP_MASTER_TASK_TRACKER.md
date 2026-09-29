@@ -4,7 +4,10 @@
 > verifikasi baru **harus** ditulis ke file ini. Tidak ada pekerjaan QA yang
 > dianggap selesai kalau tidak tercatat di sini beserta evidence-nya.
 
-_Updated: 2026-09-29 11:05 | Sesi deploy VPS: 46 halaman mati diperbaiki (commit 9876230); config Nginx untuk `_shared/` statis masih di luar repo — lihat PENDING-06 |_
+_Updated: 2026-09-29 16:15 | Print: akun pelaku jadi baris utama (Actor→employee tetap lengkap); PENDING-03 ditutup (`runtime_sweep --json-out`); warning `assets_receive.php` ditutup |_
+
+## Aturan deploy (dari owner, 2026-09-29)
+Setiap perubahan kode/config → `systemctl restart php8.3-fpm` + `nginx -t && systemctl reload nginx`, lalu verifikasi `curl` halaman login. Detail di `AGENTS.md`. Fokus `/var/www/ERP_RMI_SOFULL` saja; proyek lain di `/var/www` tidak boleh disentuh.
 
 ---
 
@@ -59,7 +62,7 @@ Dump berasal dari MariaDB (default `utf8mb4_unicode_ci`), sedangkan MySQL 8 mema
 
 | PENDING-01 | Gate SVG + regresi spreadsheet belum ada di `lint` job | IN_PROGRESS | sudah dipasang di `qa-nas` | Tanya: `lint` job GitHub-hosted tidak bisa render authenticated, jadi hanya `qa-nas` |
 | PENDING-02 | Sapuan SVG seluruh repo (semua 675 halaman) | TODO | - | Percobaan pertama di-interrupt; perlu diulang sampai tuntas |
-| PENDING-03 | `tools/qa/run_full_suite.php` | IN_PROGRESS | belum stabil | Memanggil `runtime_sweep.php --json-out=...` yang belum didukung; hanya cover render SYS, belum CRUD/RBAC/audit/print per role |
+| PENDING-03 | `tools/qa/run_full_suite.php` | **FIXED** | `runtime_sweep.php --json-out` sekarang didukung | Ditutup 2026-09-29: kontrak JSON vs argumen posisi sudah cocok. Hanya cover render SYS — belum CRUD/RBAC/audit/print per role |
 | PENDING-04 | `Fixed_Asset/assets.php` -> `Unknown column 'quantity'` | **FIXED** | migration 165 + `fa_ensure_asset_core_columns()` | Selesai di sesi deploy 2026-09-29 -> lihat tabel DEP-009 |
 | PENDING-05 | 23 actor unlinked + 2 department mismatch | BLOCKED | `check_actor_relation.php` | Butuh keputusan data owner; **dilarang** menebak |
 | PENDING-06 | Config Nginx belum ter-versioning | TODO | - | Rule `_shared/` statis hanya ada di server. Deploy ke server lain akan reproduce bug CSS 404 -> lihat DEP/SEC sesi deploy |
@@ -217,6 +220,25 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - rmi.css: topbar/field adaptif light; print global.
 - Helper _shared/rmi_icons.php (28 icon) + bootstrap wire.
 - PO print: Prepared/Approved terisi dari audit.
+
+## Print: akun pelaku jadi baris utama (user report)
+- Gejala: di print DO, identitas pelaku tertulis "Akun: StaffWQS_TGR" di baris paling bawah — DI BAWAH garis tanda tangan, jadi terlihat lepas dari nama yell. Pembaca print mencari akun, bukan mencari baris terakhir.
+- Fix `_shared/actor_stamp.php::rmi_actor_stamp()`: akun naik jadi baris isi pertama (`.erp-actor-name`), prefix "Akun:" dihapus; nama employee + tanggal tetap di bawahnya; catatan tetap di atas garis TTD. Kotak "Diterima Customer" **tidak** disentuh (user: biarkan apa adanya) — tidak punya data akun, hanya PIC + TTD digital.
+- Varian monospace `rmi_actor_stamp_text()` disamakan (0 pemanggil saat ini, tapi jangan sampai standarnya melenceng).
+- Bukti (DO id=30, `mode=print`, render headless Chrome -> PDF, `pdftotext -bbox`): judul "Disiapkan WQS / Dikirim SCM / Diterima Customer" tetap rata di y=317.28pt; `StaffWQS_TGR` y=359.21 (baris utama), "Didi Ferriansyah Maulana (WQS230901)" y=370.73, "17-03-2026 10:27:33" y=381.23, "Tercatat otomatis oleh ERP" y=395.82. Jumlah baris tetap 4 → tinggi kotak & keselaras 3 tanda tangan tidak berubah. `php -l` OK.
+- Penting: baris utama TETAP menampilkan nama employee dan kode, jadi bukti relasi Actor→employee tidak hilang. Relasi putus tetap tampil apa adanya, tidak dikarang.
+
+## Fix: warning PHP di Fixed_Asset/assets_receive.php
+- Sweep melaporkan `Undefined variable $row` + `Trying to access array offset on null` di baris 86 saat berkas diakses langsung.
+- Akar: berkas ini patch untuk `assets.php`, dipanggil di dalam loop baris, jadi `$row` disetel pemanggil. Guard `$req` (sebelumnya) hanya menutup blok 4, baris 86 tetap akses `$row['id']` telanjang.
+- Fix: samakan dengan pola `isset($row[...])` yang sudah dipakai blok 5 — form hanya dirender bila `$row` ada.
+- Bukti retest: sweep `Fixed_Asset` 14/14 render, 0 error, 0 warning. Uji dengan `$row` disetel: `request_id` = 42 (benar), link foto tetap muncul.
+
+## Fix: runtime_sweep.php --json-out (menutup PENDING-03)
+- Gejala: `run_full_suite.php` memanggil `runtime_sweep.php 100000 --json-out=<path>`, tapi `runtime_sweep.php` memetakan `$argv[2]` sebagai regex-filter. Filter `^--json-out=...` tidak match apa pun → 0 halaman dieksekusi, file JSON tak pernah ditulis → suite selalu "BLOCKER: runtime_sweep tidak menghasilkan JSON".
+- Fix: parser argumen berbasis opsi (`--json-out=`, `--limit=`, `--filter=`), argumen posisi lama tetap jalan, opsi asing diabaikan diam-diam. Laporan JSON berisi `summary{total,candidate,ok,empty,forbidden,error,warn_files}` + `pages[]{file,status,len,warn,error}` — persis yang dibaca `run_full_suite.php`. Exit 2 + pesan jelas kalau path JSON tak writable (bukan diam-diam lulus).
+- Bukti: `--filter='^/kpi/' --json-out` → 23 halaman, 0 error; `summary` & `pages[].file` terisi sesuai kontrak. Kompatibilitas: `5` dan `5 Fixed_Asset` tetap jalan. `php -l` OK.
+- Jebakan terdokumentasi: filter regex harus diawali `^/` karena `$rel`_store Grief startswith slash. `^kpi/` diam-diam_matches 0 halaman dan terlihat "sukses" — ini footgun yang sama seperti `audit_theme_contrast.py`.
 
 ## Sapuan 6 agen G1-G6 terverifikasi
 - 173 file, php -l bersih semua, tanpa overlap antar agen.

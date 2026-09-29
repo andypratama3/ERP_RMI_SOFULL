@@ -5,12 +5,33 @@
  * — hasilnya otoritatif soal halaman mana yang benar-benar mati.
  *
  * Jalankan: php tools/qa/runtime_sweep.php [jumlah] [regex-filter]
+ *           php tools/qa/runtime_sweep.php --json-out=/path/laporan.json
+ *
+ * Argumen posisi (jumlah, regex-filter) tetap didukung supaya pemanggilan
+ * lama tidak rusak. Opsi --json-out menulis laporan untuk run_full_suite.php:
+ * tanpa ini suite menganggap tahap render gagal karena tidak ada JSON.
  */
 declare(strict_types=1);
 
 $root = realpath(__DIR__ . '/../..') ?: dirname(__DIR__, 2);
-$limit = (int) ($argv[1] ?? 200);
-$filter = $argv[2] ?? '';
+
+$limit    = 200;
+$filter   = '';
+$jsonOut  = '';
+$position = [];
+foreach (array_slice($argv, 1) as $a) {
+    if (preg_match('/^--json-out=(.+)$/', $a, $m)) { $jsonOut = $m[1]; continue; }
+    if (preg_match('/^--limit=(\d+)$/', $a, $m)) { $limit = (int) $m[1]; continue; }
+    if (preg_match('/^--filter=(.*)$/', $a, $m)) { $filter = $m[1]; continue; }
+    if (strpos($a, '-') === 0) continue;   // opsi lain milik pemanggil, abaikan
+    $position[] = $a;
+}
+if (isset($position[0])) $limit  = (int) $position[0];
+if (isset($position[1])) $filter = (string) $position[1];
+if (isset($position[0]) && $jsonOut === '' && count($position) > 1) {
+    fwrite(STDERR, "CATATAN: '{$position[1]}' diperlakukan sebagai regex-filter. "
+        . "Untuk menulis JSON pakai --json-out=<path>.\n");
+}
 
 $files = [];
 $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS));
@@ -95,6 +116,7 @@ H);
 $errors = [];   // [file, error]
 $warns   = [];   // file => jumlah warning
 $ok      = 0; $empty = 0; $forbidden = 0;
+$pages   = [];   // laporan per halaman untuk --json-out
 
 foreach ($files as $rel) {
     $abs = $root . '/' . ltrim($rel, '/');
@@ -126,17 +148,24 @@ foreach ($files as $rel) {
         @unlink($resFile);
     }
 
+    $status = 'ok'; $pageError = null;
     if (!$res) {
         // Harness tidak melaporkan apa pun: JANGAN dianggap sukses. Ini yang
         // membuat halaman mati tersembunyi sebelumnya.
-        $errors[] = [$rel, 'HARNESS-GAGAL: ' . substr(trim(preg_replace('/\s+/', ' ',
-            $errOut . ' ' . $out)), 0, 160)];
+        $pageError = 'HARNESS-GAGAL: ' . substr(trim(preg_replace('/\s+/', ' ',
+            $errOut . ' ' . $out)), 0, 160);
+        $errors[] = [$rel, $pageError];
+        $status = 'error';
     } elseif (!empty($res['err'])) {
-        $errors[] = [$rel, $res['err']];
+        $pageError = (string) $res['err'];
+        $errors[] = [$rel, $pageError];
+        $status = 'error';
     } elseif (!empty($res['forbidden'])) {
         $forbidden++;
+        $status = 'forbidden';
     } elseif ((int) $res['len'] === 0) {
         $empty++;
+        $status = 'empty';
     } else {
         $ok++;
     }
@@ -144,6 +173,16 @@ foreach ($files as $rel) {
     $n = preg_match_all('/^PHPWARN\|(.+)$/m', $errOut, $wm);
     if ($n) {
         $warns[$rel] = $wm[1];
+    }
+
+    if ($jsonOut !== '') {
+        $pages[] = [
+            'file'      => ltrim($rel, '/'),
+            'status'    => $status,
+            'len'       => (int) ($res['len'] ?? 0),
+            'warn'      => $n,
+            'error'     => $pageError,
+        ];
     }
 }
 @unlink($harness);
@@ -172,4 +211,27 @@ if ($warns) {
         printf("  %-52s x%d  %s\n", $rel, count($list), substr(implode(' | ', $uniq), 0, 110));
     }
 }
+
+if ($jsonOut !== '') {
+    $summary = [
+        'total'     => count($files),
+        'candidate' => $totalAll,
+        'ok'        => $ok,
+        'empty'     => $empty,
+        'forbidden' => $forbidden,
+        'error'     => count($errors),
+        'warn_files'=> count($warns),
+        'generated' => date('c'),
+    ];
+    $written = @file_put_contents($jsonOut, json_encode(
+        ['summary' => $summary, 'pages' => $pages],
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    ));
+    if ($written === false) {
+        fwrite(STDERR, "GAGAL menulis laporan ke $jsonOut (periksa izin direktori)\n");
+        exit(2);
+    }
+    echo "\nLaporan JSON  : $jsonOut (" . count($pages) . " halaman)\n";
+}
+
 exit($errors ? 1 : 0);
