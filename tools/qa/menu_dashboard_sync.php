@@ -47,7 +47,9 @@ if (is_file($syncJson)) {
         $mismatchCount = (int)($syncData['mismatch_count'] ?? 0);
         $menuCount     = (int)($syncData['menu_count']     ?? 0);
         $deadLinkCount = $mismatchCount;  // menu_rbac_sync reports mismatches
-        $menuLeakCount = 0;               // TODO: separate leak detection
+        // Deteksi leak terpisah: pihak tak berhak yang menerima HTTP 200.
+        // Dihitung di menu_rbac_sync_check.php (GUEST 200 + dept di luar roles 200).
+        $menuLeakCount = (int)($syncData['leak_count'] ?? 0);
         $ok = (bool)($syncData['ok'] ?? $ok);
     }
 } elseif ($noUrl) {

@@ -4,7 +4,7 @@
 > verifikasi baru **harus** ditulis ke file ini. Tidak ada pekerjaan QA yang
 > dianggap selesai kalau tidak tercatat di sini beserta evidence-nya.
 
-_Updated: 2026-09-29 16:15 | Print: akun pelaku jadi baris utama (Actor→employee tetap lengkap); PENDING-03 ditutup (`runtime_sweep --json-out`); warning `assets_receive.php` ditutup |_
+_Updated: 2026-09-30 | Print DO: alur 6 tahap + transisi per kartu + blok logistik + bukti orang-per-tahap (id=30 Didi); migrasi 167/168; shared CSS table + thead 9f (owner); QA-018 FIXED (triase + leak_count); cutover gate terverifikasi hanya-jalan-di-NAS |_
 
 ## Aturan deploy (dari owner, 2026-09-29)
 Setiap perubahan kode/config → `systemctl restart php8.3-fpm` + `nginx -t && systemctl reload nginx`, lalu verifikasi `curl` halaman login. Detail di `AGENTS.md`. Fokus `/var/www/ERP_RMI_SOFULL` saja; proyek lain di `/var/www` tidak boleh disentuh.
@@ -105,23 +105,23 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 | QA-015 | Portal / API | 26 features (P0:4/P1:4) | inventory+CRUD+filter+update+RBAC+audit | P1 | AGENT-12 | TODO | - | - | tracker init |
 | QA-016 | QA / Tools | 6 features (P0:2/P1:1) | inventory+CRUD+filter+update+RBAC+audit | P1 | AGENT-13 | TODO | - | - | tracker init |
 | QA-017 | ALL | php_error_scan | syntax/fatal scan | P0 | AGENT-13 | PASS | tools/qa/php_error_scan.php overall_ok=true fatal=0 | 2026-09-29 05:07 | evidence tercatat |
-| QA-018 | ALL | TODO/FIXME discovery | 12 files contain TODO/FIXME/XXX/HACK | P2 | AGENT-13 | IN_PROGRESS | grep list | 2026-09-29 05:07 | rincian di bawah |
+| QA-018 | ALL | TODO/FIXME discovery | 12 files contain TODO/FIXME/XXX/HACK | P2 | AGENT-13 | FIXED | triase 2026-09-30: 11 false-positive pola contoh + 1 TODO asli dipecahkan via leak_count; grep TODO di menu_dashboard_sync.php = 0 | 2026-09-30 | rincian di bawah |
 | QA-019 | ALL | Final gate cutover --strict | fail_count=0 required | P0 | AGENT-13 | TODO | - | - | run php tools/qa/run_cutover_checks.php --strict --write-last |
 | QA-020 | ALL | UX panduan interaktif + tombol aksi | 158 panduan_*.php, view non-interaktif | P1 | AGENT-10 | TODO | - | - | user report: view membingungkan |
 
-## TODO/FIXME files (12)
-- [ ] `_backup/purchases_m2_20260308_231256/purchases/purchases_forwarder_quotes.php`
-- [ ] `purchases/purchases_forwarder_quotes.php`
-- [ ] `tools/qa/_lib/pipeline_steps.php`
-- [ ] `tools/qa/_lib/plan_one_pager_lib.php`
-- [ ] `tools/qa/_lib/manifest_lock_suggest_lib.php`
-- [ ] `tools/qa/menu_dashboard_sync.php`
-- [ ] `tools/ops/module_governance_tracker.php`
-- [ ] `docs/link/sop_mfa.php`
-- [ ] `master/master_manufactures.php`
-- [ ] `master/master_products.php`
-- [ ] `stock/wqs_picking.php`
-- [ ] `stock/wqs_stock_opname.php`
+## TODO/FIXME files (12) — triase 2026-09-30
+- [x] `_backup/purchases_m2_20260308_231256/purchases/purchases_forwarder_quotes.php` — false positive (`RMI-PO-XXX` data contoh CSV) + file backup, bukan kerjaan
+- [x] `purchases/purchases_forwarder_quotes.php` — false positive (`RMI-PO-XXX` data contoh CSV)
+- [x] `tools/qa/_lib/pipeline_steps.php` — bersih (grep ulang 0 hit)
+- [x] `tools/qa/_lib/plan_one_pager_lib.php` — false positive (`RFC-XXXX` pola contoh)
+- [x] `tools/qa/_lib/manifest_lock_suggest_lib.php` — false positive (`SUGG-XXXX` pola contoh)
+- [x] `tools/qa/menu_dashboard_sync.php` — TODO asli, SUDAH dipecahkan via `leak_count` (grep TODO = 0)
+- [x] `tools/ops/module_governance_tracker.php` — false positive (nilai enum status `TODO`, bukan marker kerja)
+- [x] `docs/link/sop_mfa.php` — false positive (`XXXXXX` format contoh backup code)
+- [x] `master/master_manufactures.php` — false positive (`CHASSGSGXXX` contoh SWIFT)
+- [x] `master/master_products.php` — false positive (`LOT-XXXX` placeholder input)
+- [x] `stock/wqs_picking.php` — false positive (`RMI-DO-XXXX` data contoh CSV)
+- [x] `stock/wqs_stock_opname.php` — false positive (`OPN-..-XXX` pola penomoran di teks bantuan)
 
 ## Aturan: TODO -> IN_PROGRESS -> FIXED -> RETEST -> PASS. PASS wajib evidence (command+result+file+timestamp).
 
@@ -244,3 +244,283 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - 173 file, php -l bersih semua, tanpa overlap antar agen.
 - Smoke 7 halaman 200 + nol fatal; helper render benar, tanpa leak literal.
 - Mojibake wqs + const→define + JS ✓ ditangani agen.
+
+## Fix: print DO 4/6 + FIN selalu "Menunggu" (user report RMI-BGR-20251211-007)
+- Gejala: DO fin_done tampil "4/6 tahap selesai" (WQS + FIN "Menunggu"); Foto/Video/TTD "-" ; semua tahap "Waktu tercatat, pelaku tidak". User minta seluruhnya diperbaiki, 6/6 + jujur soal data kosong, boleh backfill waktu saja.
+- Akar (evidence DB lokal, 39 baris sales_do):
+  1. `FIN 'at'=>['act_invoiced_at']` memakai kolom ACT yang NULL di 39/39 baris → FIN tak pernah selesai. Kolom FIN sendiri (`fin_updated_at`) tak pernah ditulis `fin_do_tasks.php` (save/paid/approve_revision hanya isi `fin_updated_by`).
+  2. WQS/SCM/ACT lupa fallback `*_updated_at` milik tahap sendiri (data lama mengisi `wqs_updated_at` 15:32 dkk walau `wqs_ready_at` NULL).
+  3. `sales_do_audit` tak pernah punya `status_to='fin_done'`; transisi `wait_payment->paid` oleh dept FIN hanya dikredit ke PAID.
+  4. Bug penimpa: `$__account = $__aname` membuang pelaku kolom `*_by` bila audit kosong.
+  5. POD memang kosong di DB (39/39 NULL) — dash "-" sudah benar, bukan bug.
+- Fix:
+  - `sales/sales_do_view.php`: fallback `*_updated_at` per tahap; FIN `at=>['fin_updated_at','act_invoiced_at']`, `to=>['fin_done','paid']`; pelaku kolom dipertahankan bila audit kosong; inferensi progres status ikut konvensi `sales_control_tower.php` ($wqsOk/$scmOk/$actOk/$finOk) dengan label jujur ketiga "Selesai — waktu tak tercatat"; stamp WQS/SCM samakan fallback waktu agar konsisten dengan blok Alur.
+  - `sales/fin_do_tasks.php`: tulis `fin_updated_at=NOW()` di save, approve_revision, paid.
+  - `sql/migrations/167_sales_do_backfill_fin_time.sql` (idempoten, WHERE NULL): isi `fin_updated_at` 2 DO paid dari audit FIN `wait_payment->paid`.
+- Bukti: `php -l` kedua file OK; `ci_lint.sh` LULUS; migrasi 167 applied + rerun 0 rows; simulasi logika final 39 DO — 007/008/TGR 6/6 via waktu, paid 6/6 via aktor audit, DO proses parsial tetap parsial (tanpa false-complete), POD tetap `---` (jujur). Pelaku 007 dkk tetap "tidak tercatat" karena `*_by` NULL + 0 audit — tidak dikarang.
+
+## Fix ronde 2: print DO + jejak pelaku (hasil audit 3 sub-agent, data existing saja)
+- Gejala lanjutan (DO paid RMI-BGR-260304-001): stamp "Dikirim SCM" bisa menampilkan akun layanan; username sungguhan `admin` berisiko tersaring sebagai kode dept; kasus `WQS_PICKED` tak pernah cocok; footer "Dibuat" vs blok CRM beda menit; tanggal `strtotime` tanpa guard bisa jadi 1970; aksi FIN save tanpa jejak audit; kolom pelaku ditulis kode tapi tak ada di skema.
+- Fix `sales/sales_do_view.php`: `sdv_is_dept_code()` tidak lagi menyaring ADMIN/SUPERADMIN/MANAGER/STAFF/BRANCH/SYSTEM + tolak sufiks `_TRACKING`; stamp SCM disamakan dengan daftar `by` tahap SCM (tanpa `last_updated_by`); `by`/`at` tiap tahap menunjuk kolom yang benar-benar ada ditulis (`crm_created_by`, `wqs_started_by`, `act_ready_by`, `fin_paid_by`/`fin_updated_by`; FIN `at` hanya `fin_updated_at`); guard FIN approve_revision tidak menimpa atribusi CRM; CRM "Dibuat" pakai bukti terawal (min) agar = footer; `wqs_picked` diperbaiki (lowercase) + masuk inferensi; 3 titik `date(strtotime())` diganti `rmi_actor_stamp_datetime()`; blok logistik baru (mode/vendor/resi/bukti terima WQS→SCM, kondisional, fakta dari kolom); label "Kelompok DO (dari item)"; caption PIC bukan verifikasi penandatangan.
+- Fix `sales/fin_do_tasks.php`: aksi save kini `sales_do_audit_append(FIN)` (satu-satunya aksi FIN yang tanpa jejak) + `fin_updated_at=NOW()` di save/approve_revision/paid (sudah ronde 1, diverifikasi ada).
+- Migrasi: `167` backfill `fin_updated_at` DO paid dari audit FIN (applied, rerun 0 rows); `168` tambah kolom pelaku yang hilang (`wqs_started_by`, `fin_updated_by`, `crm_created_by`, pola IF-NOT-EXISTS ala 163; applied, rerun aman).
+- Bukti: `php -l` bersih; `ci_lint.sh` LULUS; HTTP login superadmin → `sales_do_view.php?id=15` 6/6, `id=21` 6/6 + blok BITESHIP tampil, `id=23` 2/6 + penanda "sekarang" di WQS; simulasi 39 DO tanpa false-complete; POD tetap `-` (data memang kosong, tidak dikarang).
+- Dibatasi scope (jujur dicatat, bukan dikerjakan): blok order-info CRM (kolom tak ada = fitur belum dibangun), sub-langkah ACT tax/exchange di Alur, unifikasi `flow_step_from_status()` kanonis (risiko workflow), `scm_actor_name()` fallback label dept, revision residue — lihat rincian audit di bawah.
+
+## QA-018: triase TODO/FIXME (diputuskan, bukan sekadar grep)
+- Hasil: 11 dari 12 berkas adalah false positive pola contoh (`RMI-PO-XXX`, `LOT-XXXX`, `CHASSGSGXXX`, `XXXXXX`, `OPN-..-XXX`, `RFC-XXXX`, `SUGG-XXXX`, `RMI-DO-XXXX`) + nilai enum status `TODO` di `module_governance_tracker.php` + 1 TODO asli (`menu_dashboard_sync.php:50` deteksi leak).
+- Fix TODO asli: `menu_rbac_sync_check.php` kini menghitung `leak_count` (GUEST→200 + dept di luar roles→200) ke payload `--write-last`; `menu_dashboard_sync.php` membaca `leak_count` dari artefak (TODO dihapus). Aditif — logika mismatch/ok tak disentuh.
+- Bukti: `php -l` bersih; sweep lokal 141 menu → mismatch=55 leak=34 ok=0 (baseline pre-existing, kini terlihat; leak informatif — sebagian pola layout-with-denial yang oleh checker ditoleransi sebagai ok — perlu triase lanjutan sebagai follow-up, bukan gate failure).
+
+## PENDING-02: SVG sweep (dicoba ulang, belum tuntas)
+- Upaya: `check_escaped_svg.sh` 660 halaman jobs=8 dijalankan ulang; percobaan >280 dtk (sama seperti interupsi pertama) → dijalankan background ke `/tmp/svg_sweep.log`, hasil triase menyusul saat selesai.
+
+## PENDING-02 lanjutan: hasil sweep + temuan harness (belum PASS repo-wide)
+- Fakta: full-run 660 halaman jobs=8 menggantung (>8 mnt, 0 progres) — 1 worker macet me-render `bin/worker.php` (eksekutabel CLI, bukan halaman UI; di-include langsung via CLI sehingga loop worker memblokir). Sweep dihentikan agar tidak menggantung selamanya.
+- Sweep lingkup `^sales/` selesai: mayoritas `render-gagal` — artefak harness, bukan bug SVG: halaman butuh param (`sales_do_view.php` tanpa `?id=` memanggil `die()` → proses PHP exit sebelum menulis file hasil). Perlu klasifikasi tersendiri di harness.
+- Verifikasi langsung `sales_do_view.php` via HTTP render (id=15/21/23, login superadmin): 0 escaped-SVG asli; 2 hit `&lt;svg` semuanya di atribut `data-icon-*` (pola false-positive yang oleh harness sendiri dikecualikan by design).
+- Tindak lanjut agar PENDING-02 bisa PASS: (1) daftar eksklusi eksekutabel non-UI (`bin/`, `*_debug`, dsb.) di `check_escaped_svg.sh`; (2) dukung URL berparam atau tandai `butuh-param` alih-alih `render-gagal`; (3) baru rerun repo-wide. Butuh keputusan owner untuk (1)-(2) karena menyentuh kontrak gate.
+
+## Improve: kartu Alur tampilkan aksi masing-masing tahap (user: "bukan hanya admin")
+- Gejala: 6 kartu Alur DO paid semuanya tertulis `Admin / Akun: admin` sehingga terlihat copy-paste. Perburuan bukti (stock_card_photos, handover_media, portal_docs, system_audit_logs, erp_audit_log utk DO 21): NOL baris — satu-satunya manusia yang tercatat di DO ini memang `admin` (5 baris audit). Nama berbeda tidak bisa diadakan tanpa mengarang.
+- Fix `sales/sales_do_view.php`: tiap kartu kini menampilkan baris aksi monospace `dari→ke • catatan` dari baris audit yang memenangkannya (mis. CRM `new→crm_to_wqs • CREATE_DO`, WQS `wqs_processing→ready_scm`, ACT `delivered→wait_payment`, FIN/PAID `wait_payment→paid`). Disimpan di map audit (`from`/`note`) + render `sdv-flow-trans` + CSS; semua di-escape.
+- Bukti: HTTP `id=21` 200 → 5 baris trans tampil; `id=15` (tanpa audit) 6/6 tanpa baris trans; tanpa `fatal/warning/notice` PHP; `php -l` + `ci_lint.sh` LULUS.
+- Cara mendapat nama berbeda sungguhan: kerjakan tiap tahap dengan akun dept masing-masing (StaffCRM/WQS/SCM/ACT/FIN) — sistem kini mencatat pelaku+waktu+audit di semua jalur (termasuk FIN save). Data uji lama yang dikerjakan satu akun akan tetap tampil satu nama — itu fakta, bukan bug tampilan.
+
+## Fix: audit save menimpa transisi asli + bukti orang-per-tahap (user: "kenapa masih admin")
+- Gejala: DO 30 (ready_scm) tampil WQS = `Super Admin`, padahal audit mencatat `StaffWQS_TGR` memindahkan `wqs_processing→ready_scm`. Penyebab: 2 baris audit SCM `ready_scm→ready_scm` (aksi save, dari superadmin, 30-09-2026 01:33/01:39) menimpa entri last-wins sehingga transisi asli hilang.
+- Fix `sales/sales_do_view.php`: bangun map audit last-wins dengan pengecualian no-op — baris dari→ke identik (save tanpa pindah status) tidak boleh mengalahkan transisi status sesungguhnya; hanya bila tak ada transisi asli barulah save dipakai sebagai bukti sentuhan.
+- Bukti: HTTP `id=30` → CRM `api_partner:Hermina Group UAT`, WQS **`Didi Ferriansyah Maulana (WQS230901)`** (relasi akun→employee utuh), SCM `Super Admin` + trans `ready_scm→ready_scm` (transparan: memang hanya save). `id=21`/`id=15` tetap 6/6 tanpa regresi; `php -l` bersih.
+- Fakta data (tetap berlaku): DO 21 dikerjakan 1 akun `admin` di semua tahap (audit 5/5 + kolom + satelit NOL) — tampil satu nama adalah kebenaran data uji, bukan bug. Nama berbeda tampil otomatis bila kerja dikerjakan akun dept masing-masing (terbukti DO 30).
+
+## Fix shared CSS 9f: thead satu layer (owner)
+- Gejala: header tabel sticky lebih gelap dari permukaan panel lain — `background-color` + `background-image` (gradient warna sama) mengomposit translusensi 2x.
+- Fix `_shared/rmi.css` 9f: `background-color: var(--rmi-panel-2)` dikomentari; tinggal gradient satu layer + `box-shadow: inset` sebagai garis bawah (border tak andal pada sticky + border-collapse). Aturan dasar `background: var(--rmi-bg)` sudah lama kalah oleh 9f; override print (`background: ... !important` = shorthand, me-reset image) tak terpengaruh.
+- Bukti: `ci_lint.sh` LULUS; render 200: `sales_do_view?id=21`, `sales_do.php`, `sales_control_tower.php`.
+
+## Status BELUM SELESAI per 2026-09-30 (terverifikasi ulang, bukan salinan tabel lama)
+| ID | Status kini | Alasan / bukti verifikasi |
+|----|-------------|---------------------------|
+| QA-001 | PASS 2026-09-30 | 76/76 selesai. 7 defect FIXED (`products_media_view_.php` auth bypass; `master_products_doc.php` HTTP 500; `master_vendors.php` repeated placeholder `:search`; audit di `master_departements.php`/`master_tax.php`/`master_office.php`/`master_user.php`), 2 owner decision, 0 unexplained. `ci_lint.sh` LULUS |
+| QA-002 | PASS (P1 subset) 2026-09-30 | 12 P1 diprobe. FIXED: direct-GET 403 di `_do_task_helpers.php`/`_do_office_scope.php`/`_ar_helper.php`; `act_do_tasks.php` SQLSTATE HY000/1525 (`NULLIF` di datetime) hilang. `export_kpi_do_csv.php` permission manager = NEEDS-OWNER. **Catatan: tabel 40 fitur belum terbukti utuh** |
+| QA-003 | PASS 2026-09-30 | 40 file: 4 FIXED (audit `purchases_ap_import.php`, `purchases_ap_importress.php`, `purchases_ap_importreplace.php`), 9 PASS, 16 ACCEPT, 8 FAIL di luar scope, 3 NEEDS-OWNER |
+| QA-004 | PASS 2026-09-30 | 24 fitur WQS diberi verdict; 2 FIXED (`wqs_stock_opname.php`, `wqs_stock_transfer.php`), 1 NEEDS-OWNER |
+| QA-008..013, QA-015, QA-016 | TODO | Belum dijalankan |
+| QA-005/006/007 (SCM/ACT/FIN) | TODO, BUTUH OWNER | Tercatat 0 fitur — belum jelas modul kosong vs belum di-scan; jangan assign AGENT-05/06/07 sebelum owner konfirmasi |
+| QA-009 (HRL/Absensi) | TODO | Belum dijalankan |
+| QA-014 (RBAC) | PASS (matrix) 2026-09-30 | Matrix 19 route × 5 role class. Direct-GET include-only 403. 3 FAIL awal: `wqs_quarantine.php` 200 tanpa permission gate, cross-office read, nonexistent DO 200 (bukan 404). Residue user/row/grant = 0. Gate quarantine masih NEEDS-OWNER; 404 + semantik cross-office BELUM dikerjakan |
+| QA-019 (cutover --strict) | BLOCKED 2026-09-30 | `FAIL: APP_ROOT mismatch. Run from [APP_ROOT].` — `app_root_guard` mewajibkan `/volume4/web/ERP_RMI_SOFULL` (NAS/VPS); exit 2 di Mac. Guard TIDAK boleh dilonggarkan |
+| QA-020 (panduan) | TODO | 158 panduan belum interaktif |
+| PENDING-01 | IN_PROGRESS, BUTUH OWNER | Pertanyaan penempatan gate (lint hosted tak bisa render authenticated) belum diputuskan |
+| PENDING-02 | TODO, BUTUH OWNER | Full-run macet di `bin/worker.php`; halaman berparam `render-gagal`; butuh keputusan kontrak harness (eksklusi + param) sebelum rerun |
+| PENDING-05 | BLOCKED | Tetap dilarang menebak; butuh keputusan data owner |
+| PENDING-06 | TODO, BUTUH VPS | Aturan nginx hanya di `/etc/nginx` server; tak bisa dikerjakan dari Mac tanpa akses server |
+| PENDING-07 | TODO | Pindah aset `_shared/`→`public/` berisiko (ratusan referensi); belum dicoba |
+| QA-018 | FIXED 2026-09-30 | Triase tuntas + leak_count jalan (sweep 141 menu: mismatch=55 leak=34, baseline pre-existing) |
+| DEP/SEC/CI/UI/QA-017 | PASS/FIXED | Tidak berubah |
+
+---
+
+# Ekstensi QA: Playwright / UI / Input / Action / Performance
+
+_Status: 2026-09-30. Semua entri di bawah memakai status yang sama seperti
+bagian atas tracker: TODO, IN_PROGRESS, PASS, FAIL, BLOCKED, FIXED, WAIVED.
+Tidak ada status "Sebagian" — parsial ditulis di kolom bukti._
+
+## PLAYWRIGHT COVERAGE
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| PW-001 | Runtime terpasang | PASS | Node v26.10.0, `@playwright/test` 1.60.0, marker `PW_INSTALL_DONE` di `/tmp/pw_install.log` |
+| PW-002 | 3 engine terunduh | PASS | `chromium-1223`, `firefox-1522`, `webkit-2287` di `~/Library/Caches/ms-playwright` |
+| PW-003 | Config + project | PASS | `tools/qa/playwright/playwright.config.js` (chromium/firefox/webkit/responsive) |
+| PW-004 | Credential env-based | PASS | `tests/_helpers.js` hanya baca `PW_ADMIN_USER`/`PW_ADMIN_PASS`; tidak ada secret di repo. Spec auth `skip` bila env kosong |
+| PW-005 | Smoke cross-browser | PASS | 6/6 PASS (2 spec × 3 engine), 31.1s, `npx playwright test tests/smoke.spec.js` |
+| PW-006 | Smoke guardrail PHP | PASS | `/master/login.php` tidak 5xx dan tidak memunculkan `fatal error`/`parse error`/`stack trace` |
+| PW-007 | Halaman publik selain login | TODO | Inventaris route publik belum dipetakan |
+| PW-008 | Spec authenticated (menu/CRUD per modul) | TODO | Butuh env credential; belum dijalankan |
+| PW-009 | Visual regression baseline | TODO | `toHaveScreenshot` belum dibuat |
+| PW-010 | JS error monitoring seluruh route | TODO | Hanya login page yang dipantau |
+| PW-011 | `.gitignore` output test | PASS | `node_modules/`, `playwright-report/`, `test-results/`, `.playwright/` |
+
+## RESPONSIVE COVERAGE
+| ID | Viewport | Status | Bukti |
+|----|----------|--------|-------|
+| RS-001 | mobile 390×844 | PASS | 3/3 (no horizontal scroll, no overflow, no zero-size control) |
+| RS-002 | tablet 820×1180 | PASS | 3/3 |
+| RS-003 | desktop 1440×900 | PASS | 3/3 |
+| RS-004 | Modul selain login | TODO | Throughput rendah; baru login page |
+| RS-005 | Uji interaksi (bukan hanya overflow) | TODO | Belum ada tap/focus/scroll test |
+
+_Reminder_: tidak ada overlay putih dan tidak ada perubahan target sentuh.
+Nilai target sentuh yang diuji di sini hanya "zero-size" (kontrol tidak
+terlihat sama sekali), bukan threshold estetika.
+
+## INPUT FIELD COVERAGE
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| IN-001 | Inventaris input per halaman | IN_PROGRESS | `ERP_FEATURE_INVENTORY.json` masih field CRUD/filter/action; id/name/label per input belum diekstrak |
+| IN-002 | Label terpasang untuk setiap input | TODO | Butuh IN-001 |
+| IN-003 | Input tanpa nama/label terdeteksi | TODO | Butuh IN-001 |
+| IN-004 | Required/watermark konsisten | TODO | Belum diuji |
+| IN-005 | Nilai '&' tidak rusak (encoding) | TODO | Belum diuji |
+| IN-006 | Default value aman | TODO | Belum diuji |
+
+## TABLE / FILTER COVERAGE
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| TB-001 | Filter benar-benar menyaring data | TODO | Belum diuji |
+| TB-002 | Filter tidak bocor data antar office | TODO | Berkaitan `sales_do_view.php:129-134` (QA-014) |
+| TB-003 | Sort stabil & konsisten | TODO | Belum diuji |
+| TB-004 | Pagination tidak dobel / tidak skip | TODO | Belum diuji |
+| TB-005 | Empty state ada dan informatif | TODO | Belum diuji |
+| TB-006 | Header tabel tidak duplicate (9f) | PASS | Fix CSS 9f satu layer; lihat section di atas |
+
+## BUTTON / ACTION COVERAGE
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| BA-001 | Semua action terpetakan | IN_PROGRESS | `action_endpoints_registry.php` ada; belum diverifikasi ulang |
+| BA-002 | Tombol tanpa handler = dead control | TODO | Belum diuji |
+| BA-003 | Tombol punya konfirmasi bila destruktif | TODO | Belum diuji |
+| BA-004 | Tombol nonaktif bila tidak berwenang | TODO | Berkaitan RBAC |
+| BA-005 | Endpoint menolak direct GET bila bukan include | PASS | QA-002 + QA-014: helper include-only 403 |
+
+## UI/UX COVERAGE
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| UX-001 | Scan kontras warna | WAIVED | `audit_theme_contrast.py` DILARANG jadi gate (salah pairing background → ~35.703 false positive) |
+| UX-002 | Konsistensi dark/white mode | PASS | Section "Konsistensi dark/white + print global" |
+| UX-003 | Error state / empty state | TODO | Belum diuji |
+| UX-004 | Loading state pada aksi async | TODO | Belum diuji |
+| UX-005 | Copywriting Indonesia konsisten | TODO | Belum diuji |
+
+## JAVASCRIPT / AJAX COVERAGE
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| JS-001 | Tidak ada JS error di login | PASS | PW-006 |
+| JS-002 | Select2 ter-init dengan benar | TODO | Belum ada scanner Select2 |
+| JS-003 | Select2: asset tersedia | TODO | Butuh JS-002 |
+| JS-004 | Select2: input asli tetap punya nama | TODO | Butuh JS-002 (scan `name=` pada input[type=hidden] elector) |
+| JS-005 | Select2: tanpa duplicate DOM id | TODO | Butuh JS-002 |
+| JS-006 | Select2: label & CSRF utuh | TODO | Butuh JS-002 |
+| JS-007 | Dead control (elemen tanpa handler) | TODO | Belum diuji |
+| JS-008 | Ajax error ditangani | TODO | Belum diuji |
+| JS-009 | Tombol double-click tidak submit ganda | TODO | Belum diuji |
+
+## SELECT2 / COMPONENT CROSS-CHECK
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| SC-001 | Scanner Select2 ada | TODO | Belum dibuat; harus leveraging `ERP_FEATURE_INVENTORY.json` |
+| SC-002 | Halaman pakai Select2 tapi asset missing | TODO | Butuh SC-001 |
+| SC-003 | Select2 init ulang pada partial reload | TODO | Butuh SC-001 |
+| SC-004 | Reusable component sudah dipakai (tidak dobel) | TODO | Belum diuji |
+
+## PRINT / PDF COVERAGE
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| PR-001 |Ukuran kertas & margin | PASS | A4 4 mm |
+| PR-002 | Semua kolom tercetak | PASS | Kolom tidak terpotong |
+| PR-003 | Actor tercetak | PASS | Pelaku sebagai baris utama |
+| PR-004 | TTD sejajar | PASS | Section "Kertas 9x11in + garis TTD sejajar" |
+| PR-005 | Alamat tidak terpotong | PASS | Section "Print CF alamat terpotong" |
+| PR-006 | Export PDF lain (selain DO/CF) | TODO | Belum dipetakan |
+
+## ACCESSIBILITY COVERAGE
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| AC-001 | Label form terasosiasi | TODO | Sama dengan IN-002 |
+| AC-002 | Navigasi keyboard | TODO | Belum diuji |
+| AC-003 | Focus visible | TODO | Belum diuji |
+| AC-004 | `lang` & title dokumen | TODO | Belum diuji |
+| AC-005 | Kontras teks (cara manual, bukan gate otomatis) | TODO | Done manual, belum berkala |
+
+## PERFORMANCE / N+1
+| ID | Aspek | Status | Bukti |
+|----|-------|--------|-------|
+| PF-001 | Scanner N+1 ada & self-test | PASS | `tools/qa/nplus1_query_scan.php`; `--self-test` LULUS (4/4 assertion) |
+| PF-002 | Scan repo penuh | PASS | 1423 file discan, 2527 temuan terklasifikasi |
+| PF-003 | Klasifikasi noise | PASS | N1-DIRECT=979, N1-INDIRECT=242, N1-SMALLLOOP=55, UNBOUNDED=1251. DDL/migrasi & loop literal kecil dipisah agar tidak jadi P1 |
+| PF-004 | `->execute()` dideteksi | FIXED | `execute(` sempat tidak ada di daftar primitive → false negative. Ditambahkan |
+| PF-005 | Filter CLI valid | FIXED | `--filter` tanpa delimiter memicu `preg_match(): Delimiter must not be alphanumeric`. kini dibungkus otomatis |
+| PF-006 | `$argv[0]` bukan argumen | FIXED | Nama script ikut jadi `positional[0]` → hanya 1 file discan. kini di-`array_slice` |
+| PF-007 | LIMIT terbaca saat deteksi | FIXED | Scanner meng-redact literal sebelum deteksi sehingga `LIMIT` selalu hilang; kini analisis SQL dari literal mentah |
+| PF-008 | False positive dari inline JS | FIXED | `SELECT` di `querySelectorAll`/`execCommand` ikut ter-flag; kini keyword SQL harus di awal statement |
+| PF-009 | Verifikasi dinamis query count | TODO | **Wajib**: semua 979 N1-DIRECT masih CANDIDATE, belum ada yang jadi defect |
+| PF-010 | Pengujian pada volume data nyata | TODO | Belum dilakukan |
+| PF-011 | Baseline waktu response | TODO | Belum ada |
+
+_Teknik_: static scan hanya menghasilkan kandidat. Sebuah N+1 baru boleh
+naik ke FAIL setelah direproduksi — mis. 1 halaman列表 = 1 query vs 1 halaman
+= N+1 query pada data 500 baris.
+
+## INPUT-COMPONENT / ACTION — TEMUAN SISA (dari N+1 scan)
+Temuan performance di atas **belum** dihitung sebagai defect. Kandidat
+tertinggi per modul (P1 `N1-DIRECT`):
+- master=600, sales=393, payroll=190, stock=179, dashboards=149.
+
+Modul `master` dan `payroll` menjadi fokus triage berikutnya (PF-009).
+
+## DEFECT REGISTER (ekstensi)
+Belum ada defect CONFIRMED di ekstensi ini. Semua N+1 = CANDIDATE (PF-009),
+UI/UX = TODO, Playwright authenticated = TODO (PW-008).
+
+## REGRESSION REGISTER (ekstensi)
+| ID | Trigger perubahan | Verifikasi wajib | Status |
+|----|--------------------|------------------|--------|
+| RG-001 | Ubah CSS/JS/layout | `npx playwright test` (cross-browser) + `--project=responsive` | PASS 2026-09-30 |
+| RG-002 | Ubah query/loop | `php tools/qa/nplus1_query_scan.php` + verifikasi query count dinamis | IN_PROGRESS |
+| RG-003 | Ubah master/purchases/stock/sales PHP | `bash tools/qa/ci_lint.sh` | PASS 2026-09-30 |
+| RG-004 | Tambah route publik | Smoke test `PW-007` | TODO |
+
+## BLOCKED
+| ID | Item | Alasan |
+|----|------|--------|
+| BL-001 | QA-019 cutover strict | APP_ROOT guard hanya bisa terpenuhi di NAS/VPS |
+| BL-002 | Gate permission `wqs_quarantine.php` | Tidak ada `WQS.QUARANTINE_*`; butuh owner |
+| BL-003 | PW-008 authenticated suite | Butuh env credential dari owner |
+| BL-004 | PENDING-01/02/05/06/07 | Butuh keputusan owner / akses VPS |
+
+## RINGKASAN STATUS (ekstensi)
+- PASS: PW-001..006, PW-011, RS-001..003, BA-005, TB-006, UX-001(WAIVED), UX-002, JS-001, PR-001..005, PF-001..008, RG-001, RG-003
+- IN_PROGRESS: IN-001, BA-001, PF-002, PF-003, RG-002
+- TODO: SISANYA (lihat tabel)
+- BLOCKED: BL-001..004
+- WAIVED: UX-001
+
+_Final gate tetap tidak boleh PASS selama PW-008, IN-001, PF-009, dan
+blokir owner masih terbuka._
+
+---
+
+# TEMUAN KEAMANAN 2026-09-30 (ditemukan saat reset kredensial)
+
+Ditemukan tidak sengaja saat menyiapkan reset password untuk Playwright.
+Semua terverifikasi langsung ke DB `erp_rmi_sofull` (127.0.0.1), bukan dari
+asumsi. Nilai kredensial sengaja TIDAK ditulis di tracker ini.
+
+| ID | Temuan | Severity | Status | Bukti |
+|----|--------|----------|--------|-------|
+| SEC-001 | **2 akun test masih ACTIVE dengan akses SYS** setelah QA wave: `SmokeSYS_SYS` (id 189, role=sys, level=SYS) dan `SmokeBRANCH_SYS` (id 190, STAFF). Keduanya `last_login_at = 2026-09-30 03:57` | **P0** | FAIL | `SELECT ... FROM master_system_login` — status ACTIVE, `deleted_at` NULL |
+| SEC-002 | Klaim lama "0 QA login user" **tidak akurat** — ada 9 akun test tersisa: `uat_smoke_user` (179), `qa_wqs` (180), `qa_pqp` (181), `qa_crm` (182), `qa_fin` (183), `qa_act` (184), `qa_hrl` (185), `qa_mpr` (186) — semuanya INACTIVE tapi tidak dihapus | P1 | FAIL | id 179–186 di `master_system_login` |
+| SEC-003 | **Kredensial NAS bocor di komentar** `config-db.php` baris 2 (`LOCAL DEV ONLY - backup asli di config-db.php.bak_local (credential NAS: ...)`) | **P0** | FAIL | `config-db.php`; nilai tidak dicantumkan di sini |
+| SEC-004 | **Fallback password `'1234'`** saat variabel password kosong: `master/master_system_loginmalang.php:951` dan `master/master_system_loginid.php:951` | **P0** | FAIL | `password_hash(($password!==''?$password:'1234'), PASSWORD_DEFAULT)` |
+| SEC-005 | `superadmin` (id 1) & `admin` (id 2) SYS-level **MFA nonaktif**, sementara `RizqullahMediskaSYS` (187) MFA aktif | P1 | FAIL | Kolom `mfa_enabled` / `mfa_confirmed_at` |
+| SEC-006 | ~~`config-db.php` tracked di git~~ **TIDAK terjadi** — sudah di-ignore & tidak pernah di-commit | — | WAIVED | `git ls-files --error-unmatch config-db.php` → tidak match; `git log --all -- config-db.php.bak` → kosong. `config-db.php.bak` juga untracked |
+
+## Aksi yang sudah dijalankan
+| ID | Aksi | Hasil |
+|----|------|-------|
+| ACT-001 | Reset password `superadmin` (id 1) dengan owner authorization | Berhasil. `PASSWORD_DEFAULT` (bcrypt), `password_verify` lolos dari DB |
+| ACT-002 | Bersihkan lockout `auth_login_attempts` untuk `superadmin` | `failed_count=0`, `locked_until=NULL` |
+| ACT-003 | Audit `system_audit_logs` module `master` action `PASSWORD_RESET` | 1 baris ditambahkan, detail tidak menyimpan password |
+| ACT-004 | Verifikasi login end-to-end via curl | Password salah → HTTP 200 (ditolak). Password benar → HTTP 302 ke `/dashboards/index.php` |
+| ACT-005 | Hapus skrip reset dari `/tmp` | Selesai, tidak ada kredensial di disk temporary |
+
+## Rekomendasi (urutan prioritas)
+1. **SEC-001** — nonaktifkan/hapus `SmokeSYS_SYS` + `SmokeBRANCH_SYS` SEKARANG. Akun SYS aktif dengan password test = akses penuh.
+2. **SEC-003** — rotasi kredensial NAS, lalu hapus komentar yang membocorkan. Jangan commit ulang.
+3. **SEC-004** — hapus fallback `'1234'` dan file `*malang*` / `*id*` bila memang tidak dipakai.
+4. **SEC-002** — hapus 7 akun `qa_*` + `uat_smoke_user` yang INACTIVE.
+5. **SEC-005** — aktifkan MFA untuk `superadmin` & `admin`.
+
+_Tidak ada perbaikan di atas yang saya jalankan otomatis — semuanya mengubah
+kredensial/akses produksi dan butuh keputusan owner._

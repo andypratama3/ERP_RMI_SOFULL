@@ -174,6 +174,9 @@ foreach ($roles as $uname => $pass) {
 
 $results = [];
 $mismatchCount = 0;
+// Leak = pihak TAK berhak menerima HTTP 200 (konten ter-render).
+// GUEST non-302/301 yang bukan 200 (mis. 500) tetap mismatch tapi bukan leak.
+$leakCount = 0;
 foreach ($menuEntries as $entry) {
     $path      = $entry['path'];
     $url       = url_join($baseUrl, $path);
@@ -187,6 +190,7 @@ foreach ($menuEntries as $entry) {
     $guestOk = in_array($guestCode, [302, 301], true);
     $row['tests']['GUEST'] = ['expected' => 302, 'actual' => $guestCode, 'ok' => $guestOk];
     if (!$guestOk) $mismatchCount++;
+    if ($guestCode === 200) $leakCount++;
 
     foreach ($sessions as $uname => $cf) {
         $code    = msc_req($url, $cf);
@@ -209,6 +213,7 @@ foreach ($menuEntries as $entry) {
             'ok'           => $ok,
         ];
         if (!$ok) $mismatchCount++;
+        if (!$deptInRoles && $code === 200) $leakCount++;
     }
     $results[] = $row;
 }
@@ -224,6 +229,7 @@ $payload = [
     'base_url' => $baseUrl,
     'menu_count' => count($menuEntries),
     'mismatch_count' => $mismatchCount,
+    'leak_count' => $leakCount,
     'results' => $results,
 ];
 
