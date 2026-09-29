@@ -811,6 +811,13 @@ $extraHead = '<style>
             border-collapse: collapse;
             margin-top: 8px;
             font-size: 11px;
+            /* WAJIB. Shared rule set `color: var(--rmi-text)` LANGSUNG ke
+               elemen <table>, bukan hanya mewariskan dari .page.
+               Dark theme --rmi-text = #e5e7eb (putih) di atas kertas
+               .page #ffffff -> teks tak terbaca.
+               Tabel yang tidak punya properti color di sini mewarisi
+               var(--rmi-text) dan ikut ikut menjadi putih. */
+            color: #111827;
         }
         body.rmi-body .rmi-content .page table.items thead th {
             border-bottom: 1px solid #111827;
@@ -849,6 +856,10 @@ $extraHead = '<style>
         body.rmi-body .rmi-content .page .summary-table {
             border-collapse: collapse;
             font-size: 11px;
+            /* Sama seperti table.items: shared rule meng-*override* elemen
+               <table> dengan color:var(--rmi-text). Tanpa ini, baris
+               Subtotal / PPN / Grand Total jadi putih di atas kertas. */
+            color: #111827;
         }
         body.rmi-body .rmi-content .page .summary-table td {
             padding: 2px 4px;
