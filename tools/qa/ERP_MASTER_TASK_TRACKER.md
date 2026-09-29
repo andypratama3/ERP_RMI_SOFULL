@@ -4,7 +4,37 @@
 > verifikasi baru **harus** ditulis ke file ini. Tidak ada pekerjaan QA yang
 > dianggap selesai kalau tidak tercatat di sini beserta evidence-nya.
 
-_Updated: 2026-09-29 10:05 | Fixes: phpspreadsheet 5.5.0 -> 5.8.1 (CVE-2026-34084 tertutup); SVG ter-escape di KPI + dashboard manager | Root lokal: /Users/andypratama3/Development/ERP_RMI_SOFULL (prompt menyebut /volume4/web/ERP_RMI_SOFULL = NAS produksi)_
+_Updated: 2026-09-29 11:05 | Sesi deploy VPS: 46 halaman mati diperbaiki (commit 9876230); config Nginx untuk `_shared/` statis masih di luar repo — lihat PENDING-06 |_
+
+---
+
+## Sesi 2026-09-29 (VPS deploy) — 46 halaman mati + asset `_shared/`
+
+_Konteks: deploy pertama di luar NAS. Semua breakage di tabel ini berasal dari asumsi path `/volume4/...` dan schema drift — bukan bug yang terlihat saat develop di NAS._
+
+| ID | Task | Status | Evidence | Notes |
+|----|------|--------|----------|-------|
+| DEP-001 | Import DB dari dump paling lengkap `sql/erp_rmi_sofull-2.sql` | PASS | 206 tabel + 514 permission + 35 karyawan -> 226 tabel setelah migration | Dump `ERP_RMI_SOFULL.sql` (68 tabel) dipakai sebagai pembanding, bukan sumber |
+| DEP-002 | Sweep 591 halaman, baseline sebelum fix | FAIL | 46 halaman HTTP 500 | Termasuk seluruh modul MPR (30 halaman) |
+| DEP-003 | `mpr/.user.ini` hardcode `/volume4/web/ERP_RMI_SOFULL/mpr/_opcache_fix.php` | **FIXED** | path relatif; halaman MPR utama 200 | Penyebab tunggal 30 halaman MPR mati di luar NAS |
+| DEP-004 | `web/admin/ops/thresholds_{view,edit}.php` naik 4 level dari `APP_ROOT` | **FIXED** | `../../../../_shared` -> `../../..`; keduanya 200 | Keluar `APP_ROOT`, tidak pernah ada di path mana pun |
+| DEP-005 | `sales/kpi_do_sla{,_fixed_staff_v6}.php` require `_kpi_bootstrap.php` | **FIXED** | -> `../kpi/`; keduanya 200 | File ada di `sales/kpi/`, bukan `sales/` |
+| DEP-006 | `chat/views/index.php` salah 1 level untuk `_shared/rmi_icons.php` | **FIXED** | `../` -> `../../`; `/chat/index.php` 200 | Halaman masuknya bukan `views/index.php` |
+| DEP-007 | `master/master_product_media_bulk.php` bisa diakses tanpa login | **FIXED** | anonymous -> 302; authenticated -> 200 | Halaman menerima upload ZIP. `require '../config/db.php'` (tidak ada) diganti `master/auth.php` + `require_login()` |
+| DEP-008 | Migration 164 `hrl_employee_mutations` | **FIXED** | 5 file HRL -> "1146 table doesn't exist" | Tabel dipakai kode tapi tidak ada di dump mana pun |
+| DEP-009 | Migration 165 `fa_assets` + `gl_journal_lines.description` | **FIXED** | migration idempotent, `assets.php` 200 | Menutup PENDING-04. `fa_ensure_asset_core_columns()` added sebagai self-healing |
+| DEP-010 | Migration 166 normalisasi collation | **FIXED** | 200 tabel -> `utf8mb4_0900_ai_ci`, sisa non-0900 = 0 | Dump MariaDB (`unicode_ci`) bercampur dengan tabel hasil migration (`0900_ai_ci`) -> "Illegal mix of collations" di JOIN. Backup pra-conversi: `/var/backups/erp/erp_rmi_sofull_pre_collation.sql` |
+| DEP-011 | Sweep 591 halaman, setelah fix | PASS | 46 -> 10 (semua fragment include, bukan entry point) | `_inc/`, `layout.php`, `views/index.php` memang tidak bisa dibuka langsung |
+| SEC-004 | `/_shared/` diblokir penuh -> `rmi.css` + `rmi_assist.js` 404 | **FIXED** (server) | keduanya 200 + MIME benar; `/_shared/*.php` tetap 404 | Rule Nginx hanya di server ini, **belum** ada di repo. Lihat PENDING-06 |
+| SEC-005 | Path traversal lewat `_shared/` | PASS | `/_shared/../config/db.php` dll -> 404 | Regex `try_files $uri =404` menolak |
+| PENDING-06 | Config Nginx belum ter-versioning | TODO | - | Rule `_shared/` statis hanya ada di `/etc/nginx/sites-available/erp.andypratama.studio`. Deploy ulang ke server lain akan reproduce bug CSS 404. Perlu file `deploy/nginx-erp.conf` di repo |
+| PENDING-07 | `_shared/` mencampur PHP include (privat) dengan CSS/JS (publik) | TODO | - | Block-by-extension sekarang bekerja, tapi rapikan: pindahkan asset ke `public/` agar tidak perlu regex terpisah |
+
+### Detail DEP-007 — kenapa ini pararah
+`master_product_media_bulk.php` tidak punya guard auth, sementara halaman lain di modul `master/` memanggil `require_login()`. Dampaknya anonim bisa mengunggah ZIP ke server. Diperbaiki dengan menyamakan pola auth, bukan dengan menambahkan cek adhoc.
+
+### Detail DEP-010 — kenapa collation berantakan
+Dump berasal dari MariaDB (default `utf8mb4_unicode_ci`), sedangkan MySQL 8 memakai `utf8mb4_0900_ai_ci`. Tabel hasil migration baru ikut default MySQL 8, jadi dump lama dan tabel baru tidak bisa di-JOIN. Solusi: samakan seluruhnya ke default MySQL 8, bukan menambal per-query — menambal per-query hanya relocating error ke JOIN berikutnya.
 
 ## Sesi 2026-09-29 — GitHub Actions + Phpspreadsheet + SVG escape
 
@@ -30,8 +60,10 @@ _Updated: 2026-09-29 10:05 | Fixes: phpspreadsheet 5.5.0 -> 5.8.1 (CVE-2026-3408
 | PENDING-01 | Gate SVG + regresi spreadsheet belum ada di `lint` job | IN_PROGRESS | sudah dipasang di `qa-nas` | Tanya: `lint` job GitHub-hosted tidak bisa render authenticated, jadi hanya `qa-nas` |
 | PENDING-02 | Sapuan SVG seluruh repo (semua 675 halaman) | TODO | - | Percobaan pertama di-interrupt; perlu diulang sampai tuntas |
 | PENDING-03 | `tools/qa/run_full_suite.php` | IN_PROGRESS | belum stabil | Memanggil `runtime_sweep.php --json-out=...` yang belum didukung; hanya cover render SYS, belum CRUD/RBAC/audit/print per role |
-| PENDING-04 | `Fixed_Asset/assets.php` -> `Unknown column 'quantity'` | BLOCKED | runtime error terkonfirmasi | Butuh keputusan semantics + migration idempotent untuk `quantity`, `unit_cost`, `asset_category_code` |
+| PENDING-04 | `Fixed_Asset/assets.php` -> `Unknown column 'quantity'` | **FIXED** | migration 165 + `fa_ensure_asset_core_columns()` | Selesai di sesi deploy 2026-09-29 -> lihat tabel DEP-009 |
 | PENDING-05 | 23 actor unlinked + 2 department mismatch | BLOCKED | `check_actor_relation.php` | Butuh keputusan data owner; **dilarang** menebak |
+| PENDING-06 | Config Nginx belum ter-versioning | TODO | - | Rule `_shared/` statis hanya ada di server. Deploy ke server lain akan reproduce bug CSS 404 -> lihat DEP/SEC sesi deploy |
+| PENDING-07 | `_shared/` mencampur PHP privat dengan CSS/JS publik | TODO | - | Block-by-extension cukup untuk sekarang; rapikan asset ke `public/` |
 
 ### Detail SEC-003 — apa yang diuji `spreadsheet_regression.sh`
 1. `composer audit` bersih (gate keras).
