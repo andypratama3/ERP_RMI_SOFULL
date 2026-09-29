@@ -5,7 +5,7 @@
 
 | | |
 |---|---|
-| Dibuat | `2026-09-29T05:23:00+00:00` |
+| Dibuat | `2026-09-29T05:28:23+00:00` |
 | Root | `ERP_RMI_SOFULL` |
 | Generator | `tools/qa/feature_inventory_scan.php` |
 | Halaman terinventarisasi | **930** (778 halaman + 152 helper/include) |
@@ -29,11 +29,76 @@
 | audit trail | 17 | 2% |
 | export | 57 | 7% |
 
-## 2. Temuan Berisiko (perlu keputusan owner)
+## 2. Work Item Manual (dari `ERP_MASTER_TASK_TRACKER.md`)
+
+Bagian ini **disalin** dari tracker master, bukan digenerate. Status di sini
+adalah status manusia dan tidak boleh diubah oleh tool.
+
+| Status | Jumlah | Arti |
+|---|---:|---|
+| **BLOCKED** | 1 | Buntu — butuh keputusan manusia. Tidak boleh ditebak. |
+| **IN_PROGRESS** | 3 | Dikerjakan, belum selesai. |
+| **TODO** | 21 | Belum dimulai. |
+| **FIXED** | 12 | Perubahan sudah masuk, **belum** di-retest. Tidak sama dengan PASS. |
+| **PASS** | 5 | Lolos retest dengan evidence. |
+| **DONE** | 0 | Selesai penuh. |
+
+| ID | Isi | Status | Evidence | Catatan |
+|---|---|---|---|---|
+| `PENDING-05` | 23 actor unlinked + 2 department mismatch | BLOCKED | check_actor_relation.php | Butuh keputusan data owner; dilarang menebak |
+| `PENDING-01` | Gate SVG + regresi spreadsheet belum ada di lint job | IN_PROGRESS | sudah dipasang di qa-nas | Tanya: lint job GitHub-hosted tidak bisa render authenticated, jadi hanya qa-nas |
+| `PENDING-03` | tools/qa/run_full_suite.php | IN_PROGRESS | belum stabil | Memanggil runtime_sweep.php --json-out=... yang belum didukung; hanya cover render SYS, belum CRUD/RBAC/audit/print per role |
+| `QA-018` | ALL | IN_PROGRESS | grep list | 2026-09-29 05:07 |
+| `PENDING-02` | Sapuan SVG seluruh repo (semua 675 halaman) | TODO | Percobaan pertama di-interrupt; perlu diulang sampai tuntas | — |
+| `PENDING-06` | Config Nginx belum ter-versioning | TODO | Rule _shared/ statis hanya ada di /etc/nginx/sites-available/erp.andypratama.studio. Deploy ulang ke server lain akan reproduce bug CSS 404. Perlu file deploy/nginx-erp.conf di repo | — |
+| `PENDING-07` | _shared/ mencampur PHP include (privat) dengan CSS/JS (publik) | TODO | Block-by-extension sekarang bekerja, tapi rapikan: pindahkan asset ke public/ agar tidak perlu regex terpisah | — |
+| `QA-001` | Master Data | TODO | - | tracker init |
+| `QA-002` | Sales / CRM | TODO | - | tracker init |
+| `QA-003` | Purchases / Procurement | TODO | - | tracker init |
+| `QA-004` | WQS / Warehouse / Stock | TODO | - | tracker init |
+| `QA-005` | SCM / Logistics | TODO | - | tracker init |
+| `QA-006` | ACT / Accounting | TODO | - | tracker init |
+| `QA-007` | FIN | TODO | - | tracker init |
+| `QA-008` | HRL / HR | TODO | - | tracker init |
+| `QA-009` | HRL / Absensi | TODO | - | tracker init |
+| `QA-010` | HRL / Payroll | TODO | - | tracker init |
+| `QA-011` | KPI / MPR | TODO | - | tracker init |
+| `QA-012` | Dashboard / Help | TODO | - | tracker init |
+| `QA-013` | Dashboard / Chat | TODO | - | tracker init |
+| `QA-014` | RBAC / Security | TODO | - | tracker init |
+| `QA-015` | Portal / API | TODO | - | tracker init |
+| `QA-016` | QA / Tools | TODO | - | tracker init |
+| `QA-019` | ALL | TODO | - | run php tools/qa/run_cutover_checks.php --strict --write-last |
+| `QA-020` | ALL | TODO | - | user report: view membingungkan |
+| `DEP-003` | mpr/.user.ini hardcode /volume4/web/ERP_RMI_SOFULL/mpr/_opcache_fix.php | FIXED | path relatif; halaman MPR utama 200 | Penyebab tunggal 30 halaman MPR mati di luar NAS |
+| `DEP-004` | web/admin/ops/thresholds_{view,edit}.php naik 4 level dari APP_ROOT | FIXED | ../../../../_shared -> ../../..; keduanya 200 | Keluar APP_ROOT, tidak pernah ada di path mana pun |
+| `DEP-005` | sales/kpi_do_sla{,_fixed_staff_v6}.php require _kpi_bootstrap.php | FIXED | -> ../kpi/; keduanya 200 | File ada di sales/kpi/, bukan sales/ |
+| `DEP-006` | chat/views/index.php salah 1 level untuk _shared/rmi_icons.php | FIXED | ../ -> ../../; /chat/index.php 200 | Halaman masuknya bukan views/index.php |
+| `DEP-007` | master/master_product_media_bulk.php bisa diakses tanpa login | FIXED | anonymous -> 302; authenticated -> 200 | Halaman menerima upload ZIP. require '../config/db.php' (tidak ada) diganti master/auth.php + require_login() |
+| `DEP-008` | Migration 164 hrl_employee_mutations | FIXED | 5 file HRL -> "1146 table doesn't exist" | Tabel dipakai kode tapi tidak ada di dump mana pun |
+| `DEP-009` | Migration 165 fa_assets + gl_journal_lines.description | FIXED | migration idempotent, assets.php 200 | Menutup PENDING-04. fa_ensure_asset_core_columns() added sebagai self-healing |
+| `DEP-010` | Migration 166 normalisasi collation | FIXED | 200 tabel -> utf8mb4_0900_ai_ci, sisa non-0900 = 0 | Dump MariaDB (unicode_ci) bercampur dengan tabel hasil migration (0900_ai_ci) -> "Illegal mix of collations" di JOIN. Backup pra-conversi: /var/backups/erp/erp_rmi_sofull_pre_collation.sql |
+| `PENDING-04` | Fixed_Asset/assets.php -> Unknown column 'quantity' | FIXED | migration 165 + fa_ensure_asset_core_columns() | Selesai di sesi deploy 2026-09-29 -> lihat tabel DEP-009 |
+| `SEC-001` | phpoffice/phpspreadsheet 5.5.0, 8 advisory (5 high, 1 critical CVE-2026-34084, 2 medium) | FIXED | 5.5.0 -> 5.8.1, composer audit bersih | Advisory bisa dieksploitasi lewat file spreadsheet yang di-upload user, jadi ini bukan teori |
+| `SEC-002` | Constraint ^5.5 masih mengizinkan versi rentan | FIXED | composer.json -> "^5.8.1", composer validate OK | Floor versi naik supaya composer update berikutnya tidak bisa balik ke 5.5.0 |
+| `SEC-004` | /_shared/ diblokir penuh -> rmi.css + rmi_assist.js 404 | FIXED (SERVER) | keduanya 200 + MIME benar; /_shared/.php tetap 404 | Rule Nginx hanya di server ini, belum ada di repo. Lihat PENDING-06 |
+| `DEP-001` | Import DB dari dump paling lengkap sql/erp_rmi_sofull-2.sql | PASS | 206 tabel + 514 permission + 35 karyawan -> 226 tabel setelah migration | Dump ERP_RMI_SOFULL.sql (68 tabel) dipakai sebagai pembanding, bukan sumber |
+| `DEP-011` | Sweep 591 halaman, setelah fix | PASS | 46 -> 10 (semua fragment include, bukan entry point) | _inc/, layout.php, views/index.php memang tidak bisa dibuka langsung |
+| `QA-017` | ALL | PASS | tools/qa/php_error_scan.php overall_ok=true fatal=0 | 2026-09-29 05:07 |
+| `SEC-003` | Regresi spreadsheet (tulis/baca XLSX + guard env) | PASS | bash tools/qa/spreadsheet_regression.sh -> LULUS | Lihat detail di bawah |
+| `SEC-005` | Path traversal lewat _shared/ | PASS | /_shared/../config/db.php dll -> 404 | Regex try_files $uri =404 menolak |
+
+> **Catatan:** 2 id muncul lebih dari sekali di sumber (`PENDING-06`, `PENDING-07`). Yang ditampilkan hanya yang pertama.
+
+### 2.1 Yang BLOCKED — jangan dikerjakan tanpa keputusan owner
+
+- **`PENDING-05`** 23 actor unlinked + 2 department mismatch — Butuh keputusan data owner; dilarang menebak
+
+## 3. Temuan Berisiko (perlu keputusan owner)
 
 Dihitung dari deteksi statis. **Belum diverifikasi manual** — ini kandidat, bukan vonis.
 
-### 2.1 Halaman yang bisa mengubah data tapi tidak menulis audit trail
+### 3.1 Halaman yang bisa mengubah data tapi tidak menulis audit trail
 
 - **114 dari 131** halaman yang punya `update_action` + CRUD tidak memanggil `rmi_audit_safe()` / `audit_log()` / `log_audit()`.
 - Dicek manual: tidak ada helper audit terpusat di `_shared/`, jadi ini bukan artefak deteksi.
@@ -84,7 +149,7 @@ Dihitung dari deteksi statis. **Belum diverifikasi manual** — ini kandidat, bu
 
 … 74 halaman lain. Lihat `ERP_FEATURE_INVENTORY.json`.
 
-### 2.2 Halaman dengan auth gate tapi tanpa cek permission spesifik
+### 3.2 Halaman dengan auth gate tapi tanpa cek permission spesifik
 
 - **183 dari 349** halaman punya session/login gate tapi tidak memanggil `require_any_permission()` / `can_any()` / `require_permission()`.
 - Auth gate hanya membuktikan *sudah login*, bukan *boleh akses halaman ini*.
@@ -134,7 +199,7 @@ Dihitung dari deteksi statis. **Belum diverifikasi manual** — ini kandidat, bu
 
 … 143 halaman lain.
 
-## 3. Backlog Prioritas (skor risiko tertinggi)
+## 4. Backlog Prioritas (skor risiko tertinggi)
 
 Skor = permukaan fitur + gap yang terdeteksi. Ini urutan kerja, bukan urutan 
 pentingnya bisnis — itu perlu owner yang menetapkan.
@@ -192,7 +257,7 @@ pentingnya bisnis — itu perlu owner yang menetapkan.
 | 49 | 11 | `sales/kpi_do_sla_fixed_staff_v6.php` | RU | 3 | 2 | — | Ya |
 | 50 | 11 | `sales/sales_control_tower.php` | RU | 12 | 2 | — | Ya |
 
-## 4. Ringkasan per Modul
+## 5. Ringkasan per Modul
 
 | Modul | Halaman | CRUD | Filter | Aksi | Workflow | Audit | Perm | Skor risiko |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -220,7 +285,7 @@ pentingnya bisnis — itu perlu owner yang menetapkan.
 | `tests` | 6 | 1 | 0 | 0 | 1 | 0 | 0 | 5 |
 | `views` | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
-## 5. Daftar Lengkap per Modul
+## 6. Daftar Lengkap per Modul
 
 ### `master` — 91 halaman
 
@@ -1115,7 +1180,7 @@ pentingnya bisnis — itu perlu owner yang menetapkan.
 |---|---|---:|---:|---:|:-:|:-:|---|
 | `views/chat/index.php` | — | 0 | 0 | 0 | — | — | UNDETECTED |
 
-## 6. Lampiran — Detail Field per Halaman
+## 7. Lampiran — Detail Field per Halaman
 
 Hanya halaman yang punya filter / aksi / workflow / permission, agar file tidak
 didominasi halaman kosong.

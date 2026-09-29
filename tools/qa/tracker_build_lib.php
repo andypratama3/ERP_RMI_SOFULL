@@ -34,8 +34,88 @@ function rmi_risk(array $r): int
     return $s;
 }
 
+/**
+ * Parse work item dari ERP_MASTER_TASK_TRACKER.md.
+ *
+ * Posisi kolom status BERBEDA antar tabel (QA punya kolom lebih banyak dari
+ * PENDING/DEP/SEC), jadi status dicari dengan scan sel, bukan indeks tetap.
+ * PENDING-06/07 muncul dua kali di sumber -> dedupe by id, simpan yang
+ * pertama, catat duplikatnya.
+ */
+function rmi_parse_work_items(string $path): array
+{
+    if (!is_readable($path)) { return []; }
+    $lines = (string)file_get_contents($path);
+    $items = [];
+    $dupes = [];
+
+    foreach (explode("\n", $lines) as $ln) {
+        $t = trim($ln);
+        if ($t === '' || $t[0] !== '|') { continue; }
+        $cells = array_map('trim', array_slice(explode('|', $t), 1, -1));
+        if (!$cells) { continue; }
+        $id = (string)($cells[0] ?? '');
+        if (!preg_match('/^(PENDING|QA|DEP|SEC)-[0-9]+$/i', $id)) { continue; }
+
+        // Cari sel yang IS-A status. Harus exact atau diikuti spasi/"(" —
+        // kalau pakai str_starts_with, "Fixed_Asset/assets.php" akan
+        // salah kena sebagai status "FIXED".
+        $status = '';
+        $sIdx   = -1;
+        $plainCells = array_map(
+            static fn($c) => strtoupper(trim(strip_tags(str_replace(['*', '`'], '', (string)$c)))),
+            $cells
+        );
+        foreach ($plainCells as $i => $plain) {
+            foreach (['BLOCKED', 'IN_PROGRESS', 'FIXED', 'PASS', 'DONE', 'TODO'] as $k) {
+                if ($plain === $k || str_starts_with($plain, $k . ' ') || str_starts_with($plain, $k . '(')) {
+                    $status = $k; $sIdx = $i; break 2;
+                }
+            }
+        }
+        if ($status === '') { continue; }
+
+        // Dekorator pada sel status, mis. "**FIXED** (server)".
+        $decor = trim(preg_replace('~^(BLOCKED|IN_PROGRESS|FIXED|PASS|DONE|TODO)\b~i', '',
+            (string)$plainCells[$sIdx]));
+        $decor = trim($decor, "() ");
+
+        $desc = trim(strip_tags(str_replace(['*', '`'], '', (string)($cells[1] ?? ''))));
+        // rest[0] = sel status, rest[1] = evidence, rest[2] = catatan.
+        // Ambil dari $cells (bukan $plainCells) supaya kapitalisasi asli kept.
+        $txt = static fn($i) => trim(strip_tags(str_replace(['*', '`'], '', (string)($cells[$i] ?? ''))));
+        $evid = $txt($sIdx + 1);
+        $note = $txt($sIdx + 2);
+        // Kalau evidence kosong/strip, geser satu kolom.
+        if ($evid === '' || $evid === '-') {
+            $evid = $txt($sIdx + 2);
+            $note = $txt($sIdx + 3);
+        }
+
+
+        $key = strtoupper($id);
+        if (isset($items[$key])) {
+            $dupes[$key] = ($dupes[$key] ?? 1) + 1;
+            continue;
+        }
+        $items[$key] = [
+            'id'         => strtoupper($id),
+            'group'      => strtoupper(substr($id, 0, strpos($id, '-'))),
+            'desc'       => $desc,
+            'status'     => $status,
+            'decor'      => $decor,
+            'evidence'   => $evid,
+            'note'       => $note,
+            'source'     => 'ERP_MASTER_TASK_TRACKER.md',
+        ];
+    }
+    return ['items' => $items, 'dupes' => $dupes];
+}
+
+
 function rmi_build_tracker(array $rows, array $summary, string $outFile): void
 {
+    $root = realpath(__DIR__ . '/../..') ?: dirname(__DIR__, 2);
     $pages  = array_values(array_filter($rows, 'rmi_is_page'));
     $helper = count($rows) - count($pages);
 
@@ -107,13 +187,75 @@ function rmi_build_tracker(array $rows, array $summary, string $outFile): void
     }
     $w();
 
-    // ---- 2 temuan berisiko --------------------------------------------
-    $w('## 2. Temuan Berisiko (perlu keputusan owner)');
+    // ---- 2 work item manual -------------------------------------------
+    $wi  = rmi_parse_work_items($root . '/tools/qa/ERP_MASTER_TASK_TRACKER.md');
+    $all = array_values($wi['items']);
+
+    $byStatus = [];
+    foreach ($all as $i) { $byStatus[$i['status']][] = $i; }
+
+    $w('## 2. Work Item Manual (dari `ERP_MASTER_TASK_TRACKER.md`)');
+    $w();
+    $w('Bagian ini **disalin** dari tracker master, bukan digenerate. Status di sini');
+    $w('adalah status manusia dan tidak boleh diubah oleh tool.');
+    $w();
+    $w('| Status | Jumlah | Arti |');
+    $w('|---|---:|---|');
+    $meaning = [
+        'BLOCKED'     => 'Buntu — butuh keputusan manusia. Tidak boleh ditebak.',
+        'IN_PROGRESS' => 'Dikerjakan, belum selesai.',
+        'TODO'        => 'Belum dimulai.',
+        'FIXED'       => 'Perubahan sudah masuk, **belum** di-retest. Tidak sama dengan PASS.',
+        'PASS'        => 'Lolos retest dengan evidence.',
+        'DONE'        => 'Selesai penuh.',
+    ];
+    foreach (['BLOCKED', 'IN_PROGRESS', 'TODO', 'FIXED', 'PASS', 'DONE'] as $s) {
+        $w(sprintf('| **%s** | %d | %s |', $s, count($byStatus[$s] ?? []), $meaning[$s]));
+    }
+    $w();
+
+    if (count($all) > 0) {
+        $w('| ID | Isi | Status | Evidence | Catatan |');
+        $w('|---|---|---|---|---|');
+        // BLOCKED dulu supaya tidak tenggelam di antara TODO.
+        $ord = ['BLOCKED', 'IN_PROGRESS', 'TODO', 'FIXED', 'DONE', 'PASS'];
+        usort($all, static function ($a, $b) use ($ord) {
+            $ra = array_search($a['status'], $ord, true);
+            $rb = array_search($b['status'], $ord, true);
+            return ($ra <=> $rb) ?: strcmp($a['id'], $b['id']);
+        });
+        foreach ($all as $i) {
+            $st = $i['status'] . ($i['decor'] !== '' ? " ({$i['decor']})" : '');
+            $w(sprintf('| `%s` | %s | %s | %s | %s |',
+                $i['id'], $i['desc'], $st,
+                $i['evidence'] !== '' ? $i['evidence'] : '—',
+                $i['note'] !== '' ? $i['note'] : '—'));
+        }
+        $w();
+    }
+
+    if ($wi['dupes']) {
+        $w('> **Catatan:** ' . count($wi['dupes']) . ' id muncul lebih dari sekali di sumber '
+            . '(`' . implode('`, `', array_keys($wi['dupes'])) . '`). Yang ditampilkan hanya yang pertama.');
+        $w();
+    }
+
+    if (count($byStatus['BLOCKED'] ?? []) > 0) {
+        $w('### 2.1 Yang BLOCKED — jangan dikerjakan tanpa keputusan owner');
+        $w();
+        foreach ($byStatus['BLOCKED'] as $i) {
+            $w(sprintf('- **`%s`** %s — %s', $i['id'], $i['desc'], $i['note'] ?: '(tanpa catatan)'));
+        }
+        $w();
+    }
+
+
+    $w('## 3. Temuan Berisiko (perlu keputusan owner)');
     $w();
     $w('Dihitung dari deteksi statis. **Belum diverifikasi manual** — ini kandidat, bukan vonis.');
     $w();
 
-    $w('### 2.1 Halaman yang bisa mengubah data tapi tidak menulis audit trail');
+    $w('### 3.1 Halaman yang bisa mengubah data tapi tidak menulis audit trail');
     $w();
     $w(sprintf('- **%d dari %d** halaman yang punya `update_action` + CRUD tidak memanggil `rmi_audit_safe()` / `audit_log()` / `log_audit()`.', count($noAud), count($mut)));
     $w('- Dicek manual: tidak ada helper audit terpusat di `_shared/`, jadi ini bukan artefak deteksi.');
@@ -129,7 +271,7 @@ function rmi_build_tracker(array $rows, array $summary, string $outFile): void
     }
     $w();
 
-    $w('### 2.2 Halaman dengan auth gate tapi tanpa cek permission spesifik');
+    $w('### 3.2 Halaman dengan auth gate tapi tanpa cek permission spesifik');
     $w();
     $w(sprintf('- **%d dari %d** halaman punya session/login gate tapi tidak memanggil `require_any_permission()` / `can_any()` / `require_permission()`.', count($noPr), count($auth)));
     $w('- Auth gate hanya membuktikan *sudah login*, bukan *boleh akses halaman ini*.');
@@ -145,7 +287,7 @@ function rmi_build_tracker(array $rows, array $summary, string $outFile): void
     $w();
 
     // ---- 3 backlog prioritas -------------------------------------------
-    $w('## 3. Backlog Prioritas (skor risiko tertinggi)');
+    $w('## 4. Backlog Prioritas (skor risiko tertinggi)');
     $w();
     $w('Skor = permukaan fitur + gap yang terdeteksi. Ini urutan kerja, bukan urutan ');
     $w('pentingnya bisnis — itu perlu owner yang menetapkan.');
@@ -163,7 +305,7 @@ function rmi_build_tracker(array $rows, array $summary, string $outFile): void
     $w();
 
     // ---- 4 per modul ---------------------------------------------------
-    $w('## 4. Ringkasan per Modul');
+    $w('## 5. Ringkasan per Modul');
     $w();
     $w('| Modul | Halaman | CRUD | Filter | Aksi | Workflow | Audit | Perm | Skor risiko |');
     $w('|---|---:|---:|---:|---:|---:|---:|---:|---:|');
@@ -174,7 +316,7 @@ function rmi_build_tracker(array $rows, array $summary, string $outFile): void
     $w();
 
     // ---- 5 daftar lengkap ----------------------------------------------
-    $w('## 5. Daftar Lengkap per Modul');
+    $w('## 6. Daftar Lengkap per Modul');
     $w();
     foreach ($mods as $m => $v) {
         $w("### `{$m}` — {$v['n']} halaman");
@@ -192,7 +334,7 @@ function rmi_build_tracker(array $rows, array $summary, string $outFile): void
     }
 
     // ---- 6 lampiran ---------------------------------------------------
-    $w('## 6. Lampiran — Detail Field per Halaman');
+    $w('## 7. Lampiran — Detail Field per Halaman');
     $w();
     $w('Hanya halaman yang punya filter / aksi / workflow / permission, agar file tidak');
     $w('didominasi halaman kosong.');
