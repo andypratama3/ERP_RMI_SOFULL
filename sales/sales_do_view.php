@@ -817,7 +817,7 @@ $extraHead = '<style>
                .page #ffffff -> teks tak terbaca.
                Tabel yang tidak punya properti color di sini mewarisi
                var(--rmi-text) dan ikut ikut menjadi putih. */
-            color: #111827;
+            color: #111827 !important;
         }
         body.rmi-body .rmi-content .page table.items thead th {
             border-bottom: 1px solid #111827;
@@ -853,18 +853,28 @@ $extraHead = '<style>
             justify-content: flex-end;
             font-size: 11px;
         }
-        body.rmi-body .rmi-content .page .summary-table {
+        body.rmi-body .rmi-content .page table.summary-table {
             border-collapse: collapse;
             font-size: 11px;
-            /* Sama seperti table.items: shared rule meng-*override* elemen
-               <table> dengan color:var(--rmi-text). Tanpa ini, baris
-               Subtotal / PPN / Grand Total jadi putih di atas kertas. */
-            color: #111827;
+            /* WAJIB !important.
+             *
+             * Tanpa tipe `table`, selector ini hanya (0,4,1) dan KALAH
+             * dari shared rule (0,4,2). Shared rule memasang
+             * color:var(--rmi-text) LANGSUNG ke elemen <table>, sehingga
+             * baris Subtotal / PPN / Grand Total menjadi #e5e7eb di
+             * dark theme -> putih di atas kertas putih, 1.24:1.
+             *
+             * Ditambah `table` jadi (0,4,2) = seri, dan page <style>
+             * dimuat setelah rmi.css. !important dipakai supaya properti
+             * yang pernah rusak ini tidak lagi bergantung pada urutan
+             * muat stylesheet sama sekali.
+             */
+            color: #111827 !important;
         }
-        body.rmi-body .rmi-content .page .summary-table td {
+        body.rmi-body .rmi-content .page table.summary-table td {
             padding: 2px 4px;
         }
-        body.rmi-body .rmi-content .page .summary-table tr td:first-child {
+        body.rmi-body .rmi-content .page table.summary-table tr td:first-child {
             text-align: right;
         }
 
