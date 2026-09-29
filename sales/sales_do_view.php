@@ -649,6 +649,52 @@ $wqs_prepared_by_print     = $wqs_info_print['label'];
 $scm_sent_by_print         = $scm_sent_info['label'];
 $scm_delivered_by_print    = $scm_deliv_info['label'];
 
+// ---------------------------------------------------------------------------
+// Alur & pelaku: satu baris rekap untuk SETIAP tahap, supaya pembaca print
+// bisa langsung tahu "siapa sudah melakukan apa, kapan, dan tahap mana yang
+// masih menunggu" tanpa harus menebak dari kotak tanda tangan.
+//
+// Aturan: kalau belum ada aksi, tulis "Menunggu" — JANGAN pernah mengarang
+// pelaku dan jangan menulis kode departemen ('WQS'/'SCM') sebagai orang
+// (lihat sdv_is_dept_code / rmi_actor_info).
+$sdvFlowSteps = [];
+$sdvFlowSteps[] = [
+    'label'   => 'Disiapkan WQS',
+    'account' => trim((string)$wqs_prepared_by_raw),
+    'name'    => $wqs_info_print['label'],
+    'time'    => $wqs_prepared_at_print,
+];
+$sdvFlowSteps[] = [
+    'label'   => 'Dikirim SCM',
+    'account' => trim((string)$scm_sent_by_raw),
+    'name'    => $scm_sent_info['label'],
+    'time'    => $scm_sent_at_print,
+];
+// Diterima Customer tidak punya username internal: pelakunya PIC customer +
+// TTD digital. Jangan dipaksa jadi "akun".
+$sdvFlowSteps[] = [
+    'label'   => 'Diterima Customer',
+    'account' => trim((string)$customer_pic),
+    'name'    => trim((string)$customer_pic),
+    'time'    => $scm_delivered_at_print,
+    'external'=> true,
+];
+// Catatan: JANGAN saring ulang dengan sdv_is_dept_code() di sini. Pagar kode
+// departemen sudah dipasang di pemilihan kandidat kolom (lihat blok
+// $wqs_prepared_by_print / $scm_sent_by_print di atas); fallback audit
+// mengembalikan username asli yang sah. Menyaring ulang justru menghapus
+// pelaku sah seperti akun 'admin' dan membuat blok ini kurang lengkap
+// daripada kotak tanda tangan di atasnya.
+foreach ($sdvFlowSteps as &$__fs) {
+    $__fs['account'] = trim((string)$__fs['account']);
+    $__fs['name']    = trim((string)$__fs['name']);
+    $__fs['time']    = rmi_actor_stamp_datetime((string)$__fs['time']);
+    $__fs['done']    = $__fs['account'] !== '' || $__fs['name'] !== '';
+}
+unset($__fs);
+$sdvFlowDone = 0;
+foreach ($sdvFlowSteps as $__fs) if ($__fs['done']) $sdvFlowDone++;
+
 
 require_once __DIR__ . '/../_shared/rmi_layout.php';
 $baseProject = rmi_layout_base_project();
@@ -1029,6 +1075,64 @@ $extraHead = '<style>
             color: #6b7280;
             margin-top: 2px;
             word-break: break-all;
+        }
+
+        /* Alur & pelaku: rekap tahap + pelaku. Scoped di halaman print ini
+           saja, tidak menyentuh _shared/rmi.css (handoff 2.1/2.4). */
+        .sdv-flow {
+            margin-top: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: #f8fafc;
+            padding: 7px 9px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        .sdv-flow-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        .sdv-flow-count { font-weight: 400; text-transform: none; color: #4b5563; }
+        .sdv-flow-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+        .sdv-flow-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            background: #fff;
+            padding: 5px 6px;
+            min-height: 46px;
+        }
+        .sdv-flow-item.is-wait { background: #fff; border-style: dashed; }
+        .sdv-flow-step {
+            font-size: 8px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+        .sdv-flow-actor {
+            font-size: 9px;
+            color: #111827;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+        .sdv-flow-account,
+        .sdv-flow-time {
+            font-size: 8px;
+            line-height: 1.25;
+            color: #4b5563;
+        }
+        .sdv-flow-wait {
+            font-size: 8.5px;
+            font-style: italic;
+            color: #6b7280;
         }
         @media (max-width: 760px) {
             .scm-proof-grid { grid-template-columns: 1fr; }
@@ -1586,6 +1690,34 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
                     <div class="erp-actor-line">&nbsp;</div>
                 </div>
             <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Alur & pelaku: rekap siapa sudah melakukan apa, kapan, dan mana yang
+         masih menunggu. Satu blok, selalu tampil, supaya print berdiri sendiri
+         sebagai bukti jalurnya tanpa harus menggali audit trail. -->
+    <div class="sdv-flow" id="sdv-flow">
+        <div class="sdv-flow-head">
+            <span>Alur &amp; Pelaku</span>
+            <span class="sdv-flow-count"><?= (int)$sdvFlowDone ?>/<?= count($sdvFlowSteps) ?> tahap selesai</span>
+        </div>
+        <div class="sdv-flow-grid">
+        <?php foreach ($sdvFlowSteps as $__fs): ?>
+            <div class="sdv-flow-item<?= $__fs['done'] ? ' is-done' : ' is-wait' ?>">
+                <div class="sdv-flow-step"><?= htmlspecialchars($__fs['label'], ENT_QUOTES, 'UTF-8') ?></div>
+                <?php if ($__fs['done']): ?>
+                    <div class="sdv-flow-actor"><?= htmlspecialchars($__fs['name'] !== '' ? $__fs['name'] : $__fs['account'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <?php if (!$__fs['external'] && $__fs['account'] !== ''): ?>
+                        <div class="sdv-flow-account">Akun: <?= htmlspecialchars($__fs['account'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <?php endif; ?>
+                    <?php if ($__fs['time'] !== ''): ?>
+                        <div class="sdv-flow-time"><?= htmlspecialchars($__fs['time'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <div class="sdv-flow-wait">Menunggu</div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
         </div>
     </div>
 

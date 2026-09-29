@@ -32,7 +32,9 @@ echo "  memindai $PHP_FILES file..."
 LINT_OUT=$(find . -name '*.php' \
   -not -path './vendor/*' -not -path './node_modules/*' \
   -not -path './.git/*' -print0 \
-  | xargs -0 -P 8 -n 1 php -l 2>&1 | grep -v '^No syntax errors detected' || true)
+  | xargs -0 -P 8 -n 1 php -l 2>&1 \
+  | grep -v '^No syntax errors detected' \
+  | grep -v '^Cannot load Zend OPcache' || true)
 if [ -z "$LINT_OUT" ]; then
   ok "semua $PHP_FILES file PHP bebas syntax error"
 else
