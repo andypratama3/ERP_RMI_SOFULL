@@ -2456,3 +2456,283 @@ body.rmi-body .rmi-content .table > thead th{
   body.rmi-body .rmi-content .form-control-sm,
   body.rmi-body .rmi-content .form-select-sm{ min-height: 36px; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   9. DataTables + legacy table — final pass (2026-09-29)
+
+   MASALAH YANG DIPERBAIKI
+
+   (a) Pagination "besar" + kotak putih di mode gelap.
+       Urutan muat di _shared/rmi_layout.php:
+         911 bootstrap.min.css
+         912 rmi.css
+         942 extra_head  -> dataTables.bootstrap5.min.css
+         945 rmi_light_compat.css
+       Bootstrap 5 mendefinisikan .page-link lewat CSS variable:
+         .pagination{--bs-pagination-padding-x:.75rem;
+                     --bs-pagination-padding-y:.375rem;
+                     --bs-pagination-font-size:1rem;
+                     --bs-pagination-bg:var(--bs-body-bg)}
+         .page-link{padding:var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+                    font-size:var(--bs-pagination-font-size);
+                    background-color:var(--bs-pagination-bg)}
+       rmi.css tidak pernah meng-override --bs-body-bg dan tidak pernah
+       meng-set data-bs-theme, jadi --bs-pagination-bg jatuh ke default
+       Bootstrap = PUTIH.
+
+       Markup DataTables bootstrap5 (1.13):
+         <ul class="pagination">
+           <li class="paginate_button page-item">
+             <a class="page-link" href="#">1</a>
+         Rule lama (bagian 11) hanya menyasar .paginate_button, itu <li>.
+       Kotak yang benar-benar terlihat adalah <a class="page-link">.
+       Akibatnya:
+         - font 1rem + padding .375rem .75rem  -> pagination terlihat besar
+         - background putih di atas tema gelap   -> kotak putih
+         - accent pada <li> tertutup <a>       -> "halaman aktif" tak terlihat
+
+   (b) Zebra/hover legacy table & hover pagination memakai rgba(255,255,255,*).
+       Overlay putih di atas --rmi-bg light (#f5f7fb) praktis tak terlihat,
+       jadi zebra MATI TOTAL di light mode. Diganti netral rgba(127,127,127,*).
+
+   Semua selector tetap di-scope ke body.rmi-body .rmi-content / .dataTables_wrapper.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* ── 9a. Pagination: menyasar <a class="page-link">, bukan cuma <li> ── */
+body.rmi-body .dataTables_wrapper .dataTables_paginate ul.pagination{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 12px 0 0;
+  padding: 0;
+}
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button .page-link,
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  padding: 4px 9px !important;
+  font-size: 12.5px !important;
+  line-height: 1.45;
+  font-weight: 500;
+  text-decoration: none;
+  background: transparent !important;
+  border: 1px solid var(--rmi-border) !important;
+  border-radius: 8px !important;
+  color: var(--rmi-text) !important;
+  box-shadow: none !important;
+  transition: background .12s ease, border-color .12s ease, color .12s ease;
+}
+/* Ellipsis / "..." antar blok nomor */
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.ellipsis .page-link,
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.ellipsis{
+  min-width: 0;
+  padding: 4px 2px !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  color: var(--rmi-muted) !important;
+}
+/* Halaman aktif. Ditulis ulang untuk <a> karena accent di <li> tertimpa. */
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.current .page-link,
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.current{
+  background: var(--rmi-accent) !important;
+  border-color: var(--rmi-accent) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+/* Dark/contrast: #fff di atas --rmi-accent dark (#3b82f6) = 3.68:1, gagal AA.
+   #1d4ed8 = 6.70:1. Light mode tetap --rmi-accent (5.17:1).
+   Ini melengkapi override yang sudah ada di bagian 11 — tanpa baris <a>
+   di sini, accent tersebut tetap tertutup .page-link. */
+html[data-rmi-theme="dark"] body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.current .page-link,
+html[data-theme="dark"] body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.current .page-link,
+body.theme-contrast .dataTables_wrapper .dataTables_paginate .paginate_button.current .page-link,
+body.theme-contrast .dataTables_wrapper .dataTables_paginate .paginate_button.current{
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  color: #fff !important;
+}
+/* Hover: netral, bukan putih — supaya bukan tofu di light mode.
+   Ditulis ulang untuk <a>; hover lama hanya menyasar <li>. */
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button:not(.current):not(.disabled) .page-link:hover,
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button:not(.current):not(.disabled):hover{
+  background: rgba(127,127,127,.18) !important;
+  border-color: var(--rmi-border) !important;
+  color: var(--rmi-text) !important;
+}
+/* Disabled Previous/Next di tepi */
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.disabled .page-link,
+body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.disabled{
+  opacity: .4;
+  pointer-events: none;
+  background: transparent !important;
+}
+/* Keyboard focus tetap terlihat */
+body.rmi-body .dataTables_wrapper .dataTables_paginate .page-link:focus-visible{
+  outline: 2px solid var(--rmi-accent);
+  outline-offset: 2px;
+}
+
+/* ── 9b. Baris kontrol: search, length, info, export ── */
+body.rmi-body .dataTables_wrapper .dataTables_length,
+body.rmi-body .dataTables_wrapper .dataTables_filter{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+body.rmi-body .dataTables_wrapper .dataTables_length select,
+body.rmi-body .dataTables_wrapper .dataTables_filter input{
+  height: 32px;
+  min-height: 32px;
+  border-radius: 8px !important;
+  font-size: 13px;
+  color: var(--rmi-text) !important;
+  background-color: var(--rmi-panel-2) !important;
+  border: 1px solid var(--rmi-border) !important;
+  box-shadow: none !important;
+}
+body.rmi-body .dataTables_wrapper .dataTables_filter input{
+  min-width: 200px;
+  padding: 0 10px;
+}
+body.rmi-body .dataTables_wrapper .dataTables_length select{
+  padding: 0 26px 0 8px;
+}
+body.rmi-body .dataTables_wrapper .dataTables_filter input:focus,
+body.rmi-body .dataTables_wrapper .dataTables_length select:focus{
+  outline: 2px solid var(--rmi-accent);
+  outline-offset: 1px;
+}
+body.rmi-body .dataTables_wrapper .dataTables_info{
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--rmi-muted) !important;
+}
+
+/* ── 9c. Status: empty / processing / error ── */
+body.rmi-body .dataTables_wrapper td.dataTables_empty{
+  padding: 28px 10px !important;
+  text-align: center;
+  color: var(--rmi-muted) !important;
+  font-style: italic;
+}
+body.rmi-body .dataTables_wrapper .dataTables_processing{
+  padding: 10px;
+  font-size: 12px;
+  color: var(--rmi-muted) !important;
+}
+body.rmi-body .dataTables_wrapper .dataTables_error{
+  color: #fca5a5;
+  font-size: 12px;
+}
+
+/* ── 9d. Sort indicator: kolom belum terurut tidak boleh terlalu menonjol ── */
+body.rmi-body .dataTables_wrapper table.dataTable thead th.sorting,
+body.rmi-body .dataTables_wrapper table.dataTable thead th.sorting_asc,
+body.rmi-body .dataTables_wrapper table.dataTable thead th.sorting_desc{
+  padding-right: 22px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+body.rmi-body .dataTables_wrapper table.dataTable thead th.sorting{
+  color: var(--rmi-muted);
+  opacity: .75;
+}
+body.rmi-body .dataTables_wrapper table.dataTable thead th.sorting_asc,
+body.rmi-body .dataTables_wrapper table.dataTable thead th.sorting_desc{
+  color: var(--rmi-text);
+  opacity: 1;
+}
+body.rmi-body .dataTables_wrapper table.dataTable thead th.sorting:hover{
+  opacity: 1;
+}
+
+/* ── 9e. Legacy <table> polos: zebra & hover hidup di light mode ── */
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:hover{
+  background: rgba(127,127,127,.16);
+}
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even){
+  background: rgba(127,127,127,.10);
+}
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even):hover{
+  background: rgba(127,127,127,.22);
+}
+html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:hover,
+html[data-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:hover{
+  background: rgba(15,23,42,.09);
+}
+html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even),
+html[data-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even){
+  background: rgba(15,23,42,.045);
+}
+html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even):hover,
+html[data-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even):hover{
+  background: rgba(15,23,42,.115);
+}
+
+/* ── 9f. Sticky thead: --rmi-panel-2 translucent, teks bisa tembus saat scroll.
+   Dua layer di-composite supaya opaque, otomatis benar di 3 tema. ── */
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) thead th{
+  background-color: var(--rmi-panel-2);
+  background-image: linear-gradient(var(--rmi-panel-2), var(--rmi-panel-2));
+  box-shadow: inset 0 -1px 0 var(--rmi-border);
+}
+
+/* ── 9g. Penutupan baris, caption, link di dalam tabel ── */
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:last-child td{
+  border-bottom: 0;
+}
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) caption{
+  padding: 0 0 8px;
+  font-size: 12px;
+  text-align: left;
+  color: var(--rmi-muted);
+  caption-side: top;
+}
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) td a,
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) th a{
+  color: var(--rmi-accent);
+  text-decoration: none;
+}
+body.rmi-body .rmi-content table:not(.table):not(.dataTable) td a:hover{
+  text-decoration: underline;
+}
+
+/* ── 9h. Target sentuh: blok 9a mengecilkan tombol, jadi di layar sentuh
+   dan mobile harus dikembalikan ke >=42px. Ditulis DI AKHIR supaya tidak
+   ditimpa blok 9a. ── */
+@media (pointer: coarse){
+  body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button .page-link,
+  body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button{
+    min-height: 44px;
+    min-width: 44px;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+  }
+}
+@media (max-width: 575.98px){
+  body.rmi-body .dataTables_wrapper .dataTables_paginate{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    padding-top: 8px;
+  }
+  body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button .page-link,
+  body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button{
+    min-height: 44px;
+    min-width: 44px;
+  }
+  body.rmi-body .dataTables_wrapper .dataTables_filter input{
+    min-width: 0;
+    width: 100%;
+  }
+  body.rmi-body .dataTables_wrapper .dataTables_info{
+    text-align: center;
+    width: 100%;
+  }
+}
