@@ -122,6 +122,9 @@ if (!defined('RMI_ROOT')) {
 // Shared helpers (M2)
 require_once __DIR__ . '/helpers.php';
 
+// Icon pusat (anti hardcode emoji di modul)
+require_once __DIR__ . '/rmi_icons.php';
+
 // DB helpers
 require_once __DIR__ . '/db.php';
 

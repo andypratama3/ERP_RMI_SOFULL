@@ -1739,3 +1739,24 @@ html[data-rmi-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb:hover{
     color: #374151 !important;
   }
 }
+
+/* ============================================================
+ * LIGHT THEME FIXES — tombol topbar & field agar konsisten.
+ * (Dark mode tidak tersentuh.)
+ * ============================================================ */
+html[data-theme="light"] .rmi-topbar .btn-outline-light,
+html[data-rmi-theme="light"] .rmi-topbar .btn-outline-light {
+  color: #0f172a !important;
+  border-color: rgba(15, 23, 42, 0.4) !important;
+}
+html[data-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar-actions,
+html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar-actions {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+/* Input .field fixed-dark + teks var(): di light mode jadi gelap-di-gelap. */
+html[data-theme="light"] .field,
+html[data-rmi-theme="light"] .field {
+  background: #ffffff !important;
+  border-color: rgba(15, 23, 42, 0.25) !important;
+}

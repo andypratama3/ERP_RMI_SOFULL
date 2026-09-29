@@ -864,7 +864,7 @@ function rmi_header(string $title = 'RMI ERP', $active = '', array $opts = []): 
       </div>
       <div class="rmi-topbar-actions">
         <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiMenuDrawer" aria-label="Buka menu ERP" title="Menu ERP">☰ <span class="rmi-topbar-btn-label">Menu</span></button>
-        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" id="rmiContrastToggle" aria-label="Kontras tinggi" title="Kontras tinggi">◐</button>
+        <!-- Satu-satunya tombol tema: gelap/terang. (Toggle kontras dihapus agar konsisten.) -->
         <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" id="rmiThemeToggle" aria-label="Ganti tema terang/gelap" title="Tema">🌙</button>
         <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiHelpCanvas" aria-label="Bantuan halaman ini" title="Bantuan (F1)">❓ <span class="rmi-topbar-btn-label">Help</span> <span class="rmi-kbd rmi-topbar-kbd-f1">F1</span></button>
         <a class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" href="<?= $baseProject ?>/docs/help_center.php" target="_blank" rel="noopener" title="Help Center / Manual" aria-label="Buka Help Center"><span aria-hidden="true">📚</span> <span class="rmi-topbar-btn-label">Manual</span></a>

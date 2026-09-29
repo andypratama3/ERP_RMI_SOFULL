@@ -38,8 +38,8 @@ try {
 $layout = @file_get_contents($root . '/_shared/rmi_layout.php') ?: '';
 $assist = @file_get_contents($root . '/_shared/rmi_assist.js') ?: '';
 $css = @file_get_contents($root . '/_shared/rmi.css') ?: '';
-if (str_contains($layout, 'rmiThemeToggle') && str_contains($layout, 'rmiContrastToggle')) us_pass($rows, 'Topbar toggles present');
-else us_fail($rows, 'Topbar toggles present', 'Missing theme/contrast toggle id');
+if (str_contains($layout, 'rmiThemeToggle') && !str_contains($layout, 'rmiContrastToggle')) us_pass($rows, 'Topbar single theme toggle');
+else us_fail($rows, 'Topbar single theme toggle', 'Harus tepat 1 tombol tema (rmiThemeToggle), tanpa rmiContrastToggle');
 if (str_contains($assist, 'ui_contrast') && str_contains($assist, 'theme-contrast')) us_pass($rows, 'Contrast persistence logic');
 else us_fail($rows, 'Contrast persistence logic', 'Missing localStorage/class toggle logic');
 if (str_contains($css, 'body.theme-contrast') && str_contains($css, ':focus-visible')) us_pass($rows, 'Contrast CSS + focus ring');

@@ -42,6 +42,39 @@ try {
 if (!$po) { echo "PO not found."; exit; }
 $canPrice = p_can_view_buy_price();
 
+// Pelaku Prepared/Approved dari audit (username -> employee). Fail-soft.
+if (!function_exists('po_actor_label')) {
+  function po_actor_label(PDO $pdo, string $username): string {
+    $u = trim($username);
+    if ($u === '') return '';
+    try {
+      $st = $pdo->prepare("SELECT full_name, holder_employee_code FROM master_system_login WHERE username=? LIMIT 1");
+      $st->execute([$u]);
+      $lg = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+      $code = trim((string)($lg['holder_employee_code'] ?? ''));
+      if ($code !== '') {
+        $st2 = $pdo->prepare("SELECT employee_name FROM master_employees WHERE employee_code=? LIMIT 1");
+        $st2->execute([$code]);
+        $em = $st2->fetch(PDO::FETCH_ASSOC) ?: [];
+        $nm = trim((string)($em['employee_name'] ?? ''));
+        if ($nm !== '') return "{$nm} ({$code})";
+      }
+      $fn = trim((string)($lg['full_name'] ?? ''));
+      if ($fn !== '') return $fn;
+    } catch (Throwable $e) {}
+    return $u;
+  }
+}
+$po_prepared_by = ''; $po_approved_by = '';
+try {
+  $stA = $pdo->prepare("SELECT user_name FROM purchases_audit_log WHERE ref_code=? AND action IN ('CREATE','SUBMIT') ORDER BY id ASC LIMIT 1");
+  $stA->execute([(string)($po['po_code'] ?? '')]);
+  $po_prepared_by = po_actor_label($pdo, (string)($stA->fetchColumn() ?: ''));
+  $stB = $pdo->prepare("SELECT user_name FROM purchases_audit_log WHERE ref_code=? AND action='SET_STATUS' ORDER BY id DESC LIMIT 1");
+  $stB->execute([(string)($po['po_code'] ?? '')]);
+  $po_approved_by = po_actor_label($pdo, (string)($stB->fetchColumn() ?: ''));
+} catch (Throwable $e) {}
+
 ?>
 <?php
 require_once __DIR__ . '/../_shared/rmi_layout.php';
@@ -158,11 +191,13 @@ rmi_header('Print PO', [
 <div style="margin-top:30px; display:flex; gap:40px">
   <div style="text-align:center; width:240px">
     <div>Prepared By (PQP)</div>
-    <div style="margin-top:60px">(__________________)</div>
+    <div style="margin-top:40px; font-weight:700"><?=h($po_prepared_by !== '' ? $po_prepared_by : '-')?></div>
+    <div style="margin-top:20px">(__________________)</div>
   </div>
   <div style="text-align:center; width:240px">
     <div>Approved By</div>
-    <div style="margin-top:60px">(__________________)</div>
+    <div style="margin-top:40px; font-weight:700"><?=h($po_approved_by !== '' ? $po_approved_by : '-')?></div>
+    <div style="margin-top:20px">(__________________)</div>
   </div>
 </div>
 <?php rmi_footer(); ?>

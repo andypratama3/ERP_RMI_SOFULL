@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('fs');
 const path = require('path');
 
-test('tools index high-contrast smoke', async ({ page }, testInfo) => {
+test('tools index theme-toggle smoke (single toggle)', async ({ page }, testInfo) => {
   const user = process.env.PW_ADMIN_USER || '';
   const pass = process.env.PW_ADMIN_PASS || '';
 
@@ -25,16 +25,17 @@ test('tools index high-contrast smoke', async ({ page }, testInfo) => {
   const normalPath = testInfo.outputPath('tools-index-normal.png');
   await page.screenshot({ path: normalPath, fullPage: true });
 
-  const toggle = page.locator('#rmiContrastToggle, button[aria-label*="contrast" i]').first();
+  // Satu-satunya toggle tema (toggle kontras dihapus agar konsisten).
+  const toggle = page.locator('#rmiThemeToggle').first();
   await expect(toggle).toBeVisible();
   await toggle.click();
-  await expect(page.locator('body')).toHaveClass(/theme-contrast/);
+  await expect(page.locator('html')).toHaveAttribute('data-rmi-theme', /^(light|dark)$/);
 
-  const contrastPath = testInfo.outputPath('tools-index-contrast.png');
+  const contrastPath = testInfo.outputPath('tools-index-theme-toggled.png');
   await page.screenshot({ path: contrastPath, fullPage: true });
 
   const baselineDir = path.join(process.cwd(), 'tests', 'playwright', 'baseline');
-  const baselinePath = path.join(baselineDir, 'tools-index-contrast.png');
+  const baselinePath = path.join(baselineDir, 'tools-index-theme-toggled.png');
   if (fs.existsSync(baselinePath)) {
     const baseline = fs.readFileSync(baselinePath);
     const current = fs.readFileSync(contrastPath);

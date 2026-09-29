@@ -130,3 +130,9 @@ _Updated: 2026-09-29 05:08 | Fixes: run_cutover_checks.php duplikat dihapus; pan
 - rmi.css: blok @media print global (var gelap + text-light/white/secondary). Layar tak tersentuh.
 - tax_annual h4 text-white→var(--rmi-text); bukti screenshot dark+light terbaca. Sampah align-items-end dihapus.
 - public/tracking + sales_do_.php (legacy) fixed-dark mandiri, konsisten internal.
+
+## Ronde tema tunggal + icon pusat + PO aktor
+- Topbar: 1 tombol tema (kontras dihapus); uat_smoke + playwright disesuaikan.
+- rmi.css: topbar/field adaptif light; print global.
+- Helper _shared/rmi_icons.php (28 icon) + bootstrap wire.
+- PO print: Prepared/Approved terisi dari audit.
