@@ -569,16 +569,19 @@ function kpi_header(string $title): void {
 }
 
 function kpi_nav(string $active=''): void {
+    // PENTING: ikon dan teks disimpan TERPISAH. Kalau ikon dirangkai ke dalam
+    // string label lalu ikut di-escape h(), SVG-nya tampil sebagai teks mentah
+    // ("<svg class=...>") dan navbar jadi rusak total.
     $links = [
-        'center'   => [rmi_icon('home').' Center',        'kpi_center.php'],
-        'do'       => [rmi_icon('calendar').' DO SLA',          'kpi_do_sla.php'],
-        'do_audit' => [rmi_icon('search').' DO Audit',       'kpi_do_audit.php'],
-        'purch'    => [rmi_icon('cart').' Purchases',      'kpi_purchases.php'],
-        'stock'    => [rmi_icon('box').' Stock',          'kpi_stock.php'],
-        'office'   => [rmi_icon('office').' Office',         'kpi_office.php'],
-        'employee' => [rmi_icon('user').' Employee',       'kpi_employee.php'],
-        'snapshot' => [rmi_icon('doc').' Snapshot',       'kpi_snapshot.php'],
-        'audit'    => [rmi_icon('clipboard').' Audit Log',      'kpi_audit.php'],
+        'center'   => ['home',      'Center',    'kpi_center.php'],
+        'do'       => ['calendar',  'DO SLA',    'kpi_do_sla.php'],
+        'do_audit' => ['search',    'DO Audit',  'kpi_do_audit.php'],
+        'purch'    => ['cart',      'Purchases', 'kpi_purchases.php'],
+        'stock'    => ['box',       'Stock',     'kpi_stock.php'],
+        'office'   => ['office',    'Office',    'kpi_office.php'],
+        'employee' => ['user',      'Employee',  'kpi_employee.php'],
+        'snapshot' => ['doc',       'Snapshot',  'kpi_snapshot.php'],
+        'audit'    => ['clipboard', 'Audit Log', 'kpi_audit.php'],
     ];
     $titles = [
         'center'   => 'KPI Center',
@@ -600,9 +603,12 @@ function kpi_nav(string $active=''): void {
     }
     echo "<div class='kpi-nav-links'>";
     foreach ($links as $k => $v) {
-        [$label, $href] = $v;
+        [$iconName, $label, $href] = $v;
         $cls = 'knl' . ($k === $active ? ' active' : '');
-        echo "<a class='" . h($cls) . "' href='" . h($href) . "'>" . h($label) . "</a>";
+        // Ikon = HTML mentah (hanya dari pustaka lokal kita, bukan input user).
+        // Label & href = data, wajib di-escape.
+        echo "<a class='" . h($cls) . "' href='" . h($href) . "'>"
+           . rmi_icon($iconName) . ' ' . h($label) . "</a>";
     }
     echo "</div></div>";
 }

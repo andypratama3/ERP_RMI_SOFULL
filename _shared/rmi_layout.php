@@ -938,11 +938,25 @@ function rmi_footer(): void
 
 <!-- Menu Drawer (offcanvas) -->
 <div class="offcanvas offcanvas-start text-bg-dark rmi-apps-canvas" tabindex="-1" id="rmiMenuDrawer" aria-labelledby="rmiMenuDrawerLabel">
-  <div class="offcanvas-header">
+  <div class="offcanvas-header rmi-drawer-head">
     <h5 class="offcanvas-title" id="rmiMenuDrawerLabel">Menu ERP</h5>
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <div class="rmi-drawer-search">
+      <span class="rmi-drawer-search-icon" aria-hidden="true"><?= rmi_icon('search') ?></span>
+      <input type="search" id="rmiMenuSearch" class="rmi-drawer-search-input"
+             placeholder="Cari menu… (press /)" aria-label="Cari menu"
+             autocomplete="off" spellcheck="false">
+      <button type="button" id="rmiMenuSearchClear" class="rmi-drawer-search-clear" aria-label="Bersihkan pencarian" hidden>&times;</button>
+    </div>
+    <div class="rmi-drawer-count" id="rmiMenuCount" aria-live="polite"></div>
   </div>
-  <div class="offcanvas-body"><?= $navHtml ?></div>
+  <div class="offcanvas-body rmi-drawer-body"><?= $navHtml ?>
+    <div class="rmi-drawer-empty" id="rmiMenuEmpty" hidden>
+      <p class="rmi-drawer-empty-title">Menu tidak ditemukan</p>
+      <p class="rmi-drawer-empty-text">Tidak ada menu yang cocok dengan kata kunci itu.</p>
+      <button type="button" class="btn btn-sm btn-outline-light rmi-drawer-empty-btn" id="rmiMenuReset">Tampilkan semua menu</button>
+    </div>
+  </div>
 </div>
 
 <?php
@@ -1107,7 +1121,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 });
 </script>
-<script src="<?= rmi_ui_h($baseProject) ?>/_shared/rmi_assist.js?v=20260308"></script>
+<script src="<?= rmi_ui_h($baseProject) ?>/_shared/rmi_assist.js?v=20260929"></script>
 <script>
 (function(){
   var b=document.body.dataset.baseProject||'';if('serviceWorker'in navigator){navigator.serviceWorker.register(b+'/public/sw.js').catch(function(){});}

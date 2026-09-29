@@ -1484,6 +1484,9 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
     <?php endif; ?>
 
     <div class="sign-row">
+        <?php /* Flow internal: CRM -> WQS -> SCM -> Customer -> ACT -> FIN.
+                 Label tetap baku (Disiapkan WQS / Dikirim SCM / Diterima Customer);
+                 identitas akun + nama employee tampil di baris "Akun:" & nama. */ ?>
         <?= rmi_actor_stamp($pdo, $wqs_prepared_by_raw, $wqs_prepared_at_print, ['title' => 'Disiapkan WQS']) ?>
         <?= rmi_actor_stamp($pdo, $scm_sent_by_raw,     $scm_sent_at_print,     ['title' => 'Dikirim SCM']) ?>
 <div class="sign-box customer-sign<?= $scm_signature_src !== '' ? ' has-sign' : '' ?>">

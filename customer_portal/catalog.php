@@ -110,7 +110,7 @@ ob_start();
 <div class="cp-card mb-4">
   <div class="p-3">
     <form method="get" class="d-flex gap-2">
-      <input type="text" name="q" class="cp-search flex-1" placeholder="<?= rmi_icon('search') ?> Cari nama produk atau SKU..." value="<?= rmi_h($search) ?>">
+      <input type="text" name="q" class="cp-search flex-1" placeholder="Cari nama produk atau SKU..." value="<?= rmi_h($search) ?>">
       <button type="submit" class="btn btn-rmi px-4">Cari</button>
       <?php if ($search !== ''): ?>
         <a href="<?= rmi_h($base) ?>/customer_portal/catalog.php" class="btn btn-outline-secondary">Reset</a>

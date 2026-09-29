@@ -1,0 +1,192 @@
+name: CI
+
+# ============================================================================
+#  CI ERP RMI SOFULL
+# ============================================================================
+#  Ada 3 lapis, sengaja dipisah karena sumber kebenarannya berbeda:
+#
+#   1. `lint`     -> GitHub-hosted runner. Tanpa database. Selalu jalan.
+#                   Menangkap syntax error, JS rusak, guard repo, regresi.
+#   2. `security` -> GitHub-hosted runner. composer audit. Gate keras,
+#                   karena ERP ini meng-import spreadsheet dari user sehingga
+#                   advisory library spreadsheet bukan teori: file-nya bisa diunggah user.
+#   3. `qa-nas`   -> SELF-HOSTED runner yang punya akses ke MySQL/NAS.
+#                   Hanya jalan bila repository variable
+#                   RMI_SELF_HOSTED_ENABLED = 'true' diset di Settings > Secrets
+#                   and variables > Actions. Menjalankan runtime_sweep,
+#                   schema_drift, dan gate APP_ROOT yang hanya benar di NAS.
+#
+#  Jalankan lokal (tanpa DB):  bash tools/qa/ci_lint.sh
+# ============================================================================
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Job yang mau dijalankan saja (lint | security | qa-nas)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # --------------------------------------------------------------------------
+  lint:
+    name: Lint & Guards (tanpa DB)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, mysqli, pdo_mysql, gd, zip, intl, bcmath, exif
+          coverage: none
+          tools: composer:v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-${{ runner.os }}-
+
+      - name: Tampilkan versi tool
+        run: |
+          php -v | head -n 1
+          node -v
+          composer --version
+
+      # Gate utama. Script yang sama dipakai lokal, jadi "lokal hijau" dan
+      # "CI hijau" berarti hal yang persis sama.
+      - name: Jalankan tools/qa/ci_lint.sh
+        run: bash tools/qa/ci_lint.sh
+
+      - name: Ringkasan
+        if: always()
+        run: |
+          {
+            echo "## Ringkasan Lint"
+            echo
+            echo "- PHP: $(find . -name '*.php' -not -path './vendor/*' | wc -l) file"
+            echo "- JS : $(find . -name '*.js' -not -path './vendor/*' | wc -l) file"
+            echo "- SQL: $(find . -name '*.sql' -not -path './vendor/*' | wc -l) file"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # --------------------------------------------------------------------------
+  security:
+    name: Security (composer audit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: composer audit
+        id: audit
+        continue-on-error: true
+        run: |
+          composer audit --format=summary 2>&1 | tee audit.txt
+          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Ringkasan advisory
+        if: always()
+        run: |
+          {
+            echo "## Security"
+            echo
+            if grep -q 'No security vulnerability' audit.txt 2>/dev/null; then
+              echo "Tidak ada advisory composer." >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo '```' >> "$GITHUB_STEP_SUMMARY"
+              cat audit.txt >> "$GITHUB_STEP_SUMMARY"
+              echo '```' >> "$GITHUB_STEP_SUMMARY"
+              echo >> "$GITHUB_STEP_SUMMARY"
+              echo "Tugas upgrade ada di \`tools/qa/ERP_MASTER_TASK_TRACKER.md\`." >> "$GITHUB_STEP_SUMMARY"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Sengaja memblokir. Advisory phpspreadsheet yang sekarang ada bisa
+      # dieksploitasi lewat file yang di-upload user, jadi tidak boleh hijau
+      # palsu. Untuk sementara EXPECTED_ADVISORIES=8; turunkan angka ini
+      # setiap kali/library sudah di-patch.
+      - name: Gerbang advisory
+        run: |
+          if grep -q 'No security vulnerability' audit.txt 2>/dev/null; then
+            echo "Bersih."; exit 0
+          fi
+          echo "Ditemukan advisory pada composer.lock."
+          echo ""
+          echo "CVE-2026-34084 (critical) + 7 advisory lain pada phpoffice/phpspreadsheet 5.5.0"
+          echo "diperbaiki dengan upgrade ke >= 5.8.1 (tersedia 5.10.0)."
+          echo ""
+          echo "Job ini sengaja MERAH sampai upgrade selesai — lihat tracker."
+          exit 1
+
+  # --------------------------------------------------------------------------
+  # Job yang butuh database sungguhan. Aktif dengan:
+  #   Settings > Secrets and variables > Actions > New repository variable
+  #   RMI_SELF_HOSTED_ENABLED = true
+  qa-nas:
+    name: Runtime QA (self-hosted, butuh DB)
+    if: ${{ vars.RMI_SELF_HOSTED_ENABLED == 'true' && (github.event_name != 'workflow_dispatch' || inputs.only == 'qa-nas' || inputs.only == '') }}
+    runs-on: [self-hosted, linux, rmi-nas]
+    timeout-minutes: 90
+    steps:
+      - name: Pastikan APP_ROOT benar
+        run: |
+          echo "APP_ROOT=$APP_ROOT"
+          test "$APP_ROOT" = "/volume4/web/ERP_RMI_SOFULL" \
+            || { echo "APP_ROOT harus /volume4/web/ERP_RMI_SOFULL"; exit 1; }
+          cd "$APP_ROOT" || exit 1
+          pwd
+
+      - name: PHP lint (NAS)
+        run: bash tools/qa/ci_lint.sh
+
+      - name: Gate path & volume (hanya valid di NAS)
+        run: |
+          php tools/qa/base_path_guard.php
+          php tools/qa/volumes_police.php
+
+      - name: Sapuan runtime seluruh halaman
+        run: php tools/qa/runtime_sweep.php 1000
+
+      - name: Cek drift skema vs kode
+        run: php tools/qa/schema_drift.php
+
+      - name: Cek relasi actor
+        run: php tools/qa/check_actor_relation.php
+
+      - name: Upload artefak
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-nas-reports
+          path: |
+            storage/audit/**
+            tools/qa/*.json
+          retention-days: 14
+          if-no-files-found: ignore

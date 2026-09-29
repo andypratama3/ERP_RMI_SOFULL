@@ -103,12 +103,16 @@ if (!function_exists('rmi_actor_stamp')) {
     function rmi_actor_stamp(PDO $pdo, string $username, string $ts = '', array $opt = []): string
     {
         $title    = (string) ($opt['title'] ?? 'Disiapkan');
+        $titleFb  = (string) ($opt['title_fallback'] ?? $title);
         $ph       = (string) ($opt['placeholder'] ?? '-');
         $showAcc  = ($opt['show_account'] ?? true) !== false;
         $note     = (string) ($opt['note'] ?? 'Tercatat otomatis oleh ERP');
         $info     = rmi_actor_info($pdo, $username);
         $datetime = rmi_actor_stamp_datetime($ts);
         $h        = static fn($s) => htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8');
+
+        // Judul memakai akun aktual; fallback ke judul baku saat belum ada aksi.
+        if ($info['label'] === '') $title = $titleFb;
 
         $out  = '<div class="sign-box"><div class="sign-title">' . $h($title) . '</div>';
         if ($info['label'] === '') {

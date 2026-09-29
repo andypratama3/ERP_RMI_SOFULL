@@ -362,6 +362,102 @@
   }
 
   // ═══════════════════════════════════════════
+  // Menu Drawer: pencarian, section sticky, empty state, pintasan keyboard
+  // ═══════════════════════════════════════════
+  function norm(s){
+    return String(s || '')
+      .toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function initMenuSearch(){
+    var input  = q('#rmiMenuSearch');
+    var drawer = q('#rmiMenuDrawer');
+    if (!input || !drawer) return;
+
+    var clear  = q('#rmiMenuSearchClear');
+    var count  = q('#rmiMenuCount');
+    var empty  = q('#rmiMenuEmpty');
+    var reset  = q('#rmiMenuReset');
+    var links  = qa('.rmi-nav .nav-link', drawer);
+    var sects  = qa('.rmi-nav-section', drawer);
+    if (!links.length) return;
+
+    // Cache label sekali saja supaya tidak ada layout thrash saat mengetik.
+    var cache = links.map(function(a){
+      return { el: a, term: norm(a.textContent), href: norm(a.getAttribute('href')) };
+    });
+    var sectOf = sects.map(function(s){
+      return { el: s, links: [] };
+    });
+    cache.forEach(function(c){
+      var owner = null;
+      for (var i = 0; i < sectOf.length; i++) {
+        if (sects[i].compareDocumentPosition(c.el) & Node.DOCUMENT_POSITION_FOLLOWING) owner = sectOf[i];
+      }
+      if (owner) owner.links.push(c);
+    });
+
+    function apply(raw){
+      var term = norm(raw);
+      var shown = 0;
+
+      for (var i = 0; i < cache.length; i++) {
+        var hit = !term || cache[i].term.indexOf(term) !== -1 || cache[i].href.indexOf(term) !== -1;
+        cache[i].el.hidden = !hit;              // hidden, bukan display:none -> tidak reflow
+        if (hit) shown++;
+      }
+
+      // Sembunyikan section yang semua menunya tersaring.
+      for (var j = 0; j < sectOf.length; j++) {
+        var any = sectOf[j].links.some(function(c){ return !c.el.hidden; });
+        sectOf[j].el.hidden = !any;
+      }
+
+      if (count){
+        count.textContent = term ? (shown + ' menu cocok') : (cache.length + ' menu');
+      }
+      if (empty) empty.hidden = shown !== 0;
+      if (clear) clear.hidden = !term;
+    }
+
+    input.addEventListener('input', function(){ apply(input.value); });
+    if (clear) clear.addEventListener('click', function(){
+      input.value = ''; apply(''); input.focus();
+    });
+    if (reset) reset.addEventListener('click', function(){
+      input.value = ''; apply(''); input.focus();
+    });
+
+    // Pintasan: "/" atau Ctrl+K untuk fokus, Escape untuk mengosongkan.
+    document.addEventListener('keydown', function(ev){
+      var openish = drawer.classList.contains('show');
+      if (ev.key === 'Escape' && openish && input.value){
+        input.value = ''; apply(''); ev.stopPropagation();
+        return;
+      }
+      var typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement && document.activeElement.tagName || '');
+      if (typing) return;
+      if (ev.key === '/' || ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'k')){
+        ev.preventDefault();
+        if (!openish && window.bootstrap && bootstrap.Offcanvas){
+          bootstrap.Offcanvas.getOrCreateInstance(drawer).show();
+        }
+        setTimeout(function(){ input.focus(); input.select(); }, 220);
+      }
+    });
+
+    // Buka drawer dengan "//" dari mana saja tidak bothersome: fokus saat tampil.
+    drawer.addEventListener('shown.bs.offcanvas', function(){
+      if (window.innerWidth >= 992) input.focus();
+    });
+
+    apply('');
+  }
+
+  // ═══════════════════════════════════════════
   // Boot — jalankan saat DOM siap (handle script load order)
   // Event delegation: tombol bisa di-render setelah script load
   // ═══════════════════════════════════════════
@@ -369,6 +465,7 @@
     // Theme + Contrast: ditangani inline di rmi_layout.php (agar pasti jalan)
     initRoleFilter();
     initHelp();
+    initMenuSearch();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

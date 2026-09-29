@@ -60,3 +60,15 @@ Thumbs.db
 # --- Lock / state (opsional) ---
 .app_root.lock
 .APP_ROOT_LOCK.json
+
+# --- Artifak QA runtime (hasil sapuan lokal, tidak boleh masuk repo) ---
+# Log ini bisa berisi query SQL, nama akun, dan path NAS.
+storage/logs/
+storage/audit/
+storage/**/*.log
+tools/qa/.out/
+tools/qa/out/
+tools/qa/tmp/
+*.out
+*.bak
+.rerun-*

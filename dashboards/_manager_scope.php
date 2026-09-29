@@ -284,12 +284,16 @@ if (!function_exists('ds_render_manager_cards')) {
         $extra = (array)($w['extra_metrics'] ?? []);
         $links = (array)($opts['metric_links'] ?? []);
         $esc = static fn($v) => htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
+        // Ikon disimpan sebagai NAMA, bukan markup SVG. Kalau markup ikut
+        // di-escape, SVG tampil sebagai teks mentah; kalau dicetak mentah,
+        // pemanggil bisa menyuntik HTML. rmi_icon() aman untuk keduanya:
+        // inputnya cuma nama, outputnya string tetap.
         $cards = [
-            ['key'=>'scope','label'=>'Scope','value'=>$w['scope_label'] ?? '', 'icon'=>rmi_icon('target'),'color'=>'#06b6d4'],
-            ['key'=>'team_staff','label'=>'Team Staff','value'=>(int)($w['team_staff'] ?? 0), 'icon'=>rmi_icon('users'),'color'=>'#3b82f6'],
-            ['key'=>'attendance_today','label'=>'Attendance Today','value'=>(int)($w['attendance_today'] ?? 0), 'icon'=>rmi_icon('check'),'color'=>'#22c55e'],
-            ['key'=>'backlog_open','label'=>'Backlog Open','value'=>(int)($w['backlog_open'] ?? 0), 'icon'=>rmi_icon('inbox'),'color'=>'#f59e0b'],
-            ['key'=>'exceptions','label'=>'Exceptions','value'=>(int)($w['exceptions'] ?? 0), 'icon'=>rmi_icon('warn'),'color'=>'#ef4444'],
+            ['key'=>'scope','label'=>'Scope','value'=>$w['scope_label'] ?? '', 'icon_name'=>'target','color'=>'#06b6d4'],
+            ['key'=>'team_staff','label'=>'Team Staff','value'=>(int)($w['team_staff'] ?? 0), 'icon_name'=>'users','color'=>'#3b82f6'],
+            ['key'=>'attendance_today','label'=>'Attendance Today','value'=>(int)($w['attendance_today'] ?? 0), 'icon_name'=>'check','color'=>'#22c55e'],
+            ['key'=>'backlog_open','label'=>'Backlog Open','value'=>(int)($w['backlog_open'] ?? 0), 'icon_name'=>'inbox','color'=>'#f59e0b'],
+            ['key'=>'exceptions','label'=>'Exceptions','value'=>(int)($w['exceptions'] ?? 0), 'icon_name'=>'warn','color'=>'#ef4444'],
         ];
         static $cssDone = false;
         if (!$cssDone) {
@@ -299,8 +303,11 @@ if (!function_exists('ds_render_manager_cards')) {
         $render = static function(array $c) use ($links,$esc): void {
             $url = trim((string)($c['url'] ?? ($links[$c['key']] ?? '')));
             $color = (string)($c['color'] ?? '#64748b');
+            // rmi_icon() hanya menerima NAMA dan mengembalikan string tetap,
+            // jadi aman dipanggil di sini tanpa escaping.
+            $icon = rmi_icon((string)($c['icon_name'] ?? 'target'));
             $inner = '<div class="p-2 rounded ds-manager-cell" style="--dsc:'.$esc($color).'">'
-                   . '<div class="ds-manager-label"><span>'.$esc($c['icon'] ?? '•').'</span><span>'.$esc($c['label'] ?? '').'</span>'.($url!==''?'<span class="ds-manager-go">BUKA ↗</span>':'').'</div>'
+                   . '<div class="ds-manager-label"><span>'.$icon.'</span><span>'.$esc($c['label'] ?? '').'</span>'.($url!==''?'<span class="ds-manager-go">BUKA &#8599;</span>':'').'</div>'
                    . '<div class="ds-manager-value">'.$esc($c['value'] ?? '-').'</div></div>';
             echo '<div class="col-md-2 col-6">'.($url!==''?'<a class="ds-manager-link" href="'.$esc($url).'">'.$inner.'</a>':$inner).'</div>';
         };
@@ -310,7 +317,11 @@ if (!function_exists('ds_render_manager_cards')) {
         $palette=['#8b5cf6','#06b6d4','#f97316','#eab308','#ec4899','#14b8a6'];
         foreach ($extra as $i=>$m) {
             $val = isset($m['value']) ? (is_numeric($m['value']) ? number_format((float)$m['value'],0,',','.') : (string)$m['value']) : '-';
-            $render(['key'=>'extra_'.$i,'label'=>$m['label'] ?? '','value'=>$val,'icon'=>$m['icon'] ?? rmi_icon('target'),'color'=>$m['color'] ?? $palette[$i%count($palette)],'url'=>$m['url'] ?? '']);
+            // `icon` (markup SVG) sengaja TIDAK lagi dipakai: pemanggil yang
+            // mengirim HTML mentah bisa menyuntik markup. Pakai `icon_name`.
+            $render(['key'=>'extra_'.$i,'label'=>$m['label'] ?? '','value'=>$val,
+                     'icon_name'=>$m['icon_name'] ?? 'target',
+                     'color'=>$m['color'] ?? $palette[$i%count($palette)],'url'=>$m['url'] ?? '']);
         }
         echo '</div></div></div>';
     }

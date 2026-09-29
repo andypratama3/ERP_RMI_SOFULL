@@ -1,14 +1,19 @@
 <?php
+// declare(strict_types=1) WAJIB menjadi pernyataan pertama setelah <?php.
+// Jika diletakkan setelah require/comment, PHP fatal dengan
+// "strict_types declaration must be the very first statement in the script"
+// sehingga halaman ini tidak dapat dibuka sama sekali.
+declare(strict_types=1);
+
 require_once __DIR__ . '/_purchases_bootstrap.php';
 purchases_require_login();
 
 /**
  * purchases/bank_statement_import.php
+ *
  * Bank statement CSV import - preview only (Phase 3)
  * Does not persist; shows parsed rows for validation.
  */
-declare(strict_types=1);
-
 require_once __DIR__ . '/../_shared/assets.php';
 require_once __DIR__ . '/../_shared/helpers.php';
 require_once __DIR__ . '/../master/auth.php';

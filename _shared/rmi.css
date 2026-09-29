@@ -1149,8 +1149,23 @@ body.rmi-body .rmi-content h6{
   color: var(--rmi-text);
 }
 body.rmi-body .rmi-content hr{
-  border-color: var(--rmi-border);
-  opacity: .5;
+  border:0;
+  border-top:1px solid var(--rmi-border);
+  opacity:1;
+  height:0;
+  margin:18px 0;
+}
+/* Jaring pengaman: hr di luar .rmi-content tetap terlihat di kedua tema.
+  (var(--rmi-border) 12% terlalu tipis sehingga garis praktis hilang.) */
+body.rmi-body hr{
+  border:0;
+  border-top:1px solid rgba(148,163,184,.45);
+  height:0;
+  opacity:1;
+}
+html[data-theme="light"] body.rmi-body hr,
+html[data-rmi-theme="light"] body.rmi-body hr{
+  border-top-color:rgba(15,23,42,.28);
 }
 body.rmi-body .rmi-content code{
   color: #f472b6;
@@ -1880,3 +1895,286 @@ body.rmi-body .rmi-topbar-user-dd .rmi-dd-logout{
   border-color:var(--rmi-border);
 }
 body.rmi-body .rmi-topbar-user-dd .rmi-dd-logout .rmi-i{ width:15px; height:15px; }
+
+/* ============================================================
+   FORM CONTROLS — jaring pengaman global + kelas baku
+   Dua alasan:
+   1) ~1850 <input>/<select>/<textarea> lama di app tidak punya class sama
+      sekali, sehingga tampil polos & beda antar halaman. Aturan di bawah
+      memberi mereka tampilan yang SAMA dengan form-control Bootstrap,
+      tanpa harus menyentuh thousands of markup (risiko rendah).
+   2) .field yang ada di 96 tempat sebelumnya hardcode warna gelap ->
+      sekarang mengikuti token, konsisten dark & white mode.
+   ============================================================ */
+
+/* 1) Tanpa class -> samakan dengan form-control.
+      HANYA input teks; checkbox/radio/file/date/range/warna/button TIDAK
+      disentuh agar kontrol native & native picker tetap berfungsi. */
+body.rmi-body input:not([class]):is([type="text"],[type="search"],[type="email"],[type="url"],[type="tel"],[type="number"],[type="password"],[type="date"],[type="datetime-local"],[type="month"],[type="time"],[type="week"]),
+body.rmi-body input:not([class]):not([type]),
+body.rmi-body select:not([class]),
+body.rmi-body textarea:not([class]){
+  display:block;
+  width:100%;
+  padding:.45rem .7rem;
+  font-size:.95rem;
+  line-height:1.45;
+  color:var(--rmi-text);
+  background:var(--rmi-card);
+  border:1px solid var(--rmi-border);
+  border-radius:10px;
+  transition:border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+body.rmi-body input[type="date"]::-webkit-calendar-picker-indicator,
+body.rmi-body input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+body.rmi-body input[type="month"]::-webkit-calendar-picker-indicator,
+body.rmi-body input[type="time"]::-webkit-calendar-picker-indicator,
+body.rmi-body input[type="week"]::-webkit-calendar-picker-indicator{
+  filter:invert(.5);
+  cursor:pointer;
+}
+html[data-theme="light"] body.rmi-body input[type="date"]::-webkit-calendar-picker-indicator,
+html[data-rmi-theme="light"] body.rmi-body input[type="date"]::-webkit-calendar-picker-indicator,
+html[data-theme="light"] body.rmi-body input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+html[data-rmi-theme="light"] body.rmi-body input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+html[data-theme="light"] body.rmi-body input[type="month"]::-webkit-calendar-picker-indicator,
+html[data-rmi-theme="light"] body.rmi-body input[type="month"]::-webkit-calendar-picker-indicator,
+html[data-theme="light"] body.rmi-body input[type="time"]::-webkit-calendar-picker-indicator,
+html[data-rmi-theme="light"] body.rmi-body input[type="time"]::-webkit-calendar-picker-indicator,
+html[data-theme="light"] body.rmi-body input[type="week"]::-webkit-calendar-picker-indicator,
+html[data-rmi-theme="light"] body.rmi-body input[type="week"]::-webkit-calendar-picker-indicator{
+  filter:none;
+}
+body.rmi-body select:not([class]){
+  appearance:none;
+  -webkit-appearance:none;
+  padding-right:2.1rem;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),
+                   linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:calc(100% - 17px) calc(50% + 2px), calc(100% - 12px) calc(50% + 2px);
+  background-size:5px 5px, 5px 5px;
+  background-repeat:no-repeat;
+}
+body.rmi-body textarea:not([class]){ min-height:96px; resize:vertical; }
+
+/* 2) Placeholder & option selalu kontras di kedua tema */
+body.rmi-body input::placeholder, body.rmi-body textarea::placeholder{ color:var(--rmi-muted); opacity:.75; }
+body.rmi-body input:disabled, body.rmi-body select:disabled, body.rmi-body textarea:disabled{
+  background:var(--rmi-surface);
+  color:var(--rmi-muted);
+  cursor:not-allowed;
+}
+body.rmi-body input[type="checkbox"], body.rmi-body input[type="radio"]{
+  width:auto; height:auto; appearance:auto; border:0; padding:0; margin:0;
+}
+
+/* 3) Focus ring seragam (dark & white) */
+body.rmi-body input:focus, body.rmi-body select:focus, body.rmi-body textarea:focus,
+body.rmi-body .form-control:focus, body.rmi-body .form-select:focus{
+  outline:none;
+  border-color:#3b82f6;
+  box-shadow:0 0 0 3px rgba(59,130,246,.25);
+  background:var(--rmi-card);
+  color:var(--rmi-text);
+}
+
+/* 4) .field lama -> jadi wrapper label, isinya selaras dengan form-control */
+.field{ display:flex; flex-direction:column; gap:6px; margin-top:10px; }
+.field > label, .field > .form-label{
+  font-size:.82rem; font-weight:600; color:var(--rmi-text); margin:0;
+}
+.field > .muted, .field > small{ color:var(--rmi-muted); }
+
+/* 5) Kelas baku baru (opsional, untuk penulisan baru) */
+.rmi-field{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.rmi-label{ font-size:.82rem; font-weight:600; color:var(--rmi-text); }
+.rmi-hint{ font-size:.78rem; color:var(--rmi-muted); }
+.rmi-required::after{ content:" *"; color:#ef4444; font-weight:700; }
+body.rmi-body .rmi-input,
+body.rmi-body .rmi-select,
+body.rmi-body .rmi-textarea{
+  display:block; width:100%;
+  padding:.45rem .7rem;
+  font-size:.95rem; line-height:1.45;
+  color:var(--rmi-text);
+  background:var(--rmi-card);
+  border:1px solid var(--rmi-border);
+  border-radius:10px;
+}
+body.rmi-body .rmi-textarea{ min-height:96px; resize:vertical; }
+body.rmi-body .rmi-input.is-invalid,
+body.rmi-body .rmi-select.is-invalid,
+body.rmi-body .rmi-textarea.is-invalid,
+body.rmi-body .form-control.is-invalid,
+body.rmi-body .form-select.is-invalid{
+  border-color:#ef4444;
+  box-shadow:0 0 0 3px rgba(239,68,68,.2);
+}
+
+/* ============================================================
+   NAVBAR / DRAWER — 150 menu item harus bisa dipakai, bukan di-scroll buta.
+   Prinsip: h-dvh (bukan 100vh agar tidak terpotong mobile browser bar),
+   z-index dari token, animasi HANYA transform/opacity, hormati reduced-motion.
+   ============================================================ */
+
+:root{
+  --rmi-z-topbar: 1020;
+  --rmi-z-drawer: 1045;
+  --rmi-z-dropdown: 1050;
+  --rmi-drawer-w: 320px;
+}
+
+html[data-theme="light"] body.rmi-body,
+html[data-rmi-theme="light"] body.rmi-body{ --rmi-drawer-w: 320px; }
+
+.rmi-apps-canvas{ --bs-offcanvas-width: var(--rmi-drawer-w); }
+@media (max-width: 420px){ .rmi-apps-canvas{ --bs-offcanvas-width: 88vw; } }
+
+/* 1) Header drawer: judul + pencarian dalam satu blok */
+.rmi-drawer-head{
+  display:block;
+  padding:14px 16px 10px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.rmi-drawer-head .offcanvas-title{ font-size:1rem; font-weight:700; margin-bottom:10px; }
+.rmi-drawer-head .btn-close{ position:absolute; top:14px; right:14px; }
+
+/* 2) Kotak pencarian */
+.rmi-drawer-search{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 10px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:10px;
+  transition:border-color .15s ease, background-color .15s ease;
+}
+.rmi-drawer-search:focus-within{
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.5);
+}
+.rmi-drawer-search-icon{ display:flex; color:rgba(255,255,255,.65); }
+.rmi-drawer-search-icon .rmi-i{ width:1em; height:1em; }
+.rmi-drawer-search-input{
+  flex:1 1 auto;
+  min-width:0;
+  background:transparent;
+  border:0;
+  color:#f8fafc;
+  font-size:.9rem;
+  padding:9px 0;
+}
+.rmi-drawer-search-input::placeholder{ color:rgba(255,255,255,.55); }
+.rmi-drawer-search-input:focus{ outline:none; box-shadow:none; background:transparent; }
+.rmi-drawer-search-clear{
+  flex:0 0 auto;
+  background:rgba(255,255,255,.16);
+  border:0;
+  color:#f8fafc;
+  width:20px; height:20px;
+  border-radius:50%;
+  line-height:1;
+  font-size:1rem;
+  cursor:pointer;
+}
+.rmi-drawer-search-clear:hover{ background:rgba(255,255,255,.3); }
+
+/* 3) Penghitung hasil */
+.rmi-drawer-count{
+  font-size:.72rem;
+  color:rgba(255,255,255,.6);
+  padding-top:8px;
+  min-height:1rem;
+  font-variant-numeric:tabular-nums;
+}
+
+/* 4) Section jadi sticky agar 19 grup tetap jelas saat di-scroll */
+.rmi-apps-canvas .rmi-nav-section{
+  position:sticky;
+  top:0;
+  z-index:2;
+  padding:10px 10px 6px;
+  margin:0;
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+  background:#0b1220;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+html[data-theme="light"] .rmi-apps-canvas .rmi-nav-section,
+html[data-rmi-theme="light"] .rmi-apps-canvas .rmi-nav-section{
+  background:#f8fafc;
+  color:#64748b;
+  border-bottom-color:rgba(15,23,42,.1);
+}
+
+/* 5) Link menu: tinggi sentuh nyaman + indikator aktif di tepi kiri */
+.rmi-apps-canvas .rmi-nav .nav-link{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  margin:1px 0;
+  border-radius:8px;
+  font-size:.88rem;
+  line-height:1.35;
+  color:rgba(255,255,255,.86);
+  position:relative;
+  transition:background-color .15s ease, color .15s ease;
+}
+.rmi-apps-canvas .rmi-nav .nav-link .rmi-i{ width:1.05em; height:1.05em; flex:0 0 auto; opacity:.85; }
+.rmi-apps-canvas .rmi-nav .nav-link:hover{ background:rgba(255,255,255,.1); color:#fff; }
+.rmi-apps-canvas .rmi-nav .nav-link.active{
+  background:rgba(59,130,246,.24);
+  color:#fff;
+  font-weight:600;
+}
+.rmi-apps-canvas .rmi-nav .nav-link.active::before{
+  content:"";
+  position:absolute;
+  left:0; top:6px; bottom:6px;
+  width:3px;
+  border-radius:0 3px 3px 0;
+  background:#60a5fa;
+}
+.rmi-apps-canvas .rmi-nav .nav-link.rmi-nav-sub{ padding-left:26px; }
+html[data-theme="light"] .rmi-apps-canvas .rmi-nav .nav-link,
+html[data-rmi-theme="light"] .rmi-apps-canvas .rmi-nav .nav-link{ color:#1e293b; }
+html[data-theme="light"] .rmi-apps-canvas .rmi-nav .nav-link:hover{ background:rgba(15,23,42,.06); color:#0f172a; }
+html[data-theme="light"] .rmi-apps-canvas .rmi-nav .nav-link.active{ background:rgba(59,130,246,.14); color:#1d4ed8; }
+
+/* 6) Body drawer boleh scroll, tabel/grid di dalamnya tidak boleh bocor keluar */
+.rmi-drawer-body{ overflow-y:auto; overscroll-behavior:contain; }
+
+/* 7) Empty state: satu aksi jelas (reset filter) */
+.rmi-drawer-empty{ padding:28px 16px; text-align:center; color:rgba(255,255,255,.75); }
+.rmi-drawer-empty-title{ font-size:.95rem; font-weight:600; color:#f8fafc; margin:0 0 4px; }
+.rmi-drawer-empty-text{ font-size:.82rem; color:rgba(255,255,255,.6); margin:0 0 14px; }
+.rmi-drawer-empty-btn{ --bs-btn-border-color:rgba(255,255,255,.4); }
+html[data-theme="light"] .rmi-drawer-empty,
+html[data-rmi-theme="light"] .rmi-drawer-empty{ color:#475569; }
+html[data-theme="light"] .rmi-drawer-empty-title,
+html[data-rmi-theme="light"] .rmi-drawer-empty-title{ color:#0f172a; }
+
+/* 8) Fokus keyboard terlihat jelas */
+.rmi-drawer-search-input:focus-visible,
+.rmi-apps-canvas .rmi-nav .nav-link:focus-visible,
+.rmi-drawer-empty-btn:focus-visible,
+.rmi-drawer-search-clear:focus-visible{
+  outline:2px solid #93c5fd;
+  outline-offset:2px;
+}
+
+/* 9) Sidebar desktop: dvh agar tidak terpotong browser bar mobile */
+.rmi-sidebar{ height:100dvh; }
+
+/* 10) Hormati preferensi pengguna: hilangkan semua transisi */
+@media (prefers-reduced-motion: reduce){
+  .rmi-drawer-search, .rmi-apps-canvas .rmi-nav .nav-link,
+  body.rmi-body input, body.rmi-body select, body.rmi-body textarea,
+  .rmi-dd-menu .dropdown-item{ transition:none !important; animation:none !important; }
+}
