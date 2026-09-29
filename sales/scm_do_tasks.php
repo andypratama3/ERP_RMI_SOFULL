@@ -1456,7 +1456,19 @@ rmi_header('SCM - Task DO', [
     .do-meta-label{font-size:10px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
     .do-meta-val{font-size:13px;font-weight:600;color:var(--text)}
     .do-meta-sub{font-size:11px;color:var(--muted2);margin-top:1px}
-    .do-meta-link{font-size:11px;color:#60a5fa;margin-top:3px;display:block}
+    /* Token, bukan hex: #60a5fa hardcoded hanya 2.31:1 di kartu putih
+       (light mode) sehingga link ini nyaris tak terlihat. --rmi-accent-ink
+       = 6.40:1 dark / 6.66:1 light. */
+    .do-meta-link{font-size:11px;color:var(--rmi-accent-ink, #60a5fa);margin-top:3px;display:block}
+    /* Terkunci: tombol hanya aktif setelah status DELIVERED. Bukan <a>,
+       jadi tidak bisa diklik/tab-in, dan_reason dilewati ke title+aria. */
+    .do-meta-link.is-locked{
+      color:var(--rmi-muted,#475569);
+      cursor:not-allowed;
+      opacity:.85;
+      text-decoration:none;
+    }
+    .do-meta-link.is-locked:hover{text-decoration:none}
     .do-status-col{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
     .do-amount{font-size:15px;font-weight:700;letter-spacing:-.3px}
 
@@ -1632,6 +1644,9 @@ rmi_header('SCM - Task DO', [
     $trackingPublicUrl = build_tracking_public_url($token);
     $waShareUrl = build_wa_share_url((string)$r['do_code'], $trackingPublicUrl);
     $statusClass = $r['status'] === 'on_delivery' ? 'status-delivery' : 'status-ready';
+    // Detail/Print hanya terbuka setelah DELIVERED (meminta pada kartu DO SCM).
+    // Status final di flow ini = 'delivered' (lihat badgeStatus()).
+    $isDelivered = strtolower(trim((string)($r['status'] ?? ''))) === 'delivered';
     $cur_scm = $r['scm_status'] ?: 'Pending';
     $cp = strtoupper((string)($r['carrier_provider'] ?? 'BITESHIP'));
     if (!in_array($cp, ['BITESHIP'], true)) $cp = 'BITESHIP';
@@ -1651,7 +1666,12 @@ rmi_header('SCM - Task DO', [
         <div class="do-meta-label">DO Code</div>
         <div class="do-meta-val"><?= h($r['do_code']) ?></div>
         <div class="do-meta-sub"><?= h($r['do_date']) ?> &nbsp;·&nbsp; <?= h($r['office_code']) ?></div>
+        <?php if ($isDelivered): ?>
         <a class="do-meta-link" href="./sales_do_view.php?id=<?= (int)$r['id'] ?>" target="_blank">Detail / Print ↗</a>
+        <?php else: ?>
+        <span class="do-meta-link is-locked" role="link" aria-disabled="true"
+              title="Detail &amp; Print dibuka setelah status DELIVERED. Status saat ini: <?= h(strtoupper((string)($r['status'] ?? ''))) ?>.">Detail / Print 🔒</span>
+        <?php endif; ?>
       </div>
       <div>
         <div class="do-meta-label">Customer</div>
