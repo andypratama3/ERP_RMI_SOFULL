@@ -1004,6 +1004,27 @@ $extraHead = '<style>
             color: #111827;
         }
 
+        /* ---- Kertas putih harus tetap gelap, termasuk di mode gelap ------
+           Halaman ini menyimulasikan kertas (900px, cursor:pointer) di atas
+           body gelap. Aturan shared ini menang specificity-nya:
+             html[data-theme="dark"] body.rmi-body { color: var(--rmi-text) }
+           --rmi-text dark = #e5e7eb. Akibatnya seluruh isi .page memakai
+           teks terang di atas .page { background:#ffffff } = 1.24:1,
+           jadi praktis hilang, termasuk blok warning .return-summary.
+
+           Kertas bukan bagian dari tema, jadi warnanya dikunci di sini.
+           Selector dibuat setara/lewat shared rule agar override ini
+           menang tanpa !important. */
+        html[data-theme="dark"] body.rmi-body .page,
+        html[data-rmi-theme="dark"] body.rmi-body .page,
+        body.rmi-body .page {
+            color: #111827;
+        }
+
+        /* .btn-print sudah punya latar gelap sendiri (#111827) dengan teks
+           #f9fafb = 16.5:1, aman di kedua mode. .btn-back: #e5e7eb di atas
+           #111827 = 14.7:1, juga aman. Keduanya tidak perlu disentuh. */
+
         @media print {
             /*
              * PRINT CLEAN MODE
