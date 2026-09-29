@@ -22,6 +22,11 @@ _Updated: 2026-09-29 10:05 | Fixes: phpspreadsheet 5.5.0 -> 5.8.1 (CVE-2026-3408
 | UI-003 | XSS risk pada ikon kartu dashboard | **FIXED** | kartu kini menyimpan `icon_name` (string), `rmi_icon()` dipanggil saat render | `extra_metrics` bisa disuplai pemanggil; mencetak HTML mentah membuka celah injeksi |
 | UI-004 | Detektor SVG false-positive pada `data-icon-dark/light` | **FIXED** | strip atribut `data-icon-*` sebelum hitung | Escaping di dalam atribut WAJIB (browser un-escape saat parse, lalu JS `innerHTML`) |
 | UI-005 | `declare(strict_types=1)` salah posisi di `purchases/bank_statement_import.php` | **FIXED** | `php -l` bersih | Pernah jadi fatal error |
+| CI-005 | Job `security` tidak pernah `composer install` | **FIXED** | `composer install --no-interaction` ditambahkan | Tanpa vendor, `composer audit` keluar "No installed packages found" |
+| CI-006 | `composer audit` tanpa `--locked` tidak memeriksa apa-apa di runner | **FIXED** | semua pemanggilan pakai `composer audit --locked` | Yang dijaga adalah apa yang AKAN terpasang di produksi = isi composer.lock |
+| CI-007 | Penghitung advisory salah untuk JSON kosong | **FIXED** | `advisories` bisa `[]` (list) atau dict per-paket | Kode lama hanya menangani dict -> advisory bersih salah dihitung `?` |
+| CI-008 | Job `lint` tanpa vendor membuat audit tidak akurat | **FIXED** | `composer install` + `--locked` | Gate lokal dan CI kini menghasilkan angka yang sama |
+
 | PENDING-01 | Gate SVG + regresi spreadsheet belum ada di `lint` job | IN_PROGRESS | sudah dipasang di `qa-nas` | Tanya: `lint` job GitHub-hosted tidak bisa render authenticated, jadi hanya `qa-nas` |
 | PENDING-02 | Sapuan SVG seluruh repo (semua 675 halaman) | TODO | - | Percobaan pertama di-interrupt; perlu diulang sampai tuntas |
 | PENDING-03 | `tools/qa/run_full_suite.php` | IN_PROGRESS | belum stabil | Memanggil `runtime_sweep.php --json-out=...` yang belum didukung; hanya cover render SYS, belum CRUD/RBAC/audit/print per role |

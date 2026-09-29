@@ -107,19 +107,31 @@ for t in base_path_guard volumes_police; do skip "$t (butuh APP_ROOT NAS -- liha
 # dependency_audit butuh vendor/ terpasang; secret_scan masih heuristik
 # (false-positive pada nama kolom SQL "token" dan docblock Authorization).
 # dependency_audit sengaja ADVISORY di sini, bukan gate. Temuan nyata saat ini:
-#   phpoffice/phpspreadsheet 5.5.0 punya 8 advisory (1 critical, 5 high).
-#   Perbaikannya adalah upgrade ke >=5.8.1 -- lihat tasks/dependency upgrade
-#   di ERP_MASTER_TASK_TRACKER.md. Gate keras diletakkan di job `security`.
+#   phpoffice/phpspreadsheet sudah di-patch ke 5.8.1 (audit bersih).
+#   Kalau muncul advisory lagi, perbaiki dulu lalu catat di
+#   ERP_MASTER_TASK_TRACKER.md. Gate keras diletakkan di job `security`.
 if [ -f composer.lock ] && command -v composer >/dev/null 2>&1; then
-  if composer audit --format=json >/dev/null 2>&1; then
-    ok "composer audit: tidak ada advisory"
+  # --locked WAJIB. Tanpa flag itu composer audit membaca paket yang terpasang
+  # di vendor/. Di GitHub-hosted runner vendor/ tidak ada, jadi audit keluar
+  # "No installed packages found" dan tidak memeriksa apa pun.
+  audit_json=$(composer audit --locked --format=json 2>/dev/null)
+  if [ -z "$audit_json" ]; then
+    printf '  \033[33mWARN\033[0m  composer audit: tidak bisa dibaca, advisory TIDAK diverifikasi\n'
+    SKIPPED=$((SKIPPED + 1))
   else
-    n=$(composer audit --format=json 2>/dev/null | python3 -c "
+    n=$(printf '%s' "$audit_json" | python3 -c "
 import sys,json
 d=json.load(sys.stdin); a=d.get('advisories',d)
-print(sum(len(v) for v in a.values()))" 2>/dev/null || echo '?')
-    printf '  \033[33mWARN\033[0m  composer audit: %s advisory belum patched (lihat tracker)\n' "$n"
-    SKIPPED=$((SKIPPED + 1))
+# advisories bisa [] (bersih) atau dict per-paket (ada temuan)
+if isinstance(a,dict): print(sum(len(v) for v in a.values()))
+elif isinstance(a,list): print(len(a))
+else: print(0)" 2>/dev/null || echo '?')
+    if [ "$n" = "0" ]; then
+      ok "composer audit --locked: tidak ada advisory"
+    else
+      printf '  \033[33mWARN\033[0m  composer audit: %s advisory belum patched (lihat tracker)\n' "$n"
+      SKIPPED=$((SKIPPED + 1))
+    fi
   fi
 else
   skip "composer audit (composer/composer.lock tidak tersedia)"

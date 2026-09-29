@@ -73,6 +73,12 @@ jobs:
           node -v
           composer --version
 
+      # Penting untuk akurasi: tanpa vendor/, composer hanya bisa bekerja
+      # terhadap lock file. Audit memakai --locked jadi tetap benar, tapi
+      # validate --no-check-lock dan pemeriksaan autoload butuh file nyata.
+      - name: Install dependency dari composer.lock
+        run: composer install --no-interaction --no-progress --prefer-dist
+
       # Gate utama. Script yang sama dipakai lokal, jadi "lokal hijau" dan
       # "CI hijau" berarti hal yang persis sama.
       - name: Jalankan tools/qa/ci_lint.sh
@@ -107,12 +113,23 @@ jobs:
       # Exit code diambil dari PIPESTATUS, bukan $?. Setelah `composer audit |
       # tee audit.txt`, $? adalah status tee (selalu 0), sehingga semua
       # advisory akan lolos tanpa terdeteksi.
+      - name: Install dependency dari composer.lock
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      # Audit terhadap LOCK FILE, bukan paket yang terpasang. Dua alasan:
+      #   1. `composer audit` tanpa --locked membaca vendor/ yang tidak ada
+      #      di GitHub-hosted runner, sehingga keluar "No installed packages
+      #      found" dan tidak memeriksa apa pun tapi tetap non-zero.
+      #   2. Yang ingin dijaga adalah apa yang AKAN terpasang di produksi,
+      #      yang ditentukan composer.lock.
+      # Exit code diambil dari PIPESTATUS: setelah `composer audit | tee`,
+      # $? berisi status tee (selalu 0) sehingga semua advisory lolos.
       - name: composer audit
         id: audit
         continue-on-error: true
         run: |
           set -o pipefail
-          composer audit --format=summary 2>&1 | tee audit.txt
+          composer audit --locked --format=summary 2>&1 | tee audit.txt
           echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Ringkasan advisory
@@ -144,7 +161,7 @@ jobs:
           fi
           echo "Ditemukan advisory pada composer.lock:"
           echo
-          composer audit --format=summary 2>&1 | sed 's/^/  /' || true
+          cat audit.txt 2>/dev/null | sed 's/^/  /' || composer audit --locked --format=summary 2>&1 | sed 's/^/  /' || true
           echo
           echo "Perbaiki dengan: composer require phpoffice/phpspreadsheet:^<versi-terpatch> --no-interaction"
           echo "Detail tugas ada di tools/qa/ERP_MASTER_TASK_TRACKER.md"
