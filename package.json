@@ -1,0 +1,28 @@
+{
+  "name": "erp_rmi_sofull",
+  "version": "1.0.0",
+  "description": "PHP ERP untuk **Rizqullah Mediska Indonesia** (RIZKIMED).",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andypratama3/ERP_RMI_SOFULL.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/andypratama3/ERP_RMI_SOFULL/issues"
+  },
+  "homepage": "https://github.com/andypratama3/ERP_RMI_SOFULL#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
