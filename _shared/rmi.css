@@ -947,11 +947,17 @@ body.rmi-body .rmi-content label{
   font-size: 13px;
 }
 
-/* ── 4. Native <table> (non-Bootstrap) ── */
+/* ── 4. Native <table> (non-Bootstrap) ──
+   color: var(--rmi-text) SENGAJA dimatikan (owner): body.rmi-body sudah
+   color: var(--rmi-text) di semua tema, jadi tabel mewarisinya secara alami.
+   Deklarasi eksplisit di sini justru merobek tabel dari konteks warnanya
+   sendiri — tabel di atas kertas/kartu putih ikut menjadi terang di dark mode
+   (putih-di-atas-putih, kasus print DO). Tanpa baris ini tabel mengikuti
+   warna container-nya, yang selalu benar menurut pilihan container itu. */
 body.rmi-body .rmi-content table:not(.table):not(.dataTable){
   width: 100%;
   border-collapse: collapse;
-  color: var(--rmi-text);
+  /* color: var(--rmi-text); */
   font-size: 13px;
 }
 body.rmi-body .rmi-content table:not(.table):not(.dataTable) th,
@@ -2698,9 +2704,12 @@ html[data-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataT
 }
 
 /* ── 9f. Sticky thead: --rmi-panel-2 translucent, teks bisa tembus saat scroll.
-   Dua layer di-composite supaya opaque, otomatis benar di 3 tema. ── */
+   Satu layer gradient saja (owner): background-color + gradient ganda
+   mengomposit translusensi 2x sehingga header lebih gelap dari permukaan
+   panel lainnya. Inset shadow menggantikan border-bottom yang tak andal
+   pada sticky + border-collapse. ── */
 body.rmi-body .rmi-content table:not(.table):not(.dataTable) thead th{
-  background-color: var(--rmi-panel-2);
+  /* background-color: var(--rmi-panel-2); */
   background-image: linear-gradient(var(--rmi-panel-2), var(--rmi-panel-2));
   box-shadow: inset 0 -1px 0 var(--rmi-border);
 }
