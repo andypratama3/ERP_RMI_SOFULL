@@ -172,6 +172,125 @@ if (!function_exists('rmi_ui_alert_from_flash')) {
   }
 }
 
+if (!function_exists('rmi_ui_label_html')) {
+  /**
+   * Sanitasi label yang boleh memuat inline SVG (ikon rmi_icon()).
+   *
+   * KENAPA ADA: 112 call site menulis ['label' => rmi_icon('books').' Panduan'].
+   * Label itu lalu di-escape penuh, sehingga SVG keluar sebagai TEKS:
+   *   <svg class="rmi-i rmi-i-books" ...>...</svg> Panduan
+   * API `icon` sudah ada tapi tidak pernah dipakai, jadi akar masalahnya
+   * di rmi_ui_actions_html() saja.
+   *
+   * Keamanan: ini BUKAN "escape semua lalu tempel SVG". Teks di luar tag
+   * SELALU di-escape; hanya tag & atribut dari allowlist yang diizinkan
+   * lewat mentah. Jadi label hardcoded (ikon + teks) aman, dan label yang
+   * memuat input user tetap ter-escape sebagai teks.
+   */
+  function rmi_ui_label_html(string $html): string {
+    if ($html === '') return '';
+
+    // 1) Buang blok BERISI konten untuk elemen berbahaya. Menahan tag-nya saja
+    //    tidak cukup: isi <script>/<style> akan bocor sebagai teks terlihat.
+    $html = (string) preg_replace(
+      '#<(script|style|iframe|object|embed|noscript|template|textarea|svg:script)\b[^>]*>.*?</\1\s*>#is',
+      '', $html
+    );
+    // Elemen berbahaya yang tidak punya closing tag -> buang sisa isinya.
+    $html = (string) preg_replace(
+      '#<(script|style|iframe|object|embed|noscript|template|textarea)\b[^>]*>.*#is',
+      '', $html
+    );
+
+    // 2) Buang komentar HTML — kalau tidak, "<!--" jadi teks yang ter-escape.
+    $html = (string) preg_replace('/<!--.*?-->/s', '', $html);
+
+    // 2) Allowlist tag: tag SVG + tag teks inline. Tag lain (script, iframe,
+    //    form, a, img, ...) dibuang; isi teksnya tetap ditampilkan sebagai teks.
+    static $tags = [
+      'svg' => 1, 'path' => 1, 'circle' => 1, 'ellipse' => 1, 'rect' => 1,
+      'line' => 1, 'polyline' => 1, 'polygon' => 1, 'g' => 1, 'defs' => 1,
+      'symbol' => 1, 'use' => 1, 'title' => 1, 'desc' => 1,
+      'lineargradient' => 1, 'radialgradient' => 1, 'stop' => 1,
+      'text' => 1, 'tspan' => 1,
+      'span' => 1, 'b' => 1, 'strong' => 1, 'i' => 1, 'em' => 1, 'u' => 1,
+      'small' => 1, 'code' => 1, 'sub' => 1, 'sup' => 1, 'br' => 1, 'wbr' => 1,
+    ];
+
+    // 3) Allowlist atribut. Sengaja TIDAK ada style/href/src/on*:
+    //    style bisa membawa url(javascript:), dan on* adalah XSS langsung.
+    static $attrs = [
+      'class' => 1, 'id' => 1, 'viewbox' => 1, 'xmlns' => 1,
+      'fill' => 1, 'fill-opacity' => 1, 'fill-rule' => 1,
+      'stroke' => 1, 'stroke-width' => 1, 'stroke-linecap' => 1,
+      'stroke-linejoin' => 1, 'stroke-dasharray' => 1, 'stroke-opacity' => 1,
+      'stroke-miterlimit' => 1, 'opacity' => 1, 'transform' => 1,
+      'd' => 1, 'points' => 1,
+      'x' => 1, 'y' => 1, 'x1' => 1, 'y1' => 1, 'x2' => 1, 'y2' => 1,
+      'cx' => 1, 'cy' => 1, 'r' => 1, 'rx' => 1, 'ry' => 1,
+      'width' => 1, 'height' => 1, 'dx' => 1, 'dy' => 1,
+      'offset' => 1, 'stop-color' => 1, 'stop-opacity' => 1,
+      'gradientunits' => 1, 'href' => 1,
+      'aria-hidden' => 1, 'aria-label' => 1, 'role' => 1, 'focusable' => 1,
+      'lang' => 1, 'dir' => 1, 'title' => 1,
+    ];
+
+    // href dibatasi hanya ke fragmen internal (#...). resolved URL eksternal
+    // tidak boleh disuntik lewat label.
+    $isHref = static function (string $name, string $value): bool {
+      if ($name !== 'href') return true;
+      $v = strtolower(trim(html_entity_decode($value, ENT_QUOTES, 'UTF-8')));
+      return $v === '' || $v[0] === '#';
+    };
+
+    // PREG_SPLIT_DELIM_CAPTURE memotong jadi [teks, tag, teks, tag, ...].
+    // NO_EMPTY TIDAK dipakai: penghapusan elemen kosong akan menggeser pola
+    // ganjil/genap, sehingga tag bisa terbaca sebagai teks (atau sebaliknya).
+    $parts = preg_split('/(<\/?[a-zA-Z][a-zA-Z0-9:_-]*(?:\s[^>]*)?\/?>)/', $html, -1,
+                        PREG_SPLIT_DELIM_CAPTURE);
+    if (!is_array($parts)) {
+      return htmlspecialchars($html, ENT_QUOTES, 'UTF-8');
+    }
+
+    $out = '';
+    foreach ($parts as $part) {
+      if ($part === '') continue;
+
+      if (!preg_match('#^</?[a-zA-Z][a-zA-Z0-9:_-]*#', $part)) {
+        // Teks biasa: SELALU di-escape.
+        $out .= htmlspecialchars($part, ENT_QUOTES, 'UTF-8');
+        continue;
+      }
+
+      if (!preg_match('#^</?\s*([a-zA-Z][a-zA-Z0-9:_-]*)#', $part, $m)) continue;
+      $name = strtolower($m[1]);
+      if (!isset($tags[$name])) continue;   // tag di luar allowlist -> buang
+
+      $closing = $part[1] === '/';
+      if ($closing) { $out .= '</' . $name . '>'; continue; }
+
+      $selfClose = (bool) preg_match('#/>$#', $part);
+      $inner     = rtrim(substr($part, strlen($m[0])), '/');
+
+      $keep = '';
+      if (preg_match_all('/([a-zA-Z_:][a-zA-Z0-9_:.-]*)\s*=\s*(?:"([^"]*)"|\'([^\']*)\')/', $inner, $am, PREG_SET_ORDER)) {
+        foreach ($am as $a) {
+          $an = strtolower($a[1]);
+          if (!isset($attrs[$an])) continue;
+          $av = $a[2] !== '' ? $a[2] : ($a[3] ?? '');
+          if (!$isHref($an, $av)) continue;
+          // Allowlist dicek case-insensitive, tapi nama atribut dikembalikan
+          // apa adanya: SVG bersifat case-sensitive (viewBox, gradientUnits).
+          // Menurunkan hurufannyaakan mematikan viewBox.
+          $keep .= ' ' . $a[1] . '="' . htmlspecialchars($av, ENT_QUOTES, 'UTF-8') . '"';
+        }
+      }
+      $out .= '<' . $name . $keep . ($selfClose ? ' />' : '>');
+    }
+    return $out;
+  }
+}
+
 if (!function_exists('rmi_ui_actions_html')) {
   function rmi_ui_actions_html(array $actions, array $opts = []): string {
     if (empty($actions)) return '';
@@ -185,8 +304,9 @@ if (!function_exists('rmi_ui_actions_html')) {
       $attrs = trim((string)($a['attrs'] ?? ''));
       $icon  = (string)($a['icon'] ?? '');
       $out .= '<a class="' . rmi_ui_h($class) . '" href="' . rmi_ui_h($url) . '" ' . $attrs . '>';
-      if ($icon !== '') $out .= '<span class="me-1">' . $icon . '</span>';
-      $out .= rmi_ui_h($label) . '</a>';
+      if ($icon !== '') $out .= '<span class="me-1">' . rmi_ui_label_html($icon) . '</span>';
+      // Label lewat sanitizer, bukan rmi_ui_h(): label boleh memuat inline SVG.
+      $out .= rmi_ui_label_html($label) . '</a>';
     }
     return $out;
   }
@@ -820,6 +940,9 @@ function rmi_header(string $title = 'RMI ERP', $active = '', array $opts = []): 
 }
 </style>
 <?php if (!empty($opts['extra_head'])) echo $opts['extra_head']; ?>
+<?php /* Light-mode compat: harus SESUDAH extra_head supaya menang atas
+         CSS per-halaman yang hardcode warna gelap. Hanya aktif di light. */ ?>
+<link rel="stylesheet" href="<?= rmi_ui_h($baseProject) ?>/_shared/rmi_light_compat.css?v=20260929">
 </head>
 <body class="<?= rmi_ui_h($bodyClass) ?>" data-base-project="<?= rmi_ui_h($baseProject) ?>" data-user-role="<?= rmi_ui_h($roleView) ?>" data-user-role-raw="<?= rmi_ui_h($role) ?>" data-user-dept="<?= rmi_ui_h($dept) ?>" data-user-level="<?= rmi_ui_h($level) ?>" data-user-office="<?= rmi_ui_h($office) ?>">
 <?php if (rmi_env_watermark_enabled()): ?>

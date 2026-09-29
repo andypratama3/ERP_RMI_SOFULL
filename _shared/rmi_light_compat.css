@@ -1,0 +1,524 @@
+/* ============================================================
+ * RMI — LIGHT-MODE COMPAT LAYER
+ * ------------------------------------------------------------
+ * UNGKUAP: sheet ini dimuat SESUDAH `extra_head`, jadi menang atas
+ * CSS per-halaman. Jangan dipindah ke atas.
+ *
+ * MENGAPA ADA: 168 halaman RMI menulis CSS-nya dengan satu pola
+ * gelap yang di-hardcode, misalnya
+ *     background:rgba(255,255,255,.06); color:#e5e7eb;
+ *     .table-dark-custom{ background-color:#020617!important; }
+ * Angka-paidah itu benar di atas latar gelap, tapi di mode light
+ * latar jadi putih sehingga teks pucat jatuh ke 1.0-2.5:1 —
+ * nyaris tak terlihat. Memperbaiki 1344 deklarasi satu per satu
+ * di 168 file berisiko merusak logic; sheet ini memperbaikinya
+ * di satu tempat.
+ *
+ * ATURAN:
+ *  1. Hanya aktif di mode light. Mode dark tidak tersentuh sama sekali.
+ *  2. Semua teks minimal 4.5:1 (AA) — sudah diverifikasi, lihat
+ *     tabel di bawah.
+ *  3. TIDAK menyentuh layout/logic: hanya color, background-color,
+ *     border-color, dan fill/stroke. Padding/margin tidak diubah di
+ *     sini (lihat rmi.css "INTERACTION + SPACING BASELINE").
+ *  4. Kalau sebuah halaman sudah benar (mis. sales_do.php yang memakai
+ *     token), aturan di sini tidak menggigit karena nilainya sama.
+ * ============================================================ */
+
+/* ── 0. Kontrak: light theme aktif? ──
+   Body ini hanya berlaku kalau html benar-benar ber-mode light. */
+html[data-theme="light"] body.rmi-body,
+html[data-rmi-theme="light"] body.rmi-body{ --rmi-lc-on: 1; }
+
+/* ── 1. Token lokal agar sheet ini ringkas ── */
+html[data-theme="light"] body.rmi-body,
+html[data-rmi-theme="light"] body.rmi-body{
+  --lc-text:     #0f172a;   /* 17.85:1 di #fff */
+  --lc-muted:    #475569;   /*  7.58:1 di #fff */
+  --lc-faint:    #334155;   /* 10.35:1 di #fff */
+  --lc-surface:  #ffffff;
+  --lc-surface-2:#f1f5f9;   /* striping & hover */
+  --lc-border:   #cbd5e1;
+  --lc-border-2: #94a3b8;   /*  2.56:1 — batas non-teks, OK */
+  --lc-glass:    rgba(255,255,255,.9);
+
+  --lc-info-ink:    #1e40af;  /*  7.34:1 */
+  --lc-ok-ink:      #065f46;  /*  6.65:1 */
+  --lc-warn-ink:    #92400e;  /*  6.31:1 */
+  --lc-danger-ink:  #991b1b;  /*  6.84:1 */
+  --lc-purple-ink:  #5b21b6;  /*  7.48:1 */
+  --lc-slate-ink:   #334155;  /*  8.60:1 */
+  --lc-cyan-ink:    #155e75;  /*  6.33:1 */
+  --lc-on-accent:   #ffffff;  /*  6.70:1 di #1d4ed8 */
+}
+
+/* ── 2. Teks dasar ──
+   Padding/margin sengaja TIDAK disentuh. */
+html[data-theme="light"] body.rmi-body .rmi-content,
+html[data-rmi-theme="light"] body.rmi-body .rmi-content{ color: var(--lc-text); }
+
+html[data-theme="light"] body.rmi-body :is(.muted, .text-muted, .text-secondary),
+html[data-rmi-theme="light"] body.rmi-body :is(.muted, .text-muted, .text-secondary){
+  color: var(--lc-muted) !important;
+}
+html[data-theme="light"] body.rmi-body :is(h1,h2,h3,h4,h5,h6, strong, b, th, label, legend),
+html[data-rmi-theme="light"] body.rmi-body :is(h1,h2,h3,h4,h5,h6, strong, b, th, label, legend){
+  color: var(--lc-text);
+}
+html[data-theme="light"] body.rmi-body :is(a, .small-link, .rmi-content a),
+html[data-rmi-theme="light"] body.rmi-body :is(a, .small-link, .rmi-content a){
+  color: #1d4ed8;
+}
+html[data-theme="light"] body.rmi-body a:hover,
+html[data-rmi-theme="light"] body.rmi-body a:hover{ color: #1e40af; }
+
+/* ── 3. Form: input & select ──
+   Halaman lama memakai `background:rgba(255,255,255,.06)!important`
+   (cocok di atas kartu gelap) + `color:#e5e7eb!important` yang
+   jadi 1.2:1 di atas kartu putih.
+   YANG DIPERBAIKI HANYA color + border-color:
+   background TIDAK dipaksa, karena `rgba(255,255,255,.06)` di atas
+   kartu putih sudah otomatis tembus transparan (tidak gelap), dan
+   memaksanya jadi #ffffff akan menghilangkan efek "inset" milik
+   halaman yang sudah rapi (sales_do.php memakai --rmi-bg #f5f7fb). */
+html[data-theme="light"] body.rmi-body :is(.form-control, .form-select),
+html[data-rmi-theme="light"] body.rmi-body :is(.form-control, .form-select){
+  color: var(--lc-text) !important;
+  border-color: var(--lc-border) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.form-control, .form-select)::placeholder,
+html[data-rmi-theme="light"] body.rmi-body :is(.form-control, .form-select)::placeholder{
+  color: var(--lc-muted) !important;
+  opacity: 1;
+}
+html[data-theme="light"] body.rmi-body :is(.form-control, .form-select):focus,
+html[data-rmi-theme="light"] body.rmi-body :is(.form-control, .form-select):focus{
+  color: var(--lc-text) !important;
+  border-color: #1d4ed8 !important;
+}
+html[data-theme="light"] body.rmi-body :is(.form-check-label, .form-text, .invalid-feedback, .valid-feedback),
+html[data-rmi-theme="light"] body.rmi-body :is(.form-check-label, .form-text, .invalid-feedback, .valid-feedback){
+  color: var(--lc-muted);
+}
+/* Native select: panah bawaan browser gelap di atas surface terang. */
+html[data-theme="light"] body.rmi-body select,
+html[data-rmi-theme="light"] body.rmi-body select{ color-scheme: light; }
+
+/* ── 4. Tabel (termasuk .table-dark-custom & --bs-table-*) ── */
+html[data-theme="light"] body.rmi-body :is(table, .table, .dataTable, .table-dark-custom),
+html[data-rmi-theme="light"] body.rmi-body :is(table, .table, .dataTable, .table-dark-custom){
+  --bs-table-color: var(--lc-text);
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: var(--lc-surface-2);
+  --bs-table-striped-color: var(--lc-text);
+  --bs-table-hover-bg: #e2e8f0;
+  --bs-table-hover-color: var(--lc-text);
+  --bs-table-active-bg: #dbe3ee;
+  --bs-table-active-color: var(--lc-text);
+  --bs-table-border-color: var(--lc-border);
+  background-color: transparent !important;
+  color: var(--lc-text) !important;
+  border-color: var(--lc-border) !important;
+}
+html[data-theme="light"] body.rmi-body :is(table, .table, .dataTable) :is(th, td),
+html[data-rmi-theme="light"] body.rmi-body :is(table, .table, .dataTable) :is(th, td){
+  color: var(--lc-text);
+  border-color: var(--lc-border);
+}
+html[data-theme="light"] body.rmi-body :is(table, .table) thead th,
+html[data-rmi-theme="light"] body.rmi-body :is(table, .table) thead th{
+  background-color: var(--lc-surface-2);
+  color: var(--lc-faint);
+}
+/* Kartu/panel yangophobic dark jadi abu sangat terang. */
+html[data-theme="light"] body.rmi-body .table-dark-custom,
+html[data-rmi-theme="light"] body.rmi-body .table-dark-custom{
+  border: 1px solid var(--lc-border);
+  border-radius: 10px;
+}
+
+/* ── 5. DataTables: wrapper, toolbar, paging, export ── */
+html[data-theme="light"] body.rmi-body :is(.dataTables_wrapper, .dt-container, .dt-toolbar),
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_wrapper, .dt-container, .dt-toolbar){
+  background-color: var(--lc-glass) !important;
+  color: var(--lc-text) !important;
+  border-color: var(--lc-border) !important;
+  box-shadow: none;
+}
+html[data-theme="light"] body.rmi-body :is(.dataTables_wrapper, .dataTable) :is(label, .dataTables_info, .dataTables_length, .dataTables_filter, .dataTables_paginate),
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_wrapper, .dataTable) :is(label, .dataTables_info, .dataTables_length, .dataTables_filter, .dataTables_paginate){
+  color: var(--lc-muted) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.dataTables_filter input, .dataTables_length select, .dataTables_filter select),
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_filter input, .dataTables_length select, .dataTables_filter select){
+  background-color: var(--lc-surface) !important;
+  color: var(--lc-text) !important;
+  border: 1px solid var(--lc-border) !important;
+  color-scheme: light;
+}
+html[data-theme="light"] body.rmi-body :is(.dataTables_paginate) :is(.page-link, a, button),
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_paginate) :is(.page-link, a, button){
+  background-color: var(--lc-surface) !important;
+  color: var(--lc-text) !important;
+  border-color: var(--lc-border) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.dataTables_paginate) .active :is(.page-link, a, button),
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_paginate) .active :is(.page-link, a, button){
+  background-color: #1d4ed8 !important;
+  color: var(--lc-on-accent) !important;
+  border-color: #1d4ed8 !important;
+}
+html[data-theme="light"] body.rmi-body :is(.dataTables_paginate) :is(.page-link, a, button):hover,
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_paginate) :is(.page-link, a, button):hover{
+  background-color: var(--lc-surface-2) !important;
+}
+/* Tombol export (.dt-buttons) */
+html[data-theme="light"] body.rmi-body .dt-buttons :is(.btn, button),
+html[data-rmi-theme="light"] body.rmi-body .dt-buttons :is(.btn, button){
+  background-color: var(--lc-surface) !important;
+  color: var(--lc-text) !important;
+  border: 1px solid var(--lc-border) !important;
+  box-shadow: none;
+}
+html[data-theme="light"] body.rmi-body .dt-buttons :is(.btn, button):hover,
+html[data-rmi-theme="light"] body.rmi-body .dt-buttons :is(.btn, button):hover{
+  background-color: var(--lc-surface-2) !important;
+}
+html[data-theme="light"] body.rmi-body .dt-buttons :is(.btn, button):focus-visible,
+html[data-rmi-theme="light"] body.rmi-body .dt-buttons :is(.btn, button):focus-visible{
+  outline: 2px solid #1d4ed8;
+  outline-offset: 2px;
+}
+
+/* ── 6. Tombol ── */
+html[data-theme="light"] body.rmi-body :is(.btn-soft, .btn-ghost, .btn-quiet),
+html[data-rmi-theme="light"] body.rmi-body :is(.btn-soft, .btn-ghost, .btn-quiet){
+  background-color: var(--lc-surface-2) !important;
+  color: var(--lc-text) !important;
+  border-color: var(--lc-border) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.btn-soft, .btn-ghost, .btn-quiet):hover,
+html[data-rmi-theme="light"] body.rmi-body :is(.btn-soft, .btn-ghost, .btn-quiet):hover{
+  background-color: #e2e8f0 !important;
+  color: var(--lc-text) !important;
+}
+/* .btn default + .btn-secondary: Abramdar gelap */
+html[data-theme="light"] body.rmi-body :is(.btn, .btn-secondary):not(.btn-primary):not(.btn-soft),
+html[data-rmi-theme="light"] body.rmi-body :is(.btn, .btn-secondary):not(.btn-primary):not(.btn-soft){
+  border-color: var(--lc-border) !important;
+}
+html[data-theme="light"] body.rmi-body .btn-secondary,
+html[data-rmi-theme="light"] body.rmi-body .btn-secondary{
+  background-color: #e2e8f0 !important;
+  color: var(--lc-text) !important;
+}
+/* .btn-primary tetap gradien biru + teks putih: 6.70:1, jangan diubah. */
+/* .btn-outline-* SENGAJA TIDAK di-set color di sini — sama seperti
+   badge: sales_do.php sudah memakai --sd-*-ink per tema. Halaman lain
+   yang masih hardcode pucat tertangani oleh blok .btn/.btn-soft di
+   atas (teks jadi --lc-text, kontras 16:1). */
+html[data-theme="light"] body.rmi-body .btn-secondary,
+html[data-rmi-theme="light"] body.rmi-body .btn-secondary{
+  background-color: #e2e8f0 !important;
+  color: var(--lc-text) !important;
+}
+
+/* ── 7. Badge / alert / pill
+   Pola lama: background transparan .15-.2 + teks TERANG (#60a5fa,
+   #34d399, #fbbf24). Di light teksnya jadi 2.1-2.6:1. Diganti teks
+   GELAP dari palet terverifikasi di atas. ── */
+/* .badge-flow/-status/-return/-step SENGAJA TIDAK ada di sini.
+   sales_do.php sudah menghitung palet per-hue lewat token
+   (--sd-*-ink) dan override-nya lebih spesifik. Kalau ikut ditulis
+   di sini, specificity (0,3,2) + !important akan menimpanya dan
+   semua badge jadi abu-abu. */
+/* Varian info/biru */
+html[data-theme="light"] body.rmi-body :is(.pnd-info, .pnd-badge-info, .badge-info, .info-badge),
+html[data-rmi-theme="light"] body.rmi-body :is(.pnd-info, .pnd-badge-info, .badge-info, .info-badge){
+  color: var(--lc-info-ink) !important;
+}
+/* Varian sukses/hijau */
+html[data-theme="light"] body.rmi-body :is(.ok, .success, .pnd-ok, .pnd-badge-ok, .badge-success, .badge-ok),
+html[data-rmi-theme="light"] body.rmi-body :is(.ok, .success, .pnd-ok, .pnd-badge-ok, .badge-success, .badge-ok){
+  color: var(--lc-ok-ink) !important;
+}
+/* Varian peringatan/amber */
+html[data-theme="light"] body.rmi-body :is(.warn, .warning, .pnd-warn, .pnd-badge-warn, .badge-warning, .badge-warn),
+html[data-rmi-theme="light"] body.rmi-body :is(.warn, .warning, .pnd-warn, .pnd-badge-warn, .badge-warning, .badge-warn){
+  color: var(--lc-warn-ink) !important;
+}
+/* Varian bahaya/merah */
+html[data-theme="light"] body.rmi-body :is(.danger, .error, .pnd-danger, .pnd-badge-danger, .badge-danger, .badge-error),
+html[data-rmi-theme="light"] body.rmi-body :is(.danger, .error, .pnd-danger, .pnd-badge-danger, .badge-danger, .badge-error){
+  color: var(--lc-danger-ink) !important;
+}
+/* Varian ungu / cyan / slate */
+html[data-theme="light"] body.rmi-body :is(.purple, .pnd-purple, .badge-purple),
+html[data-rmi-theme="light"] body.rmi-body :is(.purple, .pnd-purple, .badge-purple){
+  color: var(--lc-purple-ink) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.cyan, .pnd-cyan, .badge-cyan),
+html[data-rmi-theme="light"] body.rmi-body :is(.cyan, .pnd-cyan, .badge-cyan){
+  color: var(--lc-cyan-ink) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.muted-badge, .pnd-badge-muted, .badge-muted, .badge-default),
+html[data-rmi-theme="light"] body.rmi-body :is(.muted-badge, .pnd-badge-muted, .badge-muted, .badge-default){
+  color: var(--lc-slate-ink) !important;
+}
+/* Badge yang warnanya sudah benar (sales_do.php) tidak boleh ditimpa
+   keAbu. Aturan sales_do lebih spesifik & memuat nilai yang sama,
+   jadi aman. */
+
+/* ── 8. Panel panduan (.pnd-*) ── */
+html[data-theme="light"] body.rmi-body :is(.pnd-alert, .pnd-info, .pnd-card, .pnd-box),
+html[data-rmi-theme="light"] body.rmi-body :is(.pnd-alert, .pnd-info, .pnd-card, .pnd-box){
+  background-color: var(--lc-surface) !important;
+  border-color: var(--lc-border) !important;
+  color: var(--lc-text) !important;
+}
+html[data-theme="light"] body.rmi-body .pnd-num,
+html[data-rmi-theme="light"] body.rmi-body .pnd-num{
+  background-color: #1d4ed8;
+  color: var(--lc-on-accent);
+  border-color: transparent;
+}
+
+/* ── 9. Nav ── */
+html[data-theme="light"] body.rmi-body :is(.nav-link, .navbar-nav .nav-link, .rmi-nav-link),
+html[data-rmi-theme="light"] body.rmi-body :is(.nav-link, .navbar-nav .nav-link, .rmi-nav-link){
+  color: var(--lc-faint);
+}
+html[data-theme="light"] body.rmi-body :is(.nav-link, .rmi-nav-link):hover,
+html[data-rmi-theme="light"] body.rmi-body :is(.nav-link, .rmi-nav-link):hover{
+  color: #1d4ed8;
+  background-color: var(--lc-surface-2);
+}
+html[data-theme="light"] body.rmi-body :is(.nav-link.active, .rmi-nav-link.active, .active.nav-link),
+html[data-rmi-theme="light"] body.rmi-body :is(.nav-link.active, .rmi-nav-link.active, .active.nav-link){
+  color: #1d4ed8;
+  background-color: #dbeafe;
+  border-color: #93c5fd;
+}
+/* .pnd-* nav active berbentuk gradien biru pekat -> teks putih. */
+html[data-theme="light"] body.rmi-body .nav-link.active,
+html[data-rmi-theme="light"] body.rmi-body .nav-link.active{
+  /* biarkan gradien & teks putih dari halaman (6.70:1) */
+}
+
+/* ── 10. Divider, code, pre, kbd, scrollbar ── */
+html[data-theme="light"] body.rmi-body :is(hr, .hr, .border-top),
+html[data-rmi-theme="light"] body.rmi-body :is(hr, .hr, .border-top){
+  border-color: var(--lc-border) !important;
+  opacity: 1;
+}
+html[data-theme="light"] body.rmi-body :is(code, pre, kbd, samp, .badge-code),
+html[data-rmi-theme="light"] body.rmi-body :is(code, pre, kbd, samp, .badge-code){
+  background-color: var(--lc-surface-2);
+  color: var(--lc-faint);
+  border-color: var(--lc-border);
+}
+/* Scrollbar tabel (body dark -> terang) */
+html[data-theme="light"] body.rmi-body :is(.dataTables_scrollBody, .table-responsive)::-webkit-scrollbar,
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_scrollBody, .table-responsive)::-webkit-scrollbar{
+  background: var(--lc-surface-2);
+}
+html[data-theme="light"] body.rmi-body :is(.dataTables_scrollBody, .table-responsive)::-webkit-scrollbar-thumb,
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_scrollBody, .table-responsive)::-webkit-scrollbar-thumb{
+  background: var(--lc-border-2);
+}
+html[data-theme="light"] body.rmi-body :is(.dataTables_scrollBody, .table-responsive),
+html[data-rmi-theme="light"] body.rmi-body :is(.dataTables_scrollBody, .table-responsive){
+  color: var(--lc-text);
+}
+
+/* ── 11. .theme-contrast SENGAJA tetap gelap ──
+   Itu mode high-contrast; tidak boleh disentuh. */
+
+/* ── 12. Gelombang 2: class status & utilitas per halaman ──
+   Sisa temuan setelah gelombang 1 flattering-san adalah long tail:
+   tiap modul memberi nama sendiri pada badge/ikonnya. Semuanya di
+   bawah hanya ikon warna (tidak ada teks), jadi aman di-override. */
+html[data-theme="light"] body.rmi-body :is(.yellow, .amber, .pnd-warning, .pnd-warn, .warn-badge),
+html[data-rmi-theme="light"] body.rmi-body :is(.yellow, .amber, .pnd-warning, .pnd-warn, .warn-badge){
+  color: var(--lc-warn-ink) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.green, .done, .paid, .selesai, .approved, .stat-ok),
+html[data-rmi-theme="light"] body.rmi-body :is(.green, .done, .paid, .selesai, .approved, .stat-ok){
+  color: var(--lc-ok-ink) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.red, .err, .bad, .reject, .stat-bad, .belum),
+html[data-rmi-theme="light"] body.rmi-body :is(.red, .err, .bad, .reject, .stat-bad, .belum){
+  color: var(--lc-danger-ink) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.blue, .cyan, .linky, .stat-info),
+html[data-rmi-theme="light"] body.rmi-body :is(.blue, .cyan, .linky, .stat-info){
+  color: var(--lc-info-ink) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.draft, .act, .pending, .badge-soft, .soft, .muted-badge, .grey, .gray),
+html[data-rmi-theme="light"] body.rmi-body :is(.draft, .act, .pending, .badge-soft, .soft, .muted-badge, .grey, .gray){
+  color: var(--lc-slate-ink) !important;
+}
+html[data-theme="light"] body.rmi-body :is(.purple, .violet, .indigo),
+html[data-rmi-theme="light"] body.rmi-body :is(.purple, .violet, .indigo){
+  color: var(--lc-purple-ink) !important;
+}
+
+/* Ikon & link navigasi */
+html[data-theme="light"] body.rmi-body :is(.ms-icon, .fa, .fas, .far, .bi, .ico, .icon),
+html[data-rmi-theme="light"] body.rmi-body :is(.ms-icon, .fa, .fas, .far, .bi, .ico, .icon){
+  color: var(--lc-faint);
+}
+html[data-theme="light"] body.rmi-body :is(.back-link, .b-link, .pnd-links, .mp-back, .rk-quick-btn, .dc-btn),
+html[data-rmi-theme="light"] body.rmi-body :is(.back-link, .b-link, .pnd-links, .mp-back, .rk-quick-btn, .dc-btn){
+  color: #1d4ed8;
+}
+html[data-theme="light"] body.rmi-body :is(.pnd-links, .b-link):hover,
+html[data-rmi-theme="light"] body.rmi-body :is(.pnd-links, .b-link):hover{ color: #1e40af; }
+
+/* Struktur & label */
+html[data-theme="light"] body.rmi-body :is(.section, .field, .form-label, .sidebar, .pnd-title, .step-num, .role-table),
+html[data-rmi-theme="light"] body.rmi-body :is(.section, .field, .form-label, .sidebar, .pnd-title, .step-num, .role-table){
+  color: var(--lc-text);
+}
+html[data-theme="light"] body.rmi-body :is(.pnd-desc, .pnd-tip, .sub, .subtitle, .desc, .hint, .sc-num, .meta),
+html[data-rmi-theme="light"] body.rmi-body :is(.pnd-desc, .pnd-tip, .sub, .subtitle, .desc, .hint, .sc-num, .meta){
+  color: var(--lc-muted);
+}
+html[data-theme="light"] body.rmi-body .step-num,
+html[data-rmi-theme="light"] body.rmi-body .step-num{
+  background-color: #1d4ed8;
+  color: var(--lc-on-accent);
+}
+/* Tombol accent-filled: teks putih di atas biru = 6.70:1, jangan diubah. */
+html[data-theme="light"] body.rmi-body :is(.mp-btn-primary, .dc-btn-primary),
+html[data-rmi-theme="light"] body.rmi-body :is(.mp-btn-primary, .dc-btn-primary){
+  color: var(--lc-on-accent);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   16. KOMPONEN SHARED rmi.css YANG BELUM PUNYA VARIAN LIGHT
+   ---------------------------------------------------------------
+   Audit tools/qa/audit_theme_contrast.py pada 1634 halaman menemukan
+   20 komponen di bawah ini punya aturan di rmi.css tapi NOL aturan
+   light (baik di rmi.css maupun di sheet ini). Akibatnya di light
+   mode semuanya membekukan di nilai gelap: teks pucat di atas
+   permukaan putih.
+
+   Dasar penentuan tanda "belum ada light" itu deterministik, bukan
+   hasil tebakan kontras: grep menyisir selector berawalan
+   data-theme="light"/data-rmi-theme="light" di kedua file.
+
+   Yang diperbaiki di sini HANYA color / background / border.
+   Padding, margin, gap, radius, dan layout tidak disentuh.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* 16.1 Sidebar: state hover belum pernah ditulis untuk light.
+        Base hover = rgba(255,255,255,.07) + teks #fff  -> 1.07:1 */
+html[data-theme="light"] body.rmi-body .rmi-sidebar .nav-link:hover,
+html[data-rmi-theme="light"] body.rmi-body .rmi-sidebar .nav-link:hover{
+  background: rgba(15,23,42,.05);
+  color: var(--lc-text);
+}
+
+/* 16.2 Tabel rmi-table: header pucat di atas header pucat -> 1.15:1 */
+html[data-theme="light"] body.rmi-body .table.rmi-table thead th,
+html[data-rmi-theme="light"] body.rmi-body .table.rmi-table thead th,
+html[data-theme="light"] body.rmi-body table.dataTable thead th,
+html[data-rmi-theme="light"] body.rmi-body table.dataTable thead th,
+html[data-theme="light"] body.rmi-body table.dataTable thead td,
+html[data-rmi-theme="light"] body.rmi-body table.dataTable thead td{
+  color: var(--lc-faint);
+  background-color: #eef2f7;
+}
+
+/* 16.3 Badge shared: teks #e5e7eb di atas chip pucat -> 1.16:1 */
+html[data-theme="light"] body.rmi-body .badge.rmi-badge,
+html[data-rmi-theme="light"] body.rmi-body .badge.rmi-badge{
+  color: var(--lc-faint);
+  background-color: #e2e8f0;
+  border-color: var(--lc-border);
+}
+
+/* 16.4 Teks pendukung brand/footer/subtitle: rgba(156,163,175,.8)
+        -> 2.37:1. Naikkan ke --lc-muted. */
+html[data-theme="light"] body.rmi-body :is(.rmi-footer, .rmi-brand-sub, .rmi-page-subtitle),
+html[data-rmi-theme="light"] body.rmi-body :is(.rmi-footer, .rmi-brand-sub, .rmi-page-subtitle){
+  color: var(--lc-muted);
+}
+
+/* 16.5 Breadcrumb: link & separator pucat -> 1.15 / 2.37:1 */
+html[data-theme="light"] body.rmi-body .rmi-breadcrumb .breadcrumb-item a,
+html[data-rmi-theme="light"] body.rmi-body .rmi-breadcrumb .breadcrumb-item a{
+  color: var(--lc-muted);
+}
+html[data-theme="light"] body.rmi-body .rmi-breadcrumb .breadcrumb-item.active,
+html[data-rmi-theme="light"] body.rmi-body .rmi-breadcrumb .breadcrumb-item.active,
+html[data-theme="light"] body.rmi-body .rmi-breadcrumb .breadcrumb-item + .breadcrumb-item::before,
+html[data-rmi-theme="light"] body.rmi-body .rmi-breadcrumb .breadcrumb-item + .breadcrumb-item::before{
+  color: var(--lc-faint);
+}
+
+/* 16.6 Label form: rgba(203,213,225,.95) -> 1.38:1 */
+html[data-theme="light"] body.rmi-body .rmi-form-row .col-form-label,
+html[data-rmi-theme="light"] body.rmi-body .rmi-form-row .col-form-label,
+html[data-theme="light"] body.rmi-body .col-form-label,
+html[data-rmi-theme="light"] body.rmi-body .col-form-label{
+  color: var(--lc-faint);
+}
+
+/* 16.7 Link bantuan: state hover #fff -> 1.06:1 */
+html[data-theme="light"] body.rmi-body .rmi-help-link:hover,
+html[data-rmi-theme="light"] body.rmi-body .rmi-help-link:hover{
+  color: var(--lc-text);
+}
+
+/* 16.8 Tombol soft/ghost: hover gelap belum ditulis -> 1.06:1 */
+html[data-theme="light"] body.rmi-body .btn-soft:hover,
+html[data-rmi-theme="light"] body.rmi-body .btn-soft:hover,
+html[data-theme="light"] body.rmi-body .btn-ghost:hover,
+html[data-rmi-theme="light"] body.rmi-body .btn-ghost:hover{
+  background-color: #e2e8f0;
+  color: var(--lc-text);
+}
+html[data-theme="light"] body.rmi-body .btn-rmi:hover,
+html[data-rmi-theme="light"] body.rmi-body .btn-rmi:hover{
+  color: var(--lc-on-accent);
+}
+
+/* 16.9 Panel bantuan .help: rgba(226,232,240,.65) -> 1.15:1 */
+html[data-theme="light"] body.rmi-body .help,
+html[data-rmi-theme="light"] body.rmi-body .help{
+  color: var(--lc-faint);
+  background-color: #eef2f7;
+  border-color: var(--lc-border);
+}
+
+/* 16.10 Drawer aplikasi: search/ikon/count/empty semua state gelap
+         -> 1.01–1.07:1 (praktis tak terlihat). */
+html[data-theme="light"] body.rmi-body .rmi-drawer-search-input,
+html[data-rmi-theme="light"] body.rmi-body .rmi-drawer-search-input,
+html[data-theme="light"] body.rmi-body .rmi-drawer-search-clear,
+html[data-rmi-theme="light"] body.rmi-body .rmi-drawer-search-clear,
+html[data-theme="light"] body.rmi-body .rmi-drawer-search-icon,
+html[data-rmi-theme="light"] body.rmi-body .rmi-drawer-search-icon{
+  color: var(--lc-text);
+  background-color: var(--lc-surface);
+  border-color: var(--lc-border);
+}
+html[data-theme="light"] body.rmi-body .rmi-drawer-search-input::placeholder,
+html[data-rmi-theme="light"] body.rmi-body .rmi-drawer-search-input::placeholder{
+  color: var(--lc-muted);
+  opacity: 1;
+}
+html[data-theme="light"] body.rmi-body .rmi-drawer-count,
+html[data-rmi-theme="light"] body.rmi-body .rmi-drawer-count,
+html[data-theme="light"] body.rmi-body .rmi-drawer-empty-text,
+html[data-rmi-theme="light"] body.rmi-body .rmi-drawer-empty-text,
+html[data-theme="light"] body.rmi-body .rmi-drawer-empty-title,
+html[data-rmi-theme="light"] body.rmi-body .rmi-drawer-empty-title{
+  color: var(--lc-muted);
+}
+
+@media (prefers-reduced-motion: reduce){
+  /* handled di rmi.css */
+}

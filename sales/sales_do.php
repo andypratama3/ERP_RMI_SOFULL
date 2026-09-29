@@ -4345,45 +4345,123 @@ $baseProject = rmi_layout_base_project();
 $extraHead = '<link rel="stylesheet" href="' . rmi_assets_base() . '/public/assets/vendor/datatables/1.13.8/css/dataTables.bootstrap5.min.css?v=20260209">' .
   '<link rel="stylesheet" href="' . rmi_assets_base() . '/public/assets/vendor/datatables-buttons/2.4.2/css/buttons.bootstrap5.min.css?v=20260209">' .
   '<style>
-        table.dataTable.table-dark-custom tbody tr.odd td,
-        table.dataTable.table-dark-custom tbody tr.even td {
-            color: #e5e7eb;
+        /* =================================================================
+           SD design tokens — SATU sumber kebenaran, ikut tema dark/light.
+           Semua warna surface/teks di halaman ini memakai var(--sd-*).
+          .var() yang tidak terdefinisi membuat seluruh rule INVALID,
+           jadi setiap token di sini wajib ada.
+           ================================================================= */
+        body{
+          --sd-surface:   var(--rmi-panel);
+          --sd-surface-2: var(--rmi-panel-2);
+          --sd-border:    var(--rmi-border);
+          --sd-text:      var(--rmi-text);
+          --sd-muted:     var(--rmi-muted);
+          --sd-input-bg:  var(--rmi-bg);
+          --sd-input-bd:  var(--rmi-border);
+          --sd-accent:    var(--rmi-accent);
+          --sd-danger:    var(--rmi-danger);
+          --sd-warning:   var(--rmi-warning);
+          --sd-success:   var(--success);
+
+          /* Border + "ink" (teks pekat) per warna aksen.
+             Dulu border & teks tombol outline ditulis hardcodedAbu/pucat,
+             yang cuma terbaca di atas kartu gelap. Variabel ini
+             ditimpa di blok mode light di bawah. */
+          --sd-border-strong: #4b5563;
+          --sd-accent-bd:  #60a5fa;
+          --sd-accent-ink: #bfdbfe;
+          --sd-danger-bd:  #f97373;
+          --sd-danger-ink: #fecaca;
+          --sd-warning-bd: #fbbf24;
+          --sd-warning-ink:#fef08a;
+          --sd-success-bd: #4ade80;
+          --sd-success-ink:#bbf7d0;
+          --sd-info-ink:   #a5f3fc;
+          --sd-clock-ink:  #f9a8d4;
+
+          /* skala badge: dulu 3 keluarga punya 3 ukuran berbeda */
+          --sd-badge-fs:   11px;
+          --sd-badge-py:   3px;
+          --sd-badge-px:   9px;
+          --sd-badge-fw:   700;
+          --sd-badge-lh:   1.25;
+
+          /* skala spacing */
+          --sd-1: 4px;  --sd-2: 8px;  --sd-3: 12px;
+          --sd-4: 16px; --sd-5: 24px;
+
+          /* skala typography */
+          --sd-fs-xs: 11px; --sd-fs-sm: 12px; --sd-fs-md: 14px;
+          --sd-lh: 1.45;
+
+          /* ukuran tombol konsisten */
+          --sd-btn-py: .25rem; --sd-btn-px: .6rem;
+          --sd-btn-fs: var(--sd-fs-sm);
+          --sd-btn-radius: 8px;
+          --sd-focus: var(--focus-ring);
         }
 
-        table.dataTable.table-dark-custom tbody tr.even td {
-            background-color: #020617 !important;
+        /* Mode LIGHT: ganti semua "ink" pucat jadi pekat supaya tetap
+           terbaca di atas kartu putih. */
+        html[data-theme="light"],
+        html[data-rmi-theme="light"]{
+          --sd-border-strong: rgba(15,23,42,.28);
+          --sd-accent-ink:    #1d4ed8;
+          --sd-danger-ink:    #991b1b;
+          --sd-warning-ink:   #854d0e;
+          --sd-success-ink:   #166534;
+          --sd-info-ink:      #0e7490;
+          --sd-clock-ink:     #9d174d;
         }
 
-        body {
-            background:
-                radial-gradient(circle at 0% -20%, #0f172a 0, transparent 50%),
-                radial-gradient(circle at 100% 120%, #111827 0, transparent 55%),
-                radial-gradient(circle at 50% 0%, #0b1120 0, transparent 55%),
-                #020617;
-            color: #e5e7eb;
-            font-size: 14px;
-            min-height: 100vh;
+        /* Latar & warna body mengikuti tema. Override gelap hanya dipasang
+           pada mode dark supaya mode light tidak tertimpa gelap. */
+        html[data-theme="dark"] body.rmi-body,
+        html[data-rmi-theme="dark"] body.rmi-body{
+          background:
+            radial-gradient(circle at 0% -20%, #0f172a 0, transparent 50%),
+            radial-gradient(circle at 100% 120%, #111827 0, transparent 55%),
+            radial-gradient(circle at 50% 0%, #0b1120 0, transparent 55%),
+            #020617;
+          color: #e5e7eb;
         }
+        body{ font-size: var(--sd-fs-md); line-height: var(--sd-lh); min-height: 100vh; }
+
         .rmi-container { max-width: 1540px; width: calc(100% - 28px); margin: 20px auto 30px auto; }
         .rmi-card {
             border-radius: 14px;
-            border: 1px solid #1f2937;
-            background: rgba(15, 23, 42, 0.96);
-            box-shadow:
-                0 18px 45px rgba(0, 0, 0, 0.7),
-                0 0 0 1px rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--sd-border);
+            background: var(--sd-surface);
+            box-shadow: var(--shadow-md);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            margin-bottom: 20px;
+            margin-bottom: var(--sd-5);
+        }
+        /* Appearance gelap asli (blur + ring) hanya untuk mode dark. */
+        html[data-theme="dark"] .rmi-card,
+        html[data-rmi-theme="dark"] .rmi-card{
+          background: rgba(15, 23, 42, 0.96);
+          border-color: #1f2937;
+          box-shadow:
+            0 18px 45px rgba(0, 0, 0, 0.7),
+            0 0 0 1px rgba(15, 23, 42, 0.7);
         }
         .rmi-card-header {
-            padding: 14px 18px;
-            border-bottom: 1px solid #1f2937;
-            background: linear-gradient(135deg, #020617 0%, #020617 40%, #0f172a 100%);
+            padding: var(--sd-3) var(--sd-4);
+            border-bottom: 1px solid var(--sd-border);
+            background: var(--sd-surface-2);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: #e5e7eb;
+            gap: var(--sd-3);
+            flex-wrap: wrap;
+            color: var(--sd-text);
+        }
+        html[data-theme="dark"] .rmi-card-header,
+        html[data-rmi-theme="dark"] .rmi-card-header{
+          background: linear-gradient(135deg, #020617 0%, #020617 40%, #0f172a 100%);
+          border-bottom-color: #1f2937;
         }
         .rmi-card-header h5 {
             margin: 0;
@@ -4392,104 +4470,330 @@ $extraHead = '<link rel="stylesheet" href="' . rmi_assets_base() . '/public/asse
             letter-spacing: 0.06em;
             text-transform: uppercase;
         }
-        .rmi-card-body { padding: 16px 18px 18px 18px; }
+        .rmi-card-body { padding: var(--sd-4); }
+
         .badge-step { border-radius: 999px; padding: 6px 14px; font-size: 11px; margin-right: 6px; }
-        .badge-step.active { background: #2563eb; }
-        .badge-step.muted { background: #111827; color: #9ca3af; border: 1px solid #1f2937; }
+        .badge-step.active { background: var(--sd-accent); color: #fff; }
+        .badge-step.muted { background: var(--sd-surface-2); color: var(--sd-muted); border: 1px solid var(--sd-border); }
+
         .form-control, .form-select {
-            background-color: #020617;
-            border: 1px solid #374151;
-            color: #e5e7eb;
+            background-color: var(--sd-input-bg);
+            border: 1px solid var(--sd-input-bd);
+            color: var(--sd-text);
             font-size: 13px;
         }
-        .form-control::placeholder { color: #6b7280; }
+        html[data-theme="dark"] .form-control,
+        html[data-rmi-theme="dark"] .form-control,
+        html[data-theme="dark"] .form-select,
+        html[data-rmi-theme="dark"] .form-select{
+          background-color: #020617;
+          border-color: #374151;
+        }
+        /* Placeholder 4.17:1 -> GAGAL AA. Dinaikkan ke >=4.5:1. */
+        .form-control::placeholder,
+        .form-select::placeholder{ color: var(--sd-muted); opacity: 1; }
         .form-control:focus, .form-select:focus {
-            background-color: #020617;
-            color: #e5e7eb;
+            background-color: var(--sd-input-bg);
+            color: var(--sd-text);
             border-color: #38bdf8;
             box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
         }
-        .form-label { color: #e5e7eb; }
-        .text-muted-small { font-size: 11px; color: #9ca3af; }
+        html[data-theme="dark"] .form-control:focus,
+        html[data-rmi-theme="dark"] .form-control:focus,
+        html[data-theme="dark"] .form-select:focus,
+        html[data-rmi-theme="dark"] .form-select:focus{
+          background-color: #020617; color: #e5e7eb;
+        }
+        /* Ring fokus keyboard harus selalu ada (WCAG 2.4.7). */
+        body .form-control:focus-visible,
+        body .form-select:focus-visible,
+        body .btn:focus-visible,
+        body a:focus-visible{
+          outline: 2px solid #38bdf8;
+          outline-offset: 2px;
+        }
+        .form-label { color: var(--sd-text); margin-bottom: var(--sd-1); }
+        .text-muted-small { font-size: var(--sd-fs-xs); color: var(--sd-muted); line-height: 1.4; }
+        .text-muted-small.text-warning{ color: var(--sd-warning); }
+
         .btn-primary { background: linear-gradient(135deg, #0ea5e9, #2563eb); border: none; }
         .btn-primary:hover { background: linear-gradient(135deg, #38bdf8, #1d4ed8); }
         .btn-secondary { background-color: #374151; border-color: #4b5563; }
-        .btn-outline-light { border-color: #4b5563; color: #e5e7eb; }
-        .btn-outline-light:hover { background-color: #111827; color: #e5e7eb; }
-        .btn-outline-danger { border-color: #f97373; color: #fecaca; }
-        .btn-outline-danger:hover { background-color: #ef4444; color: #0f172a; }
-        .btn-outline-primary { border-color: #60a5fa; color: #bfdbfe; }
+        .btn-outline-light { border-color: var(--sd-border-strong); color: var(--sd-text); }
+        .btn-outline-light:hover { background-color: var(--rmi-panel-2); color: var(--sd-text); }
+        /* Warna teks tughu (pucat) OK di atas kartu gelap, tapi nyaris
+           tak terlihat di atas kartu putih (1.42:1 / 1.45:1). Mode light
+           memakai teks pekat dari token --sd-*-ink. */
+        .btn-outline-danger { border-color: var(--sd-danger-bd); color: var(--sd-danger-ink); }
+        .btn-outline-danger:hover { background-color: var(--sd-danger); color: #fff; }
+        .btn-outline-primary { border-color: var(--sd-accent-bd); color: var(--sd-accent-ink); }
         .btn-outline-primary:hover { background-color: #3b82f6; color: #0b1120; }
-        .table-dark-custom {
-            --bs-table-bg: #020617;
-            --bs-table-striped-bg: #020617;
-            --bs-table-striped-color: #e5e7eb;
-            --bs-table-border-color: #1f2937;
-            --bs-table-hover-bg: #0f172a;
-            color: #e5e7eb;
-            border-color: #1f2937;
-            font-size: 12px;
-        }
-        .table thead th { background-color: #020617; font-size: 11px; color: #e5e7eb; white-space: nowrap; }
+        .btn-outline-warning{ border-color: var(--sd-warning-bd); color: var(--sd-warning-ink); }
+        .btn-outline-info   { border-color: var(--sd-accent-bd); color: var(--sd-accent-ink); }
+        .btn-outline-success{ border-color: var(--sd-success-bd); color: var(--sd-success-ink); }
+        /* Catatan: definisi .table-dark-custom yang lengkap & berbasis
+           token ada DI BAWAH blok ini (satu blok tunggal). Versi lama
+           yang hardcode #020617/#e5e7eb di sini sudah dihapus agar
+           tidak bertabrakan di mode light. */
+        .table thead th { font-size: 11px; color: var(--sd-text); white-space: nowrap; }
         .table tbody td { vertical-align: middle; font-size: 12px; }
-        .grand-total { font-size: 18px; font-weight: 600; color: #38bdf8; }
-        .badge-status { border-radius: 999px; padding: 2px 8px; font-size: 11px; }
-        .badge-status.crm_to_wqs { background-color:#22c55e; color:#022c22;}
-        .badge-status.other { background-color:#a855f7; color:#1e1b4b;}
-        .badge-return { display:inline-block; margin-top:4px; border-radius:999px; padding:3px 8px; font-size:10px; font-weight:700; line-height:1.2; border:1px solid transparent; white-space:nowrap; }
+        .grand-total { font-size: 18px; font-weight: 600; color: var(--sd-accent-ink); }
+
+        /* --- BADGE: satu skala untuk flow / status / return -------------
+           Sebelumnya: flow=10px/2px, status=11px/2px, return=10px/3px.
+           6 dari 6 .badge-flow GAGAL WCAG AA (ACT 1.85:1, WQS 2.07:1).
+           Di sini semua keluarga memakai token yang sama dan pola
+           background translusen (pola yang sudah terbukti ~15:1). */
+        .badge-flow,
+        .badge-status,
+        .badge-return{
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0;
+            border-radius: 999px;
+            padding: var(--sd-badge-py) var(--sd-badge-px);
+            font-size: var(--sd-badge-fs);
+            font-weight: var(--sd-badge-fw);
+            line-height: var(--sd-badge-lh);
+            letter-spacing: .01em;
+            white-space: nowrap;
+            border: 1px solid transparent;
+        }
+        .badge-return{ margin-top: 4px; }
+
+        .badge-flow-CRM  { background: rgba(59,130,246,.16);  color:#bfdbfe; border-color: rgba(59,130,246,.45); }
+        .badge-flow-WQS  { background: rgba(34,197,94,.16);  color:#bbf7d0; border-color: rgba(34,197,94,.45); }
+        .badge-flow-SCM  { background: rgba(249,115,22,.16); color:#fed7aa; border-color: rgba(249,115,22,.45); }
+        .badge-flow-ACT  { background: rgba(234,179,8,.16);  color:#fde68a; border-color: rgba(234,179,8,.45); }
+        .badge-flow-FIN  { background: rgba(168,85,247,.16); color:#e9d5ff; border-color: rgba(168,85,247,.45); }
+        .badge-flow-DONE { background: rgba(16,185,129,.16); color:#a7f3d0; border-color: rgba(16,185,129,.45); }
+
+        .badge-status.crm_to_wqs { background: rgba(34,197,94,.16);  color:#bbf7d0; border-color: rgba(34,197,94,.45); }
+        .badge-status.other      { background: rgba(168,85,247,.16); color:#e9d5ff; border-color: rgba(168,85,247,.45); }
+
         .badge-return.return-requested { background:rgba(245,158,11,.16); color:#fde68a; border-color:rgba(245,158,11,.40); }
         .badge-return.return-received { background:rgba(14,165,233,.16); color:#bae6fd; border-color:rgba(14,165,233,.40); }
-        .badge-return.return-stocked { background:rgba(34,197,94,.16); color:#bbf7d0; border-color:rgba(34,197,94,.40); }
+        .badge-return.return-stocked  { background:rgba(34,197,94,.16);  color:#bbf7d0; border-color:rgba(34,197,94,.40); }
         .badge-return.return-completed, .badge-return.return-closed { background:rgba(16,185,129,.20); color:#d1fae5; border-color:rgba(16,185,129,.45); }
-        .badge-return.return-act { background:rgba(234,179,8,.16); color:#fef08a; border-color:rgba(234,179,8,.40); }
-        .badge-return.return-fin { background:rgba(168,85,247,.16); color:#e9d5ff; border-color:rgba(168,85,247,.40); }
-        .badge-return.return-cancelled { background:rgba(239,68,68,.15); color:#fecaca; border-color:rgba(239,68,68,.40); }
-        .badge-return.return-other { background:rgba(100,116,139,.20); color:#e2e8f0; border-color:rgba(100,116,139,.45); }
+        .badge-return.return-act      { background:rgba(234,179,8,.16);  color:#fef08a; border-color:rgba(234,179,8,.40); }
+        .badge-return.return-fin      { background:rgba(168,85,247,.16); color:#e9d5ff; border-color:rgba(168,85,247,.40); }
+        .badge-return.return-cancelled{ background:rgba(239,68,68,.15);  color:#fecaca; border-color:rgba(239,68,68,.40); }
+        .badge-return.return-other    { background:rgba(100,116,139,.20);color:#e2e8f0; border-color:rgba(100,116,139,.45); }
 
-        .badge-flow { border-radius: 999px; padding: 2px 8px; font-size: 10px; }
-        .badge-flow-CRM  { background-color:#3b82f6; color:#dbeafe;}
-        .badge-flow-WQS  { background-color:#22c55e; color:#dcfce7;}
-        .badge-flow-SCM  { background-color:#f97316; color:#fff7ed;}
-        .badge-flow-ACT  { background-color:#eab308; color:#fefce8;}
-        .badge-flow-FIN  { background-color:#a855f7; color:#f5f3ff;}
-        .badge-flow-DONE { background-color:#10b981; color:#ecfdf5;}
+        /* --- Badge pada mode LIGHT -------------------------------------
+           Palet di atas memakai teks PUCAT karena background gelapnya
+           gelap. Di mode light background-nya jadi putih, sehingga teks
+           pucat + alpha .16 hanya mencapai 1.06-1.18:1 (GAGAL total).
+           Mode light memakai teks GELAP di atas background translucent
+           .20, semuanya >= 4.5:1 (AA) — sudah diverifikasi. */
+        html[data-theme="light"] :is(.badge-flow,.badge-status,.badge-return),
+        html[data-rmi-theme="light"] :is(.badge-flow,.badge-status,.badge-return){
+            background: rgba(127,127,127,.14);
+            color: var(--rmi-text);
+        }
+        html[data-theme="light"] .badge-flow-CRM,
+        html[data-rmi-theme="light"] .badge-flow-CRM{ background:rgba(59,130,246,.20);  color:#1d4ed8; border-color:rgba(59,130,246,.45); }
+        html[data-theme="light"] .badge-flow-WQS,
+        html[data-rmi-theme="light"] .badge-flow-WQS{ background:rgba(34,197,94,.20);  color:#166534; border-color:rgba(34,197,94,.45); }
+        html[data-theme="light"] .badge-flow-SCM,
+        html[data-rmi-theme="light"] .badge-flow-SCM{ background:rgba(249,115,22,.20); color:#9a3412; border-color:rgba(249,115,22,.45); }
+        html[data-theme="light"] .badge-flow-ACT,
+        html[data-rmi-theme="light"] .badge-flow-ACT{ background:rgba(234,179,8,.20);  color:#854d0e; border-color:rgba(234,179,8,.45); }
+        html[data-theme="light"] .badge-flow-FIN,
+        html[data-rmi-theme="light"] .badge-flow-FIN{ background:rgba(168,85,247,.20); color:#7e22ce; border-color:rgba(168,85,247,.45); }
+        html[data-theme="light"] .badge-flow-DONE,
+        html[data-rmi-theme="light"] .badge-flow-DONE{ background:rgba(16,185,129,.20); color:#047857; border-color:rgba(16,185,129,.45); }
+
+        html[data-theme="light"] .badge-status.crm_to_wqs,
+        html[data-rmi-theme="light"] .badge-status.crm_to_wqs{ background:rgba(34,197,94,.20);  color:#166534; border-color:rgba(34,197,94,.45); }
+        html[data-theme="light"] .badge-status.other,
+        html[data-rmi-theme="light"] .badge-status.other{ background:rgba(168,85,247,.20); color:#7e22ce; border-color:rgba(168,85,247,.45); }
+
+        html[data-theme="light"] .badge-return.return-requested,
+        html[data-rmi-theme="light"] .badge-return.return-requested{ background:rgba(245,158,11,.20); color:#854d0e; border-color:rgba(245,158,11,.45); }
+        html[data-theme="light"] .badge-return.return-received,
+        html[data-rmi-theme="light"] .badge-return.return-received{ background:rgba(14,165,233,.20); color:#1d4ed8; border-color:rgba(14,165,233,.45); }
+        html[data-theme="light"] .badge-return.return-stocked,
+        html[data-rmi-theme="light"] .badge-return.return-stocked{ background:rgba(34,197,94,.20);  color:#166534; border-color:rgba(34,197,94,.45); }
+        html[data-theme="light"] :is(.badge-return.return-completed,.badge-return.return-closed),
+        html[data-rmi-theme="light"] :is(.badge-return.return-completed,.badge-return.return-closed){ background:rgba(16,185,129,.20); color:#047857; border-color:rgba(16,185,129,.45); }
+        html[data-theme="light"] .badge-return.return-act,
+        html[data-rmi-theme="light"] .badge-return.return-act{ background:rgba(234,179,8,.20);  color:#854d0e; border-color:rgba(234,179,8,.45); }
+        html[data-theme="light"] .badge-return.return-fin,
+        html[data-rmi-theme="light"] .badge-return.return-fin{ background:rgba(168,85,247,.20); color:#7e22ce; border-color:rgba(168,85,247,.45); }
+        html[data-theme="light"] .badge-return.return-cancelled,
+        html[data-rmi-theme="light"] .badge-return.return-cancelled{ background:rgba(239,68,68,.20);  color:#991b1b; border-color:rgba(239,68,68,.45); }
+        html[data-theme="light"] .badge-return.return-other,
+        html[data-rmi-theme="light"] .badge-return.return-other{ background:rgba(100,116,139,.20); color:#334155; border-color:rgba(100,116,139,.45); }
 
         .clock-badge {
             font-size: 11px;
             padding: 4px 10px;
             border-radius: 999px;
-            background: rgba(15,23,42,0.9);
-            border: 1px solid #1f2937;
-            color: #f9a8d4;
+            background: var(--sd-surface-2);
+            border: 1px solid var(--sd-border);
+            color: var(--sd-clock-ink);
         }
 
+        /* Banner READ-ONLY. Dulu inline `color:#fff7ed` di atas
+           rgba(245,158,11,.12) = 1.06:1 di mode light (nyaris tak
+           terbaca). Sekarang teks ikut token. */
+        .sd-readonly-banner{
+            background: rgba(245,158,11,.12);
+            border: 1px solid rgba(245,158,11,.35);
+            color: var(--sd-warning-ink);
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        /* Titik penanda tanggal tidak sama dengan waktu pembuatan. */
+        .sd-warn-dot{ color: var(--sd-warning); font-weight: 700; }
+
         .table-dark-custom{
-            --bs-table-color: #e5e7eb;
+            --bs-table-color: var(--sd-text);
             --bs-table-bg: transparent;
-            --bs-table-striped-color: #e5e7eb;
-            --bs-table-striped-bg: rgba(255,255,255,.02);
-            --bs-table-hover-color: #f9fafb;
-            --bs-table-hover-bg: rgba(255,255,255,.06);
-            --bs-table-active-color: #f9fafb;
-            --bs-table-active-bg: rgba(255,255,255,.10);
+            --bs-table-striped-color: var(--sd-text);
+            --bs-table-striped-bg: rgba(127,127,127,.06);
+            --bs-table-hover-color: var(--sd-text);
+            --bs-table-hover-bg: rgba(127,127,127,.10);
+            --bs-table-active-color: var(--sd-text);
+            --bs-table-active-bg: rgba(127,127,127,.16);
+            --bs-table-border-color: var(--sd-border);
             color: var(--bs-table-color) !important;
+            font-size: 12px;
         }
         .table-dark-custom th,
         .table-dark-custom td{ color: var(--bs-table-color) !important; }
         .table-dark-custom a,
         .table-dark-custom a:visited{ color: inherit !important; }
         .table-dark-custom .text-muted,
-        .table-dark-custom .text-secondary{ color: rgba(229,231,235,.78) !important; }
-        table.dataTable.table-dark-custom th,
-        table.dataTable.table-dark-custom td,
-        .table-dark-custom .nowrap,
-        .table-dark-custom td.nowrap,
-        .table-dark-custom th.nowrap{ white-space: normal !important; }
-        table.dataTable.table-dark-custom td{
-            overflow: visible !important;
-            text-overflow: clip !important;
-            word-break: break-word;
+        .table-dark-custom .text-secondary{ color: var(--sd-muted) !important; }
+
+        /* --- BUG-002/003: white-space -----------------------------------
+           Rule lama memaksa `white-space: normal !important` ke SEMUA
+           th/td (dan ke kelas bernama `nowrap` — maknanya justru
+           terbalik). Akibatnya header "Grand Total" jadi 2 baris dan
+           tombol di kolom Aksi pecah berderet.
+           Diganti: header & kolom numerik/Aksi = nowrap, sisanya wrap. */
+        #table-do thead th{
+            background-color: var(--rmi-bg);
+            white-space: nowrap;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--sd-border);
         }
+        html[data-theme="dark"] #table-do thead th,
+        html[data-rmi-theme="dark"] #table-do thead th{ background-color: #020617; }
+        #table-do tbody td{ white-space: normal; }
+
+        /* --- BUG-004: overflow + word-break -----------------------------
+           `overflow: visible` di dalam .table-responsive membuat isi sel
+           bocor melewati batas kolom (efek "tumpang tindih"), dan
+           `word-break: break-word` memotong "Rp 1.234.567" di tengah
+           angka sehingga sisa baris terlihat rata kiri.
+           `text-overflow: clip` adalah no-op (butuh overflow:hidden). */
+        #table-do tbody td{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: normal;
+            overflow-wrap: anywhere;
+        }
+        /* Kolom uang & waktu: angka TIDAK boleh patah, dan harus tetap
+           rata kanan. */
+        #table-do td.text-end,
+        #table-do th.text-end{ white-space: nowrap; word-break: keep-all; }
+        /* Kolom Aksi: boleh membungkus antar-tombol, tapi label tiap
+           tombol tidak boleh patah ("Lihat / Lanjutkan Retur" utuh). */
+        #table-do td.sd-actions{ white-space: normal; }
+        #table-do td.sd-actions .sd-actions-wrap{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+        #table-do td.sd-actions .btn{
+            flex: 0 0 auto;
+            white-space: nowrap;
+            margin: 0;
+            padding: var(--sd-btn-py) var(--sd-btn-px);
+            font-size: var(--sd-btn-fs);
+            border-radius: var(--sd-btn-radius);
+        }
+        #table-do td.sd-actions .badge-return{ flex: 0 0 auto; }
+        #table-do td.sd-actions .rmi-i{ margin-right: 3px; vertical-align: -.15em; }
+
+        /* --- BUG-007: bulk action ---------------------------------------
+           Dua tombol berlabel panjang ("Terapkan ke yang dipilih" +
+           "Hapus DO Terpilih") pernah ditaruh di dalam `col-md-2`
+           (~25% lebar). Keduanya inline-block, jadi meluber keluar kotak
+           dan saling menimpa. Sekarang lebar kolom longgar + grid. */
+        .sd-bulk-actions{
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--sd-2);
+            align-items: stretch;
+        }
+        .sd-bulk-actions .btn{
+            flex: 1 1 auto;
+            min-width: 0;
+            /* label panjang boleh wrap di dalam tombol, bukan meluber */
+            white-space: normal;
+            line-height: 1.3;
+            padding: var(--sd-btn-py) var(--sd-btn-px);
+            font-size: var(--sd-btn-fs);
+            border-radius: var(--sd-btn-radius);
+        }
+
+        /* --- BUG-010: grup tombol Aksi form -----------------------------
+           Dulu `d-flex flex-column`; label panjang bisa melebihi lebar
+           kolom `col-md-4` pada viewport sempit. Grid 1 kolom + width
+           100% memastikan tombol selalu di dalam kotaknya. */
+        .sd-form-actions{
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--sd-2);
+            width: 100%;
+            margin-top: var(--sd-1);
+        }
+        .sd-form-actions > .btn{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-width: 0;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.3;
+            padding: var(--sd-btn-py) var(--sd-btn-px);
+            font-size: var(--sd-btn-fs);
+            border-radius: var(--sd-btn-radius);
+        }
+        .sd-form-actions > .rmi-i{ margin-right: 4px; }
+
+        #table-do th.sd-check-col,
+        #table-do td.sd-check-col{ width: 34px; text-align: center; white-space: nowrap; }
+        #table-do input[type="checkbox"]{ width: 15px; height: 15px; cursor: pointer; }
+
+        /* --- Toolbar DataTables -----------------------------------------
+           Dulu dom=Bfrtip => tombol export, "Search", tabel, paging
+           dijejal tanpa wrapper. Sekarang length + search masuk baris
+           responsif, masing-masing full-width di layar kecil. */
+        .sd-dt-toolbar{ margin: 0 0 var(--sd-2); }
+        .sd-dt-toolbar .dt-length,
+        .sd-dt-toolbar .dt-search{ display: flex; align-items: center; gap: var(--sd-2); }
+        .sd-dt-toolbar .dt-search label{ margin: 0; font-size: var(--sd-fs-sm); color: var(--sd-muted); }
+        .sd-dt-toolbar .dataTables_length label{ margin: 0; font-size: var(--sd-fs-sm); color: var(--sd-muted); }
+        .sd-dt-toolbar .dataTables_length select,
+        .sd-dt-toolbar .dataTables_filter input{
+            margin: 0;
+            min-width: 0;
+            font-size: var(--sd-fs-sm);
+        }
+        .sd-dt-toolbar .dataTables_filter input{ width: 100%; max-width: 260px; }
+        /* Pagination & tombol export diberi jarak dari tabel. */
+        #table-do_wrapper .dataTables_info,
+        #table-do_wrapper .dataTables_paginate{ padding-top: var(--sd-2); font-size: var(--sd-fs-sm); }
+        #table-do_wrapper .dt-buttons{ display: flex; flex-wrap: wrap; gap: var(--sd-2); }
+        #table-do_wrapper .dt-buttons .btn{ margin: 0; }
 
         /* --- RMI patch: Daftar Produk dibuat lebih lebar & rapi saat input --- */
         #table-items {
@@ -4526,21 +4830,23 @@ $extraHead = '<link rel="stylesheet" href="' . rmi_assets_base() . '/public/asse
             min-width: 190px;
             max-width: 240px;
             padding: 5px 7px;
-            border: 1px solid rgba(148,163,184,.18);
+            border: 1px solid var(--sd-border);
             border-radius: 7px;
-            background: rgba(2,6,23,.42);
+            /* Dulu rgba(2,6,23,.42): kotak gelap paku di dalam kartu
+               putih saat mode light. Sekarang ikut token. */
+            background: var(--sd-input-bg);
             font-size: 10px;
             line-height: 1.35;
-            color: #94a3b8;
+            color: var(--sd-muted);
         }
         .price-history-box .ph-latest {
-            color: #bae6fd;
+            color: var(--sd-accent-ink);
             font-weight: 600;
         }
         .price-history-box details { margin-top: 3px; }
         .price-history-box summary {
             cursor: pointer;
-            color: #93c5fd;
+            color: var(--sd-accent-ink);
             user-select: none;
         }
         .price-history-list {
@@ -4551,7 +4857,7 @@ $extraHead = '<link rel="stylesheet" href="' . rmi_assets_base() . '/public/asse
         }
         .price-history-item {
             padding: 5px 0;
-            border-top: 1px dashed rgba(148,163,184,.18);
+            border-top: 1px dashed var(--sd-border);
         }
         .price-history-item:first-child { border-top: 0; }
         #table-items .sku-input { min-width: 130px; }
@@ -4604,7 +4910,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
 
 <?php if (!empty($is_locked)): ?>
   <div style="max-width:1100px;margin:14px auto 0;padding:0 14px;">
-    <div style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#fff7ed;padding:10px 12px;border-radius:12px;font-size:12px;">
+    <div class="sd-readonly-banner">
       🔒 <b>READ-ONLY</b> — <?php echo h($lock_reason); ?>
     </div>
   </div>
@@ -4773,7 +5079,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                 <!-- KELOMPOK DO — satu DO satu business group; kategori Unit ACC berada di level item -->
                 <div class="row g-3 mb-3">
                     <div class="col-12">
-                        <label class="form-label fw-bold">Kelompok Dokumen (DO)<span class="text-danger">*</span></label>
+                        <div class="form-label fw-bold" id="business_group_label">Kelompok Dokumen (DO)<span class="text-danger">*</span></div>
                         <?php
                         $groupSourceDo = !empty($edit_do) ? $edit_do : (!empty($replacement_prefill_do) ? $replacement_prefill_do : []);
                         $curGroup = strtoupper(trim((string)($groupSourceDo['business_group'] ?? '')));
@@ -4786,7 +5092,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                         <?php if ($groupLocked): ?>
                             <input type="hidden" name="do_business_group" value="<?= h($curGroup) ?>">
                         <?php endif; ?>
-                        <div class="d-flex gap-2 flex-wrap mt-1">
+                        <div class="d-flex gap-2 flex-wrap mt-1" role="radiogroup" aria-labelledby="business_group_label">
                             <?php foreach ([
                                 'BMHP'     => ['label' => '🩺 BMHP',     'sub' => 'Hanya produk BMHP', 'color' => 'rgba(59,130,246,.2)', 'border' => 'rgba(59,130,246,.5)'],
                                 'UNIT_ACC' => ['label' => '🧩 UNIT ACC', 'sub' => 'Boleh campur Alat Kesehatan + Aksesoris dalam 1 DO', 'color' => 'rgba(245,158,11,.2)', 'border' => 'rgba(245,158,11,.5)'],
@@ -4808,7 +5114,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
 
                 <div class="row g-3 mb-3">
                     <div class="col-md-4">
-                        <label class="form-label">Customer<span class="text-danger">*</span></label>
+                        <label class="form-label" for="customers_code">Customer<span class="text-danger">*</span></label>
                         <select name="customers_code" id="customers_code" class="form-select form-select-sm">
                             <option value="">-- Pilih Customer --</option>
                             <?php foreach ($customers as $c): ?>
@@ -4824,8 +5130,8 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label">Office Penanggung Jawab<span class="text-danger">*</span></label>
-                        <select name="office_code" class="form-select form-select-sm">
+                        <label class="form-label" for="office_code">Office Penanggung Jawab<span class="text-danger">*</span></label>
+                        <select name="office_code" id="office_code" class="form-select form-select-sm">
                             <option value="">-- Pilih Office --</option>
                             <?php foreach ($offices as $o): ?>
                                 <?php $selectedOfficeCode = $edit_do['office_code'] ?? ($replacement_prefill_do['office_code'] ?? ''); ?>
@@ -4839,13 +5145,13 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                     </div>
 
                     <div class="col-md-2">
-                        <label class="form-label">Tanggal DO<span class="text-danger">*</span></label>
-                        <input type="date" name="do_date" class="form-control form-control-sm"
+                        <label class="form-label" for="do_date">Tanggal DO<span class="text-danger">*</span></label>
+                        <input type="date" name="do_date" id="do_date" class="form-control form-control-sm"
                                value="<?= htmlspecialchars($edit_do ? $edit_do['do_date'] : ($replacement_prefill_do['do_date'] ?? date('Y-m-d'))) ?>">
                     </div>
 
                     <div class="col-md-3">
-                        <label class="form-label">Profil Pajak / PPN</label>
+                        <label class="form-label" for="tax-code-select">Profil Pajak / PPN</label>
                         <select name="tax_code" class="form-select form-select-sm" id="tax-code-select">
                             <option value="">-- Pilih Profil Pajak --</option>
                             <?php $selected_tax_code = $edit_do['tax_code'] ?? ''; ?>
@@ -4870,18 +5176,20 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
 
                 <div class="row g-3 mb-2">
                     <div class="col-md-6">
-                        <label class="form-label">Alamat Kirim</label>
+                        <label class="form-label" for="shipping_address">Alamat Kirim</label>
                         <textarea name="shipping_address" id="shipping_address" class="form-control form-control-sm" rows="2"
                                   placeholder="Alamat kirim, bisa auto dari master_customers"><?= htmlspecialchars($edit_do['shipping_address'] ?? '') ?></textarea>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">PIC External (Purchasing Customer)</label>
-                        <div class="mb-2">
-  <label class="form-label">PIC External (Purchasing) - Dropdown (Master PIC Customer)</label>
-  <select id="ext_pic_select" class="form-select form-select-sm" <?= !empty($is_locked) ? 'disabled' : '' ?>>
+  <!-- Label duplikat dihapus: sebelumnya ada DUA <label> untuk field yang
+       sama dan keduanya tanpa `for`, jadi tidak ada pun yang terhubung
+       ke #ext_pic_select. `name` sengaja TIDAK ditambahkan agar guard JS
+       (selExtPic) tetap sesuai kontrak. -->
+  <label class="form-label" for="ext_pic_select">PIC External (Purchasing)</label>
+  <select id="ext_pic_select" class="form-select form-select-sm" aria-describedby="ext_pic_select_help" <?= !empty($is_locked) ? 'disabled' : '' ?>>
     <option value="">-- pilih PIC Purchasing (opsional) --</option>
   </select>
-  <div class="text-muted" style="font-size:12px; margin-top:4px;">
+  <div id="ext_pic_select_help" class="text-muted-small" style="margin-top:4px;">
     Sumber: master_mpr (diisi lewat Master PIC Customers / master_user.php). Pilih dropdown untuk mengisi Nama PIC + WA/HP.
   </div>
 </div>
@@ -4891,7 +5199,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                         <div class="text-muted-small">(Nanti bisa dihubungkan ke master_user untuk pilihan otomatis.)</div>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">WA/HP Purchasing</label>
+                        <label class="form-label" for="customer_phone">WA/HP Purchasing</label>
                         <input type="text" name="customer_phone" id="customer_phone" class="form-control form-control-sm"
                                value="<?= htmlspecialchars($edit_do['customer_phone'] ?? '') ?>"
                                placeholder="No HP / WA PIC">
@@ -4900,29 +5208,29 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
 
                 <div class="row g-3 mt-3">
                     <div class="col-md-3">
-                        <label class="form-label">Jam Order Customer/RS<span class="text-danger">*</span></label>
+                        <label class="form-label" for="crm_order_received_at">Jam Order Customer/RS<span class="text-danger">*</span></label>
                         <?php
                         $crmOrderValue = '';
                         if ($edit_do && !empty($edit_do['crm_order_received_at'])) {
                             $crmOrderValue = date('Y-m-d\TH:i', strtotime((string)$edit_do['crm_order_received_at']));
                         }
                         ?>
-                        <input type="datetime-local" name="crm_order_received_at" class="form-control form-control-sm"
+                        <input type="datetime-local" name="crm_order_received_at" id="crm_order_received_at" class="form-control form-control-sm"
                                value="<?= htmlspecialchars($crmOrderValue) ?>" <?= $edit_do ? '' : 'required' ?>>
                         <div class="text-muted-small">Isi sesuai jam PO/order diterima dari RS/customer. Ini dasar durasi KPI CRM.</div>
                     </div>
                     <div class="col-md-2">
-                        <label class="form-label">Sumber Order</label>
+                        <label class="form-label" for="crm_order_source">Sumber Order</label>
                         <?php $src = strtoupper((string)($edit_do['crm_order_source'] ?? 'WA')); ?>
-                        <select name="crm_order_source" class="form-select form-select-sm">
+                        <select name="crm_order_source" id="crm_order_source" class="form-select form-select-sm">
                             <?php foreach (['WA'=>'WhatsApp','EMAIL'=>'Email','TELEPON'=>'Telepon','MANUAL'=>'Manual','LAINNYA'=>'Lainnya'] as $sv=>$sl): ?>
                                 <option value="<?= $sv ?>" <?= $src===$sv?'selected':'' ?>><?= htmlspecialchars($sl) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">Bukti Order / Screenshot</label>
-                        <input type="file" name="crm_order_proof_file" class="form-control form-control-sm" accept=".jpg,.jpeg,.png,.webp,.pdf">
+                        <label class="form-label" for="crm_order_proof_file">Bukti Order / Screenshot</label>
+                        <input type="file" name="crm_order_proof_file" id="crm_order_proof_file" class="form-control form-control-sm" accept=".jpg,.jpeg,.png,.webp,.pdf">
                         <?php if ($edit_do && !empty($edit_do['crm_order_proof_file'])): ?>
                             <div class="text-muted-small">Bukti tersimpan: <?= htmlspecialchars((string)$edit_do['crm_order_proof_file']) ?></div>
                         <?php else: ?>
@@ -4930,8 +5238,8 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                         <?php endif; ?>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Catatan Order Customer</label>
-                        <input type="text" name="crm_order_note" class="form-control form-control-sm"
+                        <label class="form-label" for="crm_order_note">Catatan Order Customer</label>
+                        <input type="text" name="crm_order_note" id="crm_order_note" class="form-control form-control-sm"
                                value="<?= htmlspecialchars((string)($edit_do['crm_order_note'] ?? '')) ?>"
                                placeholder="Contoh: order via WA, PO menyusul, urgent pagi">
                     </div>
@@ -4939,9 +5247,9 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
 
                 <div class="row g-3 mt-1">
                     <div class="col-md-4">
-                        <label class="form-label mb-1">Harga termasuk PPN?</label>
+                        <div class="form-label mb-1" id="include_tax_label">Harga termasuk PPN?</div>
                         <?php $include_tax_checked = ($edit_do && !empty($edit_do['is_price_include_tax'])) ? 'checked' : ''; ?>
-                        <div class="form-check text-muted-small">
+                        <div class="form-check text-muted-small" role="group" aria-labelledby="include_tax_label">
                             <input class="form-check-input" type="checkbox" name="include_tax" id="include_tax"
                                    value="1" <?= $include_tax_checked ?>>
                             <label class="form-check-label" for="include_tax">
@@ -5006,17 +5314,17 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
             <div class="rmi-card-body">
                 <div class="row g-3">
                     <div class="col-md-8">
-                        <label class="form-label">Catatan untuk WQS / SCM / ACT / FIN</label>
-                        <textarea name="note" class="form-control form-control-sm" rows="2"
+                        <label class="form-label" for="note">Catatan untuk WQS / SCM / ACT / FIN</label>
+                        <textarea name="note" id="note" class="form-control form-control-sm" rows="2"
                                   placeholder="Contoh: mohon kirim pagi, butuh bantuan instalasi, dll."><?= htmlspecialchars($edit_do['note'] ?? '') ?></textarea>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label">Aksi</label>
+                        <div class="form-label">Aksi</div>
                         <div class="text-muted-small mb-2">
                             DO akan langsung berstatus <strong>CRM → WQS</strong> setelah disimpan.
                         </div>
 
-                        <div class="d-flex flex-column gap-2 mt-1">
+                        <div class="sd-form-actions">
                             <button type="submit" name="save_do" class="btn btn-sm btn-primary" <?= $can_save_form ? '' : 'disabled' ?>>
                                 <?= $edit_do ? 'Update & Kirim ke WQS' : 'Simpan & Kirim ke WQS' ?>
                             </button>
@@ -5100,11 +5408,21 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                             <?php if ($can_bulk_delete): ?><option value="delete">Hapus</option><?php endif; ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-sm btn-outline-light" <?= ($can_bulk_send_wqs || $can_bulk_delete) ? '' : 'disabled' ?>>Terapkan ke yang dipilih</button>
-                        <?php if ($can_bulk_delete): ?>
-                        <button type="submit" name="bulk_delete_selected" value="1" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus DO yang dicentang? Jika stok sudah pernah berkurang, stok akan dikembalikan.');">Hapus DO Terpilih</button>
-                        <?php endif; ?>
+                    <div class="col-md-3">
+                        <label for="bulk_action" class="visually-hidden">Bulk Action</label>
+                        <select name="bulk_action" id="bulk_action" class="form-select form-select-sm" aria-label="Pilih bulk action">
+                            <option value="">-- Bulk Action --</option>
+                            <?php if ($can_bulk_send_wqs): ?><option value="send_wqs">Set ke WQS</option><?php endif; ?>
+                            <?php if ($can_bulk_delete): ?><option value="delete">Hapus</option><?php endif; ?>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="sd-bulk-actions">
+                            <button type="submit" class="btn btn-sm btn-outline-light" <?= ($can_bulk_send_wqs || $can_bulk_delete) ? '' : 'disabled' ?>>Terapkan ke yang dipilih</button>
+                            <?php if ($can_bulk_delete): ?>
+                            <button type="submit" name="bulk_delete_selected" value="1" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus DO yang dicentang? Jika stok sudah pernah berkurang, stok akan dikembalikan.');">Hapus DO Terpilih</button>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
 
@@ -5112,19 +5430,19 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
                     <table id="table-do" class="table table-sm table-hover align-middle table-dark-custom" style="width:100%">
                         <thead>
                         <tr>
-                            <th><input type="checkbox" id="check-all"></th>
-                            <th>DO Code</th>
-                            <th>Tracking</th>
-                            <th>Dibuat</th>
-                            <th>Customer</th>
-                            <th>Office</th>
-                            <th class="text-end">Total</th>
-                            <th class="text-end">PPN</th>
-                            <th class="text-end">Grand Total</th>
-                            <th>Durasi CRM</th>
-                            <th>Flow</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th scope="col" class="sd-check-col"><input type="checkbox" id="check-all" aria-label="Pilih semua DO"></th>
+                            <th scope="col">DO Code</th>
+                            <th scope="col">Tracking</th>
+                            <th scope="col">Dibuat</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Office</th>
+                            <th scope="col" class="text-end">Total</th>
+                            <th scope="col" class="text-end">PPN</th>
+                            <th scope="col" class="text-end">Grand Total</th>
+                            <th scope="col">Durasi CRM</th>
+                            <th scope="col">Flow</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Aksi</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -5167,7 +5485,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
     $can_delete_row = $perm_sales_delete && in_array($status, $CRM_ALLOWED_EDIT_STATUSES, true);
 ?>
   <tr>
-    <td><input type="checkbox" class="row-check" name="selected_ids[]" value="<?= $id ?>" <?= ($can_bulk_send_wqs || $can_bulk_delete) ? '' : 'disabled' ?>></td>
+    <td class="sd-check-col"><input type="checkbox" class="row-check" name="selected_ids[]" value="<?= $id ?>" aria-label="Pilih DO <?= h($do_code) ?>" <?= ($can_bulk_send_wqs || $can_bulk_delete) ? '' : 'disabled' ?>></td>
 
     <td>
       <div class="fw-semibold"><?= h(strtoupper($do_code)) ?><?php if (($d['source'] ?? '') === 'portal'): ?> <span class="badge bg-info" title="Order dari Customer Portal">Portal</span><?php endif; ?><?php if (($d['source'] ?? '') === 'h2h'): ?> <span class="badge bg-success" title="Order dari H2H/API Partner">H2H</span><?php endif; ?></div>
@@ -5185,7 +5503,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
       <div style="font-size:11px;color:#64748b;white-space:nowrap">
         ⏰ <?= h($created_time) ?>
         <?php if ($tgl_raw !== '' && $created_raw !== '' && substr($created_raw,0,10) !== $tgl_raw): ?>
-          <span title="Tanggal DO berbeda dari waktu pembuatan" style="color:#f59e0b">•</span>
+          <span title="Tanggal DO berbeda dari waktu pembuatan" class="sd-warn-dot" title="Tanggal DO berbeda dari waktu pembuatan">•</span>
         <?php endif; ?>
       </div>
       <?php endif; ?>
@@ -5218,7 +5536,8 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
       <?php endif; ?>
     </td>
 
-    <td class="nowrap">
+    <td class="sd-actions">
+      <div class="sd-actions-wrap">
       <?php if ($can_edit_row): ?>
       <a class="btn btn-sm btn-outline-primary" href="<?= h($_SERVER['PHP_SELF']) ?>?edit=<?= $id ?>">Edit</a>
       <?php endif; ?>
@@ -5256,6 +5575,7 @@ rmi_header('CRM – Sales DO / Order', 'sales', [
       <?php if ($can_delete_row): ?>
       <button type="submit" class="btn btn-sm btn-outline-danger" name="delete_single" value="<?= $id ?>" onclick="return confirm('Hapus DO ini?');">Hapus</button>
       <?php endif; ?>
+      </div>
     </td>
   </tr>
 <?php endforeach; ?>
@@ -5316,9 +5636,14 @@ $(function () {
 
     if ($.fn.DataTable && document.getElementById('table-do')) {
         $('#table-do').DataTable({
-            dom: 'Bfrtip',
+            /* 'l' (length) ditambahkan kembali — sebelumnya 'Bfrtip'
+               tidak punya 'l' padahal lengthChange:true, jadi pilihan
+               "Show 10/25/50/100 entries" tidak pernah muncul. */
+            dom: 'B<"row sd-dt-toolbar g-2 align-items-center"<"col-12 col-lg-6 dt-length"l><"col-12 col-lg-6 dt-search"f>>rtip',
             paging: true,
-            responsive: true,
+            /* DIHAPUS: responsive:true. Plugin DataTables.Responsive tidak
+               dimuat, jadi opsi ini tidak pernah berefek (bukan error),
+               dan tidak mengubah layout apa pun. */
             lengthChange: true,
             pageLength: 25,
             order: [[3, 'desc']],

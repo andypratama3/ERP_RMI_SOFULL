@@ -1,6 +1,15 @@
 /* _shared/rmi.css - RMI ERP unified dark theme (starter)
    Note: dibuat ringan supaya tidak merusak modul lama. */
 
+/* Token TEMA disimpan pada elemen itu sendiri, bukan di :root. Efeknya:
+   kalau data-theme belum terpasang (render pertama, halaman tanpa
+   rmi_header, atau nilai tak dikenal), maka var(--rmi-bg) dst. menjadi
+   UNDEFINED. CSS lalu DROPS seluruh deklarasi yang memakainya, sehingga
+   background/color hilang total dan teks jadi warna default browser.
+   Karena itu blok gelap ditulis mulai dari `html` polos: dark = default,
+   light = override. Tanpa ini, setiap var(--rmi-*) di sheet ini
+   bergantung penuh pada JS toggle sudah terpasang. */
+html,
 html[data-theme="dark"],
 html[data-rmi-theme="dark"]{
   --rmi-bg: #0b1220;
@@ -13,9 +22,25 @@ html[data-rmi-theme="dark"]{
   --rmi-accent-2:#22c55e;
   --rmi-danger:#ef4444;
   --rmi-warning:#f59e0b;
+  /* Token INK: varian TEKS untuk accent/danger/warning.
+     Terpisah dari token fill di atas karena satu token dipakai dua
+     keperluan dengan syarat kontras berlawanan:
+       - sebagai background filled  -> gelap lebih READABLE
+       - sebagai TEKS di atas kartu -> harus lebih TERANG
+     Kalau dipaksa satu nilai, salah satu mode selalu gagal.
+     Di dark, ink = versi dil lighten (kartu #1a202d):
+       accent 6.41:1 · danger 5.89:1 · warning 7.59:1 · success 7.15:1 */
+  --rmi-accent-ink:  #60a5fa;
+  --rmi-accent2-ink: #4ade80;
+  --rmi-danger-ink:  #f87171;
+  --rmi-warning-ink: #fbbf24;
   /* Token aliases (ERP-wide UI contract) */
   --bg: var(--rmi-bg);
   --surface: var(--rmi-panel);
+  /* Alias surface opaque untuk kartu/panel. Sebelumnya undefined sehingga
+     var(--rmi-card) / var(--rmi-surface) membuat rule CSS invalid. */
+  --rmi-card: var(--rmi-panel);
+  --rmi-surface: var(--rmi-panel-2);
   --text: var(--rmi-text);
   --muted: var(--rmi-muted);
   --primary: var(--rmi-accent);
@@ -39,10 +64,26 @@ html[data-rmi-theme="dark"]{
   --focus-ring: 0 0 0 .2rem rgba(59,130,246,.18);
 }
 
-body.rmi-body{
+/* Body background + teks WAJIB per-tema. Nilai gelap tidak boleh
+   bocor ke mode light, dan mode high-contrast harus datar (tanpa
+   gradient dekoratif). Override light-nya ada di bawah blok ini. */
+html[data-theme="dark"] body.rmi-body,
+html[data-rmi-theme="dark"] body.rmi-body{
   background: radial-gradient(circle at top, rgba(59,130,246,0.18), transparent 45%),
               radial-gradient(circle at 10% 20%, rgba(34,197,94,0.10), transparent 40%),
               var(--rmi-bg);
+  color: var(--rmi-text);
+}
+
+/* Tanpa data-theme sama sekali: tetap dapat latar, bukan transparan. */
+html:not([data-theme]):not([data-rmi-theme]) body.rmi-body{
+  background-color: var(--rmi-bg);
+  color: var(--rmi-text);
+}
+
+/* High-contrast: latar polos, tanpa gradient yang menurunkan keterbacaan. */
+body.theme-contrast{
+  background: var(--rmi-bg);
   color: var(--rmi-text);
 }
 
@@ -58,8 +99,18 @@ html[data-rmi-theme="light"]{
   --rmi-accent-2:#16a34a;
   --rmi-danger:#dc2626;
   --rmi-warning:#d97706;
+  /* Token INK light: versi digelapkan agar >=4.5:1 di kartu putih.
+       accent 6.65:1 · danger 6.42:1 · warning 7.03:1 · success 4.98:1 */
+  --rmi-accent-ink:  #1d4ed8;
+  --rmi-accent2-ink: #15803d;
+  --rmi-danger-ink:  #b91c1c;
+  --rmi-warning-ink: #92400e;
   --bg: var(--rmi-bg);
   --surface: var(--rmi-panel);
+  /* Alias surface opaque untuk kartu/panel. Sebelumnya undefined sehingga
+     var(--rmi-card) / var(--rmi-surface) membuat rule CSS invalid. */
+  --rmi-card: var(--rmi-panel);
+  --rmi-surface: var(--rmi-panel-2);
   --text: var(--rmi-text);
   --muted: var(--rmi-muted);
   --primary: var(--rmi-accent);
@@ -94,8 +145,21 @@ body.theme-contrast{
   --rmi-accent-2: #22c55e;
   --rmi-danger: #ff5252;
   --rmi-warning: #ffd000;
+  /* Ink mode kontras: dipilih per keluarga, bukan disalin apa adanya.
+     accent/warning pakai nilai own (10.09 / 13.46:1); danger & success
+     justru lebih baik pakai ink dark, karena token fill mode kontras
+     (#ff5252 6.20, #22c55e 8.69) lebih redup (#f87171 7.16, #4ade80
+     11.36). Semua >=4.5:1 di kartu #0a0a0a. */
+  --rmi-accent-ink:  #00c8ff;
+  --rmi-accent2-ink: #4ade80;
+  --rmi-danger-ink:  #f87171;
+  --rmi-warning-ink: #ffd000;
   --bg: var(--rmi-bg);
   --surface: var(--rmi-panel);
+  /* Alias surface opaque untuk kartu/panel. Sebelumnya undefined sehingga
+     var(--rmi-card) / var(--rmi-surface) membuat rule CSS invalid. */
+  --rmi-card: var(--rmi-panel);
+  --rmi-surface: var(--rmi-panel-2);
   --text: var(--rmi-text);
   --muted: var(--rmi-muted);
   --primary: var(--rmi-accent);
@@ -142,7 +206,8 @@ html[data-rmi-theme="light"] .rmi-topbar{
   border-right: 1px solid var(--rmi-border);
   min-height: 100vh;
 }
-html[data-rmi-theme="light"] .rmi-sidebar{
+html[data-rmi-theme="light"] .rmi-sidebar,
+html[data-theme="light"] .rmi-sidebar{
   background: rgba(255,255,255,0.75);
 }
 
@@ -152,7 +217,8 @@ html[data-rmi-theme="light"] .rmi-sidebar{
   padding: 10px 12px;
   margin: 2px 0;
 }
-html[data-rmi-theme="light"] .rmi-sidebar .nav-link{
+html[data-rmi-theme="light"] .rmi-sidebar .nav-link,
+html[data-theme="light"] .rmi-sidebar .nav-link{
   color: rgba(15,23,42,0.85);
 }
 .rmi-sidebar .nav-link:hover{
@@ -164,7 +230,8 @@ html[data-rmi-theme="light"] .rmi-sidebar .nav-link{
   border: 1px solid rgba(59,130,246,0.35);
   color: #fff;
 }
-html[data-rmi-theme="light"] .rmi-sidebar .nav-link.active{
+html[data-rmi-theme="light"] .rmi-sidebar .nav-link.active,
+html[data-theme="light"] .rmi-sidebar .nav-link.active{
   background: rgba(37,99,235,0.12);
   border-color: rgba(37,99,235,0.25);
   color: #0f172a;
@@ -178,7 +245,8 @@ html[data-rmi-theme="light"] .rmi-sidebar .nav-link.active{
   text-transform: uppercase;
   color: rgba(229,231,235,0.55);
 }
-html[data-rmi-theme="light"] .rmi-nav-section{
+html[data-rmi-theme="light"] .rmi-nav-section,
+html[data-theme="light"] .rmi-nav-section{
   color: rgba(15,23,42,0.45);
 }
 
@@ -197,10 +265,39 @@ html[data-rmi-theme="light"] .rmi-nav-section{
   border: 1px solid var(--rmi-border);
   border-radius: 16px;
 }
-.rmi-card .card-header{
-  background: transparent;
+/* DULU ada dua definisi header yang berbeda untuk kartu yang sama:
+   `.rmi-card .card-header` (hanya background+border, tanpa padding,
+   tanpa flex, tanpa uppercase) vs `.rmi-card-header` (font-weight:700).
+   Akibatnya kartu yang markup-nya `<div class="rmi-card-header">` dan
+   kartu yang `<div class="card-header">` terlihat beda jauh although
+   they are the same component. Sekarang SATU definisi untuk keduanya. */
+.rmi-card-header,
+.rmi-card > .card-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4);
+  background: var(--rmi-panel-2);
   border-bottom: 1px solid var(--rmi-border);
+  color: var(--rmi-text);
+  font-weight: 700;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
 }
+.rmi-card-header > h5,
+.rmi-card-header > div > h5,
+.rmi-card > .card-header > h5,
+.rmi-card > .card-header > div > h5{
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+.rmi-card-body{ padding: var(--space-4); }
 
 .table.rmi-table{
   color: var(--rmi-text);
@@ -236,6 +333,16 @@ html[data-rmi-theme="light"] .rmi-nav-section{
 }
 .btn-rmi:hover{ filter: brightness(1.05); color:#fff; }
 
+/* Dark-only: gradien default #3b82f6 -> #2563eb membuat teks #fff
+   hanya 3.68:1 di ujung kanan dan 4.38:1 di tengah — di bawah AA 4.5
+   untuk CTA utama. Digeser sedikit lebih gelap (#2f6ae0 -> #1d4ed8)
+   supaya SETIAP posisi gradien >= 4.93:1. Light mode tidak diubah
+   (putih di atas #2563eb = 5.17:1, sudah lulus). */
+html[data-rmi-theme="dark"] body.rmi-body .btn-rmi,
+html[data-theme="dark"] body.rmi-body .btn-rmi{
+  background: linear-gradient(135deg, #2f6ae0, #1d4ed8);
+}
+
 .badge.rmi-badge{
   border: 1px solid rgba(255,255,255,0.14);
   background: rgba(255,255,255,0.06);
@@ -270,7 +377,12 @@ html[data-rmi-theme="light"] .rmi-nav-section{
 
 .breadcrumb.rmi-breadcrumb{ --bs-breadcrumb-divider:'›'; font-size:12px; margin-top:4px; }
 .breadcrumb.rmi-breadcrumb .breadcrumb-item a{ color:rgba(229,231,235,0.86); text-decoration:none; }
-.breadcrumb.rmi-breadcrumb .breadcrumb-item a:hover{ color:#fff; text-decoration:underline; }
+/* Hover: ganti warna, JANGAN memunculkan garis bawah. Underline yang
+   tiba-tiba muncul saat hover bikin layout "melompat" dan terlihat
+   seperti tautan yang belum selesai dimuat. Aksesibilitas keyboard
+   tetap dijamin oleh underline + outline pada :focus-visible. */
+.breadcrumb.rmi-breadcrumb .breadcrumb-item a:hover{ color:var(--rmi-text); text-decoration:none; }
+.breadcrumb.rmi-breadcrumb .breadcrumb-item a:focus-visible{ text-decoration:underline; text-underline-offset:3px; }
 .breadcrumb.rmi-breadcrumb .breadcrumb-item.active{ color:rgba(156,163,175,0.95); }
 .breadcrumb.rmi-breadcrumb .breadcrumb-item+.breadcrumb-item::before{ color:rgba(156,163,175,0.6); }
 
@@ -303,7 +415,8 @@ body.rmi-sidebar-hidden .rmi-main{ width:100%; }
 .alert.rmi-alert.alert-info{ border-color:rgba(59,130,246,0.35); background:rgba(59,130,246,0.12); }
 
 /* Cards */
-.rmi-card-header{ font-weight:700; }
+/* Definisi header kartu sudah dipusatkan di atas (RMICARD header),
+   jadi duplikat ini dihapus agar tidak saling menimpa. */
 .rmi-card-footer{ background:transparent; border-top:1px solid var(--rmi-border); }
 
 /* Table helpers */
@@ -437,8 +550,9 @@ body.rmi-sidebar-hidden .rmi-main{ width:100%; }
 .dot.ok{ background:#22c55e; }
 .dot.wait{ background:#f59e0b; }
 .dot.no{ background:#ef4444; }
-.small-link{ color:#93c5fd; text-decoration:none; }
-.small-link:hover{ text-decoration: underline; }
+.small-link{ color:var(--rmi-accent-ink); text-decoration:none; border-radius:4px; padding:1px 3px; margin:0 -3px; }
+.small-link:hover{ text-decoration:none; background:var(--rmi-panel-2); color:var(--rmi-text); }
+.small-link:focus-visible{ text-decoration:underline; text-underline-offset:3px; }
 .help{ font-size: 12px; color: rgba(226,232,240,.65); }
 .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 12px; }
 
@@ -494,13 +608,15 @@ html{
     padding-top: 12px;
     margin-top: 4px;
   }
-  html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar-actions{
+html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar-actions,
+html[data-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar-actions{
     border-top-color: rgba(15, 23, 42, 0.1);
   }
   body.rmi-body .rmi-shell-topnav .rmi-topbar{
     box-shadow: 0 2px 14px rgba(0, 0, 0, 0.14);
   }
-  html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar{
+html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar,
+html[data-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar{
     box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
   }
 }
@@ -565,7 +681,8 @@ html{
     border-radius: 12px;
     box-shadow: 0 4px 22px rgba(0, 0, 0, 0.2);
   }
-  html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-surface{
+html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-surface,
+html[data-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-surface{
     box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
   }
   /* Kelompok tombol aksi — satu “bilah” rapi */
@@ -577,7 +694,8 @@ html{
     margin-top: 6px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
-  html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar-actions{
+html[data-rmi-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar-actions,
+html[data-theme="light"] body.rmi-body .rmi-shell-topnav .rmi-topbar-actions{
     background: rgba(15, 23, 42, 0.04);
     border-color: rgba(15, 23, 42, 0.1);
     border-top-color: rgba(15, 23, 42, 0.08);
@@ -939,11 +1057,23 @@ body.rmi-body .rmi-content div.dataTables_wrapper div.dataTables_length label{
 
 /* ── 6. Links inside content ── */
 body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item){
-  color: var(--rmi-accent);
+  color: var(--rmi-accent-ink);
   text-decoration: none;
+  border-radius: 4px;
+  /* underline digeser agar tidak menempel pada glif */
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
+/* Hover tidak memunculkan underline (dulu `text-decoration:underline`
+   + `color:#60a5fa`): warna #60a5fa juga terlalu redup di mode light.
+   Affordance dipindah ke warna token + highlight latar. */
 body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item):hover{
-  color: #60a5fa;
+  color: var(--rmi-text);
+  text-decoration: none;
+  background: var(--rmi-panel-2);
+}
+/* Keyboard tetap dapat affordance yang jelas. */
+body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item):focus-visible{
   text-decoration: underline;
 }
 
@@ -1014,19 +1144,19 @@ body.rmi-body .rmi-content .btn-outline-light:hover{
 }
 body.rmi-body .rmi-content .btn-outline-primary{
   border-color: var(--rmi-accent);
-  color: var(--rmi-accent);
+  color: var(--rmi-accent-ink);
 }
 body.rmi-body .rmi-content .btn-outline-danger{
   border-color: var(--rmi-danger);
-  color: var(--rmi-danger);
+  color: var(--rmi-danger-ink);
 }
 body.rmi-body .rmi-content .btn-outline-success{
   border-color: var(--rmi-accent-2);
-  color: var(--rmi-accent-2);
+  color: var(--rmi-accent2-ink);
 }
 body.rmi-body .rmi-content .btn-outline-warning{
   border-color: var(--rmi-warning);
-  color: var(--rmi-warning);
+  color: var(--rmi-warning-ink);
 }
 
 /* ── 11. DataTables deep harmony ── */
@@ -1068,6 +1198,13 @@ body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.current{
   background: var(--rmi-accent) !important;
   border-color: var(--rmi-accent) !important;
   color: #fff !important;
+}
+/* Dark-only: #fff di atas --rmi-accent dark (#3b82f6) = 3.68:1, gagal AA.
+   #1d4ed8 memberi 6.70:1. Light mode tetap --rmi-accent (5.17:1). */
+html[data-rmi-theme="dark"] body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+html[data-theme="dark"] body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button.current{
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
 }
 body.rmi-body .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.current){
   background: rgba(255,255,255,.08) !important;
@@ -1182,43 +1319,56 @@ body.rmi-body .rmi-content pre{
   color: var(--rmi-text);
   font-size: 12px;
   overflow-x: auto;
-}
-
+}/* ── 14. Light theme overrides for legacy ── */
+html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) thead th,
 /* ── 14. Light theme overrides for legacy ── */
-html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) thead th{
+html[data-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) thead th{
   background: var(--rmi-bg);
 }
-html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:hover{
+html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:hover,
+html[data-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:hover{
   background: rgba(0,0,0,.03);
 }
-html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even){
+html[data-rmi-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even),
+html[data-theme="light"] body.rmi-body .rmi-content table:not(.table):not(.dataTable) tbody tr:nth-child(even){
   background: rgba(0,0,0,.015);
 }
-html[data-rmi-theme="light"] body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item){
-  color: var(--rmi-accent);
+html[data-rmi-theme="light"] body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item),
+html[data-theme="light"] body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item){
+  color: var(--rmi-accent-ink);
 }
-html[data-rmi-theme="light"] body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item):hover{
-  color: #1d4ed8;
+/* Hover digeser ke #1e40af, BUKAN menyamakan dengan base #1d4ed8 —
+   kalau sama, state hover jadi no-op dan affordance hilang. */
+html[data-rmi-theme="light"] body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item):hover,
+html[data-theme="light"] body.rmi-body .rmi-content a:not(.btn):not(.nav-link):not(.rmi-help-link):not(.dropdown-item):not(.page-link):not(.list-group-item):hover{
+  color: #1e40af;
 }
-html[data-rmi-theme="light"] body.rmi-body .rmi-content code{
+html[data-rmi-theme="light"] body.rmi-body .rmi-content code,
+html[data-theme="light"] body.rmi-body .rmi-content code{
   color: #be185d;
   background: rgba(0,0,0,.04);
 }
-html[data-rmi-theme="light"] body.rmi-body .rmi-content pre{
+html[data-rmi-theme="light"] body.rmi-body .rmi-content pre,
+html[data-theme="light"] body.rmi-body .rmi-content pre{
   background: rgba(0,0,0,.04);
 }
-html[data-rmi-theme="light"] body.rmi-body table.dataTable tbody tr:hover td{
+html[data-rmi-theme="light"] body.rmi-body table.dataTable tbody tr:hover td,
+html[data-theme="light"] body.rmi-body table.dataTable tbody tr:hover td{
   background: rgba(0,0,0,.03) !important;
 }
 html[data-rmi-theme="light"] body.rmi-body table.dataTable.stripe tbody tr.odd,
-html[data-rmi-theme="light"] body.rmi-body table.dataTable.display tbody tr.odd{
+html[data-theme="light"] body.rmi-body table.dataTable.stripe tbody tr.odd,
+html[data-rmi-theme="light"] body.rmi-body table.dataTable.display tbody tr.odd,
+html[data-theme="light"] body.rmi-body table.dataTable.display tbody tr.odd{
   background: rgba(0,0,0,.015);
 }
-html[data-rmi-theme="light"] body.rmi-body .rmi-content .btn-outline-light{
+html[data-rmi-theme="light"] body.rmi-body .rmi-content .btn-outline-light,
+html[data-theme="light"] body.rmi-body .rmi-content .btn-outline-light{
   border-color: rgba(0,0,0,.15);
   color: var(--rmi-text);
 }
-html[data-rmi-theme="light"] body.rmi-body .rmi-content .btn-outline-light:hover{
+html[data-rmi-theme="light"] body.rmi-body .rmi-content .btn-outline-light:hover,
+html[data-theme="light"] body.rmi-body .rmi-content .btn-outline-light:hover{
   background: rgba(0,0,0,.06);
 }
 
@@ -1228,7 +1378,8 @@ body.rmi-body .offcanvas{
   color: var(--rmi-text);
   border-color: var(--rmi-border);
 }
-html[data-rmi-theme="light"] body.rmi-body .offcanvas{
+html[data-rmi-theme="light"] body.rmi-body .offcanvas,
+html[data-theme="light"] body.rmi-body .offcanvas{
   background: #fff;
 }
 body.rmi-body .dropdown-menu{
@@ -1242,11 +1393,13 @@ body.rmi-body .dropdown-menu .dropdown-item{
 body.rmi-body .dropdown-menu .dropdown-item:hover{
   background: rgba(255,255,255,.08);
 }
-html[data-rmi-theme="light"] body.rmi-body .dropdown-menu{
+html[data-rmi-theme="light"] body.rmi-body .dropdown-menu,
+html[data-theme="light"] body.rmi-body .dropdown-menu{
   background: #fff;
   border-color: rgba(0,0,0,.12);
 }
-html[data-rmi-theme="light"] body.rmi-body .dropdown-menu .dropdown-item:hover{
+html[data-rmi-theme="light"] body.rmi-body .dropdown-menu .dropdown-item:hover,
+html[data-theme="light"] body.rmi-body .dropdown-menu .dropdown-item:hover{
   background: rgba(0,0,0,.04);
 }
 
@@ -1259,7 +1412,8 @@ body.rmi-body .modal-content{
 }
 body.rmi-body .modal-header{ border-bottom-color: var(--rmi-border); }
 body.rmi-body .modal-footer{ border-top-color: var(--rmi-border); }
-html[data-rmi-theme="light"] body.rmi-body .modal-content{
+html[data-rmi-theme="light"] body.rmi-body .modal-content,
+html[data-theme="light"] body.rmi-body .modal-content{
   background: #fff;
 }
 
@@ -1278,10 +1432,12 @@ body.rmi-body ::-webkit-scrollbar-thumb{
 body.rmi-body ::-webkit-scrollbar-thumb:hover{
   background: rgba(255,255,255,.20);
 }
-html[data-rmi-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb{
+html[data-rmi-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb,
+html[data-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb{
   background: rgba(0,0,0,.12);
 }
-html[data-rmi-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb:hover{
+html[data-rmi-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb:hover,
+html[data-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb:hover{
   background: rgba(0,0,0,.22);
 }
 
@@ -1403,6 +1559,21 @@ html[data-rmi-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb:hover{
   font-weight: 700;
   flex: 0 0 36px;
   box-shadow: 0 1px 3px rgba(0,0,0,.12);
+  position: relative;
+  isolation: isolate;
+}
+/* Scrim: inisial avatar selalu #fff, sedangkan 12 gradien hash punya
+   stop(second) yang terang — hijau limau #a3e635 hanya 1.51:1 dengan
+   teks putih, hampir tak terbaca. Scrim gelap 0.45 menurunkan SEMUA
+   24 stop sekaligus ke >=4.5:1 (terburuk 4.54:1) tanpa mengubah hue,
+   dan implemented via ::before + isolation agar tidak menimpa teks. */
+.chat-avatar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background: rgba(2,6,23,.45);
+  z-index:-1;
 }
 .chat-avatar[data-avatar-hash="0"]{ background: linear-gradient(135deg,#6366f1,#8b5cf6); }
 .chat-avatar[data-avatar-hash="1"]{ background: linear-gradient(135deg,#0ea5e9,#06b6d4); }
@@ -1437,13 +1608,13 @@ html[data-rmi-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb:hover{
   justify-content: space-between;
 }
 .chat-status-sent{ color: var(--muted); font-size: 12px; }
-.chat-status-read{ color: var(--primary); font-size: 12px; }
+.chat-status-read{ color: var(--rmi-accent-ink); font-size: 12px; }
 .chat-text{
   white-space: pre-wrap;
   word-break: break-word;
   color: var(--text);
 }
-.chat-mention{ color: var(--primary); font-weight: 600; }
+.chat-mention{ color: var(--rmi-accent-ink); font-weight: 600; }
 .chat-composer{
   border-top: 1px solid var(--border);
   padding: var(--space-3);
@@ -1525,8 +1696,8 @@ html[data-rmi-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb:hover{
   padding:2px 8px;
 }
 .chat-reaction-chip.is-mine{
-  border-color: var(--primary);
-  color: var(--primary);
+  border-color: var(--rmi-accent);
+  color: var(--rmi-accent-ink);
 }
 .chat-action-row{
   display:flex;
@@ -1989,7 +2160,7 @@ body.rmi-body .form-control:focus, body.rmi-body .form-select:focus{
 .rmi-field{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
 .rmi-label{ font-size:.82rem; font-weight:600; color:var(--rmi-text); }
 .rmi-hint{ font-size:.78rem; color:var(--rmi-muted); }
-.rmi-required::after{ content:" *"; color:#ef4444; font-weight:700; }
+.rmi-required::after{ content:" *"; color:var(--rmi-danger-ink); font-weight:700; }
 body.rmi-body .rmi-input,
 body.rmi-body .rmi-select,
 body.rmi-body .rmi-textarea{
@@ -2177,4 +2348,111 @@ html[data-rmi-theme="light"] .rmi-drawer-empty-title{ color:#0f172a; }
   .rmi-drawer-search, .rmi-apps-canvas .rmi-nav .nav-link,
   body.rmi-body input, body.rmi-body select, body.rmi-body textarea,
   .rmi-dd-menu .dropdown-item{ transition:none !important; animation:none !important; }
+}
+
+/* ============================================================
+ * INTERACTION + SPACING BASELINE
+ * Ditempelkan di akhir sheet supaya bisa menang atas aturan legacy
+ * di atas tanpa harus mengedit puluhan blok satu per satu.
+ * Semua warna lewat token => otomatis benar di dark & light.
+ * ============================================================ */
+body.rmi-body{
+  /* Durasi feedback. Batas keras 200ms: di atas itu terasa lambek. */
+  --rmi-dur: 120ms;
+  --rmi-dur-fast: 80ms;
+  --rmi-ease: cubic-bezier(.2,.6,.3,1);
+  /* Jarak antar-field. 4/8/12/16/24 mengikuti skala yang sudah dipakai. */
+  --rmi-gap: var(--space-3);
+  --rmi-gap-sm: var(--space-2);
+}
+
+/* ── 1. Fokus keyboard: satu perlakuan, semua mode ──
+   Jangan pernah dihapus `outline` tanpa Providing pengganti. */
+body.rmi-body :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible{
+  outline: 2px solid var(--rmi-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* Elemen yang sudah punya bentuk sendiri (chip, kartu) tidak perlu
+   radius tambahan yang bikinjidat. */
+body.rmi-body .badge-flow:focus-visible,
+body.rmi-body .badge-return:focus-visible,
+body.rmi-body .badge-status:focus-visible{ border-radius: 999px; }
+
+/* ── 2. Hover: berubah warna, tidak mengubah ukuran ──
+   Dilarang menganimasikan width/height/margin/padding (layout shift). */
+body.rmi-body .rmi-content .btn,
+body.rmi-body .rmi-content .btn-sm,
+body.rmi-body .rmi-content .form-control,
+body.rmi-body .rmi-content .form-select{
+  transition: background-color var(--rmi-dur) var(--rmi-ease),
+              border-color     var(--rmi-dur) var(--rmi-ease),
+              color            var(--rmi-dur) var(--rmi-ease),
+              box-shadow       var(--rmi-dur) var(--rmi-ease);
+}
+body.rmi-body .rmi-content .btn:hover{ transform: none; }
+
+/* ── 3. Angka harus sejajar (tabular) ──
+   Kolom Total/PPN/Grand Total/durasi jadi rata angka yang benar. */
+body.rmi-body .rmi-content :is(td, th).text-end,
+body.rmi-body .rmi-content .num,
+body.rmi-body .rmi-content .dataTables_wrapper .dataTables_info,
+body.rmi-body .rmi-content .grand-total{
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ── 4. Spacing: judul & paragraf ──
+   sebelumnya margin default browser (em) bikin jarak tidak seragam. */
+body.rmi-body .rmi-content :is(h1,h2,h3,h4,h5,h6){ line-height:1.25; margin:0 0 var(--space-3); }
+body.rmi-body .rmi-content h1{ font-size:1.5rem; }
+body.rmi-body .rmi-content h2{ font-size:1.25rem; }
+body.rmi-body .rmi-content h3{ font-size:1.1rem; }
+body.rmi-body .rmi-content h4,
+body.rmi-body .rmi-content h5,
+body.rmi-body .rmi-content h6{ font-size:1rem; }
+body.rmi-body .rmi-content p{ margin:0 0 var(--space-3); line-height:1.6; }
+body.rmi-body .rmi-content :is(ul, ol){ margin:0 0 var(--space-3); padding-left:1.25rem; }
+body.rmi-body .rmi-content li{ margin-bottom: var(--space-1); }
+body.rmi-body .rmi-content :is(h1,h2,h3,h4,h5,h6):last-child,
+body.rmi-body .rmi-content p:last-child{ margin-bottom:0; }
+
+/* ── 5. Form: jarak label→kontrol→kontrol konsisten ──
+   Markup lama mencampur `mb-1`, `mb-2`, `mb-3` tanpa aturan yang
+   konsisten. Semua form-label kini jarak bawah tetap. */
+body.rmi-body .rmi-content .form-label{ margin-bottom: var(--space-1); line-height:1.35; }
+body.rmi-body .rmi-content .form-check{ margin-bottom: 0; }
+body.rmi-body .rmi-content .form-group{ margin-bottom: var(--space-3); }
+body.rmi-body .rmi-content .form-group:last-child{ margin-bottom: 0; }
+body.rmi-body .rmi-content :is(.form-text, .text-muted-small){ margin-top: var(--space-1); }
+body.rmi-body .rmi-content :is(.invalid-feedback, .valid-feedback){ font-size: var(--font-sm); }
+
+/* ── 6. Tabel: cellpadding & border konsisten ── */
+body.rmi-body .rmi-content .table > :not(caption) > * > *{ padding: var(--space-2) var(--space-3); }
+body.rmi-body .rmi-content .table > thead th{
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── 7. Reduced motion: matikan semua transisi/animasi ── */
+@media (prefers-reduced-motion: reduce){
+  body.rmi-body *,
+  body.rmi-body *::before,
+  body.rmi-body *::after{
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Hover tetap harus kelihatan, hanya lewat warna (tanpa gerak). */
+  body.rmi-body .rmi-content a:not(.btn):hover{ background: var(--rmi-panel-2); }
+}
+
+/* ── 8. Target sentuh minimum 40px pada kontrol interaktif kecil ── */
+@media (pointer: coarse){
+  body.rmi-body .rmi-content .btn-sm{ min-height: 36px; }
+  body.rmi-body .rmi-content .form-control-sm,
+  body.rmi-body .rmi-content .form-select-sm{ min-height: 36px; }
 }
