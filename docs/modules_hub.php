@@ -79,7 +79,7 @@ rmi_header($registry['title'] ?? 'Panduan per modul', [
     ?>
   <div class="col-md-6 col-xl-4">
     <div class="rmi-card p-3 h-100 d-flex flex-column">
-      <div class="fw-semibold mb-1"><?= rmi_h($icon . ' ' . $title) ?></div>
+      <div class="fw-semibold mb-1"><?= $icon ?> <?= rmi_h($title) ?></div>
       <?php if ($depts !== ''): ?>
         <div class="small text-muted mb-2">Dept: <?= rmi_h($depts) ?></div>
       <?php endif; ?>

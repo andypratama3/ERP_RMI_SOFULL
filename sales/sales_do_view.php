@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../master/auth.php';
 require_login();
+require_once __DIR__ . '/../_shared/actor_stamp.php';
 require_once __DIR__ . '/../_shared/rmi_branch_guard.php';
 $__sdv_depo_restricted = function_exists('rmi_is_depo_branch_session') && rmi_is_depo_branch_session();
 if (!$__sdv_depo_restricted) {
@@ -242,39 +243,8 @@ function sdv_is_dept_code(string $v): bool
     static $codes = ['WQS','SCM','CRM','FIN','ACT','PQP','MPR','HRL','ITC','SYS','ADMIN','SUPERADMIN','MANAGER','STAFF','BRANCH','SYSTEM'];
     return in_array(strtoupper(trim($v)), $codes, true);
 }
-/**
- * Label pelaku untuk blok tanda tangan print.
- * Rantai: username login -> holder_employee_code -> master_employees.
- * Hasil: "Nama Karyawan (KODE)" bila terhubung, bila tidak pakai
- * full_name login, terakhir username apa adanya. Fail-soft.
- */
-function sdv_actor_label(PDO $pdo, string $username): string
-{
-    static $cache = [];
-    $u = trim($username);
-    if ($u === '') return '';
-    // Kode dept/role bukan orang (data lama menulis 'WQS'/'SCM'): tolak.
-    if (sdv_is_dept_code($u)) return '';
-    if (isset($cache[$u])) return $cache[$u];
-    try {
-        $st = $pdo->prepare("SELECT full_name, holder_employee_code FROM master_system_login WHERE username=? LIMIT 1");
-        $st->execute([$u]);
-        $login = $st->fetch(PDO::FETCH_ASSOC) ?: [];
-        $code = trim((string)($login['holder_employee_code'] ?? ''));
-        if ($code !== '') {
-            $st2 = $pdo->prepare("SELECT employee_name FROM master_employees WHERE employee_code=? LIMIT 1");
-            $st2->execute([$code]);
-            $emp = $st2->fetch(PDO::FETCH_ASSOC) ?: [];
-            $nm = trim((string)($emp['employee_name'] ?? ''));
-            if ($nm !== '') return $cache[$u] = "{$nm} ({$code})";
-        }
-        $fn = trim((string)($login['full_name'] ?? ''));
-        if ($fn !== '') return $cache[$u] = $fn;
-    } catch (Throwable $e) {
-        // fail-soft
-    }
-    return $cache[$u] = $u;
-}
+// Label & relasi pelaku:helpers pusat _shared/actor_stamp.php (sudah include via bootstrap).
+// sdv_is_dept_code() di atas tetap dipakai sebagai pagar data lama.
 
 function sdv_format_exp_date($value): string
 {
@@ -660,16 +630,24 @@ if (sdv_table_exists($pdo, 'sales_do_audit')) {
         $stC = $pdo->prepare("SELECT actor_name, created_at FROM sales_do_audit WHERE do_id=? ORDER BY id ASC LIMIT 1");
         $stC->execute([(int)$do_id]);
         $cRow = $stC->fetch(PDO::FETCH_ASSOC) ?: [];
-        $crm_created_by_print = sdv_actor_label($pdo, trim((string)($cRow['actor_name'] ?? '')));
+        $crm_created_by_print = rmi_actor_label($pdo, trim((string)($cRow['actor_name'] ?? '')));
         $crm_created_at_print = trim((string)($cRow['created_at'] ?? ''));
     } catch (Throwable $e) { /* fail-soft */ }
 }
 
-// Hubungkan pelaku ke kode employee (username -> holder -> master_employees).
-// DO-019 contoh: masih crm_to_wqs sehingga WQS/SCM '-' (benar: belum ada aksi).
-$wqs_prepared_by_print = sdv_actor_label($pdo, $wqs_prepared_by_print);
-$scm_sent_by_print = sdv_actor_label($pdo, $scm_sent_by_print);
-$scm_delivered_by_print = sdv_actor_label($pdo, $scm_delivered_by_print);
+// Hubungkan pelaku ke kode employee (username -> holder -> master_employees)
+// sekaligus nama akunnya, untuk bukti relasi di blok tanda tangan.
+// *_raw menyimpan username sebelum dilabeli; dipakai rmi_actor_stamp()
+// supaya lookup relasi tetap memakai akun asli.
+$wqs_prepared_by_raw = $wqs_prepared_by_print;
+$scm_sent_by_raw     = $scm_sent_by_print;
+$scm_delivered_by_raw = $scm_delivered_by_print;
+$wqs_info_print   = rmi_actor_info($pdo, $wqs_prepared_by_raw);
+$scm_sent_info    = rmi_actor_info($pdo, $scm_sent_by_raw);
+$scm_deliv_info   = rmi_actor_info($pdo, $scm_delivered_by_raw);
+$wqs_prepared_by_print     = $wqs_info_print['label'];
+$scm_sent_by_print         = $scm_sent_info['label'];
+$scm_delivered_by_print    = $scm_deliv_info['label'];
 
 
 require_once __DIR__ . '/../_shared/rmi_layout.php';
@@ -983,7 +961,13 @@ $extraHead = '<style>
             margin-top: 5px;
             padding-top: 3px;
             font-size: 8px;
+            color: #6b7280;        }
+        .erp-actor-account {
+            font-size: 8px;
+            line-height: 1.25;
             color: #6b7280;
+            margin-top: 2px;
+            word-break: break-all;
         }
         @media (max-width: 760px) {
             .scm-proof-grid { grid-template-columns: 1fr; }
@@ -1500,27 +1484,9 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
     <?php endif; ?>
 
     <div class="sign-row">
-        <div class="sign-box">
-            <div class="sign-title">Disiapkan WQS</div>
-            <div class="erp-actor-stamp">
-                <div class="erp-actor-name"><?= $wqs_prepared_by_print !== '' ? htmlspecialchars($wqs_prepared_by_print) : '-' ?></div>
-                <?php if ($wqs_prepared_at_print !== ''): ?>
-                    <div class="erp-actor-meta"><?= htmlspecialchars(date('d-m-Y H:i:s', strtotime($wqs_prepared_at_print))) ?></div>
-                <?php endif; ?>
-                <div class="erp-actor-line">Tercatat otomatis oleh ERP</div>
-            </div>
-        </div>
-        <div class="sign-box">
-            <div class="sign-title">Dikirim SCM</div>
-            <div class="erp-actor-stamp">
-                <div class="erp-actor-name"><?= $scm_sent_by_print !== '' ? htmlspecialchars($scm_sent_by_print) : '-' ?></div>
-                <?php if ($scm_sent_at_print !== ''): ?>
-                    <div class="erp-actor-meta"><?= htmlspecialchars(date('d-m-Y H:i:s', strtotime($scm_sent_at_print))) ?></div>
-                <?php endif; ?>
-                <div class="erp-actor-line">Tercatat otomatis oleh ERP</div>
-            </div>
-        </div>
-        <div class="sign-box customer-sign<?= $scm_signature_src !== '' ? ' has-sign' : '' ?>">
+        <?= rmi_actor_stamp($pdo, $wqs_prepared_by_raw, $wqs_prepared_at_print, ['title' => 'Disiapkan WQS']) ?>
+        <?= rmi_actor_stamp($pdo, $scm_sent_by_raw,     $scm_sent_at_print,     ['title' => 'Dikirim SCM']) ?>
+<div class="sign-box customer-sign<?= $scm_signature_src !== '' ? ' has-sign' : '' ?>">
             <div class="sign-title">Diterima Customer</div>
             <?php if ($scm_signature_src !== ''): ?>
                 <img class="scm-signature-img" src="<?= htmlspecialchars($scm_signature_src, ENT_QUOTES, 'UTF-8') ?>" alt="TTD Customer">

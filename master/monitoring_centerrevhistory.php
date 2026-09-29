@@ -341,7 +341,7 @@ rmi_header('Monitoring & Control', [
     ?>
     <div class="col-md-6 col-lg-4">
       <a class="text-decoration-none d-block rmi-card p-3 h-100 border border-secondary border-opacity-25" href="<?= rmi_h($href) ?>">
-        <div class="fw-semibold"><?= rmi_h($icon . ' ' . $label) ?></div>
+        <div class="fw-semibold"><?= $icon ?> <?= rmi_h($label) ?></div>
         <div class="small text-muted mt-1"><?= rmi_h($desc) ?></div>
       </a>
     </div>

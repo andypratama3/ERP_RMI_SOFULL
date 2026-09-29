@@ -125,6 +125,9 @@ require_once __DIR__ . '/helpers.php';
 // Icon pusat (anti hardcode emoji di modul)
 require_once __DIR__ . '/rmi_icons.php';
 
+// Blok penanggung jawab + relasi akun (anti hardcode nama di print)
+require_once __DIR__ . '/actor_stamp.php';
+
 // DB helpers
 require_once __DIR__ . '/db.php';
 

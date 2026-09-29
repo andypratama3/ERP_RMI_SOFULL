@@ -76,18 +76,24 @@
     document.documentElement.setAttribute('data-theme', mode);
     document.documentElement.setAttribute('data-rmi-theme', mode);
   }
+  // Ikon tombol tema: markup SVG dikirim PHP lewat data-icon-dark / data-icon-light
+  // (JS tidak bisa memanggil helper PHP, jadi tidak ada emoji hardcode di sini).
+  function themeIcon(btn, mode){
+    if(!btn) return;
+    var svg = mode === 'light' ? btn.getAttribute('data-icon-light') : btn.getAttribute('data-icon-dark');
+    if(svg){ btn.innerHTML = svg; return; }
+    btn.textContent = mode === 'light' ? 'L' : 'D';
+  }
   function initThemeToggle(){
     var mode = resolveTheme();
     applyTheme(mode);
-    var btn = q('#rmiThemeToggle');
-    if(btn) btn.textContent = mode === 'light' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    themeIcon(q('#rmiThemeToggle'), mode);
   }
   function onThemeToggleClick(){
     var next = document.documentElement.getAttribute('data-rmi-theme') === 'light' ? 'dark' : 'light';
     applyTheme(next);
     saveTheme(next);
-    var btn = q('#rmiThemeToggle');
-    if(btn) btn.textContent = next === 'light' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    themeIcon(q('#rmiThemeToggle'), next);
   }
 
   function applyContrast(mode){

@@ -185,7 +185,7 @@ if (!function_exists('rmi_ui_actions_html')) {
       $attrs = trim((string)($a['attrs'] ?? ''));
       $icon  = (string)($a['icon'] ?? '');
       $out .= '<a class="' . rmi_ui_h($class) . '" href="' . rmi_ui_h($url) . '" ' . $attrs . '>';
-      if ($icon !== '') $out .= '<span class="me-1">' . rmi_ui_h($icon) . '</span>';
+      if ($icon !== '') $out .= '<span class="me-1">' . $icon . '</span>';
       $out .= rmi_ui_h($label) . '</a>';
     }
     return $out;

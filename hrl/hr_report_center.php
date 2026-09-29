@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 $pageTitle = 'HRL Report Center';
 $pageSubtitle = 'Ringkasan report dokumen, acknowledgement, dan registrasi alkes';
 require_once __DIR__ . '/_layout_top.php';

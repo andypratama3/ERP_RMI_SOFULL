@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../_shared/rmi_icons.php';
 // Debug: cek nilai session & scope detection untuk BRANCH user
 // Hapus file ini setelah selesai debug
 if (session_status() !== PHP_SESSION_ACTIVE) session_start();

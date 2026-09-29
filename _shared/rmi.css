@@ -1760,3 +1760,123 @@ html[data-rmi-theme="light"] .field {
   background: #ffffff !important;
   border-color: rgba(15, 23, 42, 0.25) !important;
 }
+
+/* ============================================================
+   ICON LIBRARY — .rmi-i (inline SVG, currentColor)
+   Semua ikon modul memakai class ini; tidak ada emoji hardcode.
+   ============================================================ */
+.rmi-i{
+  width:1em; height:1em;
+  display:inline-block;
+  vertical-align:-0.125em;
+  flex:0 0 auto;
+  stroke-width:2;
+  pointer-events:none;
+  fill:none;
+  color:inherit;
+}
+.rmi-i + .rmi-i{ margin-left:.4em; }
+/* Ikon di dalam teks/badge/button agar optical-center */
+.badge .rmi-i, .btn .rmi-i, .rmi-btn .rmi-i{ vertical-align:-.15em; }
+/* Varian ukuran */
+.rmi-i.is-xs{ width:.8em; height:.8em; }
+.rmi-i.is-sm{ width:.9em; height:.9em; }
+.rmi-i.is-lg{ width:1.35em; height:1.35em; }
+.rmi-i.is-xl{ width:1.85em; height:1.85em; stroke-width:1.6; }
+/* Ikon besar di card/kartu menu */
+.mod-card-icon .rmi-i, .card-icon .rmi-i{ width:1.5em; height:1.5em; }
+
+/* Actor stamp: baris nama akun (bukti relasi) */
+.erp-actor-account{
+  font-size:10px;
+  line-height:1.25;
+  color:var(--rmi-muted);
+  margin-top:2px;
+  word-break:break-all;
+}
+
+/* ============================================================
+   DROPDOWN AKUN (rmi-topbar-user-dd) — adaptif dark/white
+   Dulu pakai .dropdown-menu-dark (paksa gelap) => rusak di white mode.
+   ============================================================ */
+body.rmi-body .rmi-topbar-user-dd .rmi-topbar-user-avatar{
+  width:1.05em; height:1.05em; margin-right:.15em; opacity:.9;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-menu{
+  min-width:250px;
+  background:var(--rmi-card);
+  border:1px solid var(--rmi-border);
+  border-radius:14px;
+  box-shadow:0 12px 32px rgba(2,6,23,.28);
+  padding:6px;
+  color:var(--rmi-text);
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-header{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--rmi-muted);
+  padding:8px 12px 4px;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-identity{
+  display:block;
+  padding:10px 12px 8px;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-user{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-user-avatar{
+  flex:0 0 auto;
+  width:34px; height:34px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:50%;
+  background:var(--rmi-surface);
+  border:1px solid var(--rmi-border);
+  color:var(--rmi-text);
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-user-avatar .rmi-i{ width:18px; height:18px; }
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-user-body{
+  display:flex; flex-direction:column; min-width:0;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-user-name{
+  font-weight:700; color:var(--rmi-text);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-user-full{
+  font-size:11px; color:var(--rmi-muted);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 12px;
+  border-radius:8px;
+  font-size:12.5px;
+  color:var(--rmi-muted);
+  white-space:normal;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-row .rmi-i{ width:15px; height:15px; }
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-row b{
+  margin-left:auto;
+  font-weight:600;
+  color:var(--rmi-text);
+  text-align:right;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-row:hover{ background:var(--rmi-surface); }
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-menu .dropdown-divider{
+  border-color:var(--rmi-border);
+  margin:6px 0;
+  opacity:1;
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-logout{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  color:var(--rmi-text);
+  border-color:var(--rmi-border);
+}
+body.rmi-body .rmi-topbar-user-dd .rmi-dd-logout .rmi-i{ width:15px; height:15px; }

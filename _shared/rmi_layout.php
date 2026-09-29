@@ -185,7 +185,7 @@ if (!function_exists('rmi_ui_actions_html')) {
       $attrs = trim((string)($a['attrs'] ?? ''));
       $icon  = (string)($a['icon'] ?? '');
       $out .= '<a class="' . rmi_ui_h($class) . '" href="' . rmi_ui_h($url) . '" ' . $attrs . '>';
-      if ($icon !== '') $out .= '<span class="me-1">' . rmi_ui_h($icon) . '</span>';
+      if ($icon !== '') $out .= '<span class="me-1">' . $icon . '</span>';
       $out .= rmi_ui_h($label) . '</a>';
     }
     return $out;
@@ -863,17 +863,36 @@ function rmi_header(string $title = 'RMI ERP', $active = '', array $opts = []): 
 <?php endif; ?>
       </div>
       <div class="rmi-topbar-actions">
-        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiMenuDrawer" aria-label="Buka menu ERP" title="Menu ERP">☰ <span class="rmi-topbar-btn-label">Menu</span></button>
+        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiMenuDrawer" aria-label="Buka menu ERP" title="Menu ERP"><?= rmi_icon('menu') ?> <span class="rmi-topbar-btn-label">Menu</span></button>
         <!-- Satu-satunya tombol tema: gelap/terang. (Toggle kontras dihapus agar konsisten.) -->
-        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" id="rmiThemeToggle" aria-label="Ganti tema terang/gelap" title="Tema">🌙</button>
-        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiHelpCanvas" aria-label="Bantuan halaman ini" title="Bantuan (F1)">❓ <span class="rmi-topbar-btn-label">Help</span> <span class="rmi-kbd rmi-topbar-kbd-f1">F1</span></button>
-        <a class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" href="<?= $baseProject ?>/docs/help_center.php" target="_blank" rel="noopener" title="Help Center / Manual" aria-label="Buka Help Center"><span aria-hidden="true">📚</span> <span class="rmi-topbar-btn-label">Manual</span></a>
+        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" id="rmiThemeToggle" aria-label="Ganti tema terang/gelap" title="Tema"
+                data-icon-dark="<?= rmi_ui_h(rmi_icon('moon')) ?>" data-icon-light="<?= rmi_ui_h(rmi_icon('sun')) ?>"><?= rmi_icon('moon') ?></button>
+        <button class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#rmiHelpCanvas" aria-label="Bantuan halaman ini" title="Bantuan (F1)"><?= rmi_icon('question') ?> <span class="rmi-topbar-btn-label">Help</span> <span class="rmi-kbd rmi-topbar-kbd-f1">F1</span></button>
+        <a class="btn btn-outline-light btn-sm rmi-topbar-icon-btn" href="<?= $baseProject ?>/docs/help_center.php" target="_blank" rel="noopener" title="Help Center / Manual" aria-label="Buka Help Center"><span aria-hidden="true"><?= rmi_icon('books') ?></span> <span class="rmi-topbar-btn-label">Manual</span></a>
         <div class="dropdown rmi-topbar-user-dd">
-          <button class="btn btn-outline-light btn-sm dropdown-toggle text-truncate rmi-topbar-user-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="<?= rmi_ui_h(($user['username'] ?? '-') . ' / ' . ($role ?: '-')) ?>"><?= rmi_ui_h($user['username'] ?? '-') ?> <span class="rmi-topbar-user-meta"><span class="rmi-topbar-user-sep">/</span> <?= rmi_ui_h($role ?: '-') ?></span></button>
-          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-            <li class="dropdown-item-text small"><?= rmi_ui_h($role ?: '-') ?><?= $dept ? ' &bull; ' . rmi_ui_h($dept) : '' ?><?= $office ? ' &bull; ' . rmi_ui_h($office) : '' ?></li>
+          <button class="btn btn-outline-light btn-sm dropdown-toggle text-truncate rmi-topbar-user-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  title="<?= rmi_ui_h(($user['username'] ?? '-') . ' / ' . ($role ?: '-')) ?>"><?= rmi_icon('user', 'rmi-topbar-user-avatar') ?> <span class="rmi-topbar-user-name"><?= rmi_ui_h($user['username'] ?? '-') ?></span> <span class="rmi-topbar-user-meta"><span class="rmi-topbar-user-sep">/</span> <?= rmi_ui_h($role ?: '-') ?></span></button>
+          <ul class="dropdown-menu dropdown-menu-end rmi-dd-menu">
+            <li class="dropdown-header rmi-dd-header">Akun ERP</li>
+            <li class="dropdown-item-text rmi-dd-identity">
+              <div class="rmi-dd-user">
+                <span class="rmi-dd-user-avatar"><?= rmi_icon('user') ?></span>
+                <span class="rmi-dd-user-body">
+                  <span class="rmi-dd-user-name"><?= rmi_ui_h($user['username'] ?? '-') ?></span>
+                  <span class="rmi-dd-user-full"><?= rmi_ui_h($user['full_name'] ?? '') ?></span>
+                </span>
+              </div>
+            </li>
             <li><hr class="dropdown-divider"></li>
-            <li><form method="post" action="<?= $baseProject ?>/master/logout.php" class="px-3 py-1"><button class="btn btn-sm btn-outline-light w-100" type="submit">Logout</button></form></li>
+            <li><span class="dropdown-item-text rmi-dd-row"><?= rmi_icon('shield') ?><span>Peran</span><b><?= rmi_ui_h($role ?: '-') ?></b></span></li>
+            <?php if ($dept !== ''): ?>
+            <li><span class="dropdown-item-text rmi-dd-row"><?= rmi_icon('office') ?><span>Departemen</span><b><?= rmi_ui_h($dept) ?></b></span></li>
+            <?php endif; ?>
+            <?php if ($office !== ''): ?>
+            <li><span class="dropdown-item-text rmi-dd-row"><?= rmi_icon('pin') ?><span>Unit</span><b><?= rmi_ui_h($office) ?></b></span></li>
+            <?php endif; ?>
+            <li><hr class="dropdown-divider"></li>
+            <li class="px-3 py-1"><form method="post" action="<?= $baseProject ?>/master/logout.php"><?php if (function_exists('csrf_field')) echo csrf_field(); ?><button class="btn btn-sm btn-outline-light w-100 rmi-dd-logout" type="submit"><?= rmi_icon('logout') ?> Logout</button></form></li>
           </ul>
         </div>
 <?php if ($actionsHtml !== '') echo $actionsHtml; ?>
