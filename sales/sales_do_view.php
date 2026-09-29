@@ -774,24 +774,63 @@ $extraHead = '<style>
             line-height: 1.35;
         }
 
-        table.items {
+        /* Prefix `body.rmi-body .rmi-content .page` WAJIB ada di selector
+           tabel print ini.
+
+           Konten halaman diinjeksi DI DALAM .rmi-content, dan tabel ini
+           hanya punya class "items" — jadi selector legacy shared ini tetap
+           cocok dan specificitiy-nya lebih tinggi:
+
+             _shared/rmi.css
+               body.rmi-body .rmi-content table:not(.table):not(.dataTable)
+                 th,td          -> (0,4,3)   padding:8px 10px
+                 thead th       -> (0,4,4)   font-size:12px, color:var(--rmi-muted),
+                                                   border-bottom-width:2px,
+                                                   white-space:nowrap,
+                                                   position:sticky, top:0,
+                                                   background:var(--rmi-bg)
+               table           -> (0,4,2)   font-size:13px
+
+             sales_do_view.php (tanpa prefix)
+               table.items          -> (0,1,1)
+               table.items thead th -> (0,1,3)
+
+           Resultnya SEMUA aturan layar di bawah kalah, sehingga tabel print
+           ini tidak pernah memakai padding 3px 4px / font 11px / garis bawah
+           tipis yang dimaksud. Yang tampil: padding 8px 10px, font 13px, dan
+           header sticky berwarna latar halaman (hitam di dark mode) di atas
+           kertas putih.
+
+           Dengan prefix: (0,4,4) — seri dengan shared, dan <style> halaman
+           dimuat setelah rmi.css, jadi halaman menang. Presedensinya:
+             shared (baris 963) < blok 9f (akhir rmi.css) < <style> halaman
+
+           JANGAN dipangkas prefix ini. */
+        body.rmi-body .rmi-content .page table.items {
             width: 100%;
             border-collapse: collapse;
             margin-top: 8px;
             font-size: 11px;
         }
-        table.items thead th {
+        body.rmi-body .rmi-content .page table.items thead th {
             border-bottom: 1px solid #111827;
-            padding: 4px 4px;
+            padding: 4px;
             text-align: left;
             text-transform: uppercase;
             font-size: 11px;
+            /* Batalkan efek shared: header print bukan kolom lengket, dan
+               latar darkestya memenuhi kertas, bukan bg halaman. */
+            position: static;
+            background: transparent;
+            color: #111827;
+            letter-spacing: normal;
         }
-        table.items tbody td {
+        body.rmi-body .rmi-content .page table.items tbody td {
             border-bottom: 1px solid #e5e7eb;
             padding: 3px 4px;
+            vertical-align: middle;
         }
-        table.items tfoot td {
+        body.rmi-body .rmi-content .page table.items tfoot td {
             padding: 3px 4px;
         }
         .text-right {
@@ -807,13 +846,14 @@ $extraHead = '<style>
             justify-content: flex-end;
             font-size: 11px;
         }
-        .summary-table {
+        body.rmi-body .rmi-content .page .summary-table {
             border-collapse: collapse;
+            font-size: 11px;
         }
-        .summary-table td {
+        body.rmi-body .rmi-content .page .summary-table td {
             padding: 2px 4px;
         }
-        .summary-table tr td:first-child {
+        body.rmi-body .rmi-content .page .summary-table tr td:first-child {
             text-align: right;
         }
 
