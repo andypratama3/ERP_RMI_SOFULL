@@ -1924,6 +1924,29 @@ html[data-theme="light"] body.rmi-body ::-webkit-scrollbar-thumb:hover{
   .text-secondary {
     color: #374151 !important;
   }
+  /* Legacy table header saat print.
+   *
+   * Blok di atas menimpa --rmi-text dan --rmi-muted menjadi gelap, TAPI
+   * --rmi-bg TIDAK ditimpa, sehingga tetap #0b1220 saat dark theme.
+   * Shared rule (baris ~963) memberi:
+   *     thead th { color: var(--rmi-muted); background: var(--rmi-bg); }
+   * -> #374151 di atas #0b1220 = 1.82:1, header nyaris tak terlihat.
+   *
+   * Body teks aman karena --rmi-text ditimpa ke #111827 di atas.
+   *
+   * Konvensi yang dipakai sales_do_view.php juga header gelap + teks
+   * putih, jadi ini konsisten (#ffffff di #111827 = 17.74:1).
+   *
+   * Tanpa aturan ini, file print berikut header-nya tidak terbaca:
+   *   purchases/purchases_po_print.php
+   *   customer_portal/do_print.php
+   *   stock/wqs_pr_print.php
+   *   master/master_products_print.php
+   */
+  body.rmi-body .rmi-content table:not(.table):not(.dataTable) thead th{
+    color: #ffffff !important;
+    background: #111827 !important;
+  }
 }
 
 /* ============================================================
