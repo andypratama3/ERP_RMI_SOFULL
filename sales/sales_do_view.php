@@ -650,50 +650,142 @@ $scm_sent_by_print         = $scm_sent_info['label'];
 $scm_delivered_by_print    = $scm_deliv_info['label'];
 
 // ---------------------------------------------------------------------------
-// Alur & pelaku: satu baris rekap untuk SETIAP tahap, supaya pembaca print
-// bisa langsung tahu "siapa sudah melakukan apa, kapan, dan tahap mana yang
-// masih menunggu" tanpa harus menebak dari kotak tanda tangan.
+// Alur & pelaku — rekap SELURUH tahapan alur DO, bukan hanya 3 kotak tanda
+// tangan. Alur resmi ada di flow_step_from_status() (sales_do.php):
+// CRM -> WQS -> SCM -> ACT -> FIN -> PAID.
 //
-// Aturan: kalau belum ada aksi, tulis "Menunggu" — JANGAN pernah mengarang
-// pelaku dan jangan menulis kode departemen ('WQS'/'SCM') sebagai orang
-// (lihat sdv_is_dept_code / rmi_actor_info).
-$sdvFlowSteps = [];
-$sdvFlowSteps[] = [
-    'label'   => 'Disiapkan WQS',
-    'account' => trim((string)$wqs_prepared_by_raw),
-    'name'    => $wqs_info_print['label'],
-    'time'    => $wqs_prepared_at_print,
-];
-$sdvFlowSteps[] = [
-    'label'   => 'Dikirim SCM',
-    'account' => trim((string)$scm_sent_by_raw),
-    'name'    => $scm_sent_info['label'],
-    'time'    => $scm_sent_at_print,
-];
-// Diterima Customer tidak punya username internal: pelakunya PIC customer +
-// TTD digital. Jangan dipaksa jadi "akun".
-$sdvFlowSteps[] = [
-    'label'   => 'Diterima Customer',
-    'account' => trim((string)$customer_pic),
-    'name'    => trim((string)$customer_pic),
-    'time'    => $scm_delivered_at_print,
-    'external'=> true,
-];
-// Catatan: JANGAN saring ulang dengan sdv_is_dept_code() di sini. Pagar kode
-// departemen sudah dipasang di pemilihan kandidat kolom (lihat blok
-// $wqs_prepared_by_print / $scm_sent_by_print di atas); fallback audit
-// mengembalikan username asli yang sah. Menyaring ulang justru menghapus
-// pelaku sah seperti akun 'admin' dan membuat blok ini kurang lengkap
-// daripada kotak tanda tangan di atasnya.
-foreach ($sdvFlowSteps as &$__fs) {
-    $__fs['account'] = trim((string)$__fs['account']);
-    $__fs['name']    = trim((string)$__fs['name']);
-    $__fs['time']    = rmi_actor_stamp_datetime((string)$__fs['time']);
-    $__fs['done']    = $__fs['account'] !== '' || $__fs['name'] !== '';
+// Setiap tahap diambil dari tiga sumber berurutan:
+//   1. kolom *_by   (aktor yang mengisi form; kolom ini sering kosong)
+//   2. sales_do_audit per actor_dept (transisi tercatat)
+//   3. sales_do_audit per status_to (dipakai untuk FIN vs PAID, keduanya
+//      ber-dept FIN sehingga tidak bisa dipisahkan lewat actor_dept)
+//
+// Waktu diambil dari kolom *_at, lalu jatuh ke created_at audit.
+//
+// Aturan: kalau tidak ada aktornya, tulis "Pelaku tidak tercatat" -- JANGAN
+// pernah mengarang dan jangan menulis kode departemen sebagai nama orang.
+//
+// Catatan: JANGAN saring ulang dengan sdv_is_dept_code() pada hasil di sini.
+// sini. Pagar kode departemen sudah dipasang di pemilihan kandidat kolom
+// (lihat blok $wqs_prepared_by_print / $scm_sent_by_print di atas); fallback
+// audit mengembalikan username asli yang sah. Menyaring ulang justru
+// menghapus pelaku sah seperti akun 'admin'.
+$sdvAuditRows = [];
+if (sdv_table_exists($pdo, 'sales_do_audit')) {
+    try {
+        $stTrail = $pdo->prepare("SELECT actor_dept, actor_name, status_from, status_to, note, created_at
+                                  FROM sales_do_audit WHERE do_id=? ORDER BY id ASC");
+        $stTrail->execute([(int)$do_id]);
+        $sdvAuditRows = $stTrail->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    } catch (Throwable $e) {
+        $sdvAuditRows = []; // fail-soft: print tetap jalan tanpa riwayat.
+    }
 }
-unset($__fs);
+$sdvAuditByDept = [];
+$sdvAuditByTo   = [];
+foreach ($sdvAuditRows as $__ar) {
+    $__d = strtoupper(trim((string)($__ar['actor_dept'] ?? '')));
+    $__n = trim((string)($__ar['actor_name'] ?? ''));
+    // Simpan transisi TERAKHIR per dept: untuk "Disiapkan" yang relevan adalah
+    // aksi terakhir WQS (wqs_processing -> ready_scm), bukan aksi pertamanya.
+    if ($__d !== '' && $__n !== '') {
+        $sdvAuditByDept[$__d] = ['name' => $__n, 'at' => trim((string)($__ar['created_at'] ?? ''))];
+    }
+    $__t = strtolower(trim((string)($__ar['status_to'] ?? '')));
+    if ($__t !== '' && $__n !== '') {
+        $sdvAuditByTo[$__t] = ['name' => $__n, 'at' => trim((string)($__ar['created_at'] ?? ''))];
+    }
+}
+
+$sdvStageDefs = [
+    ['key' => 'CRM',  'label' => 'CRM',  'sub' => 'DO dibuat & dikirim ke WQS',
+     'by' => ['created_by', 'crm_by'], 'at' => ['crm_finish_at', 'crm_start_at', 'crm_created_at'],
+     'to' => ['crm_to_wqs', 'sent_wqs']],
+    ['key' => 'WQS',  'label' => 'WQS',  'sub' => 'Disiapkan / picking',
+     'by' => ['wqs_ready_by', 'wqs_completed_by', 'wqs_updated_by', 'wqs_by'],
+     'at' => ['wqs_ready_at', 'wqs_started_at', 'wqs_picked_at'],
+     'to' => ['ready_scm']],
+    ['key' => 'SCM',  'label' => 'SCM',  'sub' => 'Dikirim & diantar',
+     'by' => ['scm_on_delivery_by', 'scm_delivered_by', 'scm_updated_by'],
+     'at' => ['scm_on_delivery_at', 'scm_delivered_at'],
+     'to' => ['delivered', 'on_delivery']],
+    ['key' => 'ACT',  'label' => 'ACT',  'sub' => 'Diterima & invoices',
+     'by' => ['act_reviewed_by', 'act_updated_by'],
+     'at' => ['act_ready_fin_at', 'act_invoiced_at'],
+     'to' => ['wait_payment']],
+    ['key' => 'FIN',  'label' => 'FIN',  'sub' => 'Verifikasi & approval',
+     'by' => ['fin_approved_by', 'fin_updated_by'],
+     'at' => ['act_invoiced_at'],
+     'to' => ['fin_done']],
+    ['key' => 'PAID', 'label' => 'PAID', 'sub' => 'Pembayaran diterima',
+     'by' => ['fin_paid_by'],
+     'at' => ['fin_paid_at'],
+     'to' => ['paid']],
+];
+// Tahap yang sedang berjalan, untuk penanda "sekarang".
+$sdvStatusStage = (function (string $s): string {
+    switch ($s) {
+        case 'crm_to_wqs': case 'sent_wqs': case 'revision_requested': case 'wqs_processing':
+        case 'wqs_done': case 'WQS_PICKED': return 'WQS';
+        case 'ready_scm': return 'SCM';
+        case 'on_delivery': return 'SCM';
+        case 'delivered': return 'ACT';
+        case 'wait_payment': case 'fin_done': return 'FIN';
+        case 'paid': return 'PAID';
+        default: return 'CRM';
+    }
+})(strtolower(trim((string)($do['status'] ?? ''))));
+
+$sdvFlowStages = [];
+foreach ($sdvStageDefs as $__sd) {
+    $__account = '';
+    foreach ($__sd['by'] as $__col) {
+        $__v = trim((string)($do[$__col] ?? ''));
+        if ($__v !== '' && !sdv_is_dept_code($__v)) { $__account = $__v; break; }
+    }
+    $__time = '';
+    foreach ($__sd['at'] as $__col) {
+        $__v = trim((string)($do[$__col] ?? ''));
+        if ($__v !== '' && stripos($__v, '0000-00-00') === false) { $__time = $__v; break; }
+    }
+    // Fallback pelaku & waktu dari audit. UTAMAKAN transisi spesifik
+    // (status_to) daripada fallback per-dept: "Disiapkan WQS" adalah aksi
+    // wqs_processing -> ready_scm, bukan aksi WQS pertama yang mana pun.
+    $__aname = '';
+    foreach ($__sd['to'] as $__to) {
+        if (isset($sdvAuditByTo[$__to])) { $__aname = $sdvAuditByTo[$__to]['name']; break; }
+    }
+    if ($__aname === '' && isset($sdvAuditByDept[$__sd['key']])) {
+        $__aname = $sdvAuditByDept[$__sd['key']]['name'];
+    }
+    $__account = $__aname;
+    if ($__time === '') {
+        foreach ($__sd['to'] as $__to) {
+            if (isset($sdvAuditByTo[$__to]) && $sdvAuditByTo[$__to]['at'] !== '') {
+                $__time = $sdvAuditByTo[$__to]['at'];
+                break;
+            }
+        }
+        if ($__time === '' && isset($sdvAuditByDept[$__sd['key']])) {
+            $__time = $sdvAuditByDept[$__sd['key']]['at'];
+        }
+    }
+    $__info  = $__account !== '' ? rmi_actor_info($pdo, $__account) : ['label' => ''];
+    $__done  = $__time !== '' || $__account !== '';
+    $sdvFlowStages[] = [
+        'key'     => $__sd['key'],
+        'label'   => $__sd['label'],
+        'sub'     => $__sd['sub'],
+        'account' => $__account,
+        'name'    => $__info['label'] !== '' ? $__info['label'] : ($__account !== '' ? $__account : ''),
+        'time'    => rmi_actor_stamp_datetime($__time),
+        'done'    => $__done,
+        'current' => $__done && $__sd['key'] === $sdvStatusStage,
+    ];
+}
 $sdvFlowDone = 0;
-foreach ($sdvFlowSteps as $__fs) if ($__fs['done']) $sdvFlowDone++;
+foreach ($sdvFlowStages as $__fs) if ($__fs['done']) $sdvFlowDone++;
+$sdvFlowTotal = count($sdvFlowStages);
 
 
 require_once __DIR__ . '/../_shared/rmi_layout.php';
@@ -1102,6 +1194,41 @@ $extraHead = '<style>
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
+        }
+        .sdv-flow-item.is-now {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 1px #2563eb inset;
+        }
+        .sdv-flow-now {
+            font-size: 7px;
+            font-weight: 700;
+            text-transform: none;
+            color: #1d4ed8;
+            margin-left: 3px;
+        }
+        .sdv-flow-sub {
+            font-size: 7.5px;
+            line-height: 1.2;
+            color: #6b7280;
+            margin-bottom: 2px;
+        }
+        .sdv-trail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8px;
+        }
+        .sdv-trail-table th,
+        .sdv-trail-table td {
+            border: 1px solid #e5e7eb;
+            padding: 2px 4px;
+            text-align: left;
+            vertical-align: top;
+            word-break: break-word;
+        }
+        .sdv-trail-table th {
+            background: #f3f4f6;
+            font-weight: 700;
+            color: #374151;
         }
         .sdv-flow-item {
             border: 1px solid #e5e7eb;
@@ -1699,27 +1826,74 @@ No PO: <span><?= htmlspecialchars($no_po_print) ?></span>
     <div class="sdv-flow" id="sdv-flow">
         <div class="sdv-flow-head">
             <span>Alur &amp; Pelaku</span>
-            <span class="sdv-flow-count"><?= (int)$sdvFlowDone ?>/<?= count($sdvFlowSteps) ?> tahap selesai</span>
+            <span class="sdv-flow-count"><?= (int)$sdvFlowDone ?>/<?= (int)$sdvFlowTotal ?> tahap selesai</span>
         </div>
         <div class="sdv-flow-grid">
-        <?php foreach ($sdvFlowSteps as $__fs): ?>
-            <div class="sdv-flow-item<?= $__fs['done'] ? ' is-done' : ' is-wait' ?>">
-                <div class="sdv-flow-step"><?= htmlspecialchars($__fs['label'], ENT_QUOTES, 'UTF-8') ?></div>
-                <?php if ($__fs['done']): ?>
-                    <div class="sdv-flow-actor"><?= htmlspecialchars($__fs['name'] !== '' ? $__fs['name'] : $__fs['account'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <?php if (!$__fs['external'] && $__fs['account'] !== ''): ?>
+        <?php foreach ($sdvFlowStages as $__fs): ?>
+            <div class="sdv-flow-item<?= $__fs['done'] ? ' is-done' : ' is-wait' ?><?= $__fs['current'] ? ' is-now' : '' ?>">
+                <div class="sdv-flow-step">
+                    <?= htmlspecialchars($__fs['label'], ENT_QUOTES, 'UTF-8') ?>
+                    <?php if ($__fs['current']): ?><span class="sdv-flow-now">sekarang</span><?php endif; ?>
+                </div>
+                <div class="sdv-flow-sub"><?= htmlspecialchars($__fs['sub'], ENT_QUOTES, 'UTF-8') ?></div>
+                <?php if ($__fs['name'] !== ''): ?>
+                    <div class="sdv-flow-actor"><?= htmlspecialchars($__fs['name'], ENT_QUOTES, 'UTF-8') ?></div>
+                    <?php if ($__fs['account'] !== '' && $__fs['account'] !== $__fs['name']): ?>
                         <div class="sdv-flow-account">Akun: <?= htmlspecialchars($__fs['account'], ENT_QUOTES, 'UTF-8') ?></div>
                     <?php endif; ?>
-                    <?php if ($__fs['time'] !== ''): ?>
-                        <div class="sdv-flow-time"><?= htmlspecialchars($__fs['time'], ENT_QUOTES, 'UTF-8') ?></div>
-                    <?php endif; ?>
+                <?php elseif ($__fs['done']): ?>
+                    <div class="sdv-flow-wait">Waktu tercatat, pelaku tidak</div>
                 <?php else: ?>
                     <div class="sdv-flow-wait">Menunggu</div>
+                <?php endif; ?>
+                <?php if ($__fs['time'] !== ''): ?>
+                    <div class="sdv-flow-time"><?= htmlspecialchars($__fs['time'], ENT_QUOTES, 'UTF-8') ?></div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
         </div>
     </div>
+
+    <?php if (!empty($sdvAuditRows)): ?>
+    <div class="sdv-flow" id="sdv-trail">
+        <div class="sdv-flow-head">
+            <span>Riwayat Transisi (siapa melakukan apa)</span>
+            <span class="sdv-flow-count"><?= count($sdvAuditRows) ?> transisi</span>
+        </div>
+        <table class="sdv-trail-table">
+            <thead>
+                <tr>
+                    <th>Waktu</th><th>Pelaku</th><th>Dept</th><th>Dari</th><th>Ke</th><th>Catatan</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($sdvAuditRows as $__ar): ?>
+                <tr>
+                    <td><?= htmlspecialchars(rmi_actor_stamp_datetime((string)($__ar['created_at'] ?? '')), ENT_QUOTES, 'UTF-8') ?></td>
+                    <td>
+                    <?php
+                        $__an = trim((string)($__ar['actor_name'] ?? ''));
+                        if ($__an === '') {
+                            echo '<span class="sdv-flow-wait">tidak tercatat</span>';
+                        } else {
+                            $__ai = rmi_actor_info($pdo, $__an);
+                            echo htmlspecialchars($__ai['label'] !== '' ? $__ai['label'] : $__an, ENT_QUOTES, 'UTF-8');
+                            if ($__ai['label'] !== '' && $__ai['label'] !== $__an) {
+                                echo ' <span class="sdv-flow-account">(' . htmlspecialchars($__an, ENT_QUOTES, 'UTF-8') . ')</span>';
+                            }
+                        }
+                    ?>
+                    </td>
+                    <td><?= htmlspecialchars((string)($__ar['actor_dept'] ?? '-'), ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?= htmlspecialchars((string)($__ar['status_from'] ?? '-'), ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?= htmlspecialchars((string)($__ar['status_to'] ?? '-'), ENT_QUOTES, 'UTF-8') ?></td>
+                    <td><?= htmlspecialchars(trim((string)($__ar['note'] ?? '')) !== '' ? (string)$__ar['note'] : '-', ENT_QUOTES, 'UTF-8') ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php endif; ?>
 
     <div class="footer-info">
         <div>
