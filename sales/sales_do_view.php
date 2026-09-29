@@ -1212,23 +1212,46 @@ $extraHead = '<style>
             color: #6b7280;
             margin-bottom: 2px;
         }
-        .sdv-trail-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 8px;
-        }
-        .sdv-trail-table th,
-        .sdv-trail-table td {
-            border: 1px solid #e5e7eb;
+        /* Riwayat transisi.
+           PENTING: _shared/rmi.css punya rule global
+           `body.rmi-body .rmi-content table:not(.table):not(.dataTable)`
+           (spesifisitas 0,3,2) yang menangkap tabel ini dan mewariskan
+           `position:sticky` + `text-transform:uppercase` + `font-size:12px`
+           + `padding:8px 10px` + zebra. Untuk tabel print yang rapat semua
+           itu salah, jadi di-reset di sini dengan awalan `html body` agar
+           spesifisitasnya (0,3,3) melampaui rule global. */
+        html body.rmi-body .rmi-content table.sdv-trail-table th,
+        html body.rmi-body .rmi-content table.sdv-trail-table td {
             padding: 2px 4px;
             text-align: left;
             vertical-align: top;
             word-break: break-word;
+            border: 1px solid #e5e7eb;
         }
-        .sdv-trail-table th {
+        html body.rmi-body .rmi-content table.sdv-trail-table thead th {
+            position: static;          /* sticky HEADER salah untuk print */
+            z-index: auto;
+            top: auto;
             background: #f3f4f6;
-            font-weight: 700;
             color: #374151;
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: none;      /* judul kolom tidak perlu kapital */
+            letter-spacing: normal;
+            white-space: normal;
+        }
+        html body.rmi-body .rmi-content table.sdv-trail-table tbody tr,
+        html body.rmi-body .rmi-content table.sdv-trail-table tbody tr:nth-child(even) {
+            background: #fff;          /* zebra global tidak relevan di print */
+        }
+        html body.rmi-body .rmi-content table.sdv-trail-table tbody tr:hover {
+            background: #fff;
+        }
+        .sdv-trail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8px;
+            color: #111827;
         }
         .sdv-flow-item {
             border: 1px solid #e5e7eb;
