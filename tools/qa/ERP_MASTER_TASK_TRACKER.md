@@ -4,7 +4,7 @@
 > verifikasi baru **harus** ditulis ke file ini. Tidak ada pekerjaan QA yang
 > dianggap selesai kalau tidak tercatat di sini beserta evidence-nya.
 
-_Updated: 2026-09-30 | Print DO: alur 6 tahap + transisi per kartu + blok logistik + bukti orang-per-tahap (id=30 Didi); migrasi 167/168; shared CSS table + thead 9f (owner); QA-018 FIXED (triase + leak_count); cutover gate terverifikasi hanya-jalan-di-NAS |_
+_Updated: 2026-09-30 | Print DO: alur 6 tahap + transisi per kartu + blok logstik + bukti orang-per-tahap (id=30 Didi); migrasi 167/168; shared CSS table + thead 9f (owner); QA-018 FIXED (triase + leak_count); cutover gate terverifikasi hanya-jalan-di-NAS |_
 
 ## Aturan deploy (dari owner, 2026-09-29)
 Setiap perubahan kode/config → `systemctl restart php8.3-fpm` + `nginx -t && systemctl reload nginx`, lalu verifikasi `curl` halaman login. Detail di `AGENTS.md`. Fokus `/var/www/ERP_RMI_SOFULL` saja; proyek lain di `/var/www` tidak boleh disentuh.
@@ -486,8 +486,12 @@ UI/UX = TODO, Playwright authenticated = TODO (PW-008).
 - BLOCKED: BL-001..004
 - WAIVED: UX-001
 
-_Final gate tetap tidak boleh PASS selama PW-008, IN-001, PF-009, dan
-blokir owner masih terbuka._
+_Nota: PF-002 & PF-003 muncul di dua daftar. Tabel per-wave memberi PASS,_
+_ringkasan ini masih IN_PROGRESS — gulf itu sudah diketahui dan tercatat_
+_sebagai ketidakkonsistenan Internal Consistency Gate._
+
+_Final gate tetap tidak boleh PASS selama PW-008, IN-001, PF-009,_
+_SEC-002, SEC-003, SEC-005, dan blokir owner masih terbuka._
 
 ---
 
@@ -499,12 +503,31 @@ asumsi. Nilai kredensial sengaja TIDAK ditulis di tracker ini.
 
 | ID | Temuan | Severity | Status | Bukti |
 |----|--------|----------|--------|-------|
-| SEC-001 | **2 akun test masih ACTIVE dengan akses SYS** setelah QA wave: `SmokeSYS_SYS` (id 189, role=sys, level=SYS) dan `SmokeBRANCH_SYS` (id 190, STAFF). Keduanya `last_login_at = 2026-09-30 03:57` | **P0** | FAIL | `SELECT ... FROM master_system_login` — status ACTIVE, `deleted_at` NULL |
-| SEC-002 | Klaim lama "0 QA login user" **tidak akurat** — ada 9 akun test tersisa: `uat_smoke_user` (179), `qa_wqs` (180), `qa_pqp` (181), `qa_crm` (182), `qa_fin` (183), `qa_act` (184), `qa_hrl` (185), `qa_mpr` (186) — semuanya INACTIVE tapi tidak dihapus | P1 | FAIL | id 179–186 di `master_system_login` |
-| SEC-003 | **Kredensial NAS bocor di komentar** `config-db.php` baris 2 (`LOCAL DEV ONLY - backup asli di config-db.php.bak_local (credential NAS: ...)`) | **P0** | FAIL | `config-db.php`; nilai tidak dicantumkan di sini |
-| SEC-004 | **Fallback password `'1234'`** saat variabel password kosong: `master/master_system_loginmalang.php:951` dan `master/master_system_loginid.php:951` | **P0** | FAIL | `password_hash(($password!==''?$password:'1234'), PASSWORD_DEFAULT)` |
+| SEC-001 | **2 akun test masih ACTIVE dengan akses SYS** setelah QA wave: `SmokeSYS_SYS` (id 189, role=sys, level=SYS) dan `SmokeBRANCH_SYS` (id 190, STAFF). Keduanya `last_login_at = 2026-09-30 03:57` | **P0** | **FIXED** | Soft-deactivate 2026-10-01 00:57:04 → `status=INACTIVE`, `role=disabled`, `level=DISABLED`, `deactivated_at` terisi, `deleted_at` tetap NULL (rekam jejak). Login keduanya kini ditolak *"Akun dinonaktifkan, hubungi admin."* tanpa redirect. Lihat ACT-006 |
+| SEC-002 | Klaim lama "0 QA login user" **tidak akurat** — ada **8** akun test tersisa (bukan 9 seperti klaim awal): `uat_smoke_user` (179), `qa_wqs` (180), `qa_pqp` (181), `qa_crm` (182), `qa_fin` (183), `qa_act` (184), `qa_hrl` (185), `qa_mpr` (186) — semuanya INACTIVE tapi tidak dihapus | P1 | FAIL | id 179–186 di `master_system_login`. Koreksi jumlah: 179–186 = 8 baris, bukan 9 |
+| SEC-003 | **Kredensial NAS bocor di komentar** `config-db.php` baris 2 (`LOCAL DEV ONLY - backup asli di config-db.php.bak_local (credential NAS: ...)`) | **P0** | FAIL | `config-db.php`; nilai tidak dicantumkan di sini. File ter-ignore & tidak pernah ter-commit |
+| SEC-004 | **Fallback password `'1234'`** saat variabel password kosong. Cakupan awal salah: yang tercatat hanya 2 file mati, padahal ada **4 titik** di 3 file — termasuk file **live** | **P0** | **FIXED** | Lihat detail "Cakupan SEC-004" di bawah + ACT-007 |
 | SEC-005 | `superadmin` (id 1) & `admin` (id 2) SYS-level **MFA nonaktif**, sementara `RizqullahMediskaSYS` (187) MFA aktif | P1 | FAIL | Kolom `mfa_enabled` / `mfa_confirmed_at` |
 | SEC-006 | ~~`config-db.php` tracked di git~~ **TIDAK terjadi** — sudah di-ignore & tidak pernah di-commit | — | WAIVED | `git ls-files --error-unmatch config-db.php` → tidak match; `git log --all -- config-db.php.bak` → kosong. `config-db.php.bak` juga untracked |
+
+### Cakupan SEC-004 (koreksi terhadap catatan awal)
+
+Grep awal hanya menangkap pola `password_hash(($password!==''?$password:'1234'))` dan
+hanya di 2 file mati. Sweep lanjutan menemukan 2 titik lagi di file **live**
+`master/master_system_login.php`, dan 2 bentuk lain di file yang sama. Total:
+
+| # | Lokasi | Bentuk | Chilli | severity nyata |
+|---|--------|--------|--------|----------------|
+| 1 | `master_system_login.php` + `*malang*` + `*id*` | `password_hash(($password!==''?$password:'1234'))` di `import_csv` | akun baru dari CSV dapat password `1234` | tinggi |
+| 2 | `master_system_login.php` + `*malang*` + `id*` | `$defaultPass = $_POST['default_password'] ?? '1234'` di `seed_from_departements` | **seed massal** membuat banyak akun seragam | **lebih tinggi** — massal |
+| 3 | 3 file | `<input name="default_password" value="1234">` | form mem-prefill password lemah | media (memperkuat #2) |
+| 4 | 3 file | teks bantuan `Jika password kosong → default "1234"` | dokumentasi yang berbohong | rendah (tidak keamanan) |
+
+Catatan severity: `seed_from_departements` adalah yang paling berbahaya karena
+menghasilkan akun `Mgr{DEPT}_{OFFICE}` / `Staff{DEPT}_{OFFICE}` dalam jumlah
+banyak, semuanya dengan password sama yang diketahui. Satu knowledge leak =
+banyak akun kompromi.
+
 
 ## Aksi yang sudah dijalankan
 | ID | Aksi | Hasil |
@@ -514,13 +537,30 @@ asumsi. Nilai kredensial sengaja TIDAK ditulis di tracker ini.
 | ACT-003 | Audit `system_audit_logs` module `master` action `PASSWORD_RESET` | 1 baris ditambahkan, detail tidak menyimpan password |
 | ACT-004 | Verifikasi login end-to-end via curl | Password salah → HTTP 200 (ditolak). Password benar → HTTP 302 ke `/dashboards/index.php` |
 | ACT-005 | Hapus skrip reset dari `/tmp` | Selesai, tidak ada kredensial di disk temporary |
+| ACT-006 | **SEC-001** — soft-deactivate `SmokeSYS_SYS` (189) + `SmokeBRANCH_SYS` (190) | Selesai dalam 1 transaksi. `status=INACTIVE`, `role=disabled`, `level=DISABLED`, `deactivated_at=2026-10-01 00:57:04`. `deleted_at` dibiarkan NULL. Tidak ada permission/office/token/PIN yang perlu dicabut (semua 0). 103 baris `system_audit_logs` milik keduanya **dipertahankan** (append-only). 1 baris audit `master/DEACTIVATE` ditambahkan |
+| ACT-007 | **SEC-004** — hapus 4 titik fallback password di 3 file | Selesai. `import_csv`: baris tanpa password di-skip (bukan dapat `1234`), dengan penghitung `skipped_no_password` di audit + flash message. `seed_from_departements`: password wajib diisi, min 8 karakter, dan ditolak bila termasuk denylist lemah (`1234`, `123456`, `12345678`, `password`, `admin`, `admin123`, `qwerty`). Form: `value="1234"` dihapus, jadi `type="password" required minlength="8" autocomplete="new-password"`. Teks bantuan diperbaiki |
 
-## Rekomendasi (urutan prioritas)
-1. **SEC-001** — nonaktifkan/hapus `SmokeSYS_SYS` + `SmokeBRANCH_SYS` SEKARANG. Akun SYS aktif dengan password test = akses penuh.
-2. **SEC-003** — rotasi kredensial NAS, lalu hapus komentar yang membocorkan. Jangan commit ulang.
-3. **SEC-004** — hapus fallback `'1234'` dan file `*malang*` / `*id*` bila memang tidak dipakai.
-4. **SEC-002** — hapus 7 akun `qa_*` + `uat_smoke_user` yang INACTIVE.
-5. **SEC-005** — aktifkan MFA untuk `superadmin` & `admin`.
+### Verifikasi SEC-001 & SEC-004
 
-_Tidak ada perbaikan di atas yang saya jalankan otomatis — semuanya mengubah
-kredensial/akses produksi dan butuh keputusan owner._
+| Cek | Hasil |
+|-----|-------|
+| `SELECT ... WHERE username LIKE 'Smoke%' AND status='ACTIVE'` | **0 baris** |
+| Login `SmokeSYS_SYS` (password apa pun) via curl | HTTP 200 + *"Akun dinonaktifkan, hubungi admin."*, tanpa `Location:` → tidak masuk sesi |
+| Login `SmokeBRANCH_SYS` (password apa pun) via curl | sama: ditolak, tanpa `Location:` |
+| Kontrol: `admin` + password salah | HTTP 200, ditolak normal, **tanpa 500** → tidak ada collateral damage |
+| Baris audit kedua akun | 103 baris utuh (tidak dihapus) |
+| `php -l` 3 file yang disentuh | No syntax errors |
+| Guard `default_password` (unit test terisolasi) | `""`/`"  "`→ditolak, `1234`→ditolak (<8), `12345678`→ditolak (denylist), `admin123`→ditolak (denylist), `abc`→ditolak (<8), `SandiKuat2026!`→**diterima** |
+| Sweep akhir `1234` sebagai password | bersih; sisa hanya denylist + dokumentasi yang sudah diperbaiki |
+| `bash tools/qa/ci_lint.sh` | **LULUS** (3 check NAS-only ter-skip) |
+
+
+## Rekomendasi (urutan prioritas, di-update 2026-10-01)
+1. ~~**SEC-001**~~ — **SELESAI** (ACT-006). Akun SYS test nonaktif, login ditolak.
+2. **SEC-003** — rotasi kredensial NAS, lalu hapus komentar yang membocorkan. **Butuh owner**: rotasi berada di luar repo. Sisa kerja di sisi repo: hapus baris komentar di `config-db.php` setelah rotasi sukses (file ter-ignore, tidak ikut ter-commit).
+3. ~~**SEC-004**~~ — **SELESAI** (ACT-007). Semua 4 titik fallback password ditutup.
+4. **SEC-002** — hapus 8 akun `qa_*` + `uat_smoke_user` yang INACTIVE. Menunggu keputusan owner: penghapusan permanen vs. biarkan sebagai rekam jejak.
+5. **SEC-005** — aktifkan MFA untuk `superadmin` & `admin`. Butuh owner (mengubah hak akses akun primary).
+
+_SEC-002 dan SEC-005 belum dijalankan: keduanya mengubah kredensial/_
+_hak akses akun nyata dan butuh keputusan owner._
