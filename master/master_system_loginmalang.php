@@ -891,7 +891,7 @@ if ($op === 'import_csv')
             }
             if (!isset($idx['username'])) throw new Exception("Kolom 'username' wajib ada");
 
-            $created=0; $updated=0; $skipped=0;
+            $created=0; $updated=0; $skipped=0; $noPw=0;
             foreach (array_slice($rows, 1) as $r) {
                 if (!is_array($r) || count($r)==0) continue;
                 $u = trim((string)($r[$idx['username']] ?? ''));
@@ -948,14 +948,18 @@ if ($isITCManager) {
                     }
                     $updated++;
                 } else {
-                    $hash = password_hash(($password!==''?$password:'1234'), PASSWORD_DEFAULT);
+                    // SEC-004: akun baru WAJIB punya password eksplisit dari CSV.
+                    // Dumpus password default: user hasil import yang tidak punya
+                    // password tetap bisa login, jadi nilai default diam-diam jadi celah.
+                    if ($password === '') { $noPw++; $skipped++; continue; }
+                    $hash = password_hash($password, PASSWORD_DEFAULT);
                     $st = $pdo->prepare("INSERT INTO master_system_login (username, full_name, password_hash, role, level, department, office_code, status, created_at, updated_at)
                                          VALUES (?,?,?,?,?,?,?,?,NOW(),NOW())");
                     $st->execute([$u, $full_name?:null, $hash, $role?:'staff', ($level!==''?$level:null), ($department!==''?$department:null), ($office_code!==''?$office_code:null), $status?:'ACTIVE']);
                     $created++;
                 }
             }
-            audit_append('import_csv', ['created'=>$created,'updated'=>$updated,'skipped'=>$skipped]);
+            audit_append('import_csv', ['created'=>$created,'updated'=>$updated,'skipped'=>$skipped,'skipped_no_password'=>$noPw]);
             if (function_exists('master_audit')) {
                 master_audit($pdo, 'master_system_login', 'master_system_login', 'IMPORT', null, 'IMPORT', "User import: {$created} created, {$updated} updated", ['created' => $created, 'updated' => $updated]);
             }
@@ -1146,8 +1150,20 @@ if ($op === 'seed_departements_defaults') {
 if ($op === 'seed_from_departements') {
     if (!$isAdmin) throw new Exception("Akses ditolak: hanya ADMIN/SUPERADMIN.");
 
-    $defaultPass = trim((string)($_POST['default_password'] ?? '1234'));
-    if ($defaultPass === '') $defaultPass = '1234';
+    // SEC-004: tidak ada password default. Seed massal membuat banyak akun
+    // sekaligus; password bawaan yang seragam = banyak akun bisa login orang
+    // lain. Operator wajib pilih password eksplisit yang kuat.
+    $defaultPass = trim((string)($_POST['default_password'] ?? ''));
+    if ($defaultPass === '') {
+        throw new Exception("Password default wajib diisi. Tidak ada password bawaan demi keamanan.");
+    }
+    if (strlen($defaultPass) < 8) {
+        throw new Exception("Password default minimal 8 karakter.");
+    }
+    $weakDefaults = ['1234', '123456', '12345678', 'password', 'admin', 'admin123', 'qwerty'];
+    if (in_array(strtolower($defaultPass), $weakDefaults, true)) {
+        throw new Exception("Password default terlalu umum. Pilih password lain.");
+    }
 
     // Ambil master departements aktif
     try {
@@ -1633,7 +1649,7 @@ rmi_header('Master System Login', [
           <h6 class="mb-1">Import Users CSV</h6>
           <div class="muted small mb-2">
             Header: <code>username, password, full_name, role, level, department, office_code, status</code>.
-            Jika password kosong → default "1234".
+            User baru wajib punya password di CSV; baris tanpa password akan di-skip.
           </div>
           <div class="d-flex gap-2 mb-2">
             <a href="master_system_login.php?template_csv=1" class="btn btn-outline-secondary btn-sm w-100"><?= rmi_icon('inbox') ?> Template CSV</a>
@@ -1693,7 +1709,7 @@ rmi_header('Master System Login', [
             <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
             <div class="mb-2">
               <label class="form-label small mb-1">Password Default</label>
-              <input class="form-control form-control-sm" name="default_password" value="1234" autocomplete="off" placeholder="password default">
+              <input type="password" class="form-control form-control-sm" name="default_password" value="" autocomplete="new-password" minlength="8" required placeholder="wajib, min. 8 karakter">
             </div>
             <input type="hidden" name="op" value="seed_from_departements">
             <button class="btn btn-outline-warning w-100 btn-sm">Seed Akun Otomatis</button>
